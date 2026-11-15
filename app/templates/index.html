@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="card">
+  <h1>Check a repository</h1>
+  <p class="muted">Link a GitHub repository. It is cloned read-only (nothing in it is run), analysed, and checked against the standards you pick. Every verdict cites the requirement and the lines of code it rests on.</p>
+  <form method="post" action="/scans">
+    <label for="url">GitHub repository</label>
+    <input id="url" name="url" type="url" required placeholder="https://github.com/owner/name" pattern="https://github\.com/[^/]+/[^/]+/?">
+    <div class="grid g2">
+      <div><label for="branch">Branch <span class="muted small">(optional; default branch if empty)</span></label>
+        <input id="branch" name="branch" type="text" placeholder="main"></div>
+      <div><label for="lvl">ASVS level</label>
+        <select id="lvl" name="asvs_level"><option value="1">L1: baseline</option><option value="2" selected>L2: most applications</option><option value="3">L3: high assurance</option></select></div>
+    </div>
+    <label>Standards</label>
+    <div class="checks">
+      {% for sid, (pack, label) in standards.items() %}
+      <label><input type="checkbox" name="standards" value="{{ sid }}" {% if sid in ("asvs", "nist", "gdpr") %}checked{% endif %}> {{ label }}</label>
+      {% endfor %}
+    </div>
+    <p class="small muted">Languages read by static analysis: Python, JavaScript/TypeScript, Ruby, Elixir. Dependencies: Gemfile.lock, mix.lock, npm, Python lock files, checked against OSV.
+      {% if reader %}Model reader: <b>{{ reader }}</b> (reads any language and settles judged facts).{% else %}<b>No model reader is configured</b>, so judged facts stay open and other languages are not read.{% endif %}
+      {% if not private %}Public repositories only.{% endif %}</p>
+    <button type="submit">Scan repository</button>
+  </form>
+</div>
+{% if recent %}
+<div class="card">
+  <h2>Recent scans</h2>
+  <table><tr><th>Repository</th><th>Started</th><th>State</th></tr>
+  {% for s in recent %}<tr><td><a href="/scans/{{ s.id }}">{{ s.url.replace("https://github.com/", "") }}</a></td><td class="muted small">{{ s.created }}</td><td>{{ s.state }}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}

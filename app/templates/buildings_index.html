@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Building drawings — compliance check{% endblock %}
+{% block sub %}IBC 2024 · Austin · ADA 2010 · Approved Document B · 建築基準法 — verdicts with citations to the sheet{% endblock %}
+{% block body %}
+<div class="card">
+  <h1>Check building drawings</h1>
+  <p class="muted">Upload an IFC model, DXF drawings, PDF sheets or scans — or a .zip of a whole set. Each file is read (PDF text layers directly, outlined or scanned sheets by OCR, IFC and DXF geometry), the facts are checked against the codes you pick, and every verdict links to the requirement and shows the region of the sheet or the model element it rests on.</p>
+  <form method="post" action="/projects" enctype="multipart/form-data">
+    <label for="name">Project name</label>
+    <input id="name" name="name" type="text" placeholder="Riverside Medical Office">
+    <label for="files">Drawings and models <span class="muted small">(IFC, DXF, PDF, PNG, JPEG, TIFF, or .zip; up to {{ max_mb }} MB)</span></label>
+    <input id="files" name="files" type="file" multiple required accept=".ifc,.dxf,.pdf,.png,.jpg,.jpeg,.tif,.tiff,.zip">
+    <label>Codes</label>
+    <div class="checks">
+      {% for cid, (pack, label, covers) in codes.items() %}
+      <label><input type="checkbox" name="codes" value="{{ cid }}" {% if cid in ("ibc", "ada") %}checked{% endif %}> {{ label }} <span class="muted small">— {{ covers }}</span></label>
+      {% endfor %}
+    </div>
+    <p class="small muted">Classifications the drawings can't settle — occupancy group, sprinkler standard, which stairs are exits — are asked in the report, with the answer the drawings' own code-analysis notes suggest. Large OCR'd sets take a few minutes.</p>
+    <button type="submit">Check drawings</button>
+  </form>
+</div>
+
+{% if examples %}
+<div class="card">
+  <h2>Example projects</h2>
+  <p class="small muted">Real, openly licensed drawing sets, processed by the same pipeline as an upload.</p>
+  <table><tr><th>Project</th><th>Codes</th><th>State</th></tr>
+  {% for p in examples %}<tr><td><a href="/projects/{{ p.id }}">{{ p.name }}</a>{% if p.licence %}<div class="small muted">{{ p.licence }}</div>{% endif %}</td>
+    <td class="small">{{ p.codes | join(", ") }}</td><td class="small">{{ p.state }}{% if p.state == "running" %}: {{ p.step }}{% endif %}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+
+{% if recent %}
+<div class="card">
+  <h2>Your recent projects</h2>
+  <table><tr><th>Project</th><th>Started</th><th>State</th></tr>
+  {% for p in recent %}<tr><td><a href="/projects/{{ p.id }}">{{ p.name }}</a></td><td class="muted small">{{ p.created }}</td><td class="small">{{ p.state }}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}

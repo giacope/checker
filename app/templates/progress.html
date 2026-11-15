@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block head %}{% if st.state != "error" %}<meta http-equiv="refresh" content="3">{% endif %}{% endblock %}
+{% block body %}
+<div class="card">
+  <h1>{{ req.url.replace("https://github.com/", "") }}</h1>
+  <p class="muted">{{ req.standards | join(", ") }} · ASVS L{{ req.asvs_level }}{% if req.branch %} · branch {{ req.branch }}{% endif %}</p>
+  {% if st.state == "error" %}
+    <div class="note"><b>The scan failed.</b> {{ st.error }}</div>
+    <p><a class="btn secondary" href="/">Back</a></p>
+  {% else %}
+    <p><b>{{ st.step or "Queued" }}</b>…</p>
+    <ul class="small muted">{% for m in (st.log or [])[:-1] %}<li>{{ m }}</li>{% endfor %}</ul>
+    <p class="small muted">This page refreshes itself. Large repositories with the model reader take a few minutes.</p>
+  {% endif %}
+</div>
+{% endblock %}

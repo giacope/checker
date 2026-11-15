@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block sub %}Building drawings{% endblock %}
+{% block head %}{% if st.state != "error" %}<meta http-equiv="refresh" content="3">{% endif %}{% endblock %}
+{% block body %}
+<div class="card">
+  <h1>{{ req.name }}</h1>
+  <p class="muted">{% for c in req.codes %}{{ codes[c][1] }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+  {% if st.state == "error" %}
+    <div class="note"><b>The project could not be processed.</b> {{ st.error }}</div>
+    <p><a class="btn secondary" href="/buildings">Back</a></p>
+  {% else %}
+    <p><b>{{ st.step or "Queued" }}</b>…</p>
+    <ul class="small muted">{% for m in (st.log or [])[:-1] %}<li>{{ m }}</li>{% endfor %}</ul>
+    <p class="small muted">This page refreshes itself. Sheets without a text layer are read by OCR, which takes up to a minute per large sheet; results are cached.</p>
+  {% endif %}
+</div>
+{% endblock %}

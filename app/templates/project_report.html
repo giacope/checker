@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}{{ r.project.name }} — building code report{% endblock %}
+{% block sub %}Building drawings — verdicts with citations to the sheet and the code{% endblock %}
+{% macro pill(v) %}<span class="pill v-{{ v }}">{{ VERDICT[v] }}</span>{% endmacro %}
+{% macro where(a, big=false) %}{% if a.img %}<a href="{{ a.img }}" target="_blank" rel="noopener"><span class="kv">{{ a.label }}</span></a>{% else %}<span class="kv">{{ a.label }}</span>{% endif %}{% endmacro %}
+{% block body %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <div>
+      <h1>{{ r.project.name }}</h1>
+      <div class="muted small">{{ r.files | length }} file{{ "s" if r.files | length != 1 }} · {{ r.sheets | length }} sheet{{ "s" if r.sheets | length != 1 }} read · {{ r.elements | length }} elements · processed in {{ r.seconds }} s · {{ req.created }}</div>
+      {% if req.licence %}<div class="muted small">Source: {{ req.source or "" }} · {{ req.licence }}</div>{% endif %}
+    </div>
+    <div><a class="btn secondary" href="/projects/{{ pid }}/report.md">Download Markdown</a> <a class="btn secondary" href="/projects/{{ pid }}/report.json">JSON</a></div>
+  </div>
+  <div class="grid g4" style="margin-top:16px">
+    <div class="stat"><div class="n" style="color:var(--fail)">{{ r.totals.fail or 0 }}</div><div class="small muted">requirements fail</div></div>
+    <div class="stat"><div class="n" style="color:var(--unc)">{{ (r.totals.uncertain or 0) + (r.totals.unknown or 0) }}</div><div class="small muted">need input or disagree</div></div>
+    <div class="stat"><div class="n" style="color:var(--pass)">{{ r.totals.pass or 0 }}</div><div class="small muted">pass</div></div>
+    <div class="stat"><div class="n">{{ r.elements | length }}</div><div class="small muted">{% for t, n in r.element_counts.items() %}{{ n }} {{ TYPE.get(t, t) }}{{ "s" if n != 1 }}{% if not loop.last %}, {% endif %}{% else %}elements read{% endfor %}</div></div>
+  </div>
+  <p class="small" style="margin:12px 0 0">Element checks: <b style="color:var(--fail)">{{ r.checks.fail or 0 }} fail</b> · <b style="color:var(--unc)">{{ r.checks.uncertain or 0 }} uncertain</b> · <b style="color:var(--unc)">{{ r.checks.unknown or 0 }} need input</b> · <b style="color:var(--pass)">{{ r.checks.pass or 0 }} pass</b> <span class="muted">— a requirement passes only when every element it applies to passes.</span></p>
+  <table style="margin-top:10px"><tr><th>Code</th><th>Fails</th><th>Uncertain</th><th>Needs input</th><th>Passes</th><th>N/A</th></tr>
+  {% for s in r.standards %}<tr><td><a href="#{{ s.id }}">{{ s.label }}</a> <span class="muted small">— {{ s.covers }}</span></td><td>{{ s.summary.fail or 0 }}</td><td>{{ s.summary.uncertain or 0 }}</td><td>{{ s.summary.unknown or 0 }}</td><td>{{ s.summary.pass or 0 }}</td><td>{{ s.summary.not_applicable or 0 }}</td></tr>{% endfor %}
+  </table>
+  {% if r.notes or r.skipped %}<div class="note" style="margin-top:14px"><b>Limits of this check</b><ul style="margin:6px 0 0">{% for n in r.notes[:8] %}<li>{{ n }}</li>{% endfor %}</ul>
+    {% if r.skipped %}<details class="small" style="margin-top:6px"><summary>Read but not used ({{ r.skipped | sum(attribute="count") }} items, {{ r.skipped | length }} reasons)</summary><ul>{% for g in r.skipped[:20] %}<li><b>{{ g.count }}</b> × {{ g.reason }} <span class="muted">— e.g. {{ g.examples[:2] | join("; ") }}</span></li>{% endfor %}</ul></details>{% endif %}</div>{% endif %}
+  {% if r.questions %}<p style="margin-bottom:0"><a href="#questions"><b>{{ r.questions | length }} question{{ "s" if r.questions | length != 1 }}</b></a> about the project would settle open verdicts — answer them to update the report.</p>{% endif %}
+  <nav class="toc small" style="margin-top:10px">{% for s in r.standards %}<a href="#{{ s.id }}">{{ s.label.split(":")[0] }}</a>{% endfor %}<a href="#questions">Questions</a><a href="#facts">What the drawings say</a>{% if r.conflicts %}<a href="#conflicts">Disagreements</a>{% endif %}<a href="#sheets">Sheets</a><a href="#method">Method</a></nav>
+</div>
+
+{% for s in r.standards %}
+<div class="card" id="{{ s.id }}">
+  <h2>{{ s.label }}</h2>
+  <p class="small muted">{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (copyright){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
+  {% for e in s.entries if e.verdict != "not_applicable" %}
+  <details class="req" {% if e.verdict in ("fail", "uncertain", "unknown") %}open{% endif %}>
+    <summary>{{ pill(e.verdict) }} <span class="sec">{{ e.section }}</span> <span>{{ e.title }}</span>
+      <span class="muted small" style="margin-left:auto; white-space:nowrap">{% if e.checked %}{{ e.counts.fail or 0 }} of {{ e.checked }} fail{% endif %}</span></summary>
+    <div class="body">
+      <div class="small">Requirement: {% if e.url %}<a href="{{ e.url }}" target="_blank" rel="noopener">{{ e.section }}</a>{% else %}{{ e.section }}{% endif %}</div>
+      {% if e.quote %}<blockquote class="small">{{ e.quote }}</blockquote>{% endif %}
+      {% for f in e.findings[:20] %}
+      <div class="finding {{ f.verdict }}">
+        <div>{{ pill(f.verdict) }} <b>{{ TYPE.get(f.type or "", f.type or "Building") }}</b> {% if f.type %}<span class="kv">{{ f.element }}</span>{% endif %}
+          {% for a in f.at %} · {{ where(a) }}{% endfor %}{% if f.more_at %} <span class="muted small">+{{ f.more_at }} more</span>{% endif %}
+          {% if f.facts %}<span class="small muted"> · {% for k, v in f.facts.items() %}{{ k }} {{ v | join(" / ") }}{% if not loop.last %}, {% endif %}{% endfor %}</span>{% endif %}
+        </div>
+        {% for a in f.at[:1] if a.img %}<a href="{{ a.img }}" target="_blank" rel="noopener"><img class="crop" loading="lazy" src="{{ a.img }}" alt="{{ a.label }}"></a>{% endfor %}
+        {% for k, vs in f.deciding.items() %}<div class="small">{% if f.precision_only and f.precision_only[k] %}<b>{{ k }}</b> as printed allows {{ vs | map(attribute="value") | join(" to ") }} <span class="muted">({{ vs[0].sources | join(", ") }})</span>, and the limit falls inside that range: the drawing is not precise enough to decide. A dimension at the limit settles it.{% else %}Sources disagree on <b>{{ k }}</b>: {% for d in vs %}{{ d.value }} <span class="muted">({{ d.sources | join(", ") }})</span>{% if not loop.last %} or {% endif %}{% endfor %} — the verdict differs between them.{% endif %}</div>{% endfor %}
+        {% if f.open %}<div class="small">Not shown on the drawings: {% for o in f.open %}<span class="kv">{{ o }}</span> {% endfor %}— see <a href="#questions">questions</a>.</div>{% endif %}
+      </div>
+      {% endfor %}
+      {% if e.findings | length > 20 %}<p class="small muted">… and {{ e.findings | length - 20 }} more in the JSON and Markdown exports.</p>{% endif %}
+      {% if e.passes %}<details class="small"><summary class="muted">Passing elements ({{ e.passes | length }})</summary><ul>
+        {% for p in e.passes[:100] %}<li>{{ TYPE.get(p.type, p.type) }} <span class="kv">{{ p.element }}</span>{% for a in p.at %} · {{ where(a) }}{% endfor %}{% if p.facts %}<span class="muted"> · {% for k, v in p.facts.items() %}{{ k }} {{ v | join(" / ") }}{% if not loop.last %}, {% endif %}{% endfor %}</span>{% endif %}</li>{% endfor %}
+        {% if e.passes | length > 100 %}<li class="muted">… and {{ e.passes | length - 100 }} more in the JSON export.</li>{% endif %}</ul></details>{% endif %}
+      {% if e.verdict == "pass" %}<p class="small">Checked {{ e.checked }} element{{ "s" if e.checked != 1 }}; all pass.</p>{% endif %}
+      {% if e.guidance and e.verdict != "pass" %}<p class="small"><b>What to do:</b> {{ e.guidance }}</p>{% endif %}
+      {% if e.interpretation %}<details class="small"><summary class="muted">How this is checked</summary><p>{{ e.interpretation }}</p></details>{% endif %}
+    </div>
+  </details>
+  {% endfor %}
+  {% set na = s.entries | selectattr("verdict", "equalto", "not_applicable") | list %}
+  {% if na %}<p class="small muted">Not applicable — nothing read from the drawings is subject to them: {% for e in na %}{{ e.section }}{% if not loop.last %}, {% endif %}{% endfor %}.</p>{% endif %}
+  {% if s.not_formalized %}<details class="small"><summary class="muted">Provisions this pack does not check ({{ s.not_formalized | length }})</summary><ul>{% for x in s.not_formalized %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
+</div>
+{% endfor %}
+
+<div class="card" id="questions">
+  <h2>Project questions</h2>
+  {% if r.questions %}
+  <p class="small muted">Classifications and facts the drawings don't show. An answer about a type applies to every element of it. Answers are stored with the project, shown in the report as given by the reviewer, and the codes are evaluated again.</p>
+  <form method="post" action="/projects/{{ pid }}/answers">
+    {% for q in r.questions[:60] %}
+    <div class="q">
+      <div><b>{{ q.label }}</b> <span class="muted small">— {% if q.scope == "subject" %}the building{% else %}every {{ TYPE.get(q.type, q.type) }} ({{ q.elements | length }}){% endif %}</span>
+        <div class="small muted">Decides {{ q.decides | join(", ") }}{% if q.candidates %} · the sources say {{ q.candidates | join(" or ") }}{% endif %}{% if q.suggested %} · <b>the drawings state {{ q.suggested }}</b>{% endif %}</div></div>
+      <div>{% if q.value_type == "bool" %}
+          <select name="{{ q.key }}"><option value="">—</option><option value="true">Yes</option><option value="false">No</option></select>
+        {% elif q.value_type == "enum" %}
+          <select name="{{ q.key }}"><option value="">—</option>{% for v in q["values"] %}<option {% if v == q.suggested %}selected{% endif %}>{{ v }}</option>{% endfor %}</select>
+        {% else %}<input type="text" name="{{ q.key }}" placeholder="{{ q.value_type }}{% if q.value_type == 'length' %}, e.g. 44 in or 1120 mm{% elif q.value_type == 'area' %}, e.g. 500 m2{% endif %}">{% endif %}</div>
+    </div>
+    {% endfor %}
+    {% if r.questions | length > 60 %}<p class="small muted">{{ r.questions | length - 60 }} more questions appear once these are answered.</p>{% endif %}
+    <p><button type="submit">Update report</button></p>
+  </form>
+  {% else %}<p class="small">None: every verdict above is decided by the drawings and your answers.</p>{% endif %}
+  {% if r.answered %}
+  <h3 style="margin-top:12px">Your answers</h3>
+  <form method="post" action="/projects/{{ pid }}/answers"><table>
+    {% for a in r.answered %}<tr><td class="small">{{ a.label }} <span class="muted">{% if a.element == "_subject" %}the building{% elif a.element[:1].isupper() %}every {{ TYPE.get(a.element, a.element) }}{% else %}{{ a.element }}{% endif %}</span></td><td>{{ a.value }}</td><td><button class="btn secondary" name="clear::{{ a.element }}::{{ a.attr }}" value="1">Remove</button></td></tr>{% endfor %}
+  </table></form>
+  {% endif %}
+</div>
+
+<div class="card" id="facts">
+  <h2>What the drawings and model say about the building</h2>
+  {% if r.facts %}
+  <table>{% for f in r.facts %}<tr><td class="small"><b>{{ f.name }}</b></td><td>{{ f.value }}</td><td class="small">{% for a in f.at %}{{ where(a) }} {% endfor %}<span class="muted">{{ f.sources | join(", ") }}</span></td></tr>{% endfor %}</table>
+  {% else %}<p class="small muted">No building-wide facts were read.</p>{% endif %}
+  <details class="small" style="margin-top:10px"><summary class="muted">All {{ r.elements | length }} elements read</summary>
+    <table>{% for e in r.elements[:400] %}<tr><td><span class="kv">{{ e.id }}</span><div class="muted">{{ TYPE.get(e.type, e.type) }} · {{ e.sources | join(", ") }}</div></td>
+      <td>{% for k, v in e.facts.items() %}{{ k }} <b>{{ v }}</b>{% if not loop.last %}; {% endif %}{% endfor %}</td><td>{% for a in e.at %}{{ where(a) }} {% endfor %}</td></tr>{% endfor %}</table>
+    {% if r.elements | length > 400 %}<p class="muted">… {{ r.elements | length - 400 }} more in the JSON export.</p>{% endif %}
+  </details>
+</div>
+
+{% if r.conflicts %}
+<div class="card" id="conflicts">
+  <h2>Where the model and the drawings disagree ({{ r.conflicts | length }})</h2>
+  <p class="small muted">The same element read differently by two sources. No source is preferred: a verdict that turns on one of these is reported as uncertain.</p>
+  <table>{% for c in r.conflicts[:60] %}<tr><td class="small"><span class="kv">{{ c.element }}</span></td><td class="small">{{ c.fact }}</td>
+    <td class="small">{% for src, v in c.by_source.items() %}{{ v }} <span class="muted">({{ src }})</span><br>{% endfor %}</td>
+    <td class="small">{% for a in c.at %}{{ where(a) }} {% endfor %}</td></tr>{% endfor %}</table>
+</div>
+{% endif %}
+
+<div class="card" id="sheets">
+  <h2>Sheets read ({{ r.sheets | length }})</h2>
+  {% if r.sheets %}
+  <div class="thumbs">{% for s in r.sheets[:120] %}
+    <figure><a href="/projects/{{ pid }}/thumb?file={{ s.file | urlencode }}{% if s.page %}&page={{ s.page }}{% endif %}{% if s.layout %}&layout={{ s.layout | urlencode }}{% endif %}" target="_blank" rel="noopener"><img loading="lazy" alt="{{ s.number or s.file }}" src="/projects/{{ pid }}/thumb?file={{ s.file | urlencode }}{% if s.page %}&page={{ s.page }}{% endif %}{% if s.layout %}&layout={{ s.layout | urlencode }}{% endif %}"></a>
+      <b>{{ s.number or "—" }}</b> {{ (s.title or "")[:60] }}<div class="muted">{{ s.file[:40] }}{% if s.page %} p{{ s.page }}{% endif %} · {{ {"layer": "text layer", "ocr": "OCR", "dxf": "CAD text", "none": "no text read"}.get(s.text, s.text) }} · {{ s.tokens }} words</div></figure>
+  {% endfor %}</div>
+  {% if r.sheets | length > 120 %}<p class="small muted">… {{ r.sheets | length - 120 }} more sheets.</p>{% endif %}
+  {% else %}<p class="small muted">No drawing sheets in this project{% if r.files %}; the model was read directly{% endif %}.</p>{% endif %}
+</div>
+
+<div class="card" id="method">
+  <h2>How this report was made</h2>
+  <table>{% for s in r.sources %}<tr><td><b>{{ s.id }}</b></td><td class="small">{{ s.adapter or s.kind }}{% if s.file %} · {{ s.file }}{% endif %}{% if s.schema %} · {{ s.schema }}{% endif %}{% if s.files %} · {{ s.files | length }} file{{ "s" if s.files | length != 1 }}{% endif %}{% if s.method %}<div class="muted">{{ s.method }}</div>{% endif %}</td></tr>{% endfor %}</table>
+  <p class="small muted">IFC models are read for their elements, property sets and quantities, and travel distances are computed from the floor geometry. PDF sheets are read from their text layer, or by OCR where the text is drawn as outlines or scanned; DXF drawings for their room boundaries, door blocks, dimensions and text. Every fact cites the sheet region or model element it was read from. Rule packs then decide each requirement: <b>fails</b> and <b>passes</b> hold for every value the sources allow, <b>uncertain</b> means sources disagree on a deciding fact, <b>needs input</b> means a classification the drawings don't show is open. Packs are drafts written from the published codes. This is an automated pre-check, not a plan review, approval, or certification.</p>
+</div>
+{% endblock %}

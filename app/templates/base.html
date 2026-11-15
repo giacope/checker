@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Compliance check{% endblock %}</title>
+<style>
+:root { --fg:#1b1f24; --muted:#5b6470; --line:#e3e6ea; --bg:#f7f8fa; --card:#fff; --accent:#2457d6;
+        --fail:#c62828; --fail-bg:#fdecea; --unc:#a15c00; --unc-bg:#fff4e0; --pass:#1e7d34; --pass-bg:#e8f5ec; --na:#6b7280; --na-bg:#f0f1f3; }
+* { box-sizing: border-box; }
+body { margin:0; font:15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; color:var(--fg); background:var(--bg); }
+a { color:var(--accent); text-decoration:none; } a:hover { text-decoration:underline; }
+header.top { background:#11161d; color:#fff; padding:12px 24px; display:flex; align-items:center; gap:16px; }
+header.top a { color:#fff; font-weight:600; }
+header.top .sub { color:#9aa4b2; font-size:13px; }
+header.top nav.topnav a { color:#9aa4b2; font-weight:500; margin-right:14px; font-size:14px; }
+header.top nav.topnav a.on { color:#fff; border-bottom:2px solid #6c8cff; padding-bottom:2px; }
+.crop { display:block; max-width:100%; max-height:360px; border:1px solid var(--line); border-radius:6px; margin:6px 0; background:#fff; }
+.thumbs { display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:10px; }
+.thumbs figure { margin:0; border:1px solid var(--line); border-radius:7px; padding:6px; background:#fff; font-size:12px; }
+.thumbs img { width:100%; height:100px; object-fit:contain; background:#fafbfc; }
+input[type=file] { width:100%; padding:14px; border:2px dashed #c9ced6; border-radius:9px; background:#fafbfc; }
+main { max-width:1080px; margin:0 auto; padding:24px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px; margin-bottom:16px; }
+h1 { font-size:24px; margin:0 0 4px; } h2 { font-size:19px; margin:0 0 12px; } h3 { font-size:16px; margin:0; }
+.muted { color:var(--muted); } .small { font-size:13px; }
+label { display:block; font-weight:600; margin:12px 0 4px; }
+input[type=text], input[type=url], select { width:100%; padding:9px 11px; border:1px solid #c9ced6; border-radius:7px; font:inherit; background:#fff; }
+.checks label { display:flex; gap:8px; align-items:center; font-weight:400; margin:4px 0; }
+button, .btn { display:inline-block; background:var(--accent); color:#fff; border:0; border-radius:7px; padding:9px 16px; font:inherit; font-weight:600; cursor:pointer; }
+.btn.secondary { background:#fff; color:var(--fg); border:1px solid #c9ced6; }
+button:hover, .btn:hover { filter:brightness(1.07); text-decoration:none; }
+.pill { display:inline-block; padding:1px 9px; border-radius:999px; font-size:12px; font-weight:700; white-space:nowrap; }
+.v-fail { color:var(--fail); background:var(--fail-bg); } .v-uncertain, .v-unknown { color:var(--unc); background:var(--unc-bg); }
+.v-pass { color:var(--pass); background:var(--pass-bg); } .v-not_applicable { color:var(--na); background:var(--na-bg); }
+.grid { display:grid; gap:12px; } .g4 { grid-template-columns: repeat(4, 1fr); } .g2 { grid-template-columns: 1fr 1fr; }
+.stat { border:1px solid var(--line); border-radius:9px; padding:12px 14px; background:#fff; }
+.stat .n { font-size:26px; font-weight:700; line-height:1.1; }
+table { width:100%; border-collapse:collapse; } th, td { text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); vertical-align:top; }
+th { font-size:12px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); font-weight:600; }
+details.req { border:1px solid var(--line); border-radius:9px; margin:8px 0; background:#fff; }
+details.req > summary { list-style:none; cursor:pointer; padding:11px 14px; display:flex; gap:10px; align-items:baseline; }
+details.req > summary::-webkit-details-marker { display:none; }
+details.req[open] > summary { border-bottom:1px solid var(--line); }
+.req .body { padding:12px 16px; }
+.sec { font-weight:700; white-space:nowrap; }
+.finding { border-left:3px solid var(--line); padding:6px 0 6px 12px; margin:10px 0; }
+.finding.fail { border-color:var(--fail); } .finding.uncertain, .finding.unknown { border-color:#e0a030; }
+pre.code { background:#0f141a; color:#d7dde5; border-radius:7px; padding:8px 0; margin:6px 0; overflow:auto; font:12.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+pre.code span.ln { display:inline-block; width:52px; text-align:right; padding-right:12px; color:#6b7684; user-select:none; }
+pre.code .hl { background:#3a2a10; display:block; }
+pre.code .row { display:block; padding-right:12px; white-space:pre; }
+blockquote { margin:8px 0; padding:8px 12px; border-left:3px solid #c9ced6; background:#fafbfc; color:#333; }
+.kv { font:12.5px ui-monospace, Menlo, monospace; background:#f2f4f7; padding:1px 6px; border-radius:5px; }
+.note { background:#fff8e6; border:1px solid #f1dca6; border-radius:9px; padding:10px 14px; }
+.bar { height:8px; background:#eceef1; border-radius:4px; overflow:hidden; } .bar > span { display:block; height:100%; background:var(--accent); }
+nav.toc a { display:inline-block; margin-right:14px; }
+.q { display:grid; grid-template-columns: 1fr 220px; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); align-items:center; }
+footer { color:var(--muted); font-size:12.5px; text-align:center; padding:24px; }
+@media (max-width: 760px) { .g4, .g2 { grid-template-columns: 1fr 1fr; } .q { grid-template-columns: 1fr; } }
+</style>
+{% block head %}{% endblock %}
+</head>
+<body>
+<header class="top"><a href="/">Compliance check</a><nav class="topnav"><a href="/" class="{{ 'on' if not (request.url.path.startswith('/buildings') or request.url.path.startswith('/projects')) }}">Code repositories</a><a href="/buildings" class="{{ 'on' if request.url.path.startswith('/buildings') or request.url.path.startswith('/projects') }}">Building drawings</a></nav><span class="sub">{% block sub %}OWASP ASVS 5.0 · NIST SP 800-63B-4 · GDPR — verdicts with citations, from the code{% endblock %}</span></header>
+<main>{% block body %}{% endblock %}</main>
+<footer>Automated assessment from rule packs drafted from the published texts. Not legal advice or a certification.</footer>
+</body>
+</html>

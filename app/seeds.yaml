@@ -1,0 +1,85 @@
+# Example building projects: real, openly licensed drawing sets and models, fetched from their
+# publishers and processed by the same pipeline as an upload (`uv run python -m app.seed`).
+#
+# A file is { url, sha256 } of what the publisher serves, with `member` when it is one file
+# inside a zip. `local` is a path under NORMIR_SEED_INPUTS where a copy may already be
+# (checked against sha256 before use); otherwise the url is downloaded once into
+# ~/.cache/normir/seeds/<sha256>.
+
+clinic:
+  name: NIBS Medical/Dental Clinic — model, life safety, stair and door sheets
+  codes: [ibc, ada]
+  source: https://github.com/buildingsmart-community/Community-Sample-Test-Files/tree/main/IFC%202.3.0.1%20(IFC%202x3)/Medical-Dental%20Clinic
+  licence: >-
+    CC BY 4.0 — BSI (2020) "Medical-Dental Test Files," buildingSMART International, republishing the NIBS
+    Common BIM Files (WBDG). Files unchanged; 12 of the 316 drawing sheets are used.
+  files:
+    - &clinic_dwg
+      url: https://www.wbdg.org/FFC/BIM/LCie/Clinic%20Model/2012-03-27-ClinicDrawingsRedacted.zip
+      sha256: 2cc97cb40080f2875c935101205f71e06a666d9c0d2cfa54febd13e0e376cb77
+      local: nibs-clinic/2012-03-27-ClinicDrawingsRedacted.zip
+      member: 2012-03-27-ClinicRedactedDrawings/Clinic_161_Life Safety Composite First Floor Plan.pdf
+    - {<<: *clinic_dwg, member: 2012-03-27-ClinicRedactedDrawings/Clinic_162_Life Safety Composite Second Floor Plan.pdf}
+    - {<<: *clinic_dwg, member: "2012-03-27-ClinicRedactedDrawings/Clinic_122_Enlarged Stair #1 Floor Plans & Section.pdf"}
+    - {<<: *clinic_dwg, member: "2012-03-27-ClinicRedactedDrawings/Clinic_123_Enlarged Stair #2 Floor Plans & Section.pdf"}
+    - {<<: *clinic_dwg, member: "2012-03-27-ClinicRedactedDrawings/Clinic_124_Enlarged Stair #3 Floor Plans & Section & Details.pdf"}
+    - {<<: *clinic_dwg, member: "2012-03-27-ClinicRedactedDrawings/Clinic_126_Exterior Stair & Ramp Sections & Details.pdf"}
+    - {<<: *clinic_dwg, member: 2012-03-27-ClinicRedactedDrawings/Clinic_079_Door Schedule.pdf}
+    - {<<: *clinic_dwg, member: 2012-03-27-ClinicRedactedDrawings/Clinic_080_Door Schedule.pdf}
+    - {<<: *clinic_dwg, member: 2012-03-27-ClinicRedactedDrawings/Clinic_081_Door Schedule.pdf}
+    - {<<: *clinic_dwg, member: 2012-03-27-ClinicRedactedDrawings/Clinic_076_Finish Schedule.pdf}
+    - {<<: *clinic_dwg, member: 2012-03-27-ClinicRedactedDrawings/Clinic_077_Finish Schedule.pdf}
+    - {<<: *clinic_dwg, member: 2012-03-27-ClinicRedactedDrawings/Clinic_078_Finish Schedule.pdf}
+    - url: https://www.wbdg.org/FFC/BIM/LCie/Clinic%20Model/2011-09-14-Clinic-IFC.zip
+      sha256: 8e3dfa1c70a92d3263e2998a034191d5b0ef632acc68a49bf235a15592ad7b2a
+      local: nibs-clinic/2011-09-14-Clinic-IFC.zip
+      member: Clinic_A_20110906.ifc
+
+office:
+  name: NIBS Office Building — architectural model
+  codes: [ibc, ada]
+  source: https://www.wbdg.org/FFC/BIM/LCie/Office%20Model/ (buildingSMART alliance "Common Building Information Model Files")
+  licence: >-
+    buildingSMART alliance Common BIM Files reuse terms: free for any use with attribution to the buildingSMART alliance
+    (NBIMS-US V3 §4.2.8.3.3; also listed as CC BY-ND 3.0). Files unchanged.
+  files:
+    - url: https://www.wbdg.org/FFC/BIM/LCie/Office%20Model/2011-09-14-Office-IFC.zip
+      sha256: 3fb720d4d962a7a7af2f7a0506a717d6149ecf54f5f7e45a6536b26130e030fe
+      local: nibs-office/2011-09-14-Office-IFC.zip
+      member: Office_A_20110811.ifc
+  # The office's published PDF is a 3D PDF (an embedded model and a poster image): no drawing sheet to read.
+
+tuwien:
+  name: TU Wien real-world test model for escape-route analysis
+  codes: [ibc, uk-adb]
+  source: https://doi.org/10.48436/wzp90-dmf60 (TU Wien Research Data)
+  licence: CC BY 4.0 — Real-World Test Model for Escape Route Analysis in IFC format, TU Wien. Unchanged.
+  files:
+    - url: https://researchdata.tuwien.ac.at/records/wzp90-dmf60/files/RealWorldTestModel-EscapeRouteAnalysis-ZDB-v2.ifc?download=1
+      sha256: 759c5e5f516eb23eb4a9a5f113e626e35e995029ca153ee759ac94a59043652e
+      local: tuwien-escape-route/RealWorldTestModel-EscapeRouteAnalysis-ZDB-v2.ifc
+      name: RealWorldTestModel-EscapeRouteAnalysis-ZDB-v2.ifc
+
+health-post:
+  name: Innerscene health post, 12 × 10 m — CAD floor plan
+  codes: [ibc, ada]
+  source: https://www.innerscene.com/tools/library/drawings/health-post-12-x-10-m-dimensioned-floor-plan-ca8e49f0
+  licence: CC0 1.0 (public domain dedication) — Innerscene Corp. Unchanged.
+  files:
+    - url: https://www.innerscene.com/api/library/health-post-12-x-10-m-dimensioned-floor-plan-ca8e49f0/download
+      sha256: 5930a6d25348fb06f882fa14382409042174f052a8be8e88dda42a299363c3e9
+      local: dxf/innerscene-health-post/health-post-12-x-10-m-dimensioned-floor-plan.dxf
+      name: health-post-12-x-10-m-dimensioned-floor-plan.dxf
+
+farmhouse:
+  name: FreeFarmhouse "American Farmhouse" — 25-sheet CAD set
+  codes: [ibc]
+  source: https://www.freefarmhouse.com/downloads
+  licence: >-
+    CC BY-SA (3.0 per the downloads page, 4.0 per the drawing notes) — Jay Osborne, FreeFarmhouse. Used unchanged;
+    the report's crops are excerpts of the unchanged drawing.
+  files:
+    - url: https://www.freefarmhouse.com/uploads/b/244cd9c0-4894-11ea-8aad-9b21e8eb84db/American%20Farmhouse%20CAD%20Files.zip
+      sha256: f3c88893e8aab01f97ba134bb43cf130786e0a4905e8526683fea7b084090084
+      local: dxf/freefarmhouse/american-farmhouse-cad.zip
+      member: American Farmhouse 2021-03-01.dxf

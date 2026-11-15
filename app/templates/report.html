@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}{{ r.repo.owner }}/{{ r.repo.name }} — compliance report{% endblock %}
+{% macro code(s) %}{% if s %}<pre class="code">{% for n, t in s.lines %}<span class="row{% if n == s.line %} hl{% endif %}"><span class="ln">{{ n }}</span>{{ t }}</span>{% endfor %}</pre>{% endif %}{% endmacro %}
+{% macro pill(v) %}<span class="pill v-{{ v }}">{{ VERDICT[v] }}</span>{% endmacro %}
+{% block body %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <div>
+      <h1><a href="{{ r.repo.url }}">{{ r.repo.owner }}/{{ r.repo.name }}</a></h1>
+      <div class="muted small">Commit <a href="{{ r.repo.url }}/tree/{{ r.repo.commit }}"><span class="kv">{{ r.repo.commit | short }}</span></a>{% if r.repo.branch %} · branch {{ r.repo.branch }}{% endif %}
+        · {{ req.created }} · scanned in {{ r.seconds }} s · ASVS L{{ r.asvs_level }}</div>
+      <div class="muted small">Languages: {% for k, v in r.languages.items() %}{{ k }} ({{ v }}){% if not loop.last %}, {% endif %}{% else %}none recognised{% endfor %}</div>
+    </div>
+    <div><a class="btn secondary" href="/scans/{{ sid }}/report.md">Download Markdown</a> <a class="btn secondary" href="/scans/{{ sid }}/report.json">JSON</a></div>
+  </div>
+  <div class="grid g4" style="margin-top:16px">
+    <div class="stat"><div class="n" style="color:var(--fail)">{{ r.totals.fail or 0 }}</div><div class="small muted">requirements fail</div></div>
+    <div class="stat"><div class="n" style="color:var(--unc)">{{ (r.totals.uncertain or 0) + (r.totals.unknown or 0) }}</div><div class="small muted">can't be decided from code alone</div></div>
+    <div class="stat"><div class="n" style="color:var(--pass)">{{ r.totals.pass or 0 }}</div><div class="small muted">pass</div></div>
+    <div class="stat"><div class="n">{{ r.dependencies.vulnerable }}<span class="muted" style="font-size:15px"> / {{ r.dependencies.total }}</span></div><div class="small muted">dependencies with advisories</div></div>
+  </div>
+  <table style="margin-top:14px"><tr><th>Standard</th><th>Fails</th><th>Uncertain</th><th>Needs input</th><th>Passes</th><th>N/A</th></tr>
+  {% for s in r.standards %}<tr><td><a href="#{{ s.id }}">{{ s.label }}</a></td><td>{{ s.summary.fail or 0 }}</td><td>{{ s.summary.uncertain or 0 }}</td><td>{{ s.summary.unknown or 0 }}</td><td>{{ s.summary.pass or 0 }}</td><td>{{ s.summary.not_applicable or 0 }}</td></tr>{% endfor %}
+  </table>
+  {% if r.notes %}<div class="note" style="margin-top:14px"><b>Limits of this scan</b><ul style="margin:6px 0 0">{% for n in r.notes %}<li>{{ n }}</li>{% endfor %}</ul></div>{% endif %}
+  {% if r.questions %}<p style="margin-bottom:0"><a href="#questions"><b>{{ r.questions | length }} question{{ "s" if r.questions | length != 1 }}</b></a> would settle open verdicts — answer them to update the report.</p>{% endif %}
+  <nav class="toc small" style="margin-top:10px">{% for s in r.standards %}<a href="#{{ s.id }}">{{ s.label }}</a>{% endfor %}{% if r.dependencies.total %}<a href="#deps">Dependencies</a>{% endif %}<a href="#questions">Questions</a><a href="#method">Method</a></nav>
+</div>
+
+{% for s in r.standards %}
+<div class="card" id="{{ s.id }}">
+  <h2>{{ s.label }}</h2>
+  <p class="small muted">{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (licence){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
+  {% if s.coverage %}
+    {% set c = s.coverage %}
+    <p class="small">Automatically checked: <b>{{ c.checked }}</b> of the {{ c.total }} ASVS 5.0 requirements at L{{ c.level }}. The rest need review by a person or a deployed-system test:</p>
+    <div class="bar"><span style="width:{{ (100 * c.checked / c.total) | round(1) }}%"></span></div>
+    <details class="small" style="margin:6px 0 12px"><summary class="muted">Coverage by chapter</summary>
+      <table>{% for ch in c.chapters %}<tr><td>{{ ch.chapter }} {{ ch.title }}</td><td>{{ ch.checked | length }} / {{ ch.requirements }}</td><td class="muted">{{ ch.checked | join(", ") }}</td></tr>{% endfor %}</table></details>
+  {% endif %}
+  {% for e in s.entries if e.verdict != "not_applicable" %}
+  <details class="req" {% if e.verdict in ("fail", "uncertain", "unknown") %}open{% endif %}>
+    <summary>{{ pill(e.verdict) }} <span class="sec">{{ e.section }}</span>{% if e.level %}<span class="muted small">L{{ e.level }}</span>{% endif %} <span>{{ e.title }}</span>
+      <span class="muted small" style="margin-left:auto; white-space:nowrap">{% if e.checked %}{{ e.counts.fail or 0 }} of {{ e.checked }} fail{% endif %}</span></summary>
+    <div class="body">
+      <div class="small">Requirement: {% if e.url %}<a href="{{ e.url }}" target="_blank" rel="noopener">{{ e.section }}</a>{% else %}{{ e.section }}{% endif %}{% if e.settled == "no" or e.settled == false %} · <span class="pill v-unknown">reading not settled in case law</span>{% endif %}</div>
+      {% if e.quote %}<blockquote class="small">{{ e.quote }}</blockquote>{% endif %}
+      {% for f in e.findings[:30] %}
+      <div class="finding {{ f.verdict }}">
+        <div>{{ pill(f.verdict) }} <b>{{ TYPE.get(f.type or "", f.type or "Application-wide") }}</b>
+          {% for a in f.at %} · {% if a.url %}<a href="{{ a.url }}" target="_blank" rel="noopener"><span class="kv">{{ a.at }}</span></a>{% else %}<span class="kv">{{ a.at }}</span>{% endif %}{% endfor %}
+          {% if f.type == "Dependency" %}{% set d = f.facts %}<span class="small"> · <b>{{ d.name | join("/") }} {{ d.version | join("/") }}</b> ({{ d.ecosystem | join("/") }})
+            · {{ d.max_severity | join("/") }} · {% set ids = (d.advisories or []) | join(",") %}{{ ids.count(",") + 1 - ids.count("CVE-") if ids else 0 }} advisories{% if "True" in (d.fix_available or []) %} · fixed version available{% endif %} — <a href="#deps">details</a></span>
+          {% elif f.facts %}<span class="small muted"> · {% for k, v in f.facts.items() %}{{ k }}={{ v | join("/") }}{% if not loop.last %}, {% endif %}{% endfor %}</span>{% endif %}
+        </div>
+        {% for a in f.at[:1] %}{{ code(a.snippet) }}{% endfor %}
+        {% if f.deciding %}<div class="small">Sources disagree: {% for k, vs in f.deciding.items() %}<b>{{ k }}</b> is {% for d in vs %}{{ d.value }} <span class="muted">({{ d.sources[:2] | join(", ") }})</span>{% if not loop.last %} or {% endif %}{% endfor %}{% endfor %} — the verdict differs between them.</div>{% endif %}
+        {% if f.open %}<div class="small">Not decidable from the code: {% for o in f.open %}<span class="kv">{{ o }}</span> {% endfor %}— see <a href="#questions">questions</a>.</div>{% endif %}
+      </div>
+      {% endfor %}
+      {% if e.findings | length > 30 %}<p class="small muted">… and {{ e.findings | length - 30 }} more in the JSON and Markdown exports.</p>{% endif %}
+      {% if e.verdict == "pass" %}<p class="small">Checked {{ e.checked }} place{{ "s" if e.checked != 1 }}; all pass.</p>{% endif %}
+      {% if e.guidance and e.verdict != "pass" %}<p class="small"><b>What to do:</b> {{ e.guidance }}</p>{% endif %}
+      {% if e.interpretation %}<details class="small"><summary class="muted">How this is checked</summary><p>{{ e.interpretation }}</p>{% if e.defers_to %}<p class="muted">Not covered here: {{ e.defers_to | join("; ") }}</p>{% endif %}</details>{% endif %}
+    </div>
+  </details>
+  {% endfor %}
+  {% set na = s.entries | selectattr("verdict", "equalto", "not_applicable") | list %}
+  {% if na %}<p class="small muted">Not applicable — nothing in the code is subject to them: {% for e in na %}{{ e.section }}{% if not loop.last %}, {% endif %}{% endfor %}.</p>{% endif %}
+  {% if s.not_formalized %}<details class="small"><summary class="muted">Provisions this pack does not check ({{ s.not_formalized | length }})</summary><ul>{% for x in s.not_formalized %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
+</div>
+{% endfor %}
+
+{% if r.dependencies.total %}
+<div class="card" id="deps">
+  <h2>Vulnerable dependencies</h2>
+  <p class="small muted">{{ r.dependencies.vulnerable }} of {{ r.dependencies.total }} locked packages are affected by published advisories (OSV).</p>
+  {% if r.dependencies.rows %}
+  <table><tr><th>Package</th><th>Severity</th><th>Fix</th><th>Advisories</th></tr>
+  {% for d in r.dependencies.rows[:150] %}<tr>
+    <td><b>{{ d.name }}</b> {{ d.version }} <span class="muted small">{{ d.ecosystem }}</span>{% for a in d.at %}<br><a class="small" href="{{ a.url }}">{{ a.at }}</a>{% endfor %}</td>
+    <td><span class="pill {{ 'v-fail' if d.severity in ('critical', 'high') else 'v-unknown' }}">{{ d.severity }}</span></td>
+    <td class="small">{{ "available" if d.fix_available else "none released" }}</td>
+    <td class="small">{% for a in d.advisories[:6] %}<a href="https://osv.dev/vulnerability/{{ a.id }}" target="_blank" rel="noopener">{{ a.id }}</a>{% if a.summary %}: {{ a.summary }}{% endif %}{% if a.fixed %} <span class="muted">(fixed in {{ a.fixed }})</span>{% endif %}<br>{% endfor %}{% if d.advisories | length > 6 %}<span class="muted">+{{ d.advisories | length - 6 }} more</span>{% endif %}</td>
+  </tr>{% endfor %}
+  </table>{% endif %}
+</div>
+{% endif %}
+
+<div class="card" id="questions">
+  <h2>Questions that settle open verdicts</h2>
+  {% if r.questions %}
+  <p class="small muted">The code can't show these. Answers are stored with this scan, recorded in the report as given by you, and the packs are evaluated again.</p>
+  <form method="post" action="/scans/{{ sid }}/answers">
+    {% for q in r.questions[:60] %}
+    <div class="q">
+      <div><b>{{ q.label }}</b>{% if q.type %} <span class="muted small">— {{ TYPE.get(q.type, q.type) }}</span>{% endif %}
+        {% for a in q.at %} <span class="kv small">{{ a }}</span>{% endfor %}
+        <div class="small muted">Decides {{ q.decides | join(", ") }}{% if q.candidates %} · the sources say {{ q.candidates | join(" or ") }}{% endif %}</div></div>
+      <div>{% if q.value_type == "bool" %}
+          <select name="{{ q.key }}"><option value="">—</option><option value="true">Yes</option><option value="false">No</option></select>
+        {% elif q.value_type == "enum" %}
+          <select name="{{ q.key }}"><option value="">—</option>{% for v in q["values"] %}<option>{{ v }}</option>{% endfor %}</select>
+        {% else %}<input type="text" name="{{ q.key }}" placeholder="{{ q.value_type }}">{% endif %}</div>
+    </div>
+    {% endfor %}
+    {% if r.questions | length > 60 %}<p class="small muted">{{ r.questions | length - 60 }} more questions appear once these are answered.</p>{% endif %}
+    <p><button type="submit">Update report</button></p>
+  </form>
+  {% else %}<p class="small">None: every verdict above is decided by the code.</p>{% endif %}
+  {% if r.answered %}
+  <h3 style="margin-top:12px">Your answers</h3>
+  <form method="post" action="/scans/{{ sid }}/answers"><table>
+    {% for a in r.answered %}<tr><td class="small">{{ a.label }}{% if a.element != "_subject" %} <span class="kv">{{ a.element }}</span>{% endif %}</td><td>{{ a.value }}</td><td><button class="btn secondary" name="clear::{{ a.element }}::{{ a.attr }}" value="1">Remove</button></td></tr>{% endfor %}
+  </table></form>
+  {% endif %}
+</div>
+
+{% if r.conflicts %}
+<div class="card">
+  <h2>Where the sources disagree ({{ r.conflicts | length }})</h2>
+  <p class="small muted">Static analysis and the model reader read the same code differently here. The model reader's value is used; check these first if a verdict looks wrong.</p>
+  <table>{% for c in r.conflicts[:40] %}<tr><td class="small"><span class="kv">{{ c.element }}</span></td><td class="small">{{ c.fact }}</td>
+    <td class="small">{% for v in c["values"] %}{{ v.value }} <span class="muted">({{ v.sources[:1] | join(", ") }})</span><br>{% endfor %}{% for v in c.overridden or [] %}<s>{{ v.value }}</s> <span class="muted">({{ v.sources[:1] | join(", ") }})</span><br>{% endfor %}</td></tr>{% endfor %}</table>
+</div>
+{% endif %}
+
+<div class="card" id="method">
+  <h2>How this report was made</h2>
+  <table>{% for s in r.sources %}<tr><td><b>{{ s.id }}</b></td><td class="small">{{ s.adapter or s.kind }} {{ s.adapter_version or "" }}{% if s.model %} · {{ s.model }}{% endif %}{% if s.files_analysed %} · {{ s.files_analysed }} files{% endif %}{% if s.files_sent %} · {{ s.files_sent }} files read by the model{% endif %}{% if s.lockfiles %} · {{ s.lockfiles | join(", ") }}{% endif %}</td></tr>{% endfor %}</table>
+  <p class="small muted">Facts are extracted by deterministic static analysis and, where configured, a language model reading the code; each fact cites the line it rests on. Rule packs then decide each requirement: <b>fails</b> and <b>passes</b> hold for every value the sources allow, <b>uncertain</b> means sources disagree on a deciding fact, <b>needs input</b> means a fact the code cannot show (a contract, the deployment) is open. Packs are drafts written from the published texts; each requirement states how it is read. This is an automated assessment, not legal advice or a certification.</p>
+</div>
+{% endblock %}
