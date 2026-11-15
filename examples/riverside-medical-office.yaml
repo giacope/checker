@@ -1,0 +1,10 @@
+# Example project profile (not a real project): the clinic from the research
+# prototype, before any model exists. Facts left out are open.
+building:
+  occupancy_group: B
+  sprinkler_system: nfpa13
+  has_dwelling_units: false
+  care_less_than_24h: true
+  # emergency_voice_alarm: open
+  # care_renders_incapable: open (does the procedure suite use general anesthesia?)
+  # accepts_incapable_recipients: open

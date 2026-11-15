@@ -1,0 +1,148 @@
+# Section 4, Small premises (PDF pages 54-58, printed 42-46), and Section 5,
+# General provisions (PDF pages 59-65, printed 47-53): door fastenings (5.9),
+# direction of opening (5.11), headroom (5.16).
+
+terms:
+  # ------------------------------------------------------------ Section 4
+  - name: small_premises
+    title: May the small premises guidance of Section 4 be followed?
+    cite:
+      section: "ADB2 4.2"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=54
+      quote: >-
+        Small premises should meet all of the following general conditions. a.
+        i. It should be single occupancy. ii. It should not comprise more than a
+        basement storey, ground storey and first storey. iii. No storey should
+        have a floor area more than 280m2.
+    note: >-
+      2.2: For small shop, office, industrial, storage and other similar
+      premises, the guidance on small premises (see section 4) may be followed
+      instead of the provisions in this section, if they meet both of the
+      following conditions. a. No storey has an area more than 280m2. b. There is
+      a maximum of two storeys plus a basement storey. 4.1: This guidance is not
+      applicable to small premises where highly flammable materials are sold,
+      stored or used.
+    interpretation:
+      by: pack
+      note: >-
+        (1) 'Small shop, office, industrial, storage and other similar premises'
+        (2.2) is read as purpose groups 3, 4, 6 and 7(a). (2) 'Not more than a
+        basement storey, ground storey and first storey' is read as at most two
+        storeys counted as in Diagram D5 and at most one basement storey.
+    defers_to:
+      - "ADB2 4.2b (kitchens at the extremity of a dead end)"
+      - "ADB2 4.2c (bar or restaurant: 30 people per storey, 100 on a ground storey with an independent final exit)"
+    status: draft
+    value:
+      all:
+        - {in: [{fact: building.purpose_group}, [office, shop-and-commercial, industrial, storage-and-other-non-residential]]}
+        - {fact: building.single_occupancy}
+        - {le: [{fact: building.storeys}, 2]}
+        - {le: [{fact: building.basement_storeys}, 1]}
+        - {le: [{fact: building.largest_storey_area}, 280 m2]}
+        - {not: {fact: building.highly_flammable_materials}}
+
+  - name: max_travel_distance_small_premises
+    title: Maximum travel distance in small premises (Table 4.1)
+    for: {f: Storey}
+    cite:
+      section: "ADB2 Table 4.1"
+      table: "4.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=55
+      quote: >-
+        The travel distance in small premises with an open stair is measured as
+        follows. a. In a basement: to the foot of the stair. b. On a first
+        storey: to the head of the stair.
+    note: >-
+      4.6 (PDF page 54): escape routes should be sited so that the travel
+      distance from any point of a storey to the nearest storey exit does not
+      exceed the distance given in Table 4.1. Table 4.1 note: if the internal
+      layout is not known, the direct distance should be assumed to be
+      two-thirds of the travel distance.
+    defers_to: ["ADB2 4.8-4.9 (open stairs in small premises)"]
+    status: draft
+    value:
+      cases:
+        - when: {not: {term: small_premises}}
+          then: not-applicable
+          cite:
+            section: "ADB2 4.2"
+            url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=54
+            row: not small premises (Table 2.1 applies)
+        - when: {gt: [{fact: f.exits}, 1]}
+          then: 45 m
+          cite: {row: "Storey with more than one exit/stair — 45"}
+        - when: {eq: [{fact: f.level}, ground]}
+          then: 27 m
+          cite: {row: "Ground storey with a single exit — 27"}
+        - when: {in: [{fact: f.level}, [basement, first]]}
+          then: 18 m
+          cite: {row: "Basement or first storey with a single stair — 18"}
+        - else: not-applicable
+          cite: {row: storey not described in Table 4.1}
+
+  # ------------------------------------------------------------ Section 5
+  - name: panic_fastenings_or_no_fastenings_required
+    title: Must the door have no locks, latches or bolts, or panic fastenings (5.9)?
+    for: {e: Exit}
+    cite:
+      section: "ADB2 5.9"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=60
+      quote: >-
+        In places of assembly and shop and commercial buildings (purpose groups
+        4 and 5), doors on escape routes from rooms with more than 60 people
+        should be either of the following. a. Not fitted with locks, latches or
+        bolts. b. Fitted with panic fastenings in accordance with BS EN 1125.
+    defers_to: ["BS EN 1125 (panic fastenings)"]
+    status: draft
+    value:
+      all:
+        - {in: [{fact: building.purpose_group}, [shop-and-commercial, assembly-and-recreation]]}
+        - {gt: [{fact: e.room_occupant_number}, 60]}
+
+  - name: door_must_open_in_direction_of_escape
+    title: Must the door always be hung to open in the direction of escape (5.11)?
+    for: {e: Exit}
+    cite:
+      section: "ADB2 5.11"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=60
+      quote: >-
+        It should always be hung to open in the direction of escape if either of
+        the following conditions applies. a. More than 60 people might be
+        expected to use it during a fire. b. There is a very high risk of fire
+        with potential for rapid fire growth, such as with some industrial
+        activities.
+    note: Otherwise it should open in the direction of escape whenever reasonably practicable.
+    status: draft
+    value:
+      any:
+        - {gt: [{fact: e.people}, 60]}
+        - {fact: e.very_high_fire_risk}
+
+norms:
+  - name: "ADB2 Table 4.1"
+    title: Travel distance in small premises is within Table 4.1
+    modality: obligation
+    for: {f: Storey}
+    cite:
+      section: "ADB2 4.6"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=54
+    status: draft
+    require:
+      any:
+        - {eq: [{term: max_travel_distance_small_premises, of: f}, not-applicable]}
+        - {le: [{fact: f.max_travel_distance}, {term: max_travel_distance_small_premises, of: f}]}
+
+  - name: "ADB2 5.16"
+    title: Escape route headroom is at least 2m
+    modality: obligation
+    for: {r: EscapeRoute}
+    cite:
+      section: "ADB2 5.16"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=61
+      quote: >-
+        Escape routes should have a minimum clear headroom of 2m. The only
+        projections allowed below this height are door frames.
+    status: draft
+    require:
+      ge: [{fact: r.clear_headroom}, 2 m]

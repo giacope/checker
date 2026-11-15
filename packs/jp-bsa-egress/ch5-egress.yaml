@@ -1,0 +1,646 @@
+# 第5章第2節 廊下、避難階段及び出入口: 令119条, 令120条, 令121条, 令125条1項・3項.
+# Every term here first checks the scope of 令117条1項. Text from e-Gov 法令API v2,
+# as of 2026-11-14 (revision 325CO0000000338_20261101_508CO0000000284).
+#
+# Symbols returned besides lengths and true/false:
+#   not-applicable  the provision does not apply to this element
+#   not-required    the provision applies but sets no requirement for this element
+
+tables:
+  - name: T119
+    title: 廊下の幅
+    cite:
+      section: "令119条 表"
+      table: "令119条 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_119-Pr_1
+      quote: 廊下の幅は、それぞれ次の表に掲げる数値以上としなければならない。
+    key: Corridor.category_119
+    columns: [both_sides, other]
+    note: both_sides = 両側に居室がある廊下における場合; other = その他の廊下における場合. Both are minimums.
+    rows:
+      - key: school
+        both_sides: 2.3 m
+        other: 1.8 m
+        row: 小学校、中学校、義務教育学校、高等学校又は中等教育学校における児童用又は生徒用のもの
+        quote: 小学校、中学校、義務教育学校、高等学校又は中等教育学校における児童用又は生徒用のもの　二・三　一・八
+      - key: general
+        both_sides: 1.6 m
+        other: 1.2 m
+        row: 病院における患者用のもの、共同住宅の住戸若しくは住室の床面積の合計が百平方メートルを超える階における共用のもの又は三室以下の専用のものを除き居室の床面積の合計が二百平方メートル（地階にあつては、百平方メートル）を超える階におけるもの
+        quote: 病院における患者用のもの、共同住宅の住戸若しくは住室の床面積の合計が百平方メートルを超える階における共用のもの又は三室以下の専用のものを除き居室の床面積の合計が二百平方メートル（地階にあつては、百平方メートル）を超える階におけるもの　一・六　一・二
+
+  - name: T120
+    title: 直通階段に至る歩行距離
+    cite:
+      section: "令120条1項 表"
+      table: "令120条1項 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_1
+      quote: 当該各居室からその一に至る歩行距離が同表の中欄又は下欄に掲げる場合の区分に応じそれぞれ同表の中欄又は下欄に掲げる数値以下となるように設けなければならない。
+    key: Room.category_120
+    columns: [fire_resistive, other]
+    note: >
+      fire_resistive = 主要構造部が準耐火構造である場合（特定主要構造部が耐火構造である場合を含む。）
+      又は主要構造部が不燃材料で造られている場合; other = その他の場合. Both are maximums.
+    rows:
+      - key: i
+        fire_resistive: 30 m
+        other: 30 m
+        row: （一）第百十六条の二第一項第一号に該当する窓その他の開口部を有しない居室又は法別表第一（い）欄（四）項に掲げる用途に供する特殊建築物の主たる用途に供する居室
+        quote: （一）　第百十六条の二第一項第一号に該当する窓その他の開口部を有しない居室（（中略）国土交通大臣が定める基準に適合するものを除く。）又は法別表第一（い）欄（四）項に掲げる用途に供する特殊建築物の主たる用途に供する居室　三〇　三〇
+      - key: ii
+        fire_resistive: 50 m
+        other: 30 m
+        row: （二）法別表第一（い）欄（二）項に掲げる用途に供する特殊建築物の主たる用途に供する居室
+        quote: （二）　法別表第一（い）欄（二）項に掲げる用途に供する特殊建築物の主たる用途に供する居室　五〇　三〇
+      - key: iii
+        fire_resistive: 50 m
+        other: 40 m
+        row: （三）（一）の項又は（二）の項に掲げる居室以外の居室
+        quote: （三）　（一）の項又は（二）の項に掲げる居室以外の居室　五〇　四〇
+
+terms:
+  # ------------------------------------------------------------- 令119条
+  - name: corridor_category_119
+    title: 令119条の表の廊下の用途 (corridor row in the 令119条 table)
+    for: {c: Corridor}
+    cite:
+      section: "令119条 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_119-Pr_1
+    interpretation:
+      by: pack
+      note: >
+        (1) 「三室以下の専用のものを除き」 is read as limiting only the third limb
+        (floors with more than 200 m2 of habitable rooms), not the hospital and
+        apartment-house limbs. (2) The school row is taken first, so a pupils'
+        corridor gets 2.3 m / 1.8 m even on a floor that also meets the general row.
+        (3) A corridor that fits neither row returns not-listed: 令119条 sets no
+        minimum width for it.
+    value:
+      cases:
+        - when:
+            all:
+              - {in: [{fact: building.principal_use}, [school_elementary, school_secondary]]}
+              - {fact: c.for_pupils}
+          then: school
+          cite: {row: 小学校、中学校、義務教育学校、高等学校又は中等教育学校における児童用又は生徒用のもの}
+        - when:
+            all:
+              - {eq: [{fact: building.principal_use}, hospital]}
+              - {fact: c.for_patients}
+          then: general
+          cite: {row: 病院における患者用のもの}
+        - when:
+            all:
+              - {eq: [{fact: building.principal_use}, apartment_house]}
+              - {fact: c.common_use}
+              - {gt: [{fact: c.floor_dwelling_unit_area}, 100 m2]}
+          then: general
+          cite: {row: 共同住宅の住戸若しくは住室の床面積の合計が百平方メートルを超える階における共用のもの}
+        - when:
+            all:
+              - {not: {fact: c.exclusive_to_three_rooms_or_fewer}}
+              - {not: {fact: c.in_basement}}
+              - {gt: [{fact: c.floor_habitable_area}, 200 m2]}
+          then: general
+          cite: {row: 三室以下の専用のものを除き居室の床面積の合計が二百平方メートルを超える階におけるもの}
+        - when:
+            all:
+              - {not: {fact: c.exclusive_to_three_rooms_or_fewer}}
+              - {fact: c.in_basement}
+              - {gt: [{fact: c.floor_habitable_area}, 100 m2]}
+          then: general
+          cite: {row: 三室以下の専用のものを除き居室の床面積の合計が百平方メートルを超える地階におけるもの}
+        - else: not-listed
+          cite: {row: 表に掲げる廊下以外の廊下, note: 令119条 sets no minimum width}
+
+  - name: min_corridor_width_119
+    title: 廊下の幅の最小値 (minimum corridor width)
+    for: {c: Corridor}
+    cite:
+      section: "令119条"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_119-Pr_1
+    defers_to: ["令117条2項（別の建築物とみなす部分）"]
+    value:
+      cases:
+        - when: {not: {term: section_5_2_applies_to_corridor, of: c}}
+          then: not-applicable
+          cite:
+            section: "令117条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+            row: 令117条1項に掲げる建築物又は階以外
+        - when: {eq: [{term: corridor_category_119, of: c}, not-listed]}
+          then: not-required
+          cite: {row: 表に掲げる廊下以外の廊下}
+        - when: {fact: c.rooms_on_both_sides}
+          then: {lookup: T119, key: {term: corridor_category_119, of: c}, column: both_sides}
+          cite: {row: 両側に居室がある廊下における場合}
+        - else: {lookup: T119, key: {term: corridor_category_119, of: c}, column: other}
+          cite: {row: その他の廊下における場合}
+
+  # ------------------------------------------------------------- 令120条
+  - name: room_category_120
+    title: 令120条1項の表の居室の種類 (room type in the 令120条 table)
+    for: {r: Room}
+    cite:
+      section: "令120条1項 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_1
+    note: >
+      The exclusion in row (一) for windowless rooms that meet the criteria the
+      Minister sets (国土交通大臣が定める基準) is the judged fact
+      Room.meets_mlit_windowless_criteria; the criteria themselves are not encoded.
+    defers_to: ["令120条1項表(一)の国土交通大臣が定める基準（告示）"]
+    value:
+      cases:
+        - when:
+            all:
+              - {fact: r.windowless_116_2_1}
+              - {not: {fact: r.meets_mlit_windowless_criteria}}
+          then: i
+          cite:
+            section: "令120条1項 表(一)"
+            row: （一）第百十六条の二第一項第一号に該当する窓その他の開口部を有しない居室
+        - when:
+            all:
+              - {eq: [{term: special_building_class}, class-4]}
+              - {fact: r.main_use_room}
+          then: i
+          cite:
+            section: "令120条1項 表(一)"
+            row: （一）法別表第一（い）欄（四）項に掲げる用途に供する特殊建築物の主たる用途に供する居室
+        - when:
+            all:
+              - {eq: [{term: special_building_class}, class-2]}
+              - {fact: r.main_use_room}
+          then: ii
+          cite:
+            section: "令120条1項 表(二)"
+            row: （二）法別表第一（い）欄（二）項に掲げる用途に供する特殊建築物の主たる用途に供する居室
+        - else: iii
+          cite:
+            section: "令120条1項 表(三)"
+            row: （三）（一）の項又は（二）の項に掲げる居室以外の居室
+
+  - name: walking_distance_table_120
+    title: 令120条1項の表の歩行距離 (table value before 令120条2項・3項)
+    for: {r: Room}
+    cite:
+      section: "令120条1項 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_1
+    value:
+      cases:
+        - when: {term: fire_resistive_or_noncombustible}
+          then: {lookup: T120, key: {term: room_category_120, of: r}, column: fire_resistive}
+          cite: {row: 主要構造部が準耐火構造である場合（特定主要構造部が耐火構造である場合を含む。）又は主要構造部が不燃材料で造られている場合}
+        - else: {lookup: T120, key: {term: room_category_120, of: r}, column: other}
+          cite: {row: その他の場合}
+
+  - name: walking_distance_limit_120
+    title: 令120条に規定する歩行距離の数値 (walking distance value of 令120条, after 2項・3項)
+    for: {r: Room}
+    cite:
+      section: "令120条"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120
+    note: >
+      The value 令121条3項 and 令125条1項 refer to as 「前条（第百二十条）に規定する
+      歩行距離の数値」. It does not check whether 令120条 applies to the room; see
+      max_walking_distance_to_direct_stair for that.
+    interpretation:
+      by: pack
+      note: >
+        v0 has no addition or subtraction, so 「十を加えた数値」 (2項) and 「十を減じた
+        数値」 (3項) are written out for each value the relevant table column
+        prints: 30 and 50 m in the 準耐火・不燃 column, 30 and 40 m in the other
+        column. The 15th-floor rule is read as: a room on the 15th floor or above
+        gets the table value if it meets 2項本文 (structure and 準不燃 finish), and
+        the table value minus 10 m otherwise.
+    value:
+      cases:
+        - when:
+            all:
+              - {term: fire_resistive_or_noncombustible}
+              - {fact: r.finish_quasi_noncombustible}
+              - {lt: [{fact: r.storey}, 15]}
+          cite:
+            section: "令120条2項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_2
+            row: 内装を準不燃材料でした居室 — 前項の表の数値に十を加えた数値
+            quote: 前項の表の数値に十を加えた数値を同項の表の数値とする。ただし、十五階以上の階の居室については、この限りでない。
+          then:
+            cases:
+              - when: {eq: [{lookup: T120, key: {term: room_category_120, of: r}, column: fire_resistive}, 30 m]}
+                then: 40 m
+                cite: {section: "令120条2項", row: 30 + 10}
+              - else: 60 m
+                cite: {section: "令120条2項", row: 50 + 10, note: 50 m is the only other value in this column}
+        - when:
+            all:
+              - {ge: [{fact: r.storey}, 15]}
+              - {term: fire_resistive_or_noncombustible}
+              - {not: {fact: r.finish_quasi_noncombustible}}
+          cite:
+            section: "令120条3項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_3
+            row: 十五階以上の階の居室（前項本文に該当するものを除く） — 第一項の表の数値から十を減じた数値
+            quote: 十五階以上の階の居室については、前項本文の規定に該当するものを除き、第一項の表の数値から十を減じた数値を同項の表の数値とする。
+          then:
+            cases:
+              - when: {eq: [{lookup: T120, key: {term: room_category_120, of: r}, column: fire_resistive}, 30 m]}
+                then: 20 m
+                cite: {section: "令120条3項", row: 30 − 10}
+              - else: 40 m
+                cite: {section: "令120条3項", row: 50 − 10, note: 50 m is the only other value in this column}
+        - when:
+            all:
+              - {ge: [{fact: r.storey}, 15]}
+              - {not: {term: fire_resistive_or_noncombustible}}
+          cite:
+            section: "令120条3項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_3
+            row: 十五階以上の階の居室（前項本文に該当するものを除く） — 第一項の表の数値から十を減じた数値
+          then:
+            cases:
+              - when: {eq: [{lookup: T120, key: {term: room_category_120, of: r}, column: other}, 30 m]}
+                then: 20 m
+                cite: {section: "令120条3項", row: 30 − 10}
+              - else: 30 m
+                cite: {section: "令120条3項", row: 40 − 10, note: 40 m is the only other value in this column}
+        - else: {term: walking_distance_table_120, of: r}
+          cite: {section: "令120条1項 表", row: 表の数値}
+
+  - name: max_walking_distance_to_direct_stair
+    title: 居室から直通階段に至る歩行距離の上限 (maximum walking distance to a direct stair)
+    for: {r: Room}
+    cite:
+      section: "令120条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_1
+      quote: 建築物の避難階以外の階（地下街におけるものを除く。次条第一項において同じ。）においては、避難階又は地上に通ずる直通階段（傾斜路を含む。以下同じ。）を（中略）設けなければならない。
+    note: Floors in an underground mall (地下街) are outside 令120条; that case is not modelled.
+    defers_to:
+      - "令117条2項（別の建築物とみなす部分）"
+      - "令120条4項（主要構造部を準耐火構造とした共同住宅のメゾネット住戸で歩行距離40メートル以下のもの）"
+    value:
+      cases:
+        - when: {not: {term: section_5_2_applies_to_room, of: r}}
+          then: not-applicable
+          cite:
+            section: "令117条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+            row: 令117条1項に掲げる建築物又は階以外
+        - when: {fact: r.on_evacuation_floor}
+          then: not-applicable
+          cite: {row: 避難階の居室（令125条1項による）}
+        - else: {term: walking_distance_limit_120, of: r}
+          cite: {row: 避難階以外の階の居室}
+
+  # ------------------------------------------------------------- 令121条
+  - name: area_121_50m2
+    title: 令121条1項の「五十平方メートル」（同条2項による読替え後）
+    cite:
+      section: "令121条2項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_2
+      quote: 主要構造部が準耐火構造である建築物又は主要構造部が不燃材料で造られている建築物について前項の規定を適用する場合には、同項中「五十平方メートル」とあるのは「百平方メートル」と、「百平方メートル」とあるのは「二百平方メートル」と、「二百平方メートル」とあるのは「四百平方メートル」とする。
+    value:
+      cases:
+        - when: {term: fire_resistive_or_noncombustible}
+          then: 100 m2
+          cite: {row: 「五十平方メートル」とあるのは「百平方メートル」}
+        - else: 50 m2
+          cite: {section: "令121条1項", row: 五十平方メートル}
+
+  - name: area_121_100m2
+    title: 令121条1項の「百平方メートル」（同条2項による読替え後）
+    cite:
+      section: "令121条2項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_2
+    value:
+      cases:
+        - when: {term: fire_resistive_or_noncombustible}
+          then: 200 m2
+          cite: {row: 「百平方メートル」とあるのは「二百平方メートル」}
+        - else: 100 m2
+          cite: {section: "令121条1項", row: 百平方メートル}
+
+  - name: area_121_200m2
+    title: 令121条1項の「二百平方メートル」（同条2項による読替え後）
+    cite:
+      section: "令121条2項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_2
+    value:
+      cases:
+        - when: {term: fire_resistive_or_noncombustible}
+          then: 400 m2
+          cite: {row: 「二百平方メートル」とあるのは「四百平方メートル」}
+        - else: 200 m2
+          cite: {section: "令121条1項", row: 二百平方メートル}
+
+  - name: uses_of_121_items_1_to_4
+    title: 令121条1項1号から4号までに掲げる用途
+    cite:
+      section: "令121条1項6号イ"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_6
+      quote: 第一号から第四号までに掲げる用途に供する階以外の階
+    interpretation:
+      by: pack
+      note: v0 has one use per building, so a floor is taken to be 「供する」 the building's use.
+    value:
+      any:
+        - {in: [{fact: building.principal_use}, [theater, cinema, entertainment_hall, spectator_facility, public_hall, assembly_hall]]}
+        - {term: large_retail_store}
+        - {eq: [{fact: building.principal_use}, cabaret_cafe_nightclub_bar]}
+        - {fact: building.adult_entertainment_use}
+        - {in: [{fact: building.principal_use}, [hospital, clinic_with_inpatient_beds, clinic_without_inpatient_beds, child_welfare_facility]]}
+
+  - name: two_direct_stairs_required
+    title: その階から避難階又は地上に通ずる二以上の直通階段が必要か (are two or more direct stairs required from this floor?)
+    for: {f: Floor}
+    cite:
+      section: "令121条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1
+      quote: 建築物の避難階以外の階が次の各号のいずれかに該当する場合においては、その階から避難階又は地上に通ずる二以上の直通階段を設けなければならない。
+    interpretation:
+      by: pack
+      note: >
+        (1) Items are tried in printed order. 6号 「前各号に掲げる階以外の階」 is read
+        as floors that do not meet 1号 to 5号, so a hospital floor whose wards do not
+        exceed the 4号 area can still need two stairs under 6号. (2) 令121条2項
+        replaces every 50, 100, and 200 m2 in 1項, including those in the
+        exceptions of 3号 and 6号イ (terms area_121_*). (3) A floor with no
+        habitable room has a habitable area of 0 m2 (6号イ 「居室を有するもの」).
+    defers_to:
+      - "令117条2項（別の建築物とみなす部分）"
+      - "令121条4項（階数3以下・延べ面積200平方メートル未満の建築物の特定階）"
+      - "令123条2項・3項（3号・6号イの直通階段の構造）"
+    value:
+      cases:
+        - when: {not: {term: section_5_2_applies_to_floor, of: f}}
+          then: not-applicable
+          cite:
+            section: "令117条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+            row: 令117条1項に掲げる建築物又は階以外
+        - when: {fact: f.is_evacuation_floor}
+          then: not-applicable
+          cite: {row: 避難階}
+        - when:
+            all:
+              - {in: [{fact: building.principal_use}, [theater, cinema, entertainment_hall, spectator_facility, public_hall, assembly_hall]]}
+              - {fact: f.has_audience_seating}
+          then: true
+          cite:
+            section: "令121条1項1号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_1
+            row: 一　劇場、映画館、演芸場、観覧場、公会堂又は集会場の用途に供する階でその階に客席、集会室その他これらに類するものを有するもの
+        - when:
+            all:
+              - {term: large_retail_store}
+              - {fact: f.has_sales_floor}
+          then: true
+          cite:
+            section: "令121条1項2号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_2
+            row: 二　物品販売業を営む店舗（床面積の合計が千五百平方メートルを超えるものに限る。）の用途に供する階でその階に売場を有するもの
+        - when:
+            all:
+              - any:
+                  - {eq: [{fact: building.principal_use}, cabaret_cafe_nightclub_bar]}
+                  - {fact: building.adult_entertainment_use}
+              - {fact: f.has_guest_seating_or_rooms}
+              - not:
+                  any:
+                    - all:
+                        - {le: [{fact: f.storey}, 5]}
+                        - {le: [{fact: f.habitable_area}, {term: area_121_100m2}]}
+                        - {fact: f.has_balcony_and_123_stair}
+                    - all:
+                        - any:
+                            - {fact: f.directly_above_evacuation_floor}
+                            - {fact: f.directly_below_evacuation_floor}
+                        - {le: [{fact: f.storey}, 5]}
+                        - {le: [{fact: f.habitable_area}, {term: area_121_100m2}]}
+          then: true
+          cite:
+            section: "令121条1項3号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_3
+            row: 三　キャバレー等（イ〜ホ）の用途に供する階でその階に客席、客室その他これらに類するものを有するもの（かっこ書の階を除く。）
+        - when:
+            all:
+              - {in: [{fact: building.principal_use}, [hospital, clinic_with_inpatient_beds, clinic_without_inpatient_beds]]}
+              - {gt: [{fact: f.ward_area}, {term: area_121_50m2}]}
+          then: true
+          cite:
+            section: "令121条1項4号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_4
+            row: 四　病院若しくは診療所の用途に供する階でその階における病室の床面積の合計が五十平方メートルを超えるもの
+        - when:
+            all:
+              - {eq: [{fact: building.principal_use}, child_welfare_facility]}
+              - {gt: [{fact: f.child_welfare_main_room_area}, {term: area_121_50m2}]}
+          then: true
+          cite:
+            section: "令121条1項4号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_4
+            row: 四　児童福祉施設等の用途に供する階でその階における児童福祉施設等の主たる用途に供する居室の床面積の合計が五十平方メートルを超えるもの
+        - when:
+            all:
+              - {in: [{fact: building.principal_use}, [hotel, ryokan, boarding_house]]}
+              - {gt: [{fact: f.lodging_room_area}, {term: area_121_100m2}]}
+          then: true
+          cite:
+            section: "令121条1項5号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_5
+            row: 五　ホテル、旅館若しくは下宿の用途に供する階でその階における宿泊室の床面積の合計が百平方メートルを超えるもの
+        - when:
+            all:
+              - {eq: [{fact: building.principal_use}, apartment_house]}
+              - {gt: [{fact: f.habitable_area}, {term: area_121_100m2}]}
+          then: true
+          cite:
+            section: "令121条1項5号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_5
+            row: 五　共同住宅の用途に供する階でその階における居室の床面積の合計が百平方メートルを超えるもの
+        - when:
+            all:
+              - {eq: [{fact: building.principal_use}, dormitory]}
+              - {gt: [{fact: f.bedroom_area}, {term: area_121_100m2}]}
+          then: true
+          cite:
+            section: "令121条1項5号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_5
+            row: 五　寄宿舎の用途に供する階でその階における寝室の床面積の合計が百平方メートルを超えるもの
+        - when:
+            all:
+              - {ge: [{fact: f.storey}, 6]}
+              - {gt: [{fact: f.habitable_area}, 0 m2]}
+              - not:
+                  all:
+                    - {not: {term: uses_of_121_items_1_to_4}}
+                    - {le: [{fact: f.habitable_area}, {term: area_121_100m2}]}
+                    - {fact: f.has_balcony_and_123_stair}
+          then: true
+          cite:
+            section: "令121条1項6号イ"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_6
+            row: 六イ　六階以上の階でその階に居室を有するもの（かっこ書の階を除く。）
+        - when:
+            all:
+              - {le: [{fact: f.storey}, 5]}
+              - {fact: f.directly_above_evacuation_floor}
+              - {gt: [{fact: f.habitable_area}, {term: area_121_200m2}]}
+          then: true
+          cite:
+            section: "令121条1項6号ロ"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_6
+            row: 六ロ　五階以下の階でその階における居室の床面積の合計が避難階の直上階にあつては二百平方メートルを超えるもの
+        - when:
+            all:
+              - {le: [{fact: f.storey}, 5]}
+              - {not: {fact: f.directly_above_evacuation_floor}}
+              - {gt: [{fact: f.habitable_area}, {term: area_121_100m2}]}
+          then: true
+          cite:
+            section: "令121条1項6号ロ"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_6
+            row: 六ロ　五階以下の階でその階における居室の床面積の合計がその他の階にあつては百平方メートルを超えるもの
+        - else: false
+          cite: {row: 令121条1項各号のいずれにも該当しない階}
+
+  - name: max_overlapping_route_length_121_3
+    title: 各直通階段に至る歩行経路の重複区間の長さの上限 (maximum length of the common part of the routes to the two stairs)
+    for: {r: Room}
+    cite:
+      section: "令121条3項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_3
+      quote: 居室の各部分から各直通階段に至る通常の歩行経路の全てに共通の重複区間があるときにおける当該重複区間の長さは、前条に規定する歩行距離の数値の二分の一をこえてはならない。ただし、居室の各部分から、当該重複区間を経由しないで、避難上有効なバルコニー、屋外通路その他これらに類するものに避難することができる場合は、この限りでない。
+    value:
+      cases:
+        - when: {not: {term: section_5_2_applies_to_room, of: r}}
+          then: not-applicable
+          cite:
+            section: "令117条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+            row: 令117条1項に掲げる建築物又は階以外
+        - when: {not: {fact: r.floor_requires_two_direct_stairs}}
+          then: not-applicable
+          cite: {row: 第一項の規定により二以上の直通階段を設ける場合以外}
+        - when: {fact: r.escape_to_balcony_without_overlap}
+          then: not-required
+          cite: {row: ただし書 — 重複区間を経由しないで避難上有効なバルコニー等に避難することができる場合}
+        - else:
+            mul: [{term: walking_distance_limit_120, of: r}, 0.5]
+          cite: {row: 前条に規定する歩行距離の数値の二分の一}
+
+  # ------------------------------------------------------------- 令125条
+  - name: max_walking_distance_room_to_exterior_exit
+    title: 避難階の居室から屋外への出口に至る歩行距離の上限 (evacuation floor, room to exterior exit)
+    for: {r: Room}
+    cite:
+      section: "令125条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_125-Pr_1
+      quote: 居室（避難上有効な開口部を有するものを除く。）の各部分から屋外への出口の一に至る歩行距離は同条に規定する数値の二倍以下としなければならない。
+    interpretation:
+      by: pack
+      note: 「同条に規定する数値」 is the 令120条 value for this room, including the 2項 and 3項 adjustments.
+    value:
+      cases:
+        - when: {not: {term: section_5_2_applies_to_room, of: r}}
+          then: not-applicable
+          cite:
+            section: "令117条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+            row: 令117条1項に掲げる建築物又は階以外
+        - when: {not: {fact: r.on_evacuation_floor}}
+          then: not-applicable
+          cite: {row: 避難階以外の階の居室（令120条による）}
+        - when: {fact: r.has_effective_evacuation_opening}
+          then: not-required
+          cite: {row: 避難上有効な開口部を有する居室}
+        - else:
+            mul: [{term: walking_distance_limit_120, of: r}, 2]
+          cite: {row: 第百二十条に規定する数値の二倍}
+
+  - name: max_walking_distance_stair_to_exterior_exit
+    title: 避難階で階段から屋外への出口に至る歩行距離の上限 (evacuation floor, stair to exterior exit)
+    for: {r: Room}
+    cite:
+      section: "令125条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_125-Pr_1
+      quote: 避難階においては、階段から屋外への出口の一に至る歩行距離は第百二十条に規定する数値以下と（中略）しなければならない。
+    interpretation:
+      by: pack
+      note: >
+        The order does not say which room's 令120条 value applies to a stair. This
+        pack reads it as the value of each room the stair serves: evaluate this term
+        for every room on the floors the stair serves (r is that room) and take the
+        smallest result. v0 cannot relate a stair to the rooms it serves.
+    value:
+      cases:
+        - when: {not: {term: section_5_2_applies_to_room, of: r}}
+          then: not-applicable
+          cite:
+            section: "令117条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+            row: 令117条1項に掲げる建築物又は階以外
+        - else: {term: walking_distance_limit_120, of: r}
+          cite: {row: 第百二十条に規定する数値}
+
+  - name: min_total_exterior_exit_width_125_3
+    title: 物品販売業を営む店舗の避難階の屋外への出口の幅の合計の最小値
+    cite:
+      section: "令125条3項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_125-Pr_3
+      quote: 物品販売業を営む店舗の避難階に設ける屋外への出口の幅の合計は、床面積が最大の階における床面積百平方メートルにつき六十センチメートルの割合で計算した数値以上としなければならない。
+    note: >
+      「物品販売業を営む店舗」 here is limited to stores of more than 1,500 m2 by the
+      definition in 令121条1項2号. The order gives no rounding; none is applied.
+    defers_to: ["令125条4項（令124条3項の準用：屋上広場は階とみなす）"]
+    value:
+      cases:
+        - when: {not: {term: section_5_2_applies}}
+          then: not-applicable
+          cite:
+            section: "令117条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+            row: 令117条1項に掲げる建築物以外
+        - when: {not: {term: large_retail_store}}
+          then: not-applicable
+          cite: {section: "令121条1項2号", row: 物品販売業を営む店舗（床面積の合計が千五百平方メートルを超えるもの）以外}
+        - else:
+            mul: [600 mm, {div: [{fact: building.largest_floor_area}, 100 m2]}]
+          cite: {row: 床面積が最大の階における床面積百平方メートルにつき六十センチメートル}
+
+norms:
+  - name: "令119条"
+    title: 廊下の幅が令119条の表の数値以上である
+    modality: obligation
+    for: {c: Corridor}
+    cite:
+      section: "令119条"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_119-Pr_1
+    require:
+      any:
+        - {in: [{term: min_corridor_width_119, of: c}, [not-applicable, not-required]]}
+        - {ge: [{fact: c.width}, {term: min_corridor_width_119, of: c}]}
+
+  - name: "令120条1項"
+    title: 居室から直通階段に至る歩行距離が令120条の数値以下である
+    modality: obligation
+    for: {r: Room}
+    cite:
+      section: "令120条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_1
+    require:
+      any:
+        - {eq: [{term: max_walking_distance_to_direct_stair, of: r}, not-applicable]}
+        - {le: [{fact: r.walking_distance_to_direct_stair}, {term: max_walking_distance_to_direct_stair, of: r}]}
+
+  - name: "令125条1項"
+    title: 避難階の居室から屋外への出口に至る歩行距離が令120条の数値の二倍以下である
+    modality: obligation
+    for: {r: Room}
+    cite:
+      section: "令125条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_125-Pr_1
+    require:
+      any:
+        - {in: [{term: max_walking_distance_room_to_exterior_exit, of: r}, [not-applicable, not-required]]}
+        - {le: [{fact: r.walking_distance_to_exterior_exit}, {term: max_walking_distance_room_to_exterior_exit, of: r}]}

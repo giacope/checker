@@ -1,0 +1,466 @@
+# Facts the rules in this pack read. kind says where a value comes from:
+#   given    stated by the applicant in the project profile or model
+#   measured computed from the model by deterministic code
+#   judged   a classification a person or a calibrated model makes
+#
+# v0 has no relations between elements, so facts about the floor (階) a room,
+# corridor, or stair is on are repeated on that element (for example
+# Room.on_floor_with_windowless_room). Floors are numbered above ground from 1;
+# basement floors (地階) are 0 or negative (B1 = 0 or -1, either works for every
+# rule here, since the rules only compare with 5, 6, and 15).
+predicates:
+  # ---------------------------------------------------------- building level
+  - name: building.principal_use
+    label: 建築物の用途（法別表第一（い）欄・令115条の3の区分による）
+    type: enum
+    kind: given
+    refers_to: ["法2条2号", "法別表第一", "令115条の3", "令19条1項"]
+    note: >
+      v0 assumes one use for the whole building. Values, by 法別表第一（い）欄:
+      (一) theater 劇場, cinema 映画館, entertainment_hall 演芸場, spectator_facility 観覧場,
+      public_hall 公会堂, assembly_hall 集会場;
+      (二) hospital 病院, clinic_with_inpatient_beds 診療所（患者の収容施設があるもの）,
+      hotel ホテル, ryokan 旅館, boarding_house 下宿, apartment_house 共同住宅,
+      dormitory 寄宿舎, child_welfare_facility 児童福祉施設等（令19条1項・令115条の3第1号）;
+      (三) school_elementary 小学校（義務教育学校の前期課程を含む）,
+      school_secondary 中学校（義務教育学校の後期課程を含む）・高等学校・中等教育学校,
+      school_other その他の学校（大学、高等専門学校、専修学校、各種学校等）, gymnasium 体育館,
+      museum_library_sports 博物館・美術館・図書館・ボーリング場・スキー場・スケート場・水泳場・スポーツの練習場（令115条の3第2号）;
+      (四) retail_store 百貨店・マーケット・物品販売業（物品加工修理業を含む）を営む店舗（床面積10平方メートル以内のものを除く）,
+      exhibition_hall 展示場, cabaret_cafe_nightclub_bar キャバレー・カフェー・ナイトクラブ・バー,
+      dance_hall ダンスホール, amusement_facility 遊技場, public_bath 公衆浴場,
+      restaurant 待合・料理店・飲食店（令115条の3第3号）;
+      (五) warehouse 倉庫;
+      (六) garage_repair_shop 自動車車庫・自動車修理工場, studio 映画スタジオ・テレビスタジオ（令115条の3第4号）;
+      not in 法別表第一: clinic_without_inpatient_beds 診療所（患者の収容施設がないもの）,
+      office 事務所, factory 工場, detached_house 一戸建ての住宅, other その他.
+    values:
+      - theater
+      - cinema
+      - entertainment_hall
+      - spectator_facility
+      - public_hall
+      - assembly_hall
+      - hospital
+      - clinic_with_inpatient_beds
+      - hotel
+      - ryokan
+      - boarding_house
+      - apartment_house
+      - dormitory
+      - child_welfare_facility
+      - school_elementary
+      - school_secondary
+      - school_other
+      - gymnasium
+      - museum_library_sports
+      - retail_store
+      - exhibition_hall
+      - cabaret_cafe_nightclub_bar
+      - dance_hall
+      - amusement_facility
+      - public_bath
+      - restaurant
+      - warehouse
+      - garage_repair_shop
+      - studio
+      - clinic_without_inpatient_beds
+      - office
+      - factory
+      - detached_house
+      - other
+
+  - name: building.adult_entertainment_use
+    label: 令121条1項3号ロからホまでに掲げる用途（個室付浴場業、ヌードスタジオ等、専ら異性を同伴する客の休憩の用に供する施設、店舗型電話異性紹介営業等）に供する
+    type: bool
+    kind: judged
+    refers_to: ["令121条1項3号"]
+    note: Asked separately from principal_use because these uses cut across the 法別表第一 classes.
+
+  - name: building.stories
+    label: 階数（令2条1項8号）
+    type: number
+    kind: given
+    refers_to: ["令2条1項8号"]
+
+  - name: building.total_floor_area
+    label: 延べ面積（令2条1項4号）
+    type: area
+    kind: given
+    refers_to: ["令2条1項4号"]
+
+  - name: building.store_floor_area
+    label: 物品販売業を営む店舗の用途に供する部分の床面積の合計
+    type: area
+    kind: given
+    refers_to: ["令121条1項2号", "令23条1項 表(二)"]
+
+  - name: building.largest_floor_area
+    label: 床面積が最大の階における床面積
+    type: area
+    kind: measured
+    refers_to: ["令125条3項"]
+
+  - name: building.main_structure
+    label: 主要構造部の構造
+    type: enum
+    kind: given
+    values: [fire_resistant, quasi_fire_resistant, noncombustible, other]
+    note: >
+      fire_resistant = 特定主要構造部が耐火構造; quasi_fire_resistant = 主要構造部が準耐火構造;
+      noncombustible = 主要構造部が不燃材料で造られている; other = その他.
+    refers_to: ["法2条5号", "法2条7号", "法2条7号の2", "法2条9号", "令120条1項", "令121条2項"]
+
+  # ------------------------------------------------------------------ stairs
+  - name: Stair.special_purpose_only
+    label: 昇降機機械室用階段、物見塔用階段その他特殊の用途に専用する階段である
+    type: bool
+    kind: judged
+    refers_to: ["令27条"]
+
+  - name: Stair.uses_mlit_structure_23_4
+    label: 令23条4項の国土交通大臣が定めた構造方法を用いる階段である
+    type: bool
+    kind: given
+    refers_to: ["令23条4項"]
+
+  - name: Stair.for_pupils
+    label: 児童用又は生徒用の階段である
+    type: bool
+    kind: judged
+    refers_to: ["令23条1項 表(一)", "令23条1項 表(二)"]
+
+  - name: Stair.for_customers
+    label: 客用の階段である
+    type: bool
+    kind: judged
+    refers_to: ["令23条1項 表(二)"]
+
+  - name: Stair.in_basement
+    label: 地階又は地下工作物内における階段である
+    type: bool
+    kind: measured
+    refers_to: ["令23条1項 表(三)", "令1条2号"]
+
+  - name: Stair.habitable_area_of_floor_above
+    label: 直上階の居室の床面積の合計（地上階の階段）
+    type: area
+    kind: measured
+    note: The floor directly above the floor the stair rises from.
+    refers_to: ["令23条1項 表(三)"]
+
+  - name: Stair.habitable_area_of_floor
+    label: その階の居室の床面積の合計（地階・地下工作物内の階段）
+    type: area
+    kind: measured
+    refers_to: ["令23条1項 表(三)"]
+
+  - name: Stair.outdoor
+    label: 屋外階段である
+    type: bool
+    kind: judged
+    refers_to: ["令23条1項"]
+
+  - name: Stair.direct_stair_120_121
+    label: 令120条又は令121条の規定による直通階段である
+    type: bool
+    kind: given
+    refers_to: ["令120条", "令121条"]
+
+  - name: Stair.within_dwelling
+    label: 住宅の階段（共同住宅の共用の階段を除く）である
+    type: bool
+    kind: judged
+    note: Includes the private stair inside a dwelling unit of an apartment house or row house.
+    refers_to: ["令23条1項"]
+
+  - name: Stair.width
+    label: 階段及びその踊場の幅（令23条3項により高さ50センチメートル以下の手すり等は幅10センチメートルを限度としてないものとみなして算定）
+    type: length
+    kind: measured
+    refers_to: ["令23条3項"]
+
+  - name: Stair.riser
+    vocab: Stair.riser_height
+    label: 蹴上げの寸法
+    type: length
+    kind: measured
+
+  - name: Stair.tread
+    vocab: Stair.tread_depth
+    label: 踏面の寸法（回り階段の部分は踏面の狭い方の端から30センチメートルの位置で測る）
+    type: length
+    kind: measured
+    refers_to: ["令23条2項"]
+
+  - name: Stair.height
+    label: 階段の高さ
+    type: length
+    kind: measured
+    refers_to: ["令24条1項", "令25条4項"]
+
+  - name: Stair.max_rise_between_landings
+    label: 踊場と踊場（又は床）の間の高さの最大値
+    type: length
+    kind: measured
+    refers_to: ["令24条1項"]
+
+  - name: Stair.straight
+    label: 直階段である
+    type: bool
+    kind: judged
+    refers_to: ["令24条2項"]
+
+  - name: Stair.landing_depth
+    label: 令24条1項により設ける踊場の踏幅（最小値）
+    type: length
+    kind: measured
+    refers_to: ["令24条2項"]
+
+  - name: Stair.has_handrail
+    label: 手すりを設けている
+    type: bool
+    kind: measured
+    refers_to: ["令25条1項"]
+
+  - name: Stair.sides_enclosed
+    label: 階段及びその踊場の両側（手すりが設けられた側を除く）に側壁又はこれに代わるものを設けている
+    type: bool
+    kind: judged
+    refers_to: ["令25条2項"]
+
+  - name: Stair.has_intermediate_handrail
+    label: 中間に手すりを設けている
+    type: bool
+    kind: measured
+    refers_to: ["令25条3項"]
+
+  - name: Stair.category_23
+    label: 令23条1項の表の階段の種別（(一)〜(四)）
+    type: enum
+    values: [i, ii, iii, iv]
+    kind: judged
+    note: Key domain of table T23. The pack derives it with the term stair_category_23.
+
+  # --------------------------------------------------------------- corridors
+  - name: Corridor.on_floor_with_windowless_room
+    label: 令116条の2第1項1号に該当する窓その他の開口部を有しない居室を有する階にある
+    type: bool
+    kind: measured
+    refers_to: ["令117条1項", "令116条の2第1項1号"]
+
+  - name: Corridor.for_pupils
+    label: 児童用又は生徒用の廊下である
+    type: bool
+    kind: judged
+
+  - name: Corridor.for_patients
+    label: 病院における患者用の廊下である
+    type: bool
+    kind: judged
+
+  - name: Corridor.common_use
+    label: 共用の廊下である
+    type: bool
+    kind: judged
+
+  - name: Corridor.floor_dwelling_unit_area
+    label: その階の共同住宅の住戸又は住室の床面積の合計
+    type: area
+    kind: measured
+
+  - name: Corridor.exclusive_to_three_rooms_or_fewer
+    label: 三室以下の専用の廊下である
+    type: bool
+    kind: judged
+
+  - name: Corridor.floor_habitable_area
+    label: その階の居室の床面積の合計
+    type: area
+    kind: measured
+
+  - name: Corridor.in_basement
+    label: 地階にある
+    type: bool
+    kind: measured
+
+  - name: Corridor.rooms_on_both_sides
+    label: 両側に居室がある廊下である（中廊下）
+    type: bool
+    kind: measured
+
+  - name: Corridor.width
+    label: 廊下の幅
+    type: length
+    kind: measured
+    note: The order does not say how to measure; practice measures the clear width between finished walls (内法). Confirm with the reviewing authority.
+
+  - name: Corridor.category_119
+    label: 令119条の表の廊下の用途（school / general）
+    type: enum
+    values: [school, general]
+    kind: judged
+    note: Key domain of table T119. The pack derives it with the term corridor_category_119.
+
+  # ------------------------------------------------------------ rooms (居室)
+  - name: Room.storey
+    label: 居室のある階（地上階は1から数える。地階は0以下）
+    type: number
+    kind: given
+    refers_to: ["令120条2項", "令120条3項"]
+
+  - name: Room.on_evacuation_floor
+    label: 避難階（直接地上へ通ずる出入口のある階）にある
+    type: bool
+    kind: given
+    refers_to: ["令13条1号"]
+
+  - name: Room.on_floor_with_windowless_room
+    label: 令116条の2第1項1号に該当する窓その他の開口部を有しない居室を有する階にある
+    type: bool
+    kind: measured
+    refers_to: ["令117条1項", "令116条の2第1項1号"]
+
+  - name: Room.windowless_116_2_1
+    label: 令116条の2第1項1号に該当する窓その他の開口部を有しない居室である（採光に有効な開口部の面積が床面積の1/20未満）
+    type: bool
+    kind: measured
+    refers_to: ["令116条の2第1項1号", "令20条"]
+
+  - name: Room.meets_mlit_windowless_criteria
+    label: 令120条1項表(一)の国土交通大臣が定める避難上支障がない基準に適合する
+    type: bool
+    kind: judged
+    refers_to: ["令120条1項 表(一)"]
+
+  - name: Room.main_use_room
+    label: 特殊建築物の主たる用途に供する居室である
+    type: bool
+    kind: judged
+    refers_to: ["令120条1項 表(一)", "令120条1項 表(二)"]
+
+  - name: Room.finish_quasi_noncombustible
+    label: 当該居室及びこれから地上に通ずる主たる廊下、階段その他の通路の壁（床面からの高さ1.2メートル以下の部分を除く）及び天井の室内に面する部分の仕上げを準不燃材料でしている
+    type: bool
+    kind: judged
+    refers_to: ["令120条2項", "令1条5号"]
+
+  - name: Room.walking_distance_to_direct_stair
+    label: 居室の各部分から直通階段の一に至る歩行距離（最大値）
+    type: length
+    kind: measured
+    refers_to: ["令120条1項"]
+
+  - name: Room.has_effective_evacuation_opening
+    label: 避難上有効な開口部を有する居室である
+    type: bool
+    kind: judged
+    refers_to: ["令125条1項"]
+
+  - name: Room.walking_distance_to_exterior_exit
+    label: 避難階の居室の各部分から屋外への出口の一に至る歩行距離（最大値）
+    type: length
+    kind: measured
+    refers_to: ["令125条1項"]
+
+  - name: Room.floor_requires_two_direct_stairs
+    label: 居室のある階に令121条1項により二以上の直通階段が必要である
+    type: bool
+    kind: given
+    note: Evaluate the term two_direct_stairs_required on the room's floor; v0 cannot link a room to its floor.
+    refers_to: ["令121条1項"]
+
+  - name: Room.escape_to_balcony_without_overlap
+    label: 居室の各部分から重複区間を経由しないで避難上有効なバルコニー、屋外通路その他これらに類するものに避難することができる
+    type: bool
+    kind: judged
+    refers_to: ["令121条3項"]
+
+  - name: Room.category_120
+    label: 令120条1項の表の居室の種類（(一)〜(三)）
+    type: enum
+    values: [i, ii, iii]
+    kind: judged
+    note: Key domain of table T120. The pack derives it with the term room_category_120.
+
+  # ----------------------------------------------------------------- floors
+  - name: Floor.storey
+    label: 階（地上階は1から数える。地階は0以下）
+    type: number
+    kind: given
+
+  - name: Floor.is_evacuation_floor
+    label: 避難階（直接地上へ通ずる出入口のある階）である
+    type: bool
+    kind: given
+    refers_to: ["令13条1号"]
+
+  - name: Floor.has_windowless_room
+    label: 令116条の2第1項1号に該当する窓その他の開口部を有しない居室を有する
+    type: bool
+    kind: measured
+    refers_to: ["令117条1項", "令116条の2第1項1号"]
+
+  - name: Floor.directly_above_evacuation_floor
+    label: 避難階の直上階である
+    type: bool
+    kind: given
+
+  - name: Floor.directly_below_evacuation_floor
+    label: 避難階の直下階である
+    type: bool
+    kind: given
+
+  - name: Floor.has_audience_seating
+    label: その階に客席、集会室その他これらに類するものを有する
+    type: bool
+    kind: judged
+    refers_to: ["令121条1項1号"]
+
+  - name: Floor.has_sales_floor
+    label: その階に売場を有する
+    type: bool
+    kind: judged
+    refers_to: ["令121条1項2号"]
+
+  - name: Floor.has_guest_seating_or_rooms
+    label: その階に客席、客室その他これらに類するものを有する
+    type: bool
+    kind: judged
+    refers_to: ["令121条1項3号"]
+
+  - name: Floor.ward_area
+    label: その階における病室の床面積の合計
+    type: area
+    kind: measured
+    refers_to: ["令121条1項4号"]
+
+  - name: Floor.child_welfare_main_room_area
+    label: その階における児童福祉施設等の主たる用途に供する居室の床面積の合計
+    type: area
+    kind: measured
+    refers_to: ["令121条1項4号"]
+
+  - name: Floor.lodging_room_area
+    label: その階における宿泊室の床面積の合計
+    type: area
+    kind: measured
+    refers_to: ["令121条1項5号"]
+
+  - name: Floor.bedroom_area
+    label: その階における寝室の床面積の合計（寄宿舎）
+    type: area
+    kind: measured
+    refers_to: ["令121条1項5号"]
+
+  - name: Floor.habitable_area
+    label: その階の居室の床面積の合計
+    type: area
+    kind: measured
+    refers_to: ["令121条1項"]
+
+  - name: Floor.has_balcony_and_123_stair
+    label: その階に避難上有効なバルコニー、屋外通路その他これらに類するもの及び令123条2項又は3項に適合する直通階段が設けられている
+    type: bool
+    kind: judged
+    refers_to: ["令121条1項3号", "令121条1項6号イ", "令123条2項", "令123条3項"]

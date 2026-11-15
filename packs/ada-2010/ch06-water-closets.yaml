@@ -1,0 +1,111 @@
+# Chapter 6, Plumbing elements and facilities: water closets (604). Text from
+# the U.S. Access Board's ADA Accessibility Standards page, checked against the
+# DOJ page, read 2026-11-14.
+
+terms:
+  - name: water_closet_subject_to_604
+    title: Must the water closet comply with 604.2 through 604.8?
+    for: {wc: WaterCloset}
+    cite:
+      section: "604.1"
+      url: https://www.access-board.gov/ada/#ada-604_1
+    quote: >-
+      Water closets and toilet compartments shall comply with 604.2 through
+      604.8. EXCEPTION: Water closets and toilet compartments for children’s
+      use shall be permitted to comply with 604.9.
+    interpretation:
+      by: pack
+      note: >
+        The exception is a permission to comply with 604.9 instead, so a
+        children's water closet is out of scope of 604.2 to 604.8 only when it
+        complies with 604.9 (a judged fact here; 604.9 is not encoded).
+    defers_to: ["213.3.2", "604.9"]
+    status: draft
+    value:
+      all:
+        - {fact: wc.required_accessible}
+        - not:
+            all:
+              - {fact: wc.for_childrens_use}
+              - {fact: wc.complies_with_604_9}
+
+norms:
+  - name: "604.2"
+    title: Water closet centerline is 16 to 18 in from the side wall (17 to 19 in in ambulatory compartments)
+    modality: obligation
+    for: {wc: WaterCloset}
+    cite:
+      section: "604.2"
+      url: https://www.access-board.gov/ada/#ada-604_2
+    quote: >-
+      The water closet shall be positioned with a wall or partition to the rear
+      and to one side. The centerline of the water closet shall be 16 inches
+      (405 mm) minimum to 18 inches (455 mm) maximum from the side wall or
+      partition, except that the water closet shall be 17 inches (430 mm)
+      minimum and 19 inches (485 mm) maximum from the side wall or partition in
+      the ambulatory accessible toilet compartment specified in 604.8.2.
+    note: '"Water closets shall be arranged for a left-hand or right-hand approach" is not encoded.'
+    defers_to: ["604.8.2"]
+    status: draft
+    require:
+      any:
+        - not: {term: water_closet_subject_to_604, of: wc}
+        - all:
+            - {fact: wc.wall_to_rear_and_side}
+            - cases:
+                - when: {fact: wc.in_ambulatory_compartment}
+                  then:
+                    all:
+                      - ge: [{fact: wc.centerline_to_side_wall}, 17 in]
+                      - le: [{fact: wc.centerline_to_side_wall}, 19 in]
+                  cite: {note: "ambulatory accessible toilet compartment (604.8.2): 17 to 19 in"}
+                - else:
+                    all:
+                      - ge: [{fact: wc.centerline_to_side_wall}, 16 in]
+                      - le: [{fact: wc.centerline_to_side_wall}, 18 in]
+                  cite: {note: "16 to 18 in"}
+
+  - name: "604.4"
+    title: Seat height is 17 to 19 in, and seats are not sprung to lift
+    modality: obligation
+    for: {wc: WaterCloset}
+    cite:
+      section: "604.4"
+      url: https://www.access-board.gov/ada/#ada-604_4
+    quote: >-
+      The seat height of a water closet above the finish floor shall be 17
+      inches (430 mm) minimum and 19 inches (485 mm) maximum measured to the
+      top of the seat. Seats shall not be sprung to return to a lifted
+      position.
+    interpretation:
+      by: pack
+      note: >
+        Exception 1 exempts the water closet from all of 604.4, including the
+        sprung-seat rule; Exception 2 changes only the height range.
+    status: draft
+    require:
+      any:
+        - not: {term: water_closet_subject_to_604, of: wc}
+        - {fact: wc.private_office_single_user}
+        - all:
+            - not: {fact: wc.seat_sprung_to_lift}
+            - cases:
+                - when: {fact: wc.in_residential_dwelling_unit}
+                  then:
+                    all:
+                      - ge: [{fact: wc.seat_height}, 15 in]
+                      - le: [{fact: wc.seat_height}, 19 in]
+                  cite:
+                    section: "604.4"
+                    url: https://www.access-board.gov/ada/#ada-604_4x2
+                    note: "Exception 2: residential dwelling units, 15 to 19 in"
+                    quote: >-
+                      In residential dwelling units, the height of water closets
+                      shall be permitted to be 15 inches (380 mm) minimum and 19
+                      inches (485 mm) maximum above the finish floor measured to
+                      the top of the seat.
+                - else:
+                    all:
+                      - ge: [{fact: wc.seat_height}, 17 in]
+                      - le: [{fact: wc.seat_height}, 19 in]
+                  cite: {note: "17 to 19 in"}

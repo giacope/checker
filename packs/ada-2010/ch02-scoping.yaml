@@ -1,0 +1,28 @@
+# Chapter 2, Scoping requirements. Text from the U.S. Access Board's ADA
+# Accessibility Standards page, checked against the DOJ page, read 2026-11-14.
+
+terms:
+  - name: stair_subject_to_504
+    title: Must the stair comply with 504?
+    for: {s: Stair}
+    cite:
+      section: "210.1"
+      url: https://www.access-board.gov/ada/#ada-210_1
+    quote: Interior and exterior stairs that are part of a means of egress shall comply with 504.
+    note: >
+      Exception 2 still requires handrails complying with 505 when the stairs
+      are altered; that part is carried by the Handrail.within_505_1 fact.
+    status: draft
+    value:
+      all:
+        - {fact: s.part_of_means_of_egress}
+        - not:
+            any:
+              - all:
+                  - {fact: building.detention_correctional_facility}
+                  - not: {fact: s.in_public_use_area}
+              - all:
+                  - {fact: s.altered}
+                  - {fact: s.levels_connected_by_accessible_route}
+              - {fact: s.assembly_aisle_stair}
+              - {fact: s.connects_play_components}

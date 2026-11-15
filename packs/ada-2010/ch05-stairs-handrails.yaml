@@ -1,0 +1,94 @@
+# Chapter 5, General site and building elements: stairways (504) and
+# handrails (505). Text from the U.S. Access Board's ADA Accessibility
+# Standards page, checked against the DOJ page, read 2026-11-14.
+
+terms:
+  - name: handrail_subject_to_505
+    title: Must the handrail comply with 505?
+    for: {h: Handrail}
+    cite:
+      section: "505.1"
+      url: https://www.access-board.gov/ada/#ada-505_1
+    quote: >-
+      Handrails provided along walking surfaces complying with 403, required at
+      ramps complying with 405, and required at stairs complying with 504 shall
+      comply with 505.
+    defers_to: ["403.6", "405.8", "504.6", "210.1 Exception 2 (handrails on altered stairs)"]
+    status: draft
+    value: {fact: h.within_505_1}
+
+norms:
+  - name: "504.2"
+    title: Risers are 4 to 7 in high and treads 11 in deep minimum, uniform on the flight
+    modality: obligation
+    for: {s: Stair}
+    cite:
+      section: "504.2"
+      url: https://www.access-board.gov/ada/#ada-504_2
+    quote: >-
+      All steps on a flight of stairs shall have uniform riser heights and
+      uniform tread depths. Risers shall be 4 inches (100 mm) high minimum and
+      7 inches (180 mm) high maximum. Treads shall be 11 inches (280 mm) deep
+      minimum.
+    interpretation:
+      by: pack
+      note: >
+        A Stair element is one flight. Uniform is read as the lowest and highest
+        riser (and the shallowest and deepest tread) being equal, with the
+        evaluator's float tolerance only. 104.1.1 lets dimensions not stated as
+        a range carry conventional industry tolerances; v0 has no tolerance
+        intervals, so a model check against built dimensions should apply them
+        before reporting a failure.
+    defers_to: ["104.1.1 (construction tolerances)"]
+    status: draft
+    require:
+      any:
+        - not: {term: stair_subject_to_504, of: s}
+        - all:
+            - ge: [{fact: s.min_riser_height}, 4 in]
+            - le: [{fact: s.max_riser_height}, 7 in]
+            - ge: [{fact: s.min_tread_depth}, 11 in]
+            - eq: [{fact: s.min_riser_height}, {fact: s.max_riser_height}]
+            - eq: [{fact: s.min_tread_depth}, {fact: s.max_tread_depth}]
+
+  - name: "504.3"
+    title: No open risers
+    modality: obligation
+    for: {s: Stair}
+    cite:
+      section: "504.3"
+      url: https://www.access-board.gov/ada/#ada-504_3
+    quote: Open risers are not permitted.
+    status: draft
+    require:
+      any:
+        - not: {term: stair_subject_to_504, of: s}
+        - not: {fact: s.has_open_risers}
+
+  - name: "505.4"
+    title: Top of gripping surface is 34 to 38 in high, at a consistent height
+    modality: obligation
+    for: {h: Handrail}
+    cite:
+      section: "505.4"
+      url: https://www.access-board.gov/ada/#ada-505_4
+    quote: >-
+      Top of gripping surfaces of handrails shall be 34 inches (865 mm) minimum
+      and 38 inches (965 mm) maximum vertically above walking surfaces, stair
+      nosings, and ramp surfaces. Handrails shall be at a consistent height
+      above walking surfaces, stair nosings, and ramp surfaces.
+    interpretation:
+      by: pack
+      note: >
+        The range is checked on the lowest and highest measured heights along
+        the handrail. "Consistent height" has no numeric limit in the text and
+        is a judged fact. As a stated range, 34 to 38 in carries no
+        construction tolerance (104.1.1).
+    status: draft
+    require:
+      any:
+        - not: {term: handrail_subject_to_505, of: h}
+        - all:
+            - ge: [{fact: h.min_height}, 34 in]
+            - le: [{fact: h.max_height}, 38 in]
+            - {fact: h.height_consistent}

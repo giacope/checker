@@ -1,0 +1,170 @@
+# Building-level terms: the 法別表第一 use class, the scope of 第5章第2節 (令117条),
+# and building facts the egress rules share. Text from e-Gov 法令API v2, as of
+# 2026-11-14 (施行令 revision 325CO0000000338_20261101_508CO0000000284; 法 revision
+# 325AC0000000201_20260527_508AC0000000023).
+
+terms:
+  - name: special_building_class
+    title: 法別表第一（い）欄の用途の区分 (use class of 法別表第一)
+    cite:
+      section: "法別表第一(い)欄"
+      url: https://laws.e-gov.go.jp/law/325AC0000000201/20260527_508AC0000000023#Mpat_1
+    note: >
+      Returns class-1 to class-6 for the row of 法別表第一（い）欄 the use falls in, or
+      not-special. The (ろ)(は)(に) columns set the floor and area thresholds of 法27条
+      (fire-resistive construction); they do not limit which buildings are
+      特殊建築物 of a class, so they are not read here.
+    interpretation:
+      by: pack
+      note: >
+        「その他これらに類するもので政令で定めるもの」 is read from 令115条の3. Uses the
+        pack does not list (value other) are taken as not in 法別表第一; a similar
+        use the building official treats as 類する needs its own value.
+    value:
+      cases:
+        - when: {in: [{fact: building.principal_use}, [theater, cinema, entertainment_hall, spectator_facility, public_hall, assembly_hall]]}
+          then: class-1
+          cite:
+            section: "法別表第一(い)欄(一)項"
+            row: （一）劇場、映画館、演芸場、観覧場、公会堂、集会場
+            quote: 劇場、映画館、演芸場、観覧場、公会堂、集会場その他これらに類するもので政令で定めるもの
+        - when: {in: [{fact: building.principal_use}, [hospital, clinic_with_inpatient_beds, hotel, ryokan, boarding_house, apartment_house, dormitory]]}
+          then: class-2
+          cite:
+            section: "法別表第一(い)欄(二)項"
+            row: （二）病院、診療所（患者の収容施設があるものに限る。）、ホテル、旅館、下宿、共同住宅、寄宿舎
+            quote: 病院、診療所（患者の収容施設があるものに限る。）、ホテル、旅館、下宿、共同住宅、寄宿舎その他これらに類するもので政令で定めるもの
+        - when: {eq: [{fact: building.principal_use}, child_welfare_facility]}
+          then: class-2
+          cite:
+            section: "令115条の3第1号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_4-At_115_3-Pr_1-It_1
+            row: （二）項の用途に類するもの — 児童福祉施設等
+            quote: （二）項の用途に類するもの　児童福祉施設等（幼保連携型認定こども園を含む。以下同じ。）
+        - when: {in: [{fact: building.principal_use}, [school_elementary, school_secondary, school_other, gymnasium]]}
+          then: class-3
+          cite:
+            section: "法別表第一(い)欄(三)項"
+            row: （三）学校、体育館
+            quote: 学校、体育館その他これらに類するもので政令で定めるもの
+        - when: {eq: [{fact: building.principal_use}, museum_library_sports]}
+          then: class-3
+          cite:
+            section: "令115条の3第2号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_4-At_115_3-Pr_1-It_2
+            row: （三）項の用途に類するもの
+            quote: 博物館、美術館、図書館、ボーリング場、スキー場、スケート場、水泳場又はスポーツの練習場
+        - when: {in: [{fact: building.principal_use}, [exhibition_hall, cabaret_cafe_nightclub_bar, dance_hall, amusement_facility]]}
+          then: class-4
+          cite:
+            section: "法別表第一(い)欄(四)項"
+            row: （四）百貨店、マーケット、展示場、キャバレー、カフェー、ナイトクラブ、バー、ダンスホール、遊技場
+            quote: 百貨店、マーケット、展示場、キャバレー、カフェー、ナイトクラブ、バー、ダンスホール、遊技場その他これらに類するもので政令で定めるもの
+        - when: {in: [{fact: building.principal_use}, [retail_store, public_bath, restaurant]]}
+          then: class-4
+          cite:
+            section: "令115条の3第3号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_4-At_115_3-Pr_1-It_3
+            row: （四）百貨店、マーケット；（四）項の用途に類するもの
+            note: retail_store covers 百貨店 and マーケット (法別表第一) and 物品販売業を営む店舗 (令115条の3第3号).
+            quote: 公衆浴場、待合、料理店、飲食店又は物品販売業を営む店舗（床面積が十平方メートル以内のものを除く。）
+        - when: {eq: [{fact: building.principal_use}, warehouse]}
+          then: class-5
+          cite:
+            section: "法別表第一(い)欄(五)項"
+            row: （五）倉庫
+            quote: 倉庫その他これに類するもので政令で定めるもの
+        - when: {eq: [{fact: building.principal_use}, garage_repair_shop]}
+          then: class-6
+          cite:
+            section: "法別表第一(い)欄(六)項"
+            row: （六）自動車車庫、自動車修理工場
+            quote: 自動車車庫、自動車修理工場その他これらに類するもので政令で定めるもの
+        - when: {eq: [{fact: building.principal_use}, studio]}
+          then: class-6
+          cite:
+            section: "令115条の3第4号"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_4-At_115_3-Pr_1-It_4
+            row: （六）項の用途に類するもの
+            quote: 映画スタジオ又はテレビスタジオ
+        - else: not-special
+          cite: {row: 法別表第一（い）欄に掲げる用途以外}
+
+  - name: large_retail_store
+    title: 物品販売業を営む店舗で床面積の合計が1,500平方メートルを超えるもの
+    cite:
+      section: "令121条1項2号"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_121-Pr_1-It_2
+      quote: 物品販売業を営む店舗（床面積の合計が千五百平方メートルを超えるものに限る。第百二十二条第二項、第百二十四条第一項及び第百二十五条第三項において同じ。）
+    note: The same threshold appears in 令23条1項 表(二).
+    value:
+      all:
+        - {eq: [{fact: building.principal_use}, retail_store]}
+        - {gt: [{fact: building.store_floor_area}, 1500 m2]}
+
+  - name: fire_resistive_or_noncombustible
+    title: 主要構造部が準耐火構造（特定主要構造部が耐火構造である場合を含む）又は不燃材料で造られている
+    cite:
+      section: "令120条1項 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_120-Pr_1
+      quote: 主要構造部が準耐火構造である場合（特定主要構造部が耐火構造である場合を含む。）又は主要構造部が不燃材料で造られている場合
+    note: The same set of structures is named in 令120条2項 and 令121条2項.
+    value: {in: [{fact: building.main_structure}, [fire_resistant, quasi_fire_resistant, noncombustible]]}
+
+  - name: section_5_2_applies
+    title: 第5章第2節（令117条〜令126条）が建築物全体に適用される (scope of 第5章第2節, whole building)
+    cite:
+      section: "令117条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+      quote: この節の規定は、法別表第一（い）欄（一）項から（四）項までに掲げる用途に供する特殊建築物、階数が三以上である建築物、前条第一項第一号に該当する窓その他の開口部を有しない居室を有する階又は延べ面積が千平方メートルをこえる建築物に限り適用する。
+    note: >
+      The fourth limb (a floor with a windowless room under 令116条の2第1項1号) brings in
+      only that floor, so it is read by the floor-, room-, and corridor-level scope
+      terms, not here.
+    interpretation:
+      by: pack
+      note: >
+        A building of a use in 法別表第一（い）欄（一）〜（四）項 is in scope whatever its
+        size; the (ろ)(は)(に) thresholds of that table belong to 法27条.
+    defers_to: ["令117条2項（開口部のない耐火構造の床・壁等で区画された部分を別の建築物とみなす）"]
+    value:
+      any:
+        - {in: [{term: special_building_class}, [class-1, class-2, class-3, class-4]]}
+        - {ge: [{fact: building.stories}, 3]}
+        - {gt: [{fact: building.total_floor_area}, 1000 m2]}
+
+  - name: section_5_2_applies_to_floor
+    title: 第5章第2節がこの階に適用される
+    for: {f: Floor}
+    cite:
+      section: "令117条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+      quote: 前条第一項第一号に該当する窓その他の開口部を有しない居室を有する階
+    value:
+      any:
+        - {term: section_5_2_applies}
+        - {fact: f.has_windowless_room}
+
+  - name: section_5_2_applies_to_room
+    title: 第5章第2節がこの居室に適用される
+    for: {r: Room}
+    cite:
+      section: "令117条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+      quote: 前条第一項第一号に該当する窓その他の開口部を有しない居室を有する階
+    value:
+      any:
+        - {term: section_5_2_applies}
+        - {fact: r.on_floor_with_windowless_room}
+
+  - name: section_5_2_applies_to_corridor
+    title: 第5章第2節がこの廊下に適用される
+    for: {c: Corridor}
+    cite:
+      section: "令117条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_5-Se_2-At_117-Pr_1
+      quote: 前条第一項第一号に該当する窓その他の開口部を有しない居室を有する階
+    value:
+      any:
+        - {term: section_5_2_applies}
+        - {fact: c.on_floor_with_windowless_room}

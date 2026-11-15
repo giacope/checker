@@ -1,0 +1,515 @@
+# Section 2, Design for horizontal escape (PDF pages 24-39, printed 12-27):
+# travel distance (2.3, 2.6, 2.7, Table 2.1), number of escape routes and exits
+# (2.9, Table 2.2), inner rooms (2.11), widths of escape routes and exits (2.18,
+# Table 2.3, 2.21, 2.22).
+
+tables:
+  - name: T2.1
+    title: Limitations on travel distance
+    cite:
+      section: "ADB2 Table 2.1"
+      table: "2.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+    key: Space.table_2_1_row
+    columns: [one_direction, more_than_one_direction]
+    note: >-
+      Maximum travel distance (Note 1) where travel is possible in one direction
+      only (m) and in more than one direction (m). Note 1: If the internal layout
+      of partitions, fittings, etc. is not known, direct distances, rather than
+      travel distances, should be assessed. The direct distance should be assumed
+      to be two-thirds of the actual travel distance.
+    rows:
+      - {key: residential-institutional, one_direction: 9 m, more_than_one_direction: 18 m, row: "2(a) Residential (institutional)"}
+      - key: residential-other-bedrooms
+        one_direction: 9 m
+        more_than_one_direction: 18 m
+        row: "2(b) Residential (other): a. in bedrooms"
+        note: >-
+          Note 2: Maximum part of travel distance within the room. This limit
+          applies within the bedroom and any associated dressing room, bathroom
+          or sitting room, etc. The distance is measured to the door to the
+          protected corridor that serves the room or suite. Sub-item (b) applies
+          from that point along the bedroom corridor to a storey exit.
+      - {key: residential-other-bedroom-corridors, one_direction: 9 m, more_than_one_direction: 35 m, row: "2(b) Residential (other): b. in bedroom corridors"}
+      - {key: residential-other-elsewhere, one_direction: 18 m, more_than_one_direction: 35 m, row: "2(b) Residential (other): c. elsewhere"}
+      - {key: office, one_direction: 18 m, more_than_one_direction: 45 m, row: "3 Office"}
+      - {key: shop-and-commercial, one_direction: 18 m, more_than_one_direction: 45 m, row: "4 Shop and commercial"}
+      - {key: assembly-buildings-primarily-for-disabled-people, one_direction: 9 m, more_than_one_direction: 18 m, row: "5 Assembly and recreation: a. buildings primarily for disabled people"}
+      - {key: assembly-seating-in-rows, one_direction: 15 m, more_than_one_direction: 32 m, row: "5 Assembly and recreation: b. areas with seating in rows"}
+      - {key: assembly-elsewhere, one_direction: 18 m, more_than_one_direction: 45 m, row: "5 Assembly and recreation: c. elsewhere"}
+      - {key: industrial-normal-hazard, one_direction: 25 m, more_than_one_direction: 45 m, row: "6 Industrial — Normal hazard"}
+      - {key: industrial-higher-hazard, one_direction: 12 m, more_than_one_direction: 25 m, row: "6 Industrial — Higher hazard"}
+      - {key: storage-normal-hazard, one_direction: 25 m, more_than_one_direction: 45 m, row: "7 Storage and other non-residential — Normal hazard"}
+      - {key: storage-higher-hazard, one_direction: 12 m, more_than_one_direction: 25 m, row: "7 Storage and other non-residential — Higher hazard"}
+      - key: place-of-special-fire-hazard
+        one_direction: 9 m
+        more_than_one_direction: 18 m
+        row: "2–7 Place of special fire hazard"
+        note: >-
+          Note 5: Maximum part of travel distance within the room/area. Travel
+          distance outside the room/area should comply with the limits for the
+          purpose group of the building or part.
+      - {key: plant-within-room, one_direction: 9 m, more_than_one_direction: 35 m, row: "2–7 Plant room or roof-top plant: a. distance within the room"}
+      - {key: plant-route-not-in-open-air, one_direction: 18 m, more_than_one_direction: 45 m, row: "2–7 Plant room or roof-top plant: b. escape route not in open air (overall travel distance)"}
+      - {key: plant-route-in-open-air, one_direction: 60 m, more_than_one_direction: 100 m, row: "2–7 Plant room or roof-top plant: c. escape route in open air (overall travel distance)"}
+
+terms:
+  # ------------------------------------------------------------ Table 2.1
+  - name: table_2_1_row
+    title: Which row of Table 2.1 sets the travel distance to the storey exit
+    for: {s: Space}
+    cite:
+      section: "ADB2 Table 2.1"
+      table: "2.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+    interpretation:
+      by: pack
+      note: >-
+        (1) Plant room or roof-top plant rows apply in every purpose group (2–7)
+        and are tried first; this term gives the overall travel distance row (b
+        or c), and max_travel_distance_within_room gives row a. (2) A place of
+        special fire hazard takes the row of its purpose group here, because
+        Note 5 makes the special fire hazard row a limit within the room only;
+        that limit is max_travel_distance_within_room. (3) Row 7 'Storage and
+        other non-residential' is read as covering both 7(a) and 7(b) (car
+        parks). (4) 'Higher hazard' (Note 3) is asked of the space.
+    status: draft
+    value:
+      cases:
+        - when: {all: [{fact: s.is_plant_room}, {fact: s.plant_escape_route_in_open_air}]}
+          then: plant-route-in-open-air
+          cite: {row: "2–7 Plant room or roof-top plant: c. escape route in open air (overall travel distance)"}
+        - when: {fact: s.is_plant_room}
+          then: plant-route-not-in-open-air
+          cite: {row: "2–7 Plant room or roof-top plant: b. escape route not in open air (overall travel distance)"}
+        - when: {eq: [{fact: building.purpose_group}, residential-institutional]}
+          then: residential-institutional
+          cite: {row: "2(a) Residential (institutional)"}
+        - when: {eq: [{fact: building.purpose_group}, residential-other]}
+          then:
+            cases:
+              - when: {eq: [{fact: s.residential_other_area}, bedroom]}
+                then: residential-other-bedrooms
+                cite: {row: "2(b) Residential (other): a. in bedrooms"}
+              - when: {eq: [{fact: s.residential_other_area}, bedroom-corridor]}
+                then: residential-other-bedroom-corridors
+                cite: {row: "2(b) Residential (other): b. in bedroom corridors"}
+              - else: residential-other-elsewhere
+                cite: {row: "2(b) Residential (other): c. elsewhere"}
+          cite: {row: "2(b) Residential (other)"}
+        - when: {eq: [{fact: building.purpose_group}, office]}
+          then: office
+          cite: {row: "3 Office"}
+        - when: {eq: [{fact: building.purpose_group}, shop-and-commercial]}
+          then: shop-and-commercial
+          cite: {row: "4 Shop and commercial"}
+        - when: {eq: [{fact: building.purpose_group}, assembly-and-recreation]}
+          then:
+            cases:
+              - when: {fact: building.primarily_for_disabled_people}
+                then: assembly-buildings-primarily-for-disabled-people
+                cite: {row: "5 Assembly and recreation: a. buildings primarily for disabled people"}
+              - when: {fact: s.seating_in_rows}
+                then: assembly-seating-in-rows
+                cite: {row: "5 Assembly and recreation: b. areas with seating in rows"}
+              - else: assembly-elsewhere
+                cite: {row: "5 Assembly and recreation: c. elsewhere"}
+          cite: {row: "5 Assembly and recreation"}
+        - when: {eq: [{fact: building.purpose_group}, industrial]}
+          then:
+            cases:
+              - when: {fact: s.higher_hazard}
+                then: industrial-higher-hazard
+                cite: {row: "6 Industrial — Higher hazard"}
+              - else: industrial-normal-hazard
+                cite: {row: "6 Industrial — Normal hazard"}
+          cite: {row: "6 Industrial"}
+        - else:
+            cases:
+              - when: {fact: s.higher_hazard}
+                then: storage-higher-hazard
+                cite: {row: "7 Storage and other non-residential — Higher hazard"}
+              - else: storage-normal-hazard
+                cite: {row: "7 Storage and other non-residential — Normal hazard"}
+          cite: {row: "7 Storage and other non-residential (purpose groups 7(a) and 7(b))"}
+
+  - name: max_travel_distance_one_direction
+    title: Maximum travel distance where travel is possible in one direction only
+    for: {s: Space}
+    cite:
+      section: "ADB2 Table 2.1"
+      table: "2.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+    status: draft
+    value: {lookup: T2.1, key: {term: table_2_1_row, of: s}, column: one_direction}
+
+  - name: max_travel_distance_more_than_one_direction
+    title: Maximum travel distance where travel is possible in more than one direction
+    for: {s: Space}
+    cite:
+      section: "ADB2 Table 2.1"
+      table: "2.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+    status: draft
+    value: {lookup: T2.1, key: {term: table_2_1_row, of: s}, column: more_than_one_direction}
+
+  - name: max_travel_distance
+    title: Maximum travel distance to the nearest storey exit
+    for: {s: Space}
+    cite:
+      section: "ADB2 2.3"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=24
+      quote: >-
+        The limits on travel distance to the nearest exit given in Table 2.1
+        (which apply only to the nearest exit; other exits may be further away).
+    note: >-
+      Where escape is possible in more than one direction, 2.7 also limits the
+      part of the route in one direction only; the norm 'ADB2 2.7' checks both.
+    status: draft
+    value:
+      cases:
+        - when: {fact: s.alternative_escape_routes}
+          then: {term: max_travel_distance_more_than_one_direction, of: s}
+          cite:
+            section: "ADB2 Table 2.1"
+            url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+            row: Maximum travel distance where travel is possible in more than one direction
+        - else: {term: max_travel_distance_one_direction, of: s}
+          cite:
+            section: "ADB2 Table 2.1"
+            url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+            row: Maximum travel distance where travel is possible in one direction only
+
+  - name: max_direct_distance
+    title: Maximum direct distance where the internal layout is not known
+    for: {s: Space}
+    cite:
+      section: "ADB2 Table 2.1 note 1"
+      table: "2.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+      quote: >-
+        If the internal layout of partitions, fittings, etc. is not known, direct
+        distances, rather than travel distances, should be assessed. The direct
+        distance should be assumed to be two-thirds of the actual travel distance.
+    interpretation:
+      by: pack
+      note: >-
+        Read as: the direct distance limit is two-thirds of the Table 2.1 travel
+        distance limit (computed as the limit divided by 1.5).
+    status: draft
+    value:
+      div: [{term: max_travel_distance, of: s}, 1.5]
+
+  - name: max_travel_distance_within_room
+    title: Maximum part of the travel distance within the room (places of special fire hazard, plant rooms)
+    for: {s: Space}
+    cite:
+      section: "ADB2 Table 2.1"
+      table: "2.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=26
+    note: >-
+      For a 2(b) bedroom the within-room limit is already the row max_travel_distance
+      uses (Note 2); this term covers the two other within-room rows.
+    status: draft
+    value:
+      cases:
+        - when: {fact: s.is_place_of_special_fire_hazard}
+          then:
+            cases:
+              - when: {fact: s.alternative_escape_routes}
+                then: {lookup: T2.1, key: place-of-special-fire-hazard, column: more_than_one_direction}
+                cite: {row: "2–7 Place of special fire hazard, more than one direction (Note 5: within the room/area)"}
+              - else: {lookup: T2.1, key: place-of-special-fire-hazard, column: one_direction}
+                cite: {row: "2–7 Place of special fire hazard, one direction only (Note 5: within the room/area)"}
+          cite: {row: "2–7 Place of special fire hazard"}
+        - when: {fact: s.is_plant_room}
+          then:
+            cases:
+              - when: {fact: s.alternative_escape_routes}
+                then: {lookup: T2.1, key: plant-within-room, column: more_than_one_direction}
+                cite: {row: "2–7 Plant room or roof-top plant: a. distance within the room, more than one direction"}
+              - else: {lookup: T2.1, key: plant-within-room, column: one_direction}
+                cite: {row: "2–7 Plant room or roof-top plant: a. distance within the room, one direction only"}
+          cite: {row: "2–7 Plant room or roof-top plant: a. distance within the room"}
+        - else: not-applicable
+          cite: {row: Table 2.1 sets no separate within-room limit for this space}
+
+  # ------------------------------------------------- 2.6, 2.9, Table 2.2
+  - name: single_escape_route_acceptable_for_storey
+    title: May the storey have a single escape route (2.6b)?
+    for: {f: Storey}
+    cite:
+      section: "ADB2 2.6"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=25
+      quote: >-
+        A storey with no more than 60 people, where the limits on travel distance
+        in one direction only are satisfied (see Table 2.1).
+    defers_to:
+      - "ADB2 2.6a (parts of a floor within the one-direction limit; no one room of a place of assembly or bar with more than 60 people, or of a 2(a) building with more than 30)"
+      - "ADB2 3.3 (single escape stairs)"
+    status: draft
+    value:
+      all:
+        - {le: [{fact: f.occupant_number}, 60]}
+        - {fact: f.one_direction_travel_limits_met}
+
+  - name: min_escape_routes_from_storey
+    title: Minimum number of escape routes and exits from a storey
+    for: {f: Storey}
+    cite:
+      section: "ADB2 Table 2.2"
+      table: "2.2"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=27
+      quote: >-
+        Table 2.2 gives the minimum number of escape routes and exits from a room
+        or storey for different numbers of occupants. This number is likely to be
+        increased by the need to observe travel distances and other practical
+        considerations.
+    defers_to: ["ADB2 2.3b (travel distance limits may need more exits)", "ADB2 2.16 (areas for consuming food and/or drink: two escape routes)"]
+    status: draft
+    value:
+      cases:
+        - when: {le: [{fact: f.occupant_number}, 60]}
+          then: 1
+          cite: {row: "60 — 1"}
+        - when: {le: [{fact: f.occupant_number}, 600]}
+          then: 2
+          cite: {row: "600 — 2"}
+        - else: 3
+          cite: {row: "More than 600 — 3"}
+
+  - name: min_escape_routes_from_room
+    title: Minimum number of escape routes and exits from a room or tier
+    for: {s: Space}
+    cite:
+      section: "ADB2 Table 2.2"
+      table: "2.2"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=27
+      quote: >-
+        The building design should be based on the number of occupants. If the
+        number is not known, use the appropriate floor space factors (Appendix D).
+    note: The occupant number is the term occupant_number (D1(b), Table D1).
+    defers_to: ["ADB2 2.3b (travel distance limits may need more exits)", "ADB2 2.16 (areas for consuming food and/or drink: two escape routes)"]
+    status: draft
+    value:
+      cases:
+        - when: {le: [{term: occupant_number, of: s}, 60]}
+          then: 1
+          cite: {row: "60 — 1"}
+        - when: {le: [{term: occupant_number, of: s}, 600]}
+          then: 2
+          cite: {row: "600 — 2"}
+        - else: 3
+          cite: {row: "More than 600 — 3"}
+
+  # ---------------------------------------------------------- 2.11 inner rooms
+  - name: max_inner_room_occupant_number
+    title: Maximum occupant number of an inner room
+    cite:
+      section: "ADB2 2.11"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=28
+      quote: >-
+        a. The occupant number of the inner room does not exceed: i. 30 people
+        for 'residential (institutional)' buildings (purpose group 2(a)) ii. 60
+        people for other purpose groups.
+    status: draft
+    value:
+      cases:
+        - when: {eq: [{fact: building.purpose_group}, residential-institutional]}
+          then: 30
+          cite: {row: "2.11a(i) 30 people for 'residential (institutional)' buildings (purpose group 2(a))"}
+        - else: 60
+          cite: {row: "2.11a(ii) 60 people for other purpose groups"}
+
+  - name: inner_room_acceptable
+    title: Is the inner room arrangement acceptable (2.11)?
+    for: {s: Space}
+    cite:
+      section: "ADB2 2.11"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=27
+      quote: >-
+        An inner room is at risk if a fire starts in the access room (Diagram
+        2.3). Such an arrangement should only be accepted if all of the following
+        conditions are satisfied.
+    interpretation:
+      by: pack
+      note: >-
+        (1) s is the inner room; facts about its access room are asked of it. (2)
+        The occupant number is the term occupant_number (D1(b)). (3) 2.11e is read
+        as the Table 2.1 limit for the inner room (max_travel_distance), measured
+        to the exits from the access room.
+    status: draft
+    value:
+      all:
+        - {le: [{term: occupant_number, of: s}, {term: max_inner_room_occupant_number}]}
+        - {not: {fact: s.is_bedroom}}
+        - {fact: s.entered_directly_from_access_room}
+        - {le: [{fact: s.access_rooms_on_escape_route}, 1]}
+        - {le: [{fact: s.travel_distance_to_access_room_exit}, {term: max_travel_distance, of: s}]}
+        - {not: {fact: s.access_room_is_place_of_special_fire_hazard}}
+        - {fact: s.access_room_same_occupier}
+        - any:
+            - {ge: [{fact: s.enclosure_gap_below_ceiling}, 500 mm]}
+            - {ge: [{fact: s.vision_panel_area}, 0.1 m2]}
+            - {fact: s.access_room_has_fire_detection}
+
+  # ------------------------------------------------- 2.18, Table 2.3, 2.22
+  - name: min_exit_width
+    title: Minimum width of an exit (Table 2.3)
+    for: {e: Exit}
+    cite:
+      section: "ADB2 Table 2.3"
+      table: "2.3"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=31
+      quote: >-
+        Widths less than 1050mm should not be interpolated. [...] 5mm/person
+        does not apply to an opening serving fewer than 220 people.
+    note: >-
+      Note 3: Widths less than 1050mm should not be interpolated. Note 5:
+      5mm/person does not apply to an opening serving fewer than 220 people. The
+      per-person rule starts above 220 people in this edition (not at 1000).
+    interpretation:
+      by: pack
+      note: >-
+        The 'Maximum number of people' column is read as the upper bound of each
+        row, so 61 to 110 people need 850mm. Exit.people is the number after
+        discounting the largest storey exit (2.21).
+    defers_to: ["Approved Document M (widths may need to be increased, Table 2.3 note 2)", "ADB2 2.21 (discount the largest storey exit)"]
+    status: draft
+    value:
+      cases:
+        - when: {le: [{fact: e.people}, 60]}
+          then: 750 mm
+          cite: {row: "60 — 750"}
+        - when: {le: [{fact: e.people}, 110]}
+          then: 850 mm
+          cite: {row: "110 — 850"}
+        - when: {le: [{fact: e.people}, 220]}
+          then: 1050 mm
+          cite: {row: "220 — 1050"}
+        - else:
+            mul: [5 mm, {fact: e.people}]
+          cite: {row: "More than 220 — 5 per person"}
+
+  - name: min_escape_route_width
+    title: Minimum width of an escape route (Table 2.3)
+    for: {r: EscapeRoute}
+    cite:
+      section: "ADB2 Table 2.3"
+      table: "2.3"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=31
+      quote: >-
+        Widths less than 1050mm should not be interpolated. [...] 5mm/person
+        does not apply to an opening serving fewer than 220 people.
+    note: >-
+      Note 3: Widths less than 1050mm should not be interpolated. Note 5:
+      5mm/person does not apply to an opening serving fewer than 220 people.
+    defers_to: ["Approved Document M (widths may need to be increased, Table 2.3 note 2)", "BS 9999 Annex D (spacing of fixed seating, 2.20)"]
+    status: draft
+    value:
+      cases:
+        - when:
+            all:
+              - {le: [{fact: r.people}, 60]}
+              - {fact: r.gangway_between_fixed_storage_racking}
+              - not:
+                  all:
+                    - {eq: [{fact: building.purpose_group}, shop-and-commercial]}
+                    - {fact: r.in_public_area}
+          then: 530 mm
+          cite: {row: "60 — 750, note 4: may be reduced to 530mm for gangways between fixed storage racking, other than in public areas of 'shop and commercial' (purpose group 4) buildings"}
+        - when: {le: [{fact: r.people}, 60]}
+          then: 750 mm
+          cite: {row: "60 — 750"}
+        - when: {le: [{fact: r.people}, 110]}
+          then: 850 mm
+          cite: {row: "110 — 850"}
+        - when: {le: [{fact: r.people}, 220]}
+          then: 1050 mm
+          cite: {row: "220 — 1050"}
+        - else:
+            mul: [5 mm, {fact: r.people}]
+          cite: {row: "More than 220 — 5 per person"}
+
+  - name: exit_capacity
+    title: Maximum number of people an exit of a given width can accommodate (2.22)
+    for: {e: Exit}
+    cite:
+      section: "ADB2 2.22"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=31
+      quote: >-
+        To calculate how many people two or more available exits (after
+        discounting) can accommodate, add together the maximum numbers of people
+        that each exit width can accommodate. For example, three exits each 850mm
+        wide accommodate 3 ×110 = 330 people.
+    interpretation:
+      by: pack
+      note: >-
+        Table 2.3 read in reverse. Widths below 1050mm are not interpolated (note
+        3); from 1050mm to 1100mm the capacity is 220; above 1100mm it is the
+        width divided by 5mm, not rounded down (v0 has no floor operator), so
+        compare a number of people with it using 'le'. A width below 750mm
+        accommodates no one here (note 4 concerns gangways, not exits).
+    defers_to: ["ADB2 2.21-2.22 (sum over the exits left after discounting the largest; v0 has no sum)"]
+    status: draft
+    value:
+      cases:
+        - when: {gt: [{fact: e.width}, 1100 mm]}
+          then: {div: [{fact: e.width}, 5 mm]}
+          cite: {section: "ADB2 Table 2.3", row: "More than 220 — 5 per person"}
+        - when: {ge: [{fact: e.width}, 1050 mm]}
+          then: 220
+          cite: {section: "ADB2 Table 2.3", row: "220 — 1050"}
+        - when: {ge: [{fact: e.width}, 850 mm]}
+          then: 110
+          cite: {section: "ADB2 Table 2.3", row: "110 — 850"}
+        - when: {ge: [{fact: e.width}, 750 mm]}
+          then: 60
+          cite: {section: "ADB2 Table 2.3", row: "60 — 750"}
+        - else: 0
+          cite: {section: "ADB2 Table 2.3", row: narrower than the smallest width in Table 2.3}
+
+norms:
+  - name: "ADB2 2.7"
+    title: Travel distance is within the limits of Table 2.1
+    modality: obligation
+    for: {s: Space}
+    cite:
+      section: "ADB2 2.7"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=25
+      quote: >-
+        a. The travel distance to the nearest storey exit is within the limits
+        for routes where escape is possible in more than one direction (Table
+        2.1). b. The travel distance for the 'one direction only' section of the
+        route does not exceed the limit for travel distance where there is no
+        alternative escape route (Table 2.1).
+    defers_to: ["ADB2 Diagram 2.1 (dead-end condition geometry)"]
+    status: draft
+    require:
+      all:
+        - {le: [{fact: s.travel_distance}, {term: max_travel_distance, of: s}]}
+        - any:
+            - {not: {fact: s.alternative_escape_routes}}
+            - {le: [{fact: s.one_direction_travel_distance}, {term: max_travel_distance_one_direction, of: s}]}
+
+  - name: "ADB2 2.18 (exits)"
+    title: The exit is at least as wide as Table 2.3 requires
+    modality: obligation
+    for: {e: Exit}
+    cite:
+      section: "ADB2 2.18"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=30
+    status: draft
+    require:
+      ge: [{fact: e.width}, {term: min_exit_width, of: e}]
+
+  - name: "ADB2 2.18 (escape routes)"
+    title: The escape route is at least as wide as Table 2.3 requires
+    modality: obligation
+    for: {r: EscapeRoute}
+    cite:
+      section: "ADB2 2.18"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=30
+    status: draft
+    require:
+      ge: [{fact: r.width}, {term: min_escape_route_width, of: r}]

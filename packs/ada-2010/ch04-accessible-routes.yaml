@@ -1,0 +1,275 @@
+# Chapter 4, Accessible routes: walking surfaces (403), doors (404), ramps
+# (405). Text from the U.S. Access Board's ADA Accessibility Standards page,
+# checked against the DOJ page, read 2026-11-14.
+#
+# v0 has only obligations, so scoping is written into each norm as
+# "not in scope, or meets the requirement". A norm on an element outside its
+# scope evaluates to true. Exceptions that only make a requirement less strict
+# are encoded as further alternatives in the same expression.
+
+terms:
+  # ------------------------------------------------------------- scoping
+  - name: route_subject_to_403
+    title: Must the walking surface comply with 403?
+    for: {w: Route}
+    cite:
+      section: "403.1"
+      url: https://www.access-board.gov/ada/#ada-403_1
+    quote: Walking surfaces that are a part of an accessible route shall comply with 403.
+    defers_to: ["206.2"]
+    status: draft
+    value: {fact: w.on_accessible_route}
+
+  - name: door_subject_to_404
+    title: Must the door, doorway, or gate comply with 404?
+    for: {d: Door}
+    cite:
+      section: "404.1"
+      url: https://www.access-board.gov/ada/#ada-404_1
+    quote: Doors, doorways, and gates that are part of an accessible route shall comply with 404.
+    note: >
+      The 404.1 Exception (doors operated only by security personnel) does not
+      reach 404.2.3 or 404.2.5, so it does not matter for the norms in this pack.
+    defers_to: ["206.2", "206.5"]
+    status: draft
+    value: {fact: d.on_accessible_route}
+
+  - name: ramp_subject_to_405
+    title: Must the ramp comply with 405?
+    for: {r: Ramp}
+    cite:
+      section: "405.1"
+      url: https://www.access-board.gov/ada/#ada-405_1
+    quote: >-
+      Ramps on accessible routes shall comply with 405. EXCEPTION: In assembly
+      areas, aisle ramps adjacent to seating and not serving elements required
+      to be on an accessible route shall not be required to comply with 405.
+    defers_to: ["206.2"]
+    status: draft
+    value:
+      all:
+        - {fact: r.on_accessible_route}
+        - not:
+            all:
+              - {fact: r.assembly_aisle_ramp_adjacent_to_seating}
+              - not: {fact: r.serves_required_accessible_elements}
+
+  # ------------------------------------------------------------ values
+  - name: required_door_clear_width
+    title: Minimum clear opening width of a door
+    for: {d: Door}
+    cite:
+      section: "404.2.3"
+      url: https://www.access-board.gov/ada/#ada-404_2_3
+    defers_to: ["404.2.3 Exception 1 (5/8 in latch side stop in alterations)"]
+    status: draft
+    value:
+      cases:
+        - when: {gt: [{fact: d.opening_depth}, 24 in]}
+          then: 36 in
+          cite:
+            note: openings more than 24 in deep
+            quote: Openings more than 24 inches (610 mm) deep shall provide a clear opening of 36 inches (915 mm) minimum.
+        - else: 32 in
+          cite:
+            note: door openings
+            quote: Door openings shall provide a clear width of 32 inches (815 mm) minimum.
+
+norms:
+  # --------------------------------------------------------- 403 walking
+  - name: "403.5.1"
+    title: Walking surfaces on an accessible route are 36 in wide, or 32 in for short separated segments
+    modality: obligation
+    for: {w: Route}
+    cite:
+      section: "403.5.1"
+      url: https://www.access-board.gov/ada/#ada-403_5_1
+    quote: >-
+      Except as provided in 403.5.2 and 403.5.3, the clear width of walking
+      surfaces shall be 36 inches (915 mm) minimum. EXCEPTION: The clear width
+      shall be permitted to be reduced to 32 inches (815 mm) minimum for a
+      length of 24 inches (610 mm) maximum provided that reduced width segments
+      are separated by segments that are 48 inches (1220 mm) long minimum and
+      36 inches (915 mm) wide minimum.
+    interpretation:
+      by: pack
+      note: >
+        The exception is read over one Route element: every segment narrower
+        than 36 in is at least 32 in wide (the element's least clear width) and
+        at most 24 in long, and, where there are two or more, each pair is
+        separated by at least 48 in of walking surface 36 in wide or more. A
+        single reduced segment needs no separation. Reduced segments that fall
+        in different Route elements are not related to each other in v0.
+    defers_to: ["403.5.2 (clear width at turn)", "403.5.3 (passing spaces)", "403.5 Exception (employee work areas)"]
+    status: draft
+    require:
+      any:
+        - not: {term: route_subject_to_403, of: w}
+        - ge: [{fact: w.clear_width}, 36 in]
+        - all:
+            - ge: [{fact: w.clear_width}, 32 in]
+            - le: [{fact: w.longest_reduced_width_length}, 24 in]
+            - any:
+                - le: [{fact: w.reduced_width_segment_count}, 1]
+                - ge: [{fact: w.shortest_separation_between_reduced_segments}, 48 in]
+
+  # ------------------------------------------------------------ 404 doors
+  - name: "404.2.3"
+    title: Door clear width is 32 in (36 in for openings over 24 in deep), with limited projections
+    modality: obligation
+    for: {d: Door}
+    cite:
+      section: "404.2.3"
+      url: https://www.access-board.gov/ada/#ada-404_2_3
+    quote: >-
+      There shall be no projections into the required clear opening width lower
+      than 34 inches (865 mm) above the finish floor or ground. Projections into
+      the clear opening width between 34 inches (865 mm) and 80 inches (2030 mm)
+      above the finish floor or ground shall not exceed 4 inches (100 mm).
+    interpretation:
+      by: pack
+      note: >
+        Door.clear_width is the clear opening as 404.2.3 measures it (face of
+        the door to the stop, door open 90 degrees, for swinging doors). Any
+        projection below 34 in fails, even where the opening is wider than
+        required; the pack does not credit width beyond the minimum.
+        Exception 2 (closers and stops at 78 in minimum) is applied in the
+        definition of Door.projection_34_to_80in. For a doorway with two
+        leaves (404.2.2), the Door facts describe the widest active leaf.
+    defers_to: ["404.2.2", "404.2.3 Exception 1 (5/8 in latch side stop in alterations)"]
+    status: draft
+    require:
+      any:
+        - not: {term: door_subject_to_404, of: d}
+        - all:
+            - ge: [{fact: d.clear_width}, {term: required_door_clear_width, of: d}]
+            - le: [{fact: d.projection_below_34in}, 0 in]
+            - le: [{fact: d.projection_34_to_80in}, 4 in]
+
+  - name: "404.2.5"
+    title: Thresholds are 1/2 in high maximum
+    modality: obligation
+    for: {d: Door}
+    cite:
+      section: "404.2.5"
+      url: https://www.access-board.gov/ada/#ada-404_2_5
+    quote: >-
+      Thresholds, if provided at doorways, shall be 1/2 inch (13 mm) high
+      maximum. Raised thresholds and changes in level at doorways shall comply
+      with 302 and 303. EXCEPTION: Existing or altered thresholds 3/4 inch (19
+      mm) high maximum that have a beveled edge on each side with a slope not
+      steeper than 1:2 shall not be required to comply with 404.2.5.
+    note: The exception is encoded; 1/2 in and 3/4 in are written as 0.5 in and 0.75 in because v0 quantities take decimals.
+    defers_to: ["302", "303 (raised thresholds and changes in level)"]
+    status: draft
+    require:
+      any:
+        - not: {term: door_subject_to_404, of: d}
+        - not: {fact: d.has_threshold}
+        - le: [{fact: d.threshold_height}, 0.5 in]
+        - all:
+            - {fact: d.threshold_existing_or_altered}
+            - {fact: d.threshold_beveled_1_2}
+            - le: [{fact: d.threshold_height}, 0.75 in]
+
+  # ------------------------------------------------------------ 405 ramps
+  - name: "405.2"
+    title: Ramp running slope is not steeper than 1:12 (Table 405.2 for existing facilities)
+    modality: obligation
+    for: {r: Ramp}
+    cite:
+      section: "405.2"
+      url: https://www.access-board.gov/ada/#ada-405_2
+    quote: >-
+      Ramp runs shall have a running slope not steeper than 1:12. EXCEPTION: In
+      existing sites, buildings, and facilities, ramps shall be permitted to
+      have running slopes steeper than 1:12 complying with Table 405.2 where
+      such slopes are necessary due to space limitations.
+    interpretation:
+      by: pack
+      note: >
+        v0 has no slope or ratio type. "Not steeper than 1:N" is written as
+        N × rise ≤ horizontal run, which is exact (no floating-point ratio), and
+        reads the slope of the run as a whole from its rise and horizontal
+        projection. A run whose local slope varies needs the steepest local
+        slope instead. Table 405.2 is keyed by ranges of slope, which v0 tables
+        (keyed by an enum) cannot express, so its rows are cases rows here.
+        Table 405.2's "Maximum Rise" is read as the rise of the ramp run.
+    status: draft
+    require:
+      any:
+        - not: {term: ramp_subject_to_405, of: r}
+        - cases:
+            - when: {le: [{mul: [12, {fact: r.rise}]}, {fact: r.horizontal_run}]}
+              then: true
+              cite: {note: not steeper than 1:12}
+            - when:
+                not:
+                  all:
+                    - {fact: r.in_existing_facility}
+                    - {fact: r.space_limited}
+              then: false
+              cite: {note: steeper than 1:12 and the exception for existing facilities with space limitations does not apply}
+            - when: {le: [{mul: [10, {fact: r.rise}]}, {fact: r.horizontal_run}]}
+              then: {le: [{fact: r.rise}, 6 in]}
+              cite: {table: "405.2", row: "Steeper than 1:12 but not steeper than 1:10 — 6 inches (150 mm)"}
+            - when: {le: [{mul: [8, {fact: r.rise}]}, {fact: r.horizontal_run}]}
+              then: {le: [{fact: r.rise}, 3 in]}
+              cite: {table: "405.2", row: "Steeper than 1:10 but not steeper than 1:8 — 3 inches (75 mm)"}
+            - else: false
+              cite: {table: "405.2", row: "Table Legend 1: A slope steeper than 1:8 is prohibited."}
+
+  - name: "405.3"
+    title: Ramp cross slope is not steeper than 1:48
+    modality: obligation
+    for: {r: Ramp}
+    cite:
+      section: "405.3"
+      url: https://www.access-board.gov/ada/#ada-405_3
+    quote: Cross slope of ramp runs shall not be steeper than 1:48.
+    interpretation:
+      by: pack
+      note: >
+        Ramp.cross_slope is a dimensionless rise over run and 1:48 is written as
+        1 ÷ 48. A cross slope of exactly 1:48 given as a decimal compares in
+        floating point, so the model should supply it unrounded.
+    status: draft
+    require:
+      any:
+        - not: {term: ramp_subject_to_405, of: r}
+        - le: [{fact: r.cross_slope}, {div: [1, 48]}]
+
+  - name: "405.5"
+    title: Ramp clear width, and width between handrails, is 36 in minimum
+    modality: obligation
+    for: {r: Ramp}
+    cite:
+      section: "405.5"
+      url: https://www.access-board.gov/ada/#ada-405_5
+    quote: >-
+      The clear width of a ramp run and, where handrails are provided, the
+      clear width between handrails shall be 36 inches (915 mm) minimum.
+    defers_to: ["405.5 Exception (employee work areas)", "405.8 (36 in maintained when handrails are installed later)"]
+    status: draft
+    require:
+      any:
+        - not: {term: ramp_subject_to_405, of: r}
+        - all:
+            - ge: [{fact: r.clear_width}, 36 in]
+            - any:
+                - not: {fact: r.has_handrails}
+                - ge: [{fact: r.clear_width_between_handrails}, 36 in]
+
+  - name: "405.6"
+    title: Ramp run rise is 30 in maximum
+    modality: obligation
+    for: {r: Ramp}
+    cite:
+      section: "405.6"
+      url: https://www.access-board.gov/ada/#ada-405_6
+    quote: The rise for any ramp run shall be 30 inches (760 mm) maximum.
+    status: draft
+    require:
+      any:
+        - not: {term: ramp_subject_to_405, of: r}
+        - le: [{fact: r.rise}, 30 in]

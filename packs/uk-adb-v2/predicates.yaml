@@ -1,0 +1,470 @@
+# Facts the rules in this pack read. kind says where a value comes from:
+#   given    stated by the applicant in the project profile or model
+#   measured computed from the model by deterministic code
+#   judged   a classification a person or a calibrated model makes
+#
+# v0 has no relations between elements, so a fact about the room, storey, or
+# stair an element belongs to is repeated on that element (for example
+# Stair.widest_exit_width). Source: ADB Volume 2, 2019 edition incorporating
+# 2020, 2022, 2025 and 2026 amendments (gov.uk PDF, retrieved 2026-11-14).
+predicates:
+  # ---------------------------------------------------------- building level
+  - name: building.purpose_group
+    label: purpose group of the building (ADB2 Table 0.1)
+    type: enum
+    kind: judged
+    refers_to: ["ADB2 0.20", "ADB2 Table 0.1"]
+    cite:
+      section: "ADB2 Table 0.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=17
+      quote: >-
+        Building uses are classified within different purpose groups, which
+        represent different levels of hazard (see Table 0.1). A purpose group can
+        apply to a whole building or to a compartment within the building, and
+        should relate to the main use of the building or compartment.
+    note: >-
+      The Volume 2 purpose groups of Table 0.1 (PDF pages 17-19):
+      residential-institutional = 2(a) Residential (institutional);
+      residential-other = 2(b) Residential (other);
+      office = 3 Office;
+      shop-and-commercial = 4 Shop and commercial;
+      assembly-and-recreation = 5 Assembly and recreation;
+      industrial = 6 Industrial;
+      storage-and-other-non-residential = 7(a) Storage and other non-residential;
+      car-park = 7(b) Car parks designed to admit and accommodate only cars,
+      motorcycles and passenger or light goods vehicles that weigh a maximum of
+      2500kg gross. Purpose group 1 (dwellings) is Volume 1 and is not a value.
+      v0 has one purpose group per building; 0.21-0.22 (ancillary and multiple
+      main uses) are not formalized.
+    values:
+      - residential-institutional
+      - residential-other
+      - office
+      - shop-and-commercial
+      - assembly-and-recreation
+      - industrial
+      - storage-and-other-non-residential
+      - car-park
+
+  - name: building.primarily_for_disabled_people
+    label: the building is an 'assembly and recreation' building primarily for disabled people
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 2.1"]
+
+  - name: building.evacuation_strategy
+    label: escape strategy the stairs are designed for (simultaneous or phased evacuation)
+    type: enum
+    kind: given
+    values: [simultaneous, phased]
+    refers_to: ["ADB2 3.13", "ADB2 3.16", "ADB2 3.19", "ADB2 3.21"]
+
+  - name: building.open_spatial_planning
+    label: the building has open spatial planning
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 3.16", "ADB2 Appendix A"]
+
+  - name: building.storeys
+    label: number of storeys, counted as in Diagram D5 (basement storeys excluded)
+    type: number
+    kind: measured
+    refers_to: ["ADB2 Diagram D5"]
+
+  - name: building.basement_storeys
+    label: number of basement storeys
+    type: number
+    kind: measured
+
+  - name: building.largest_storey_area
+    label: floor area of the largest storey
+    type: area
+    kind: measured
+    refers_to: ["ADB2 2.2", "ADB2 4.2", "ADB2 Diagram D3"]
+
+  - name: building.single_occupancy
+    label: the premises are in single occupancy
+    type: bool
+    kind: given
+    refers_to: ["ADB2 4.2"]
+
+  - name: building.highly_flammable_materials
+    label: highly flammable materials are sold, stored or used in the premises
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 4.1"]
+
+  # ------------------------------------------------- rooms and other spaces
+  - name: Space.accommodation
+    label: type of accommodation (ADB2 Table D1)
+    type: enum
+    kind: judged
+    refers_to: ["ADB2 Table D1"]
+    note: Key domain of table TD1; the values follow its fifteen numbered rows.
+    values:
+      - standing-spectator-or-bar-near-serving-point
+      - assembly-hall-or-bar-without-fixed-seating
+      - concourse-or-queuing-area
+      - committee-room-dining-room-restaurant-meeting-room
+      - exhibition-hall-or-studio
+      - skating-rink
+      - shop-sales-area
+      - art-gallery-dormitory-factory-museum-workshop
+      - office
+      - shop-sales-area-bulky-goods
+      - kitchen-or-library
+      - bedroom-or-study-bedroom
+      - bed-sitting-room-billiards-snooker
+      - storage-and-warehousing
+      - car-park
+
+  - name: Space.floor_area
+    label: floor area of the room or storey, measured as in D2 (counters and display units included; stair enclosures, lifts, sanitary accommodation and other fixed parts of the structure excluded)
+    type: area
+    kind: measured
+    refers_to: ["ADB2 D2", "ADB2 Diagram D3"]
+
+  - name: Space.parking_spaces
+    label: number of parking spaces
+    type: number
+    kind: measured
+    refers_to: ["ADB2 Table D1"]
+
+  - name: Space.is_place_of_special_fire_hazard
+    label: the room is a place of special fire hazard (Appendix A, e.g. oil-filled transformer room, switch gear room, boiler room, fuel store)
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Appendix A", "ADB2 Table 2.1"]
+
+  - name: Space.is_plant_room
+    label: the space is a plant room or roof-top plant
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 2.1"]
+
+  - name: Space.plant_escape_route_in_open_air
+    label: the escape route from the plant room or roof-top plant is in the open air
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 2.1"]
+
+  - name: Space.residential_other_area
+    label: in a 'residential (other)' building, whether the space is a bedroom (with its dressing room, bathroom, sitting room etc.), a bedroom corridor, or elsewhere
+    type: enum
+    kind: judged
+    values: [bedroom, bedroom-corridor, elsewhere]
+    refers_to: ["ADB2 Table 2.1"]
+
+  - name: Space.seating_in_rows
+    label: the area has seating in rows
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 2.1"]
+
+  - name: Space.higher_hazard
+    label: the industrial or storage space is higher hazard (Table 2.1 note 3, e.g. significant amounts of hazardous goods or materials)
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 2.1 note 3"]
+
+  - name: Space.table_2_1_row
+    label: row of ADB2 Table 2.1 that applies to the space
+    type: enum
+    kind: judged
+    note: Key domain of table T2.1. The pack derives it with the term table_2_1_row.
+    values:
+      - residential-institutional
+      - residential-other-bedrooms
+      - residential-other-bedroom-corridors
+      - residential-other-elsewhere
+      - office
+      - shop-and-commercial
+      - assembly-buildings-primarily-for-disabled-people
+      - assembly-seating-in-rows
+      - assembly-elsewhere
+      - industrial-normal-hazard
+      - industrial-higher-hazard
+      - storage-normal-hazard
+      - storage-higher-hazard
+      - place-of-special-fire-hazard
+      - plant-within-room
+      - plant-route-not-in-open-air
+      - plant-route-in-open-air
+
+  - name: Space.alternative_escape_routes
+    label: escape is possible in more than one direction, the routes being alternative escape routes under 2.10 (45 degrees or more apart, or separated by fire resisting construction)
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 2.10", "ADB2 Diagram 2.2"]
+
+  - name: Space.travel_distance
+    label: travel distance from the furthest point of the space to the nearest storey exit, measured along the shortest route (Appendix A, D3)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 D3", "ADB2 Appendix A"]
+
+  - name: Space.one_direction_travel_distance
+    label: travel distance along the part of the route where escape is possible in one direction only (2.7b, Diagram 2.1 distance CB)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 2.7", "ADB2 Diagram 2.1"]
+
+  - name: Space.is_bedroom
+    label: the room is a bedroom
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 2.11b"]
+
+  - name: Space.entered_directly_from_access_room
+    label: the inner room is entered directly from the access room (not via a corridor)
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 2.11c"]
+
+  - name: Space.access_rooms_on_escape_route
+    label: number of access rooms the escape route from the inner room passes through
+    type: number
+    kind: measured
+    refers_to: ["ADB2 2.11d"]
+
+  - name: Space.travel_distance_to_access_room_exit
+    label: travel distance from any point in the inner room to the exits from the access room (maximum)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 2.11e"]
+
+  - name: Space.access_room_is_place_of_special_fire_hazard
+    label: the access room is a place of special fire hazard
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 2.11f"]
+
+  - name: Space.access_room_same_occupier
+    label: the access room is in the control of the same occupier as the inner room
+    type: bool
+    kind: given
+    refers_to: ["ADB2 2.11f"]
+
+  - name: Space.enclosure_gap_below_ceiling
+    label: distance below the ceiling at which the enclosures (walls or partitions) of the inner room stop (0 mm if they reach it)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 2.11g"]
+
+  - name: Space.vision_panel_area
+    label: area of the vision panel in the door or walls of the inner room (0 m2 if none)
+    type: area
+    kind: measured
+    refers_to: ["ADB2 2.11g"]
+
+  - name: Space.access_room_has_fire_detection
+    label: the access room is fitted with an automatic fire detection and alarm system that warns occupants of the inner room
+    type: bool
+    kind: given
+    refers_to: ["ADB2 2.11g"]
+
+  # ----------------------------------------------------------------- storeys
+  - name: Storey.occupant_number
+    label: number of occupants of the storey (designed number, or the sum of the room occupant numbers from Table D1)
+    type: number
+    kind: given
+    refers_to: ["ADB2 2.9", "ADB2 D1"]
+
+  - name: Storey.one_direction_travel_limits_met
+    label: every point of the storey is within the Table 2.1 limit for travel in one direction only
+    type: bool
+    kind: measured
+    refers_to: ["ADB2 2.6b", "ADB2 Table 2.1"]
+
+  - name: Storey.max_travel_distance
+    label: travel distance from the furthest point of the storey to the nearest storey exit (D3)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 4.6", "ADB2 D3"]
+
+  - name: Storey.level
+    label: position of the storey in small premises (basement, ground or first storey)
+    type: enum
+    kind: given
+    values: [basement, ground, first, other]
+    refers_to: ["ADB2 Table 4.1"]
+
+  - name: Storey.exits
+    label: number of storey exits or stairs serving the storey
+    type: number
+    kind: measured
+    refers_to: ["ADB2 Table 4.1"]
+
+  # ------------------------------------------------------------------ exits
+  - name: Exit.people
+    label: maximum number of people likely to use the exit in a fire (for a storey exit, after discounting the largest exit under 2.21)
+    type: number
+    kind: given
+    refers_to: ["ADB2 2.19", "ADB2 2.21", "ADB2 5.11"]
+
+  - name: Exit.width
+    label: clear width of the door or doorway when open (D4a, Diagram D1)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 D4", "ADB2 Diagram D1"]
+
+  - name: Exit.room_occupant_number
+    label: occupant number of the room the door is on an escape route from
+    type: number
+    kind: given
+    refers_to: ["ADB2 5.9"]
+
+  - name: Exit.very_high_fire_risk
+    label: there is a very high risk of fire with potential for rapid fire growth where the door is
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 5.11b"]
+
+  # ---------------------------------------------------------- escape routes
+  - name: EscapeRoute.people
+    label: maximum number of people likely to use the escape route
+    type: number
+    kind: given
+    refers_to: ["ADB2 2.19"]
+
+  - name: EscapeRoute.width
+    label: width of the escape route (D4b; at 1500mm above finished floor level where defined by walls, otherwise the minimum width between fixed obstructions)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 D4"]
+
+  - name: EscapeRoute.gangway_between_fixed_storage_racking
+    label: the route is a gangway between fixed storage racking
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 2.3 note 4"]
+
+  - name: EscapeRoute.in_public_area
+    label: the route is in a public area
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 2.3 note 4"]
+
+  - name: EscapeRoute.clear_headroom
+    label: minimum clear headroom of the escape route, ignoring door frames
+    type: length
+    kind: measured
+    refers_to: ["ADB2 5.16"]
+
+  # ----------------------------------------------------------------- stairs
+  - name: Stair.people_served
+    vocab: Stair.occupant_load
+    label: maximum number of people assessed as likely to use the stair in a fire emergency (Table 3.1 note 1), after dividing the population between the available stairs and discounting under 3.14
+    type: number
+    kind: given
+    refers_to: ["ADB2 Table 3.1", "ADB2 3.13", "ADB2 3.14", "ADB2 3.18"]
+
+  - name: Stair.staff_only
+    label: the stair will only be used by staff
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 3.1"]
+
+  - name: Stair.serves_assembly_area_of_100m2_or_more
+    label: the stair serves an area used for assembly purposes that is not less than 100 m2
+    type: bool
+    kind: judged
+    refers_to: ["ADB2 Table 3.1"]
+
+  - name: Stair.serves_area_with_occupancy_over_50
+    label: the stair serves an area with an occupancy of more than 50
+    type: bool
+    kind: measured
+    refers_to: ["ADB2 Table 3.1"]
+
+  - name: Stair.floors_served
+    label: number of floors (storeys) served by the stair
+    type: number
+    kind: measured
+    refers_to: ["ADB2 Table 3.2", "ADB2 3.18"]
+
+  - name: Stair.table_3_2_row
+    label: row of ADB2 Table 3.2 (number of floors served)
+    type: enum
+    kind: measured
+    note: Key domain of table T3.2. The pack derives it with the term table_3_2_row.
+    values: [floors-1, floors-2, floors-3, floors-4, floors-5, floors-6, floors-7, floors-8, floors-9, floors-10]
+
+  - name: Stair.phased_people_per_storey
+    label: maximum number of people in any storey that the stair must accommodate in phased evacuation (after dividing between the available stairs)
+    type: number
+    kind: given
+    refers_to: ["ADB2 Table 3.3"]
+
+  - name: Stair.serves_basement
+    label: the stair serves a basement storey
+    type: bool
+    kind: measured
+    refers_to: ["ADB2 3.16a"]
+
+  - name: Stair.calculated_min_width
+    label: minimum stair width calculated outside Tables 3.2 and 3.3 (3.18 formula for stairs wider than 1800mm, Table 3.2 note 1 extrapolation beyond 10 floors, or Table 3.3 note 3 formula beyond 190 people)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 3.18", "ADB2 Table 3.2 note 1", "ADB2 Table 3.3 note 3"]
+    note: v0 has no addition or subtraction, so the pack cannot compute these formulas itself.
+
+  - name: Stair.width
+    label: clear width of the stair between walls or balustrades (D4c; handrails and strings intruding up to 100mm each side ignored), at its narrowest point
+    type: length
+    kind: measured
+    refers_to: ["ADB2 D4"]
+
+  - name: Stair.widest_exit_width
+    label: width of the widest exit giving access to the stair
+    type: length
+    kind: measured
+    refers_to: ["ADB2 3.10a", "ADB2 2.21"]
+
+  - name: Stair.rise
+    label: height (rise) of the stair
+    type: length
+    kind: measured
+    refers_to: ["ADB2 3.10d", "ADB2 Table 3.2 note 3"]
+
+  - name: Stair.has_central_handrail
+    label: the stair has a central handrail
+    type: bool
+    kind: measured
+    refers_to: ["ADB2 3.10d"]
+
+  - name: Stair.is_only_stair
+    label: the stair is the only one serving the building or part of the building
+    type: bool
+    kind: given
+    refers_to: ["ADB2 3.34a"]
+
+  - name: Stair.building_has_more_than_one_storey_above_or_below_ground_storey
+    label: the building or part served has more than one storey above or below the ground storey
+    type: bool
+    kind: measured
+    refers_to: ["ADB2 3.34a"]
+
+  - name: Stair.top_storey_height
+    label: height above ground level of the highest storey the stair serves (Diagram D6)
+    type: length
+    kind: measured
+    refers_to: ["ADB2 3.34b", "ADB2 Diagram D6"]
+
+  - name: Stair.is_firefighting_stair
+    label: the stair is a firefighting stair
+    type: bool
+    kind: given
+    refers_to: ["ADB2 3.34d", "ADB2 Section 17"]
+
+  - name: Stair.not_discounted_under_3_15b
+    label: the option in 3.15b (protected lobbies) has been used so as not to discount the stair
+    type: bool
+    kind: given
+    refers_to: ["ADB2 3.15b", "ADB2 3.34e"]
+
+  - name: Stair.smoke_control_3_15a
+    label: the escape stairs are protected by a smoke control system as described in 3.15a
+    type: bool
+    kind: given
+    refers_to: ["ADB2 3.15a", "ADB2 3.34"]

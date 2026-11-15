@@ -1,0 +1,63 @@
+package: ada-2010
+version: 0.1.0
+title: 2010 ADA Standards for Accessible Design
+publisher: U.S. Department of Justice
+jurisdiction: United States (federal)
+# Where the regulation comes from. This is the instrument itself, not an
+# adoption of someone else's model code, so it is recorded here rather than
+# under `adoption` (which the evaluator reads as a jurisdiction overlay).
+regulation:
+  instrument: 2010 ADA Standards for Accessible Design (Department of Justice final rules under titles II and III of the ADA)
+  codified_at: >
+    28 CFR 35.151 (title II) and 28 CFR part 36, subpart D (title III),
+    with the 2004 ADAAG at 36 CFR part 1191, appendices B and D. Where
+    28 CFR 35.151 and the 2004 ADAAG differ, 35.151 prevails for title II.
+  published: 2010-09-15
+  compliance_date: 2012-03-15
+  effective: 2012-03-15
+  effective_note: >
+    Compliance with the 2010 Standards is required from 2012-03-15: under title
+    II when physical construction or alterations commence on or after that date
+    (28 CFR 35.151(c)(3)); under title III when the last building permit
+    application is certified complete (or received, or construction starts
+    where no permit is needed) on or after that date (28 CFR 36.406(a)(3)).
+    The final rules themselves took effect on 2011-03-15; that date is not on
+    the DOJ page and was not checked against the Federal Register here. This
+    pack uses the compliance date.
+  url: https://www.ada.gov/law-and-regs/design-standards/2010-stds/
+source_url: https://www.ada.gov/law-and-regs/design-standards/2010-stds/
+cite_source: >
+  cite.url points to the U.S. Access Board's ADA Accessibility Standards page,
+  https://www.access-board.gov/ada/, which carries stable per-provision anchors
+  of the form #ada-<section with dots as underscores> (for example
+  #ada-404_2_3), #ada-<section>x<n> for numbered exceptions, and #<term> for
+  defined terms in 106.5. The DOJ page above anchors only whole sections, such
+  as #404-doors-doorways-and-gates. The provision text quoted in this pack was
+  checked to read the same on both pages (read 2026-11-14).
+# US government work: the text is in the public domain and may be quoted.
+text_policy: public
+scope: >
+  Model-checkable technical provisions for doors (404.2.3, 404.2.5), walking
+  surfaces (403.5.1), ramps (405.2, 405.3, 405.5, 405.6), stairs (504.2,
+  504.3), handrails (505.4), water closets (604.2, 604.4), and turning space
+  (304.3), with their scoping from 403.1, 404.1, 405.1, 210.1, 505.1, and
+  604.1. Dimensions are in inches as printed; the metric values in parentheses
+  are not encoded. Values are compared exactly; the construction tolerances of
+  104.1.1 are not applied. Every element is a draft until an accessibility
+  professional reviews it.
+
+not_formalized:
+  - "206.2 Where accessible routes are required (read as the given fact '... is part of an accessible route')"
+  - "206.5 Doors, doorways, and gates (which doors must be on an accessible route)"
+  - "213 Toilet facilities and bathing facilities (which water closets must comply with 604)"
+  - "302, 303 Floor surfaces and changes in level, including raised thresholds (404.2.5)"
+  - "304.2 Turning space floor surfaces; 304.4 door swing"
+  - "306 Knee and toe clearance within turning space (304.3.1, 304.3.2)"
+  - "403.3 Walking surface slope; 403.5.2 clear width at turn; 403.5.3 passing spaces"
+  - "403.5 Exception and 405.5 Exception (employee work areas)"
+  - "404.2.3 Exception 1 (latch side stop in alterations)"
+  - "404.2.4 Maneuvering clearances; 404.2.6 to 404.2.11; 404.3"
+  - "405.4, 405.7 to 405.10 Ramp surfaces, landings, handrails, edge protection, wet conditions"
+  - "504.4 to 504.7 Tread surface, nosings, handrails, wet conditions"
+  - "505.2, 505.3, 505.5 to 505.10 Handrail location, continuity, clearance, gripping surface, extensions"
+  - "604.3, 604.5 to 604.9 Water closet clearance, grab bars, flush controls, dispensers, compartments, children's water closets"

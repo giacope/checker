@@ -1,0 +1,18 @@
+terms:
+  - name: ambulatory_care_facility
+    title: Does the building contain an ambulatory care facility?
+    cite:
+      section: "202"
+      row: AMBULATORY CARE FACILITY
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-2-definitions/IBC2024P1-Ch02-Sec202
+    note: >
+      Read from the definition: care on a less than 24-hour basis, to persons the
+      care renders incapable of self-preservation, or for whom staff have accepted
+      responsibility when they are already incapable. Otherwise the space is an
+      outpatient clinic (§202, CLINIC, OUTPATIENT).
+    value:
+      all:
+        - {fact: building.care_less_than_24h}
+        - any:
+            - {fact: building.care_renders_incapable}
+            - {fact: building.accepts_incapable_recipients}

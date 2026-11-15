@@ -1,0 +1,150 @@
+package: uk-adb-v2
+version: 0.1.0
+title: "Approved Document B (fire safety) Volume 2: Buildings other than dwellings — means of escape (requirement B1)"
+publisher: Ministry of Housing, Communities and Local Government (gov.uk)
+jurisdiction: England
+# Approved Documents are statutory guidance approved by the Secretary of State.
+# They are Crown copyright and may be re-used under the Open Government Licence,
+# so the pack may quote the text (with the attribution below).
+text_policy: public
+
+licence:
+  name: Open Government Licence v3.0
+  url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  attribution: >-
+    © Crown copyright 2026. Approved Document B: Fire safety, Volume 2:
+    Buildings other than dwellings, 2019 edition incorporating 2020, 2022,
+    2025 and 2026 amendments (online version including the forthcoming 2029
+    changes), for use in England. Contains public sector information licensed
+    under the Open Government Licence v3.0.
+  as_printed: >-
+    © Crown Copyright 2026. The content of this publication, excluding logos,
+    may be reproduced free of charge in any format or medium for research,
+    private study or for internal circulation within an organisation. This is
+    subject to it being reproduced accurately and not used in a misleading
+    context. The material must be acknowledged as Crown copyright and the title
+    and edition of the publication specified. This document/publication is
+    value added. You may re-use the content (not including logos) free of
+    charge in any format or medium, under the terms of the Open Government
+    Licence. To view this licence, visit:
+    http://www.nationalarchives.gov.uk/doc/open-government-licence/ […]
+  note: >-
+    The PDF's back cover (PDF page 224) asks that the material be acknowledged
+    as Crown copyright with the title and edition specified; the attribution
+    above does that. The printed licence link has no version and uses http; the
+    url above is the https address of OGL v3.0.
+
+# The binding requirement. Approved Documents give guidance on one way to meet
+# it; following them is not mandatory (ADB2 Introduction, PDF pages 5-7).
+requirement:
+  instrument: The Building Regulations 2010 (SI 2010/2214)
+  provision: Schedule 1, Part B (Fire safety), requirement B1 Means of warning and escape
+  url: https://www.legislation.gov.uk/uksi/2010/2214/schedule/1
+  read: 2026-11-14 (legislation.gov.uk, latest available revised version)
+  text: >-
+    B1. The building shall be designed and constructed so that there are
+    appropriate provisions for the early warning of fire, and appropriate means
+    of escape in case of fire from the building to a place of safety outside
+    the building capable of being safely and effectively used at all material
+    times.
+  limits_on_application: >-
+    Requirement B1 does not apply to any prison provided under section 33 of
+    the Prison Act 1952 (power to provide prisons etc).
+
+source:
+  document: "Approved Document B (fire safety) volume 2: Buildings other than dwellings"
+  edition_as_printed: >-
+    2019 edition incorporating 2020, 2022, 2025 and 2026 amendments and
+    forthcoming 2029 changes – for use in England
+  gov_uk_title: >-
+    Approved Document B (fire safety) volume 2: Buildings other than dwellings,
+    2019 edition incorporating 2020, 2022, 2025 and 2026 amendments collated
+    with 2029 amendments
+  landing_page: https://www.gov.uk/government/publications/fire-safety-approved-document-b
+  url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf
+  retrieved: 2026-11-14
+  sha256: 106cfbd5d5cafdae8f38f12b93fc6f43ff08ef74533d9159f4981375b55ef927
+  pages: 224
+  # The edition this pack encodes is the one in force on the retrieval date.
+  applies_from: 2026-09-30
+  applies_from_note: >-
+    The PDF lists the 2026 amendments as "set out in the September 2026 AD B
+    amendments" but does not print their date. The 2026 amendment booklet
+    (https://assets.publishing.service.gov.uk/media/66d57a94d107658faec7e448/AD_B_2026_amendments.pdf)
+    says they take effect on 30 September 2026 for use in England; the 2019
+    edition incorporating the 2020, 2022 and 2025 amendments continues to apply
+    where a building notice, initial notice or full plans application was given
+    or made before that day and the work is sufficiently progressed before it or
+    within 18 months beginning on it. For Volume 2 the 2026 booklet changes only
+    Appendix A key terms (evacuation lift lobby, evacuation shaft, interlocked
+    stair, storey exit); the PDF carries the new storey exit definition
+    (PDF page 148).
+  amendments:
+    - amendment: 2020
+      as_printed: "Main changes made by the 2020 amendments ... The changes are set out in the May 2020 AD B amendments."
+      takes_effect: 2020-11-26
+      takes_effect_source: May 2020 amendment booklet (https://assets.publishing.service.gov.uk/media/5ec7f1c086650c76ab17fc0c/AD_B_2019_edition__May2020_amendments.pdf)
+    - amendment: 2022
+      as_printed: "Main changes made by the 2022 amendments ... The changes are set out in the June 2022 AD B amendment booklet and the November 2022 correction notice."
+      takes_effect: 2022-12-01
+      takes_effect_source: June 2022 amendment booklet (https://assets.publishing.service.gov.uk/media/62964fac8fa8f5039927d15b/ADB_amendment_booklet_June_2022.pdf)
+    - amendment: 2025
+      as_printed: "Main changes made by the 2025 amendments ... The changes are set out in the March 2025 AD B amendments."
+      takes_effect: 2025-03-02
+      takes_effect_source: 2025 amendment booklet (https://assets.publishing.service.gov.uk/media/67c1ac3d16dc9038974dbcfe/2025_Amendments_to_Approved_Document_B_volume_1_and_volume_2.pdf)
+    - amendment: 2026
+      as_printed: "Main changes made by the 2026 amendments ... The changes are set out in the September 2026 AD B amendments."
+      takes_effect: 2026-09-30
+      takes_effect_source: 2026 amendment booklet (see applies_from_note)
+    - amendment: 2029 (forthcoming, collated in the same PDF)
+      as_printed: >-
+        The 2029 amendments take effect on 2 September 2029 for use in England.
+        [...] The changes focus on the fire safety provisions regarding the
+        removal of national classes for fire resistance.
+      takes_effect: 2029-09-02
+      note: >-
+        Not in force on the retrieval date. The PDF marks the affected passages
+        "Effective until 1 September 2029" / "2029 amendment – effective from 2
+        September 2029"; they are all in Appendices B and C. None of the pages
+        this pack cites (PDF pages 17-61 and 185-187) carries either mark.
+
+cite_source: >-
+  Every cite.url is the gov.uk PDF above with a #page=N fragment, N being the
+  1-based physical page of the PDF (the page a viewer opens), not the printed
+  folio. For the main text the PDF page is the printed page number plus 12
+  (printed page 14, Table 2.1, is PDF page 26; printed page 174, Table D1, is
+  PDF page 186). Page numbers were checked against the text extracted from each
+  PDF page and, for the tables, against renderings of those pages.
+  cite.section is "ADB2 <paragraph>" or "ADB2 Table <number>".
+
+scope: >-
+  Means of escape guidance in Sections 2 to 5 and Appendix D of Approved
+  Document B Volume 2: purpose groups (Table 0.1), occupant numbers from floor
+  space factors (D1, Table D1), travel distance (Table 2.1, 2.6, 2.7), number
+  of escape routes and exits (Table 2.2), inner rooms (2.11), widths of escape
+  routes and exits (Table 2.3, 2.22), escape stair widths (3.10, Table 3.1,
+  3.16, Table 3.2, Table 3.3), protected lobbies to stairs (3.34), small
+  premises (2.2, 4.1, 4.2, Table 4.1), door fastenings and opening direction
+  (5.9, 5.11) and headroom (5.16). v0 has one purpose group per building, so
+  mixed use buildings (0.21, 0.22, 2.5, 3.2) are out of scope. Every element is
+  a draft until a fire engineer or building control surveyor reviews it.
+
+not_formalized:
+  - "ADB2 0.21-0.24 Ancillary and multiple uses (v0 has one purpose group per building)"
+  - "ADB2 1.1-1.9 Fire detection and alarm systems"
+  - "ADB2 2.4, 2.5, 2.8, 2.10 (direction of alternative routes is the given fact Space.alternative_escape_routes_available), 2.12-2.17"
+  - "ADB2 2.21 Discounting the largest storey exit (needs the sum of exit capacities over a storey)"
+  - "ADB2 2.23 Merging flows at final exit, W = ((N/2.5) + (60S))/80 (needs addition)"
+  - "ADB2 2.24-2.32 Protected corridors, corridor division, dead ends, external routes, escape over flat roofs"
+  - "ADB2 2.33-2.46 Residential care homes and progressive horizontal evacuation"
+  - "ADB2 3.2-3.3 Mixed use buildings and single escape stairs"
+  - "ADB2 3.4-3.9 Refuges"
+  - "ADB2 3.14-3.15 Discounting of stairs (Stair.people_served is given after discounting)"
+  - "ADB2 3.18 Formula P = 200W + 50 (W – 0.3)(N – 1) (needs addition and subtraction)"
+  - "ADB2 Table 3.2 Note 1 linear extrapolation beyond 10 floors (needs addition)"
+  - "ADB2 Table 3.3 Note 3 formula (P×10) – 100 (needs subtraction)"
+  - "ADB2 3.19-3.21 Conditions for phased evacuation"
+  - "ADB2 3.23-3.33, 3.35-3.41 Enclosure, construction and other design of escape stairs"
+  - "ADB2 4.3-4.9 Small premises other than Table 4.1 (construction, open stairs)"
+  - "ADB2 5.1-5.8, 5.10, 5.12-5.15, 5.17-5.46 Other general provisions"
+  - "ADB2 Table D1 Note 1 (actual occupancy data) and Note 3 (most onerous factor for mixed accommodation)"

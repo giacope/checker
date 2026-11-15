@@ -1,0 +1,461 @@
+# Facts the rules in this pack read. kind says where a value comes from:
+#   given    stated by the applicant in the project profile or model
+#   measured computed from the model by deterministic code, with a tolerance
+#   judged   a classification a person or a calibrated model makes
+predicates:
+  # ---------------------------------------------------------- building level
+  - name: building.occupancy_group
+    label: occupancy group
+    type: enum
+    values: [A-1, A-2, A-3, A-4, A-5, B, E, F-1, F-2, H-1, H-2, H-3, H-4, H-5, I-1, I-2, I-3, I-4, M, R-1, R-2, R-3, R-4, S-1, S-2, U]
+    kind: given
+    note: v0 assumes one occupancy group for the whole building; mixed occupancies come later.
+
+  - name: building.sprinkler_system
+    label: automatic sprinkler system throughout
+    type: enum
+    values: [nfpa13, nfpa13r, nfpa13d, none]
+    kind: given
+    note: nfpa13 = §903.3.1.1, nfpa13r = §903.3.1.2, nfpa13d = §903.3.1.3.
+    refers_to: ["903.3.1.1", "903.3.1.2", "903.3.1.3"]
+
+  - name: building.emergency_voice_alarm
+    label: emergency voice/alarm communication system per §907.5.2.2
+    type: bool
+    kind: given
+    refers_to: ["907.5.2.2"]
+
+  - name: building.has_dwelling_units
+    label: building contains dwelling units
+    type: bool
+    kind: given
+
+  - name: building.care_less_than_24h
+    label: gives medical care on a less than 24-hour basis
+    type: bool
+    kind: given
+
+  - name: building.care_renders_incapable
+    label: the care renders persons incapable of self-preservation
+    type: bool
+    kind: judged
+    note: For example general anesthesia. v0 asks this of the building; per-suite facts come with portions.
+
+  - name: building.accepts_incapable_recipients
+    label: staff accept responsibility for care recipients already incapable of self-preservation
+    type: bool
+    kind: judged
+
+  # ---------------------------------------------------------------- corridors
+  - name: Corridor.occupant_load
+    label: occupant load the corridor serves
+    type: number
+    kind: measured
+
+  - name: Corridor.clear_width
+    label: corridor clear width
+    type: length
+    kind: measured
+
+  - name: Corridor.serves_stretcher_traffic
+    label: the corridor serves stretcher traffic
+    type: bool
+    kind: judged
+
+  - name: Corridor.mep_access_only
+    label: the corridor only gives access to mechanical, plumbing, or electrical systems or equipment
+    type: bool
+    kind: judged
+
+  - name: Corridor.within_dwelling_unit
+    label: the corridor is within a dwelling unit
+    type: bool
+    kind: measured
+
+  - name: Corridor.bed_movement_required
+    label: bed movement is required in the corridor
+    type: bool
+    kind: judged
+
+  # ------------------------------------------------------------------- spaces
+  - name: Space.function
+    label: function of the space
+    type: enum
+    kind: judged
+    values:
+      - accessory-storage-mechanical
+      - agricultural-building
+      - aircraft-hangars
+      - airport-baggage-claim
+      - airport-baggage-handling
+      - airport-concourse
+      - airport-waiting
+      - assembly-gaming-floors
+      - assembly-exhibit-gallery-museum
+      - assembly-fixed-seats
+      - assembly-concentrated
+      - assembly-standing
+      - assembly-unconcentrated
+      - bowling-centers
+      - business
+      - business-concentrated
+      - courtrooms
+      - day-care
+      - dormitories
+      - educational-classroom
+      - educational-shops-vocational
+      - exercise-rooms
+      - h5-fabrication-manufacturing
+      - industrial
+      - information-technology-equipment
+      - institutional-inpatient
+      - institutional-outpatient
+      - institutional-sleeping
+      - kitchens-commercial
+      - library-reading-rooms
+      - library-stack-area
+      - locker-rooms
+      - mall-buildings
+      - mercantile
+      - storage-stock-shipping
+      - parking-garages
+      - residential
+      - skating-rink-pool
+      - skating-decks
+      - stages-platforms
+      - warehouses
+
+  - name: Space.net_floor_area
+    label: net floor area
+    type: area
+    kind: measured
+
+  - name: Space.gross_floor_area
+    label: gross floor area
+    type: area
+    kind: measured
+
+  - name: Space.exit_access_travel_distance
+    vocab: Space.travel_distance
+    label: exit access travel distance, measured per §1017.3
+    type: length
+    kind: measured
+    refers_to: ["1017.3"]
+
+  # ------------------------------------------------------------------- stairs
+  - name: Stair.occupant_load
+    label: occupant load the stairway serves
+    type: number
+    kind: measured
+
+  - name: Stair.width
+    label: stairway width
+    type: length
+    kind: measured
+
+  - name: Stair.riser_height
+    label: riser height, measured vertically between nosings
+    type: length
+    kind: measured
+
+  - name: Stair.tread_depth
+    label: rectangular tread depth, measured horizontally between nosings
+    type: length
+    kind: measured
+
+  # ------------------------------------------- added for drawing and model checks
+  # Facts read by ch10-components.yaml. Measured facts are named after vocab/bim.yaml;
+  # the judged and given ones are classifications the drawings cannot settle, which
+  # the report asks the reviewer.
+
+  - name: building.storeys_above_ground
+    label: number of storeys above grade plane
+    type: number
+    kind: measured
+
+  - name: building.mixed_occupancy
+    label: the building is a mixed occupancy building
+    type: bool
+    kind: given
+    refers_to: ["508"]
+
+  - name: building.open_parking_garage
+    label: the building is a Group S-2 open parking garage
+    type: bool
+    kind: given
+    refers_to: ["406.5"]
+
+  - name: building.mechanical_parking_garage
+    label: the building is a parking garage where vehicles are mechanically parked
+    type: bool
+    kind: given
+
+  - name: building.emergency_escape_openings
+    label: emergency escape and rescue openings are provided per §1031
+    type: bool
+    kind: given
+    refers_to: ["1031"]
+
+  - name: building.r2_sleeping_units
+    label: the Group R-2 occupancy consists of sleeping units rather than dwelling units
+    type: bool
+    kind: given
+
+  - name: building.i2_condition
+    label: Group I-2 condition
+    type: enum
+    values: [condition-1, condition-2]
+    kind: given
+    refers_to: ["308.3.1", "308.3.2"]
+
+  - name: building.i3_condition
+    label: Group I-3 condition
+    type: enum
+    values: [condition-1, condition-2, condition-3, condition-4, condition-5]
+    kind: given
+    refers_to: ["308.4.1"]
+
+  # ---------------------------------------------------------------- storeys
+  - name: Storey.exits
+    label: exits and exit access stairways or ramps that serve the storey
+    type: number
+    kind: measured
+
+  - name: Storey.max_travel_distance
+    label: longest exit access travel distance on the storey, measured per §1017.3
+    type: length
+    kind: measured
+    refers_to: ["1017.3"]
+
+  - name: Storey.occupant_load
+    label: occupant load of the storey (§1004; the vocabulary has none, so it is stated)
+    type: number
+    kind: given
+
+  - name: Storey.dwelling_units
+    label: number of dwelling units on the storey
+    type: number
+    kind: given
+
+  - name: Storey.position
+    label: position of the storey relative to the grade plane
+    type: enum
+    values: [lower-below, first-below, first, second, third, fourth, fifth, sixth-or-higher]
+    kind: given
+    note: >
+      first-below is the first story below grade plane; lower-below is any story
+      below that. first is the first story above grade plane.
+
+  - name: Storey.rooms_exit_directly_to_exterior
+    label: every room, area and space on the storey complies with §1006.2.1 and its exits discharge directly to the exterior at the level of exit discharge
+    type: bool
+    kind: judged
+    refers_to: ["1006.3.4 item 2"]
+
+  - name: Storey.dwelling_units_meet_1006_3_4_item_5
+    label: the storey consists of individual dwelling units that each meet §1006.3.4 item 5 (one-exit space per §1006.2.1, and exit discharging directly outside or reaching two independent exits)
+    type: bool
+    kind: judged
+    refers_to: ["1006.3.4 item 5"]
+
+  # ----------------------------------------------------- spaces (number of exits)
+  - name: Space.exits
+    label: exits or exit access doorways from the space
+    type: number
+    kind: measured
+
+  - name: Space.common_path_of_travel
+    label: common path of egress travel distance from the most remote point of the space
+    type: length
+    kind: measured
+    refers_to: ["202 COMMON PATH OF EGRESS TRAVEL", "1006.2.1"]
+
+  - name: Space.design_occupant_load
+    vocab: Space.stated_occupant_load
+    label: design occupant load of the space, as stated on the drawings
+    type: number
+    kind: measured
+    refers_to: ["1004"]
+
+  - name: Space.unoccupied_mechanical
+    label: the space is an unoccupied mechanical room or penthouse
+    type: bool
+    kind: judged
+    refers_to: ["1006.2.1 Exception 3"]
+
+  # ------------------------------------------------------- corridors (dead ends)
+  - name: Corridor.dead_end_length
+    label: length of the longest dead end in the corridor
+    type: length
+    kind: measured
+
+  - name: Corridor.more_than_one_exit_required
+    label: the area the corridor serves requires more than one exit or exit access doorway
+    type: bool
+    kind: judged
+    refers_to: ["1006.2", "1006.3"]
+
+  - name: Corridor.serves_patient_rooms
+    label: the dead-end corridor serves patient rooms or patient treatment spaces
+    type: bool
+    kind: judged
+
+  # ------------------------------------------------------------- stairs (more)
+  - name: Stair.rise
+    label: total rise of the stair, floor to floor
+    type: length
+    kind: measured
+
+  - name: Stair.risers
+    label: number of risers in the tallest flight
+    type: number
+    kind: measured
+
+  - name: Stair.headroom
+    label: headroom clearance, measured vertically from the line connecting the nosings
+    type: length
+    kind: measured
+
+  - name: Stair.handrail_height
+    label: handrail height, measured above the stair tread nosings
+    type: length
+    kind: measured
+
+  - name: Stair.spiral
+    label: the stairway is a spiral stairway complying with §1011.10
+    type: bool
+    kind: judged
+    refers_to: ["1011.10"]
+
+  - name: Stair.serves_technical_production_area
+    label: the stairway is a means of egress from a technical production area
+    type: bool
+    kind: judged
+    refers_to: ["410.5"]
+
+  # ------------------------------------------------------------------- doors
+  - name: Door.clear_width
+    label: clear opening width of the active leaf, face of the door to the stop with the door open 90 degrees
+    type: length
+    kind: measured
+
+  - name: Door.height
+    label: clear opening height of the door
+    type: length
+    kind: measured
+
+  - name: Door.is_external
+    label: the door is in an exterior wall
+    type: bool
+    kind: measured
+
+  - name: Door.means_of_egress_door
+    label: the door is in the means of egress (including doors provided in excess of the number required)
+    type: bool
+    kind: judged
+    refers_to: ["1010.1"]
+
+  - name: Door.bed_movement
+    label: the door is a means of egress door used for the movement of beds
+    type: bool
+    kind: judged
+
+  - name: Door.in_dwelling_or_sleeping_unit
+    label: the door opening is within a dwelling unit or sleeping unit
+    type: bool
+    kind: judged
+
+  - name: Door.in_accessible_unit
+    label: the unit is required to be an Accessible unit, Type A unit or Type B unit
+    type: bool
+    kind: given
+    refers_to: ["1107", "1108"]
+
+  - name: Door.part_of_required_means_of_egress
+    label: the door opening is part of the required means of egress
+    type: bool
+    kind: judged
+
+  - name: Door.unit_required_exit_door
+    label: the door is the unit's required exit door
+    type: bool
+    kind: judged
+
+  - name: Door.to_resident_sleeping_unit
+    label: the door opening is to a resident sleeping unit in Group I-3
+    type: bool
+    kind: judged
+
+  - name: Door.storage_closet_under_10_sqft
+    label: the door opening is to a storage closet of less than 10 square feet
+    type: bool
+    kind: judged
+
+  - name: Door.type_b_unit_user_passage
+    label: the door opening is required to be accessible within a Type B unit and is intended for user passage
+    type: bool
+    kind: judged
+
+  - name: Door.serves_sauna_toilet_or_dressing
+    label: the door serves a sauna compartment, or a toilet, dressing, fitting or changing room
+    type: bool
+    kind: judged
+
+  # ------------------------------------------------------------------- ramps
+  - name: Ramp.slope
+    label: running slope as rise over run
+    type: number
+    kind: measured
+
+  - name: Ramp.rise
+    label: rise of the ramp run
+    type: length
+    kind: measured
+
+  - name: Ramp.clear_width
+    label: clear width of the ramp between handrails or other permissible projections
+    type: length
+    kind: measured
+
+  - name: Ramp.occupant_load
+    label: occupant load the ramp serves (derived outside the pack; the vocabulary has none)
+    type: number
+    kind: measured
+
+  - name: Ramp.means_of_egress
+    label: the ramp is used as part of a means of egress
+    type: bool
+    kind: judged
+    refers_to: ["1012.1"]
+
+  - name: Ramp.assembly_aisle_or_curb_ramp
+    label: the ramp is a ramped aisle within an assembly room or space, or a curb ramp
+    type: bool
+    kind: judged
+    refers_to: ["1012.1 Exceptions 1 and 2", "1030"]
+
+  - name: Ramp.parking_vehicle_ramp_exempt
+    label: the ramp is a parking-garage vehicle ramp used for pedestrian exit access that is not an accessible route to accessible parking or other required accessible elements, nor part of an accessible means of egress
+    type: bool
+    kind: judged
+    refers_to: ["1012.1 Exception 3"]
+
+  - name: Ramp.within_dwelling_unit
+    label: the ramp is within a dwelling unit
+    type: bool
+    kind: judged
+
+  - name: Ramp.mep_access_only
+    label: the ramp only gives access to mechanical, plumbing, or electrical systems or equipment
+    type: bool
+    kind: judged
+
+  - name: Ramp.serves_stretcher_traffic
+    label: the ramp serves stretcher traffic
+    type: bool
+    kind: judged
+
+  - name: Ramp.bed_movement_required
+    label: bed movement is required on the ramp
+    type: bool
+    kind: judged

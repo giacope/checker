@@ -1,0 +1,407 @@
+# Facts the rules in this pack read. kind says where a value comes from:
+#   given    stated by the applicant in the project profile or model
+#   measured computed from the model by deterministic code
+#   judged   a classification a person or a calibrated model makes
+#
+# Lengths are in inches as printed in the 2010 Standards. Slopes that are not
+# derived from a rise and a run are dimensionless numbers, rise over run
+# (1:48 is 0.0208).
+predicates:
+  # ---------------------------------------------------------- building level
+  - name: building.detention_correctional_facility
+    status: draft
+    label: the facility is a detention or correctional facility
+    type: bool
+    kind: given
+    refers_to: ["210.1"]
+
+  # -------------------------------------------------------------------- doors
+  - name: Door.on_accessible_route
+    status: draft
+    label: the door, doorway, or gate is part of an accessible route
+    type: bool
+    kind: judged
+    refers_to: ["206.2", "206.5"]
+    note: Which doors must be on an accessible route is scoped by 206.2 and 206.5, which this pack does not encode.
+
+  - name: Door.clear_width
+    status: draft
+    label: door clear opening width
+    type: length
+    kind: measured
+    refers_to: ["404.2.3"]
+    note: >
+      For swinging doors, measured between the face of the door and the stop
+      with the door open 90 degrees (404.2.3, Figure 404.2.3).
+
+  - name: Door.opening_depth
+    status: draft
+    label: depth of the door opening
+    type: length
+    kind: measured
+    refers_to: ["404.2.3"]
+
+  - name: Door.projection_below_34in
+    status: draft
+    label: largest projection into the required clear opening width below 34 in above the finish floor
+    type: length
+    kind: measured
+    note: 0 in where nothing projects.
+
+  - name: Door.projection_34_to_80in
+    status: draft
+    label: largest projection into the clear opening width between 34 in and 80 in above the finish floor, not counting door closers and door stops 78 in or more above the finish floor
+    type: length
+    kind: measured
+    refers_to: ["404.2.3 Exception 2"]
+    note: Exception 2 is encoded here, in the definition of the measured fact.
+
+  - name: Door.has_threshold
+    status: draft
+    label: a threshold is provided at the doorway
+    type: bool
+    kind: measured
+
+  - name: Door.threshold_height
+    status: draft
+    label: threshold height
+    type: length
+    kind: measured
+
+  - name: Door.threshold_existing_or_altered
+    status: draft
+    label: the threshold is existing or altered
+    type: bool
+    kind: given
+
+  - name: Door.threshold_beveled_1_2
+    status: draft
+    label: the threshold has a beveled edge on each side with a slope not steeper than 1:2
+    type: bool
+    kind: measured
+
+  # ------------------------------------------------------ walking surfaces
+  - name: Route.on_accessible_route
+    status: draft
+    label: the walking surface is part of an accessible route
+    type: bool
+    kind: judged
+    refers_to: ["206.2"]
+    note: >
+      A Route element is one walking-surface segment between turns, doors, or
+      other route elements. Where accessible routes are required is scoped by
+      206.2, which this pack does not encode.
+
+  - name: Route.clear_width
+    status: draft
+    label: least clear width of the walking surface
+    type: length
+    kind: measured
+
+  - name: Route.longest_reduced_width_length
+    status: draft
+    label: length of the longest segment narrower than 36 in
+    type: length
+    kind: measured
+    note: 0 in where the walking surface is 36 in wide throughout.
+
+  - name: Route.reduced_width_segment_count
+    status: draft
+    label: number of segments narrower than 36 in
+    type: number
+    kind: measured
+
+  - name: Route.shortest_separation_between_reduced_segments
+    status: draft
+    label: shortest length of walking surface at least 36 in wide between two segments narrower than 36 in
+    type: length
+    kind: measured
+    note: Read only when there are two or more reduced-width segments.
+
+  # -------------------------------------------------------------------- ramps
+  - name: Ramp.on_accessible_route
+    status: draft
+    label: the ramp is on an accessible route
+    type: bool
+    kind: judged
+    refers_to: ["206.2"]
+    note: >
+      A Ramp element is one ramp run. 106.5 defines a ramp as a walking surface
+      with a running slope steeper than 1:20; classifying a sloped walking
+      surface as a ramp is left to the model.
+
+  - name: Ramp.assembly_aisle_ramp_adjacent_to_seating
+    status: draft
+    label: the ramp is an aisle ramp in an assembly area, adjacent to seating
+    type: bool
+    kind: judged
+    refers_to: ["405.1 Exception"]
+
+  - name: Ramp.serves_required_accessible_elements
+    status: draft
+    label: the ramp serves elements required to be on an accessible route
+    type: bool
+    kind: judged
+    refers_to: ["405.1 Exception"]
+
+  - name: Ramp.rise
+    status: draft
+    label: rise of the ramp run
+    type: length
+    kind: measured
+
+  - name: Ramp.horizontal_run
+    status: draft
+    label: horizontal projection of the ramp run
+    type: length
+    kind: measured
+
+  - name: Ramp.cross_slope
+    status: draft
+    label: steepest cross slope of the ramp run (rise over run)
+    type: number
+    kind: measured
+
+  - name: Ramp.in_existing_facility
+    status: draft
+    label: the ramp is in an existing site, building, or facility
+    type: bool
+    kind: given
+    refers_to: ["405.2 Exception"]
+
+  - name: Ramp.space_limited
+    status: draft
+    label: a slope steeper than 1:12 is necessary due to space limitations
+    type: bool
+    kind: judged
+    refers_to: ["405.2 Exception"]
+
+  - name: Ramp.clear_width
+    status: draft
+    label: clear width of the ramp run
+    type: length
+    kind: measured
+
+  - name: Ramp.has_handrails
+    status: draft
+    label: handrails are provided on the ramp run
+    type: bool
+    kind: measured
+
+  - name: Ramp.clear_width_between_handrails
+    status: draft
+    label: clear width between handrails
+    type: length
+    kind: measured
+
+  # ------------------------------------------------------------------- stairs
+  - name: Stair.part_of_means_of_egress
+    status: draft
+    label: the stair is part of a means of egress
+    type: bool
+    kind: judged
+    refers_to: ["210.1"]
+    note: A Stair element is one flight of stairs.
+
+  - name: Stair.in_public_use_area
+    status: draft
+    label: the stair is located in a public use area
+    type: bool
+    kind: judged
+
+  - name: Stair.altered
+    status: draft
+    label: the stair is in an alteration
+    type: bool
+    kind: given
+
+  - name: Stair.levels_connected_by_accessible_route
+    status: draft
+    label: the levels the stair connects are also connected by an accessible route
+    type: bool
+    kind: judged
+
+  - name: Stair.assembly_aisle_stair
+    status: draft
+    label: the stair is an aisle stair in an assembly area
+    type: bool
+    kind: judged
+
+  - name: Stair.connects_play_components
+    status: draft
+    label: the stair connects play components
+    type: bool
+    kind: judged
+
+  - name: Stair.min_riser_height
+    status: draft
+    label: lowest riser height on the flight
+    type: length
+    kind: measured
+
+  - name: Stair.max_riser_height
+    status: draft
+    label: highest riser height on the flight
+    type: length
+    kind: measured
+
+  - name: Stair.min_tread_depth
+    status: draft
+    label: shallowest tread depth on the flight
+    type: length
+    kind: measured
+
+  - name: Stair.max_tread_depth
+    status: draft
+    label: deepest tread depth on the flight
+    type: length
+    kind: measured
+
+  - name: Stair.has_open_risers
+    status: draft
+    label: the flight has open risers
+    type: bool
+    kind: measured
+
+  # ---------------------------------------------------------------- handrails
+  - name: Handrail.within_505_1
+    status: draft
+    label: the handrail is provided along a walking surface complying with 403, required at a ramp complying with 405, or required at a stair complying with 504
+    type: bool
+    kind: judged
+    refers_to: ["505.1", "403.6", "405.8", "504.6", "210.1"]
+    note: >
+      v0 cannot relate a handrail to the stair or ramp it serves, so this is a
+      single fact instead of a rule over the Stair or Ramp element.
+
+  - name: Handrail.min_height
+    status: draft
+    label: lowest height of the top of the gripping surface above walking surfaces, stair nosings, and ramp surfaces
+    type: length
+    kind: measured
+
+  - name: Handrail.max_height
+    status: draft
+    label: highest height of the top of the gripping surface above walking surfaces, stair nosings, and ramp surfaces
+    type: length
+    kind: measured
+
+  - name: Handrail.height_consistent
+    status: draft
+    label: the handrail is at a consistent height above walking surfaces, stair nosings, and ramp surfaces
+    type: bool
+    kind: judged
+
+  # ------------------------------------------------------------ water closets
+  - name: WaterCloset.required_accessible
+    status: draft
+    label: the water closet is one required to comply with 604
+    type: bool
+    kind: given
+    refers_to: ["213.3.2", "603", "604.1"]
+
+  - name: WaterCloset.for_childrens_use
+    status: draft
+    label: the water closet is for children's use
+    type: bool
+    kind: given
+    refers_to: ["604.1 Exception"]
+
+  - name: WaterCloset.complies_with_604_9
+    status: draft
+    label: the water closet complies with 604.9 (children's use)
+    type: bool
+    kind: judged
+    refers_to: ["604.9"]
+
+  - name: WaterCloset.wall_to_rear_and_side
+    status: draft
+    label: the water closet has a wall or partition to the rear and to one side
+    type: bool
+    kind: measured
+
+  - name: WaterCloset.centerline_to_side_wall
+    status: draft
+    label: distance from the water closet centerline to the side wall or partition
+    type: length
+    kind: measured
+
+  - name: WaterCloset.in_ambulatory_compartment
+    status: draft
+    label: the water closet is in an ambulatory accessible toilet compartment (604.8.2)
+    type: bool
+    kind: given
+    refers_to: ["604.8.2"]
+
+  - name: WaterCloset.seat_height
+    status: draft
+    label: height of the top of the seat above the finish floor
+    type: length
+    kind: measured
+
+  - name: WaterCloset.seat_sprung_to_lift
+    status: draft
+    label: the seat is sprung to return to a lifted position
+    type: bool
+    kind: measured
+
+  - name: WaterCloset.private_office_single_user
+    status: draft
+    label: the water closet is in a single-occupant toilet room accessed only through a private office and not for common use or public use
+    type: bool
+    kind: given
+    refers_to: ["604.4 Exception 1"]
+
+  - name: WaterCloset.in_residential_dwelling_unit
+    status: draft
+    label: the water closet is in a residential dwelling unit
+    type: bool
+    kind: given
+    refers_to: ["604.4 Exception 2"]
+
+  # ---------------------------------------------------------- turning spaces
+  - name: TurningSpace.shape
+    status: draft
+    label: shape of the turning space
+    type: enum
+    values: [circular, t-shaped]
+    kind: measured
+    refers_to: ["304.3"]
+    note: Which rooms and spaces need a turning space (for example 603.2.1) is scoped elsewhere and not encoded.
+
+  - name: TurningSpace.diameter
+    status: draft
+    label: diameter of the circular turning space
+    type: length
+    kind: measured
+
+  - name: TurningSpace.square_side
+    status: draft
+    label: side of the smallest square that contains the T-shaped space
+    type: length
+    kind: measured
+
+  - name: TurningSpace.arm_width
+    status: draft
+    label: width of the narrower arm of the T
+    type: length
+    kind: measured
+
+  - name: TurningSpace.base_width
+    status: draft
+    label: width of the base of the T
+    type: length
+    kind: measured
+
+  - name: TurningSpace.arm_clear_length
+    status: draft
+    label: shorter of the lengths the two arms extend beyond the sides of the base, clear of obstructions
+    type: length
+    kind: measured
+    note: Knee and toe clearance complying with 306 counts as clear (304.3.2 permits it at the end of either the base or one arm).
+
+  - name: TurningSpace.base_clear_length
+    status: draft
+    label: length the base extends beyond the arms, clear of obstructions
+    type: length
+    kind: measured

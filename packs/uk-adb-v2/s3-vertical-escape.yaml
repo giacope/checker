@@ -1,0 +1,328 @@
+# Section 3, Design for vertical escape (PDF pages 40-53, printed 28-41):
+# width of escape stairs (3.10, Table 3.1, 3.13), simultaneous evacuation
+# (3.16, 3.17, Table 3.2), phased evacuation (3.19, 3.22, Table 3.3), and
+# protected lobbies or corridors (3.34).
+
+tables:
+  - name: T3.2
+    title: Capacity of stairs for basements and for simultaneous evacuation of the building
+    cite:
+      section: "ADB2 Table 3.2"
+      table: "3.2"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=44
+    key: Stair.table_3_2_row
+    columns: [w1000, w1100, w1200, w1300, w1400, w1500, w1600, w1700, w1800]
+    note: >-
+      Maximum number of people served by a stair of width 1000mm ... 1800mm
+      (columns w1000 ... w1800), by number of floors served (rows).
+    rows:
+      - {key: floors-1, w1000: 150, w1100: 220, w1200: 240, w1300: 260, w1400: 280, w1500: 300, w1600: 320, w1700: 340, w1800: 360, row: "1"}
+      - {key: floors-2, w1000: 190, w1100: 260, w1200: 285, w1300: 310, w1400: 335, w1500: 360, w1600: 385, w1700: 410, w1800: 435, row: "2"}
+      - {key: floors-3, w1000: 230, w1100: 300, w1200: 330, w1300: 360, w1400: 390, w1500: 420, w1600: 450, w1700: 480, w1800: 510, row: "3"}
+      - {key: floors-4, w1000: 270, w1100: 340, w1200: 375, w1300: 410, w1400: 445, w1500: 480, w1600: 515, w1700: 550, w1800: 585, row: "4"}
+      - {key: floors-5, w1000: 310, w1100: 380, w1200: 420, w1300: 460, w1400: 500, w1500: 540, w1600: 580, w1700: 620, w1800: 660, row: "5"}
+      - {key: floors-6, w1000: 350, w1100: 420, w1200: 465, w1300: 510, w1400: 555, w1500: 600, w1600: 645, w1700: 690, w1800: 735, row: "6"}
+      - {key: floors-7, w1000: 390, w1100: 460, w1200: 510, w1300: 560, w1400: 610, w1500: 660, w1600: 710, w1700: 760, w1800: 810, row: "7"}
+      - {key: floors-8, w1000: 430, w1100: 500, w1200: 555, w1300: 610, w1400: 665, w1500: 720, w1600: 775, w1700: 830, w1800: 885, row: "8"}
+      - {key: floors-9, w1000: 470, w1100: 540, w1200: 600, w1300: 660, w1400: 720, w1500: 780, w1600: 840, w1700: 900, w1800: 960, row: "9"}
+      - {key: floors-10, w1000: 510, w1100: 580, w1200: 645, w1300: 710, w1400: 775, w1500: 840, w1600: 905, w1700: 970, w1800: 1035, row: "10"}
+
+terms:
+  # -------------------------------------------------------------- 3.16
+  - name: simultaneous_evacuation_design
+    title: Must the stair be sized for simultaneous evacuation?
+    for: {s: Stair}
+    cite:
+      section: "ADB2 3.16"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=44
+      quote: >-
+        The following stairs should be designed to allow simultaneous
+        evacuation. a. All stairs serving basements. b. All stairs serving
+        buildings with open spatial planning. c. All stairs serving 'residential
+        (other)' (purpose group 2(b)) or 'assembly and recreation' (purpose group
+        5) buildings.
+    note: >-
+      3.19: phased evacuation may be used for any building provided it is not
+      identified in paragraph 3.16. Otherwise the stair follows the strategy the
+      building is designed for (building.evacuation_strategy).
+    defers_to: ["ADB2 3.19-3.21 (conditions for phased evacuation)", "BS 9999 Annexes B and C (designs based on simultaneous evacuation)"]
+    status: draft
+    value:
+      any:
+        - {fact: s.serves_basement}
+        - {fact: building.open_spatial_planning}
+        - {in: [{fact: building.purpose_group}, [residential-other, assembly-and-recreation]]}
+        - {eq: [{fact: building.evacuation_strategy}, simultaneous]}
+
+  # ---------------------------------------------------------- Table 3.2
+  - name: table_3_2_row
+    title: Row of Table 3.2 for the number of floors served
+    for: {s: Stair}
+    cite:
+      section: "ADB2 Table 3.2"
+      table: "3.2"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=44
+    note: Only read for 1 to 10 floors; min_stair_width_simultaneous handles more than 10 first.
+    status: draft
+    value:
+      cases:
+        - {when: {le: [{fact: s.floors_served}, 1]}, then: floors-1, cite: {row: "1"}}
+        - {when: {eq: [{fact: s.floors_served}, 2]}, then: floors-2, cite: {row: "2"}}
+        - {when: {eq: [{fact: s.floors_served}, 3]}, then: floors-3, cite: {row: "3"}}
+        - {when: {eq: [{fact: s.floors_served}, 4]}, then: floors-4, cite: {row: "4"}}
+        - {when: {eq: [{fact: s.floors_served}, 5]}, then: floors-5, cite: {row: "5"}}
+        - {when: {eq: [{fact: s.floors_served}, 6]}, then: floors-6, cite: {row: "6"}}
+        - {when: {eq: [{fact: s.floors_served}, 7]}, then: floors-7, cite: {row: "7"}}
+        - {when: {eq: [{fact: s.floors_served}, 8]}, then: floors-8, cite: {row: "8"}}
+        - {when: {eq: [{fact: s.floors_served}, 9]}, then: floors-9, cite: {row: "9"}}
+        - {else: floors-10, cite: {row: "10"}}
+
+  - name: min_stair_width_simultaneous
+    title: Minimum stair width for simultaneous evacuation (Table 3.2)
+    for: {s: Stair}
+    cite:
+      section: "ADB2 Table 3.2"
+      table: "3.2"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=44
+      quote: The capacity of stairs of widths from 1000mm to 1800mm is given in Table 3.2.
+    interpretation:
+      by: pack
+      note: >-
+        (1) The minimum width is the narrowest printed column whose capacity, in
+        the row for the floors served, is at least the number of people served by
+        this stair; the table is not interpolated between columns. The 3.18
+        formula would allow intermediate widths of 1100mm or more (and 3.18's
+        worked examples round up to 1100mm because the formula starts there),
+        but v0 cannot evaluate it. (2) Stair.people_served is P after dividing
+        the population by the number of available stairs (3.18) and after
+        discounting (3.14, 3.15). (3) More than 10 floors (note 1, linear
+        extrapolation) and more than the 1800mm column (3.18 formula) leave the
+        width as the open fact Stair.calculated_min_width.
+    defers_to:
+      - "ADB2 3.18 (P = 200W + 50 (W – 0.3)(N – 1); needs addition and subtraction)"
+      - "ADB2 Table 3.2 note 1 (linear extrapolation beyond 10 storeys)"
+      - "ADB2 3.14-3.15 (discounting of stairs)"
+    status: draft
+    value:
+      cases:
+        - when: {gt: [{fact: s.floors_served}, 10]}
+          then: {fact: s.calculated_min_width}
+          cite: {row: "Note 1: The capacity of stairs that serve more than 10 storeys may be obtained by using linear extrapolation."}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1000}]}
+          then: 1000 mm
+          cite: {row: 1000mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1100}]}
+          then: 1100 mm
+          cite: {row: 1100mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1200}]}
+          then: 1200 mm
+          cite: {row: 1200mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1300}]}
+          then: 1300 mm
+          cite: {row: 1300mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1400}]}
+          then: 1400 mm
+          cite: {row: 1400mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1500}]}
+          then: 1500 mm
+          cite: {row: 1500mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1600}]}
+          then: 1600 mm
+          cite: {row: 1600mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1700}]}
+          then: 1700 mm
+          cite: {row: 1700mm}
+        - when: {le: [{fact: s.people_served}, {lookup: T3.2, key: {term: table_3_2_row, of: s}, column: w1800}]}
+          then: 1800 mm
+          cite: {row: 1800mm}
+        - else: {fact: s.calculated_min_width}
+          cite:
+            section: "ADB2 3.18"
+            url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=44
+            row: "more than the 1800mm column: 3.18 formula, P = 200W + 50 (W – 0.3)(N – 1)"
+
+  # ---------------------------------------------------------- Table 3.3
+  - name: min_stair_width_phased
+    title: Minimum stair width for phased evacuation (Table 3.3)
+    for: {s: Stair}
+    cite:
+      section: "ADB2 Table 3.3"
+      table: "3.3"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=47
+      quote: The minimum width of stairs needed for phased evacuation is given in Table 3.3.
+    note: >-
+      Note 1: This table assumes a phased evacuation of the fire floor first
+      followed by evacuation of not more than two floors at a time.
+    interpretation:
+      by: pack
+      note: >-
+        Each row's number is the upper bound for its width. Above 190 people the
+        Note 3 formula ((P×10) – 100, minimum 1000mm) gives the width; v0 cannot
+        subtract, so the width is the open fact Stair.calculated_min_width.
+    defers_to: ["ADB2 Table 3.3 note 3 ((P×10) – 100; needs subtraction)", "ADB2 3.19-3.21 (conditions for phased evacuation)"]
+    status: draft
+    value:
+      cases:
+        - {when: {le: [{fact: s.phased_people_per_storey}, 100]}, then: 1000 mm, cite: {row: "100 — 1000"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 120]}, then: 1100 mm, cite: {row: "120 — 1100"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 130]}, then: 1200 mm, cite: {row: "130 — 1200"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 140]}, then: 1300 mm, cite: {row: "140 — 1300"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 150]}, then: 1400 mm, cite: {row: "150 — 1400"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 160]}, then: 1500 mm, cite: {row: "160 — 1500"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 170]}, then: 1600 mm, cite: {row: "170 — 1600"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 180]}, then: 1700 mm, cite: {row: "180 — 1700"}}
+        - {when: {le: [{fact: s.phased_people_per_storey}, 190]}, then: 1800 mm, cite: {row: "190 — 1800"}}
+        - else: {fact: s.calculated_min_width}
+          cite: {row: "Note 3: (P×10) – 100 where P = the number of people on the most heavily occupied storey; minimum 1000mm"}
+
+  - name: stair_width_for_capacity
+    title: Minimum stair width from the escape strategy (Tables 3.2 and 3.3)
+    for: {s: Stair}
+    cite:
+      section: "ADB2 3.13"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=43
+      quote: >-
+        The width depends on the number of stairs provided and the escape
+        strategy (simultaneous or phased evacuation). If the maximum number of
+        people needing to use escape stairs is unknown, calculate it using the
+        floor space factors in Appendix D.
+    status: draft
+    value:
+      cases:
+        - when: {term: simultaneous_evacuation_design, of: s}
+          then: {term: min_stair_width_simultaneous, of: s}
+          cite: {section: "ADB2 3.17", url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=44, row: simultaneous evacuation — Table 3.2}
+        - else: {term: min_stair_width_phased, of: s}
+          cite: {section: "ADB2 3.22", url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=47, row: phased evacuation — Table 3.3}
+
+  # ---------------------------------------------------------- Table 3.1
+  - name: min_stair_width
+    title: Minimum width of an escape stair (Table 3.1, with Tables 3.2 and 3.3)
+    for: {s: Stair}
+    cite:
+      section: "ADB2 Table 3.1"
+      table: "3.1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=43
+      quote: "b. It should be no less than the minimum widths given in Table 3.1."
+    interpretation:
+      by: pack
+      note: >-
+        (1) Rows are tried in printed order; a row gives its width only up to its
+        'Maximum number of people served' (Stair.people_served, note 1). (2)
+        Where the number served is above a row's maximum, and for row 1c
+        (note 3), the width comes from Table 3.2 (simultaneous) or Table 3.3
+        (phased) through stair_width_for_capacity. (3) A stair in an 'other'
+        building serving 51 to 220 people fits no row's number (1c starts over
+        220, row 2 stops at 50); this pack also sends it to Tables 3.2/3.3,
+        whose smallest width is 1000mm. (4) 3.10a (at least as wide as the exits
+        giving access) is checked by the norm 'ADB2 3.10', not folded in here.
+    defers_to:
+      - "BS 9999 Section 6 (firefighting stairs at least 1100mm wide, Table 3.1 note 2)"
+      - "Approved Document M (may need to be increased to 1000mm, Table 3.1 note 4)"
+      - "Approved Document K (dimensional constraints on stairs, 3.25)"
+    status: draft
+    value:
+      cases:
+        - when:
+            all:
+              - {eq: [{fact: building.purpose_group}, residential-institutional]}
+              - {not: {fact: s.staff_only}}
+              - {le: [{fact: s.people_served}, 150]}
+          then: 1000 mm
+          cite: {row: "1a. In a 'residential (institutional)' building (unless the stair will only be used by staff) — 150 — 1000"}
+        - when:
+            all:
+              - {eq: [{fact: building.purpose_group}, residential-institutional]}
+              - {not: {fact: s.staff_only}}
+          then: {term: stair_width_for_capacity, of: s}
+          cite: {row: "1a. more than 150 people: Table 3.2 or Table 3.3 (3.13)"}
+        - when:
+            all:
+              - {eq: [{fact: building.purpose_group}, assembly-and-recreation]}
+              - {fact: s.serves_assembly_area_of_100m2_or_more}
+              - {le: [{fact: s.people_served}, 220]}
+          then: 1100 mm
+          cite: {row: "1b. In an 'assembly and recreation' building and serving an area used for assembly purposes (unless the area is less than 100m²) — 220 — 1100"}
+        - when:
+            all:
+              - {eq: [{fact: building.purpose_group}, assembly-and-recreation]}
+              - {fact: s.serves_assembly_area_of_100m2_or_more}
+          then: {term: stair_width_for_capacity, of: s}
+          cite: {row: "1b. more than 220 people: Table 3.2 or Table 3.3 (3.13)"}
+        - when:
+            all:
+              - {fact: s.serves_area_with_occupancy_over_50}
+              - {gt: [{fact: s.people_served}, 220]}
+          then: {term: stair_width_for_capacity, of: s}
+          cite: {row: "1c. In any other building and serving an area with an occupancy of more than 50 — Over 220 — See note 3 (Table 3.2 or Table 3.3)"}
+        - when: {le: [{fact: s.people_served}, 50]}
+          then: 800 mm
+          cite: {row: "2. Any stair not described above — 50 — 800"}
+        - else: {term: stair_width_for_capacity, of: s}
+          cite: {row: "no row of Table 3.1 gives a width: Table 3.2 or Table 3.3 (3.13)"}
+
+  # -------------------------------------------------------------- 3.34
+  - name: protected_lobbies_required
+    title: Must the stair be approached through protected lobbies or protected corridors (3.34)?
+    for: {s: Stair}
+    cite:
+      section: "ADB2 3.34"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=52
+      quote: >-
+        In the following situations, protected lobbies or protected corridors
+        should be provided at all storeys above ground, except the top storey.
+    note: The answer is for every storey above ground served by the stair except the top storey.
+    status: draft
+    value:
+      cases:
+        - when: {fact: s.is_firefighting_stair}
+          then: true
+          cite: {row: "d. If the stair is a firefighting stair."}
+        - when: {fact: s.not_discounted_under_3_15b}
+          then: true
+          cite: {row: "e. If the option in paragraph 3.15b has been used so as not to discount one stair when calculating stair widths."}
+        - when:
+            any:
+              - all:
+                  - {fact: s.is_only_stair}
+                  - {fact: s.building_has_more_than_one_storey_above_or_below_ground_storey}
+              - {ge: [{fact: s.top_storey_height}, 18 m]}
+              - {eq: [{fact: building.evacuation_strategy}, phased]}
+          then: {not: {fact: s.smoke_control_3_15a}}
+          cite: {row: "a.–c. only stair with more than one storey above or below the ground storey; serves a storey at 18m or more; phased evacuation — unless a smoke control system as described in 3.15a is used"}
+        - else: false
+          cite: {row: none of the situations in 3.34 applies}
+
+norms:
+  - name: "ADB2 3.10"
+    title: The escape stair is wide enough
+    modality: obligation
+    for: {s: Stair}
+    cite:
+      section: "ADB2 3.10"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=42
+      quote: >-
+        The width of escape stairs should meet all of the following conditions.
+        a. It should be at least as wide as any exits giving access to the
+        stairs.
+    note: >-
+      3.10 continues on PDF page 43: b. It should be no less than the minimum
+      widths given in Table 3.1. c. It should not reduce at any point on the way
+      to a final exit. d. It should not exceed 1400mm in stairs taller than 30m,
+      unless a central handrail is provided.
+    interpretation:
+      by: pack
+      note: >-
+        (1) Stair.width is the narrowest clear width, so (b) is checked at the
+        narrowest point. (2) 'Taller than 30m' in (d) is the rise of the stair
+        (Table 3.2 note 3 says 'a rise of more than 30m').
+    defers_to: ["ADB2 3.10c (the width should not reduce on the way to a final exit)", "ADB2 3.10d second sentence (each side of a central handrail assessed separately)"]
+    status: draft
+    require:
+      all:
+        - {ge: [{fact: s.width}, {fact: s.widest_exit_width}]}
+        - {ge: [{fact: s.width}, {term: min_stair_width, of: s}]}
+        - any:
+            - {le: [{fact: s.rise}, 30 m]}
+            - {fact: s.has_central_handrail}
+            - {le: [{fact: s.width}, 1400 mm]}

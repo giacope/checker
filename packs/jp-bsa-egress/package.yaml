@@ -1,0 +1,65 @@
+package: jp-bsa-egress
+version: 0.1.0
+title: 建築基準法・同施行令 避難規定（階段・廊下・直通階段・歩行距離）
+publisher: e-Gov 法令検索（デジタル庁）
+jurisdiction: Japan (national law)
+# 著作権法第13条: 法令（憲法・法律・政令・省令・告示・条例等）は著作権の目的とならない。
+# The statutory text may therefore be quoted.
+text_policy: public
+scope: >
+  Building Standards Act (建築基準法) and its Enforcement Order (建築基準法施行令)
+  as in force on the as-of date below: stair width, riser and tread (令23条),
+  landings (令24条), handrails (令25条), special-use stairs (令27条), the scope of
+  第5章第2節 (令117条), corridor width (令119条), walking distance to a direct stair
+  (令120条), two or more direct stairs (令121条), the exterior exit on the
+  evacuation floor (令125条1項・3項), and the 法別表第一 use classes these rules
+  read. Every element is a draft until a qualified reviewer (建築士 or 建築主事)
+  approves it. This is national law, not an adopted model code, so the package has
+  no `adoption` block; answers report its provisions as published.
+
+# Source: e-Gov 法令API v2, law_data endpoint with point-in-time retrieval
+# (asof), response_format=xml. The revision IDs are the ones the API returned for
+# that date. Element cite.url links pin the same revision on e-Gov 法令検索:
+#   https://laws.e-gov.go.jp/law/<law_id>/<revision date>_<amendment law id>#<anchor>
+# Anchors are the element ids e-Gov renders, e.g. Mp-Ch_5-Se_2-At_120-Pr_2
+# (本則 第5章 第2節 第120条 第2項) and Mpat_1 (法別表第一).
+source:
+  api: https://laws.e-gov.go.jp/api/2/law_data/{law_id}?asof=2026-11-14&response_format=xml
+  as_of: 2026-11-14
+  retrieved: 2026-11-14
+  laws:
+    - law_id: 325CO0000000338
+      law_num: 昭和二十五年政令第三百三十八号
+      title: 建築基準法施行令
+      law_revision_id: 325CO0000000338_20261101_508CO0000000284
+      amendment_law: 建築基準法施行令の一部を改正する政令（令和八年政令第二百八十四号）
+      amendment_promulgated: 2026-09-16
+      amendment_enforced: 2026-11-01
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284
+    - law_id: 325AC0000000201
+      law_num: 昭和二十五年法律第二百一号
+      title: 建築基準法
+      law_revision_id: 325AC0000000201_20260527_508AC0000000023
+      amendment_law: 都市再生特別措置法等の一部を改正する法律（令和八年法律第二十三号）
+      amendment_promulgated: 2026-05-27
+      amendment_enforced: 2026-05-27
+      url: https://laws.e-gov.go.jp/law/325AC0000000201/20260527_508AC0000000023
+      note: >
+        The API also lists three later revisions of 建築基準法 that were not yet in
+        force on the as-of date (enforcement 2027-01-22, 2027-05-26, 2028-07-30).
+
+not_formalized:
+  - "令23条4項 国土交通大臣が定めた構造方法を用いる階段（告示の内容）"
+  - "令26条 階段に代わる傾斜路"
+  - "令117条2項 別の建築物とみなす部分"
+  - "令118条 客席からの出口の戸"
+  - "令120条1項表(一) 無窓居室の除外基準（国土交通大臣が定める基準の内容）"
+  - "令120条4項 主要構造部を準耐火構造とした共同住宅のメゾネット住戸"
+  - "令121条1項3号・6号イ 令123条2項又は3項に適合する直通階段（構造基準）"
+  - "令121条4項 階数3以下・延べ面積200平方メートル未満の建築物の特定階"
+  - "令122条 避難階段の設置"
+  - "令123条 避難階段及び特別避難階段の構造"
+  - "令124条 物品販売業を営む店舗における避難階段等の幅"
+  - "令125条2項 劇場等の屋外への出口の戸"
+  - "令125条4項 令124条3項の準用（屋上広場を階とみなす）"
+  - "令126条 屋上広場等"

@@ -1,0 +1,50 @@
+# Chapter 3, Building blocks: turning space (304.3). Text from the U.S. Access
+# Board's ADA Accessibility Standards page, checked against the DOJ page, read
+# 2026-11-14.
+
+norms:
+  - name: "304.3"
+    title: Turning space is a 60 in circle or a T-shaped space in a 60 in square
+    modality: obligation
+    for: {t: TurningSpace}
+    cite:
+      section: "304.3"
+      url: https://www.access-board.gov/ada/#ada-304_3
+    quote: Turning space shall comply with 304.3.1 or 304.3.2.
+    interpretation:
+      by: pack
+      note: >
+        A TurningSpace element is one turning space the model provides where
+        some other provision requires it (for example 603.2.1); which spaces
+        need one is not encoded, so the norm applies to every TurningSpace.
+        For the T, "each arm clear of obstructions 12 inches minimum in each
+        direction" is read as each arm extending at least 12 in beyond the
+        sides of the base, and "the base clear 24 inches minimum" as the base
+        extending at least 24 in beyond the arms, which is what a 36 in wide T
+        in a 60 in square gives (12 + 36 + 12 = 60, 36 + 24 = 60).
+    defers_to: ["304.2 (floor surfaces, changes in level)", "304.4 (door swing)", "306 (knee and toe clearance)"]
+    status: draft
+    require:
+      cases:
+        - when: {eq: [{fact: t.shape}, circular]}
+          then: {ge: [{fact: t.diameter}, 60 in]}
+          cite:
+            section: "304.3.1"
+            url: https://www.access-board.gov/ada/#ada-304_3_1
+            quote: The turning space shall be a space of 60 inches (1525 mm) diameter minimum.
+        - else:
+            all:
+              - ge: [{fact: t.square_side}, 60 in]
+              - ge: [{fact: t.arm_width}, 36 in]
+              - ge: [{fact: t.base_width}, 36 in]
+              - ge: [{fact: t.arm_clear_length}, 12 in]
+              - ge: [{fact: t.base_clear_length}, 24 in]
+          cite:
+            section: "304.3.2"
+            url: https://www.access-board.gov/ada/#ada-304_3_2
+            quote: >-
+              The turning space shall be a T-shaped space within a 60 inch (1525
+              mm) square minimum with arms and base 36 inches (915 mm) wide
+              minimum. Each arm of the T shall be clear of obstructions 12
+              inches (305 mm) minimum in each direction and the base shall be
+              clear of obstructions 24 inches (610 mm) minimum.

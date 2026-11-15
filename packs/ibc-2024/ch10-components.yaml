@@ -1,0 +1,733 @@
+# Chapter 10, Means of egress: the requirements a drawing set or a model can
+# decide from the facts in vocab/bim.yaml (doors, stairs, handrails, ramps,
+# dead-end corridors, and the number of exits from spaces and storeys).
+# Section numbers, values, table cells, and exceptions are from the 2024 IBC
+# on ICC Digital Codes (Chapter 10 content page), read 2026-11-15. Titles,
+# labels, notes, and guidance are this pack's own words.
+#
+# v0 has only obligations, so an exception is written as a further
+# alternative in the same `any`, after the measured check: an element that
+# meets the plain limit passes without the report asking anything, and one
+# that does not is "unknown" until the reviewer answers the judged or given
+# facts the exception turns on.
+#
+# Limits are applied in the inch-pound units the code states. Several printed
+# metric equivalents are rounded (32 in is 812.8 mm, printed 813; 41½ in is
+# 1054.1 mm, printed 1054; 12 ft is 3657.6 mm, printed 3658), so a value
+# measured exactly at the printed metric figure can land on the other side.
+
+terms:
+  # -------------------------------------------------- 1006.2.1 spaces with one exit
+  - name: max_one_exit_space_occupant_load
+    title: Maximum occupant load of a space with one exit or exit access doorway
+    cite:
+      section: "1006.2.1"
+      table: "1006.2.1"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.2.1
+    status: draft
+    value:
+      cases:
+        - when: {in: [{fact: building.occupancy_group}, [A-1, A-2, A-3, A-4, A-5, E, M]]}
+          then: 49
+          cite: {row: "A, E, M"}
+        - when: {eq: [{fact: building.occupancy_group}, B]}
+          then: 49
+          cite: {row: B}
+        - when: {in: [{fact: building.occupancy_group}, [F-1, F-2]]}
+          then: 49
+          cite: {row: F}
+        - when: {in: [{fact: building.occupancy_group}, [H-1, H-2, H-3]]}
+          then: 3
+          cite: {row: "H-1, H-2, H-3"}
+        - when: {in: [{fact: building.occupancy_group}, [H-4, H-5]]}
+          then: 10
+          cite: {row: "H-4, H-5"}
+        - when: {in: [{fact: building.occupancy_group}, [I-1, I-2, I-4]]}
+          then: 10
+          cite: {row: "I-1, I-2, I-4"}
+        - when: {eq: [{fact: building.occupancy_group}, I-3]}
+          then: 10
+          cite: {row: I-3}
+        - when: {eq: [{fact: building.occupancy_group}, R-1]}
+          then: 10
+          cite: {row: R-1}
+        - when: {in: [{fact: building.occupancy_group}, [R-2, R-3, R-4]]}
+          then: 20
+          cite: {row: "R-2; R-3; R-4"}
+        - when: {in: [{fact: building.occupancy_group}, [S-1, S-2]]}
+          then: 29
+          cite: {row: S}
+        - else: 49
+          cite: {row: U}
+
+  - name: max_one_exit_common_path
+    title: Maximum common path of egress travel distance from a space with one exit
+    for: {s: Space}
+    cite:
+      section: "1006.2.1"
+      table: "1006.2.1"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.2.1
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        "With sprinkler system" is footnote a (§903.3.1.1 or §903.3.1.2, nfpa13 or
+        nfpa13r) for every row but H, where footnote b (§903.2.5) is approximated as
+        an NFPA 13 system, as in max_exit_access_travel_distance. The occupant load
+        that picks the OL ≤ 30 or OL > 30 column is the space's design occupant
+        load. Footnote f (Group S-2 open parking garage, not more than 100 feet) is
+        read as setting 100 feet for those garages.
+    defers_to: ["Table 1006.2.1 footnote c (assembly with fixed seating, §1030.8)", "Table 1006.2.1 footnote d (Group I-2, §407.4)", "Table 1006.2.1 footnote g (R-3 and R-4 with §903.3.1.3, §1006.2.2.6)"]
+    value:
+      cases:
+        - when: {in: [{fact: building.occupancy_group}, [A-1, A-2, A-3, A-4, A-5, E, M]]}
+          then: 75 ft
+          cite: {row: "A, E, M — 75 feet in every column"}
+        - when: {eq: [{fact: building.occupancy_group}, B]}
+          cite: {row: B}
+          then:
+            cases:
+              - when: {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}
+                then: 100 ft
+                cite: {row: "B — with sprinkler system (footnote a)"}
+              - when: {le: [{fact: s.design_occupant_load}, 30]}
+                then: 100 ft
+                cite: {row: "B — without sprinkler system, OL ≤ 30"}
+              - else: 75 ft
+                cite: {row: "B — without sprinkler system, OL > 30"}
+        - when: {in: [{fact: building.occupancy_group}, [F-1, F-2]]}
+          cite: {row: F}
+          then:
+            cases:
+              - when: {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}
+                then: 100 ft
+                cite: {row: "F — with sprinkler system (footnote a)"}
+              - else: 75 ft
+                cite: {row: "F — without sprinkler system, OL ≤ 30 or OL > 30"}
+        - when: {in: [{fact: building.occupancy_group}, [H-1, H-2, H-3, H-4, H-5]]}
+          cite: {row: "H-1, H-2, H-3; H-4, H-5"}
+          then:
+            cases:
+              - when: {not: {eq: [{fact: building.sprinkler_system}, nfpa13]}}
+                then: not-permitted
+                cite: {row: "H — without sprinkler system: NP"}
+              - when: {in: [{fact: building.occupancy_group}, [H-1, H-2, H-3]]}
+                then: 25 ft
+                cite: {row: "H-1, H-2, H-3 — with sprinkler system (footnote b)"}
+              - else: 75 ft
+                cite: {row: "H-4, H-5 — with sprinkler system (footnote b)"}
+        - when: {in: [{fact: building.occupancy_group}, [I-1, I-2, I-3, I-4, R-1, R-2, R-3, R-4]]}
+          cite: {row: "I-1, I-2, I-4; I-3; R-1; R-2; R-3; R-4"}
+          then:
+            cases:
+              - when: {not: {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}}
+                then: not-permitted
+                cite: {row: "I and R — without sprinkler system: NP"}
+              - when: {in: [{fact: building.occupancy_group}, [I-1, I-2, I-4, R-1]]}
+                then: 75 ft
+                cite: {row: "I-1, I-2, I-4; R-1 — with sprinkler system (footnote a)"}
+              - when: {eq: [{fact: building.occupancy_group}, I-3]}
+                then: 100 ft
+                cite: {row: "I-3 — with sprinkler system (footnote a)"}
+              - else: 125 ft
+                cite: {row: "R-2; R-3; R-4 — with sprinkler system (footnote a)"}
+        - when: {in: [{fact: building.occupancy_group}, [S-1, S-2]]}
+          cite: {row: S}
+          then:
+            cases:
+              - when: {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}
+                then: 100 ft
+                cite: {row: "S — with sprinkler system (footnote a)"}
+              - when:
+                  all:
+                    - {eq: [{fact: building.occupancy_group}, S-2]}
+                    - {fact: building.open_parking_garage}
+                then: 100 ft
+                cite: {row: "Footnote f: Group S-2 open parking garage"}
+              - when: {le: [{fact: s.design_occupant_load}, 30]}
+                then: 100 ft
+                cite: {row: "S — without sprinkler system, OL ≤ 30"}
+              - else: 75 ft
+                cite: {row: "S — without sprinkler system, OL > 30"}
+        - else:
+            cases:
+              - when: {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}
+                then: 75 ft
+                cite: {row: "U — with sprinkler system (footnote a)"}
+              - when: {le: [{fact: s.design_occupant_load}, 30]}
+                then: 100 ft
+                cite: {row: "U — without sprinkler system, OL ≤ 30"}
+              - else: 75 ft
+                cite: {row: "U — without sprinkler system, OL > 30"}
+          cite: {row: U}
+
+  # ---------------------------------------------- 1006.3.4 storeys with one exit
+  - name: single_exit_r2_dwelling_units
+    title: May a storey of a Group R-2 occupancy of dwelling units have one exit (Table 1006.3.4(1))?
+    for: {f: Storey}
+    cite:
+      section: "1006.3.4"
+      table: "1006.3.4(1)"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.3.4
+    status: draft
+    defers_to: ["Table 1006.3.4(1) footnote c (occupiable roofs)"]
+    value:
+      cases:
+        - when: {in: [{fact: f.position}, [lower-below, first-below, first, second, third]]}
+          cite: {row: "Basement, first, second or third story above grade plane — R-2 a, b: 4 dwelling units, 125 feet"}
+          then:
+            all:
+              - {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}
+              - {fact: building.emergency_escape_openings}
+              - le: [{fact: f.dwelling_units}, 4]
+              - le: [{fact: f.max_travel_distance}, 125 ft]
+        - else: false
+          cite: {row: "Fourth story above grade plane and higher — NP"}
+
+  - name: single_exit_other_occupancies
+    title: May a storey have one exit under Table 1006.3.4(2)?
+    for: {f: Storey}
+    cite:
+      section: "1006.3.4"
+      table: "1006.3.4(2)"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.3.4
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        Footnote b (100 feet in B, F and S with §903.3.1.1) is applied only where the
+        table marks it, on the first-story row; the second-story row marks only
+        footnote d. Occupancies not listed on a row (for example H-1 on the first
+        story, or A on the second) are read as not permitted.
+    value:
+      cases:
+        - when: {in: [{fact: f.position}, [first-below, first]]}
+          cite: {row: First story above or below grade plane}
+          then:
+            cases:
+              - when: {in: [{fact: building.occupancy_group}, [A-1, A-2, A-3, A-4, A-5, E, M, U]]}
+                then:
+                  all:
+                    - le: [{fact: f.occupant_load}, 49]
+                    - le: [{fact: f.max_travel_distance}, 75 ft]
+                cite: {row: "A, B b, E, F b, M, U — 49, 75 feet"}
+              - when: {in: [{fact: building.occupancy_group}, [B, F-1, F-2, S-1, S-2]]}
+                then:
+                  all:
+                    - le: [{fact: f.occupant_load}, {cases: [
+                        {when: {in: [{fact: building.occupancy_group}, [S-1, S-2]]}, then: 29, cite: {row: "S b, d — 29"}},
+                        {else: 49, cite: {row: "B b, F b — 49"}}]}]
+                    - le:
+                        - {fact: f.max_travel_distance}
+                        - cases:
+                            - when: {eq: [{fact: building.sprinkler_system}, nfpa13]}
+                              then: 100 ft
+                              cite: {row: "Footnote b: B, F and S with §903.3.1.1 — 100 feet"}
+                            - when:
+                                all:
+                                  - {eq: [{fact: building.occupancy_group}, S-2]}
+                                  - {fact: building.open_parking_garage}
+                              then: 100 ft
+                              cite: {row: "Footnote d: Group S-2 open parking garage — 100 feet"}
+                            - else: 75 ft
+                              cite: {row: 75 feet}
+                cite: {row: "B b, F b; S b, d"}
+              - when: {in: [{fact: building.occupancy_group}, [H-2, H-3]]}
+                then:
+                  all:
+                    - le: [{fact: f.occupant_load}, 3]
+                    - le: [{fact: f.max_travel_distance}, 25 ft]
+                cite: {row: "H-2, H-3 — 3, 25 feet"}
+              - when: {in: [{fact: building.occupancy_group}, [H-4, H-5, I-1, I-2, I-3, I-4, R-1]]}
+                then:
+                  all:
+                    - le: [{fact: f.occupant_load}, 10]
+                    - le: [{fact: f.max_travel_distance}, 75 ft]
+                cite: {row: "H-4, H-5, I, R-1 — 10, 75 feet"}
+              - when: {eq: [{fact: building.occupancy_group}, R-2]}
+                then:
+                  all:
+                    - {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}
+                    - {fact: building.emergency_escape_openings}
+                    - le: [{fact: f.occupant_load}, 10]
+                    - le: [{fact: f.max_travel_distance}, 75 ft]
+                cite: {row: "R-2 a, c — 10, 75 feet"}
+              - else: false
+                cite: {row: "Not listed on the first-story row (H-1, R-3, R-4)"}
+        - when: {eq: [{fact: f.position}, second]}
+          cite: {row: Second story above grade plane}
+          then:
+            cases:
+              - when: {in: [{fact: building.occupancy_group}, [B, F-1, F-2, M, S-1, S-2]]}
+                then:
+                  all:
+                    - le: [{fact: f.occupant_load}, 29]
+                    - le:
+                        - {fact: f.max_travel_distance}
+                        - cases:
+                            - when:
+                                all:
+                                  - {eq: [{fact: building.occupancy_group}, S-2]}
+                                  - {fact: building.open_parking_garage}
+                              then: 100 ft
+                              cite: {row: "Footnote d: Group S-2 open parking garage — 100 feet"}
+                            - else: 75 ft
+                              cite: {row: 75 feet}
+                cite: {row: "B, F, M, S d — 29, 75 feet"}
+              - else: false
+                cite: {row: Not listed on the second-story row}
+        - else: false
+          cite: {row: "Third story above grade plane and higher — NP (and stories below the first story below grade plane, not listed)"}
+
+  - name: single_exit_permitted
+    title: May the storey have a single exit or access to a single exit (§1006.3.4)?
+    for: {f: Storey}
+    cite:
+      section: "1006.3.4"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.3.4
+    status: draft
+    defers_to: ["1006.3.4.1 (mixed occupancies)"]
+    value:
+      any:
+        - in: [{fact: building.occupancy_group}, [R-3, R-4]]
+        - cases:
+            - when:
+                all:
+                  - {eq: [{fact: building.occupancy_group}, R-2]}
+                  - not: {fact: building.r2_sleeping_units}
+              then: {term: single_exit_r2_dwelling_units, of: f}
+              cite: {row: "Item 1, Table 1006.3.4(1) (footnote b: R-2 of dwelling units)"}
+            - else: {term: single_exit_other_occupancies, of: f}
+              cite: {row: "Item 1, Table 1006.3.4(2)"}
+        - {fact: f.rooms_exit_directly_to_exterior}
+        - {fact: building.mechanical_parking_garage}
+        - {fact: f.dwelling_units_meet_1006_3_4_item_5}
+
+  # ------------------------------------------------------------ 1020.5 dead ends
+  - name: max_dead_end_length
+    title: Maximum length of a dead-end corridor
+    for: {c: Corridor}
+    cite:
+      section: "1020.5"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1020.5
+    status: draft
+    value:
+      cases:
+        - when:
+            all:
+              - {eq: [{fact: building.occupancy_group}, I-3]}
+              - {in: [{fact: building.i3_condition}, [condition-2, condition-3, condition-4]]}
+          then: 50 ft
+          cite: {row: "Exception 1: Group I-3, Condition 2, 3 or 4"}
+        - when:
+            all:
+              - {in: [{fact: building.occupancy_group}, [B, E, F-1, F-2, I-1, M, R-1, R-2, S-1, S-2, U]]}
+              - {eq: [{fact: building.sprinkler_system}, nfpa13]}
+          then: 50 ft
+          cite: {row: "Exception 2: Groups B, E, F, I-1, M, R-1, R-2, S and U, sprinklered per §903.3.1.1"}
+        - when:
+            all:
+              - {eq: [{fact: building.occupancy_group}, I-2]}
+              - {eq: [{fact: building.i2_condition}, condition-2]}
+              - not: {fact: c.serves_patient_rooms}
+          then: 30 ft
+          cite: {row: "Exception 4: Group I-2, Condition 2, not serving patient rooms or patient treatment spaces"}
+        - else: 20 ft
+          cite: {row: 20 feet}
+
+norms:
+  # ------------------------------------------------------------------- doors
+  - name: "1010.1.1 width"
+    title: Door clear opening width is at least 32 in (41½ in for I-2 bed movement), or an exception applies
+    guidance: >
+      Use a wider door or leaf so the active leaf gives at least 32 in clear between
+      the door face and the stop at 90 degrees (41½ in where beds move in Group I-2);
+      in a pair without a mullion, one leaf alone must give the 32 in.
+    modality: obligation
+    for: {d: Door}
+    cite:
+      section: "1010.1.1"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1010.1.1
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        Door.clear_width is the clear opening of the active leaf, which is what the
+        two-leaf rule measures. §1010.1 applies the section to doors in the means of
+        egress, including doors provided in excess of the number required; the norm
+        asks whether a door is one only when the door is too narrow. Exception 2's
+        "not required to be an Accessible unit" is read through Door.in_accessible_unit.
+        ICC's free view shows Exception 8 as "Doors serving sauna compartments,
+        toilet or dressing, fitting or changing" with words apparently missing; the
+        predicate is this pack's reading. The inch values apply: 813 mm passes 32 in,
+        but 1054 mm (41½ in), 806 mm (31.75 in) and 711 mm (28 in) are just short.
+    defers_to: ["1010.1.1 required capacity (0.2 in per occupant, §1005.3.2; the vocabulary has no door occupant load)", "1010.1.1 Exception 9 (not shown on ICC's free view)", "1010.1.1.1 (projections into the clear opening)"]
+    require:
+      all:
+        - any:
+            - ge: [{fact: d.clear_width}, 41.5 in]
+            - not:
+                all:
+                  - {eq: [{fact: building.occupancy_group}, I-2]}
+                  - {fact: d.bed_movement}
+        - any:
+            - ge: [{fact: d.clear_width}, 32 in]
+            # Exception 1: R-2 and R-3 units, door not part of the required means of egress
+            - all:
+                - {in: [{fact: building.occupancy_group}, [R-2, R-3]]}
+                - {fact: d.in_dwelling_or_sleeping_unit}
+                - not: {fact: d.in_accessible_unit}
+                - not: {fact: d.part_of_required_means_of_egress}
+            # Exception 2: I-3 resident sleeping units, 28 in
+            - all:
+                - {eq: [{fact: building.occupancy_group}, I-3]}
+                - ge: [{fact: d.clear_width}, 28 in]
+                - {fact: d.to_resident_sleeping_unit}
+                - not: {fact: d.in_accessible_unit}
+            # Exception 6: I-1, R-2, R-3, R-4 units, interior egress doors
+            - all:
+                - {in: [{fact: building.occupancy_group}, [I-1, R-2, R-3, R-4]]}
+                - not: {fact: d.is_external}
+                - {fact: d.in_dwelling_or_sleeping_unit}
+                - not: {fact: d.in_accessible_unit}
+            # Exception 7: Type B units, user passage, 31.75 in
+            - all:
+                - ge: [{fact: d.clear_width}, 31.75 in]
+                - {fact: d.type_b_unit_user_passage}
+            # Exception 8: sauna, toilet, dressing, fitting or changing, 20 in
+            - all:
+                - ge: [{fact: d.clear_width}, 20 in]
+                - {fact: d.serves_sauna_toilet_or_dressing}
+            # Exception 3: storage closets under 10 sq ft
+            - {fact: d.storage_closet_under_10_sqft}
+            # §1010.1: not a means of egress door
+            - not: {fact: d.means_of_egress_door}
+
+  - name: "1010.1.1 height"
+    title: Door clear opening height is at least 80 in (78 in within a unit, 76 in at some unit exterior doors)
+    guidance: >
+      Raise the door head or use a taller door so the clear opening is at least 80 in
+      above the floor or threshold (78 in inside a dwelling or sleeping unit).
+    modality: obligation
+    for: {d: Door}
+    cite:
+      section: "1010.1.1"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1010.1.1
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        Door.height is read as the clear opening height; where only the scheduled
+        leaf height is known, an adapter reports that. Exception 4 ("within a dwelling
+        unit or sleeping unit") and Exception 5 ("in dwelling and sleeping units")
+        are both read through Door.in_dwelling_or_sleeping_unit. The inch values
+        apply: 2032 mm meets 80 in, but 1981 mm (78 in) and 1930 mm (76 in) are just
+        short.
+    require:
+      any:
+        - ge: [{fact: d.height}, 80 in]
+        # Exception 4
+        - all:
+            - ge: [{fact: d.height}, 78 in]
+            - {fact: d.in_dwelling_or_sleeping_unit}
+        # Exception 5
+        - all:
+            - ge: [{fact: d.height}, 76 in]
+            - {fact: d.is_external}
+            - {fact: d.in_dwelling_or_sleeping_unit}
+            - not: {fact: d.in_accessible_unit}
+            - not: {fact: d.unit_required_exit_door}
+        - not: {fact: d.means_of_egress_door}
+
+  # ------------------------------------------------------------------ stairs
+  - name: "1011.3"
+    title: Stairway headroom is at least 80 in (78 in for spiral stairways)
+    guidance: >
+      Raise the soffit, beam, or floor opening above the stair, or move the
+      obstruction, so there is at least 80 in clear measured vertically from the line
+      of the nosings over the full width of the stair and landings.
+    modality: obligation
+    for: {t: Stair}
+    cite:
+      section: "1011.3"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1011.3
+    status: draft
+    defers_to: ["1011.3 Exception 2 (floor-opening projection of up to 4¾ in in R-3, R-2 dwelling units, and accessory U)"]
+    require:
+      any:
+        - ge: [{fact: t.headroom}, 80 in]
+        - all:
+            - ge: [{fact: t.headroom}, 78 in]
+            - {fact: t.spiral}
+
+  - name: "1011.8"
+    title: A flight of stairs rises no more than 12 ft between floor levels or landings
+    guidance: >
+      Add an intermediate landing so that no single flight rises more than 12 ft.
+    modality: obligation
+    for: {t: Stair}
+    cite:
+      section: "1011.8"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1011.8
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        A stair whose total floor-to-floor rise is 12 ft or less passes. Otherwise the
+        rise of the tallest flight is taken as Stair.risers × Stair.riser_height,
+        reading Stair.risers as the risers of the tallest flight; if an adapter
+        reports the risers of the whole stair, this is the total rise and the check
+        is conservative. 12 ft is 3657.6 mm, so a flight of exactly the printed
+        3658 mm fails.
+    require:
+      any:
+        - le: [{fact: t.rise}, 12 ft]
+        - le: [{mul: [{fact: t.risers}, {fact: t.riser_height}]}, 12 ft]
+        # Exception: spiral stairways from technical production areas
+        - all:
+            - {fact: t.spiral}
+            - {fact: t.serves_technical_production_area}
+
+  # --------------------------------------------------------------- handrails
+  - name: "1014.2"
+    title: Stairway handrail height is 34 to 38 in above the nosings
+    guidance: >
+      Reset the handrail so its top is between 34 and 38 in above the tread nosings,
+      at a uniform height along the flight.
+    modality: obligation
+    for: {t: Stair}
+    cite:
+      section: "1014.2"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1014.2
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        A Stair element is a stairway (§1011.1 separates alternating tread devices
+        and ship's ladders from stairways), so the 30 to 34 in range for those is not
+        applied here. Stair.handrail_height is the height along the flight;
+        Exceptions 1 and 2 only let fittings and bendings at transitions exceed the
+        maximum, and Exception 3 covers stepped and ramped aisles, so none of them
+        changes this check.
+    defers_to: ["1014.2 alternating tread devices and ship's ladders (30 to 34 in)", "1014.2 uniformity", "1014.2 ramp handrails (the vocabulary has no ramp handrail height)"]
+    require:
+      all:
+        - ge: [{fact: t.handrail_height}, 34 in]
+        - le: [{fact: t.handrail_height}, 38 in]
+
+  # ------------------------------------------------------------------- ramps
+  - name: "1012.2"
+    title: Means of egress ramps are no steeper than 1:12; other pedestrian ramps no steeper than 1:8
+    guidance: >
+      Lengthen the ramp run (or add runs and landings) so the running slope is no
+      steeper than 1 in 12; a pedestrian ramp outside the means of egress may be up to
+      1 in 8.
+    modality: obligation
+    for: {r: Ramp}
+    cite:
+      section: "1012.2"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1012.2
+    status: draft
+    defers_to: ["1012.3 (cross slope)", "1030.14.1 (ramped aisles)"]
+    require:
+      any:
+        - le: [{fact: r.slope}, {div: [1, 12]}]
+        - all:
+            - le: [{fact: r.slope}, {div: [1, 8]}]
+            - not: {fact: r.means_of_egress}
+        # §1012.1 Exceptions 1 and 2: ramped aisles and curb ramps follow other rules
+        - {fact: r.assembly_aisle_or_curb_ramp}
+
+  - name: "1012.4"
+    title: A means of egress ramp run rises no more than 30 in
+    guidance: >
+      Break the ramp into runs of no more than 30 in rise each, with a level landing
+      between them.
+    modality: obligation
+    for: {r: Ramp}
+    cite:
+      section: "1012.4"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1012.4
+    status: draft
+    require:
+      any:
+        - le: [{fact: r.rise}, 30 in]
+        - not: {fact: r.means_of_egress}
+        - {fact: r.assembly_aisle_or_curb_ramp}
+        - {fact: r.parking_vehicle_ramp_exempt}
+
+  - name: "1012.5.1"
+    title: A means of egress ramp is at least 36 in clear and as wide as a corridor serving the same load
+    guidance: >
+      Widen the ramp so the clear width between handrails is at least 36 in and at
+      least what Table 1020.3 and 0.2 in per occupant (0.15 in where §1005.3.2
+      Exception 1 applies) require for a corridor serving the same occupant load.
+    modality: obligation
+    for: {r: Ramp}
+    cite:
+      section: "1012.5.1"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1012.5.1
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        "Not less than that required for corridors by Section 1020.3" is written as
+        one check per row of Table 1020.3 that could apply to a ramp, plus the
+        capacity of §1005.3.2. Taking every applicable row is the same as the
+        first-match order of min_corridor_width for these rows: the 36 in and 24 in
+        rows only relax the 44 in default, and the 36 in clear-width floor of this
+        section is at least as wide as either.
+    require:
+      any:
+        - all:
+            - ge: [{fact: r.clear_width}, 36 in]
+            - any:
+                - ge: [{fact: r.clear_width}, 44 in]
+                - lt: [{fact: r.occupant_load}, 50]
+                - {fact: r.within_dwelling_unit}
+                - {fact: r.mep_access_only}
+            - any:
+                - ge: [{fact: r.clear_width}, 72 in]
+                - not:
+                    all:
+                      - {eq: [{fact: building.occupancy_group}, E]}
+                      - ge: [{fact: r.occupant_load}, 100]
+            - any:
+                - ge: [{fact: r.clear_width}, 96 in]
+                - not:
+                    all:
+                      - {eq: [{fact: building.occupancy_group}, I-2]}
+                      - {fact: r.bed_movement_required}
+            - any:
+                - ge: [{fact: r.clear_width}, 72 in]
+                - not:
+                    all:
+                      - {fact: r.serves_stretcher_traffic}
+                      - {term: ambulatory_care_facility}
+            - ge: [{fact: r.clear_width}, {mul: [{term: egress_capacity_factor}, {fact: r.occupant_load}]}]
+        - not: {fact: r.means_of_egress}
+        - {fact: r.assembly_aisle_or_curb_ramp}
+        - {fact: r.parking_vehicle_ramp_exempt}
+
+  # --------------------------------------------------------------- dead ends
+  - name: "1020.5"
+    title: Dead-end corridors are no longer than 20 ft (30 or 50 ft under the exceptions)
+    guidance: >
+      Shorten the dead end, or extend the corridor to a second exit or exit access
+      doorway so it is no longer a dead end; in a building sprinklered per §903.3.1.1
+      the limit for most occupancies is 50 ft.
+    modality: obligation
+    for: {c: Corridor}
+    cite:
+      section: "1020.5"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1020.5
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        Exception 3 compares the dead end with 2.5 times its least width; this pack
+        uses Corridor.clear_width, the narrowest width of the whole corridor, which is
+        never wider than the dead end's least width, so the exception is applied
+        conservatively. The 20 ft check comes first because no row allows less.
+    require:
+      any:
+        - le: [{fact: c.dead_end_length}, 20 ft]
+        - le: [{fact: c.dead_end_length}, {term: max_dead_end_length, of: c}]
+        # Exception 3
+        - lt: [{fact: c.dead_end_length}, {mul: [2.5, {fact: c.clear_width}]}]
+        - not: {fact: c.more_than_one_exit_required}
+
+  # ---------------------------------------------------- number of exits: spaces
+  - name: "1006.2.1"
+    title: A space with one exit stays within Table 1006.2.1's occupant load and common path of egress travel
+    guidance: >
+      Add a second exit or exit access doorway from the space, or reduce its occupant
+      load or common path of egress travel to within Table 1006.2.1.
+    modality: obligation
+    for: {s: Space}
+    cite:
+      section: "1006.2.1"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.2.1
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        The design occupant load is the one stated on the drawings
+        (Space.stated_occupant_load); whether it is at least what §1004.5 gives is
+        the separate question the occupant_load term answers. Footnote e (common
+        path applies to R-3 only in a mixed occupancy building) is applied to the
+        R-3 and R-4 rows, both of which carry the mark.
+    defers_to: ["1006.2.1 Exception 1 (foyers and lobbies: cumulative occupant loads, §1004.2)", "1006.2.1 Exception 2 (Group I-2 care suites, §407.4)", "1006.2.2 (egress based on use)"]
+    require:
+      any:
+        - ge: [{fact: s.exits}, 2]
+        - all:
+            - ge: [{fact: s.exits}, 1]
+            - le: [{fact: s.design_occupant_load}, {term: max_one_exit_space_occupant_load}]
+            - any:
+                - all:
+                    - ne: [{term: max_one_exit_common_path, of: s}, not-permitted]
+                    - le: [{fact: s.common_path_of_travel}, {term: max_one_exit_common_path, of: s}]
+                # footnote e
+                - all:
+                    - {in: [{fact: building.occupancy_group}, [R-3, R-4]]}
+                    - not: {fact: building.mixed_occupancy}
+                # Exception 3
+                - {fact: s.unoccupied_mechanical}
+
+  - name: "1006.2.1.1"
+    title: A space with 501 to 1,000 occupants has three exits; with more than 1,000, four
+    guidance: >
+      Add exits or exit access doorways from the space: three for 501 to 1,000
+      occupants, four for more than 1,000.
+    modality: obligation
+    for: {s: Space}
+    cite:
+      section: "1006.2.1.1"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.2.1.1
+    status: draft
+    require:
+      all:
+        - any:
+            - ge: [{fact: s.exits}, 3]
+            - le: [{fact: s.design_occupant_load}, 500]
+        - any:
+            - ge: [{fact: s.exits}, 4]
+            - le: [{fact: s.design_occupant_load}, 1000]
+
+  # --------------------------------------------------- number of exits: storeys
+  - name: "1006.3.3"
+    title: Each storey has the exits Table 1006.3.3 requires, or one exit where §1006.3.4 permits
+    guidance: >
+      Provide another exit or exit access stairway from the storey (two for up to 500
+      occupants, three for 501 to 1,000, four above 1,000), or bring a single-exit
+      storey within the occupant load, dwelling-unit, and travel-distance limits of
+      Table 1006.3.4(1) or 1006.3.4(2).
+    modality: obligation
+    for: {f: Storey}
+    cite:
+      section: "1006.3.3"
+      table: "1006.3.3"
+      url: https://codes.iccsafe.org/s/IBC2024P1/chapter-10-means-of-egress/IBC2024P1-Ch10-Sec1006.3.3
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        Table 1006.3.3 (1-500: 2; 501-1,000: 3; more than 1,000: 4) is written as one
+        check per row, so a storey with four exits passes without its occupant load.
+        Storey.exits counts exits and exit access stairways or ramps to exits; that
+        the required number is maintained down to exit discharge is not checked.
+    defers_to: ["1006.3.1 (egress from occupied roofs)", "1006.3.2 (path of egress travel to common exits)"]
+    require:
+      any:
+        - all:
+            - ge: [{fact: f.exits}, 2]
+            - any:
+                - ge: [{fact: f.exits}, 3]
+                - le: [{fact: f.occupant_load}, 500]
+            - any:
+                - ge: [{fact: f.exits}, 4]
+                - le: [{fact: f.occupant_load}, 1000]
+        - all:
+            - ge: [{fact: f.exits}, 1]
+            - {term: single_exit_permitted, of: f}

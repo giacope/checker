@@ -1,0 +1,394 @@
+# 第2章第3節 階段: 令23条〜令25条, 令27条. These apply to every building, not only
+# to those in the scope of 令117条. Text from e-Gov 法令API v2, as of 2026-11-14
+# (revision 325CO0000000338_20261101_508CO0000000284). The table gives centimetres;
+# values here are in millimetres.
+
+tables:
+  - name: T23
+    title: 階段及びその踊場の幅並びに階段の蹴上げ及び踏面の寸法
+    cite:
+      section: "令23条1項 表"
+      table: "令23条1項 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_1
+      quote: 階段及びその踊場の幅並びに階段の蹴上げ及び踏面の寸法は、次の表によらなければならない。
+    key: Stair.category_23
+    columns: [width, riser, tread]
+    note: width is a minimum (以上), riser a maximum (以下), tread a minimum (以上).
+    rows:
+      - key: i
+        width: 1400 mm
+        riser: 160 mm
+        tread: 260 mm
+        row: （一）小学校（義務教育学校の前期課程を含む。）における児童用のもの
+        quote: （一）　小学校（義務教育学校の前期課程を含む。）における児童用のもの　一四〇以上　一六以下　二六以上
+      - key: ii
+        width: 1400 mm
+        riser: 180 mm
+        tread: 260 mm
+        row: （二）中学校、高等学校若しくは中等教育学校における生徒用のもの又は物品販売業を営む店舗で床面積の合計が千五百平方メートルを超えるもの、劇場、映画館、演芸場、観覧場、公会堂若しくは集会場における客用のもの
+        quote: （二）　中学校（義務教育学校の後期課程を含む。）、高等学校若しくは中等教育学校における生徒用のもの又は物品販売業（物品加工修理業を含む。第百三十条の五の三を除き、以下同じ。）を営む店舗で床面積の合計が千五百平方メートルを超えるもの、劇場、映画館、演芸場、観覧場、公会堂若しくは集会場における客用のもの　一四〇以上　一八以下　二六以上
+      - key: iii
+        width: 1200 mm
+        riser: 200 mm
+        tread: 240 mm
+        row: （三）直上階の居室の床面積の合計が二百平方メートルを超える地上階又は居室の床面積の合計が百平方メートルを超える地階若しくは地下工作物内におけるもの
+        quote: （三）　直上階の居室の床面積の合計が二百平方メートルを超える地上階又は居室の床面積の合計が百平方メートルを超える地階若しくは地下工作物内におけるもの　一二〇以上　二〇以下　二四以上
+      - key: iv
+        width: 750 mm
+        riser: 220 mm
+        tread: 210 mm
+        row: （四）（一）から（三）までに掲げる階段以外のもの
+        quote: （四）　（一）から（三）までに掲げる階段以外のもの　七五以上　二二以下　二一以上
+
+terms:
+  - name: stair_category_23
+    title: 令23条1項の表の階段の種別 (stair type in the 令23条 table)
+    for: {s: Stair}
+    cite:
+      section: "令23条1項 表"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_1
+    interpretation:
+      by: pack
+      note: >
+        (1) The table does not say which row wins when a stair fits several; the
+        rows are taken in printed order, and each earlier row is at least as strict
+        as every later one in all three dimensions. (2) In row (二), 「客用のもの」 is
+        read as qualifying both the store of more than 1,500 m2 and the theaters;
+        stairs of such a store that only staff use fall to (三) or (四). (3) For row
+        (三), the 「直上階」 of an above-ground stair is the floor directly above the
+        floor the stair rises from. (4) A 義務教育学校 is entered as
+        school_elementary or school_secondary for the stage whose pupils use the
+        stair.
+    value:
+      cases:
+        - when:
+            all:
+              - {eq: [{fact: building.principal_use}, school_elementary]}
+              - {fact: s.for_pupils}
+          then: i
+          cite:
+            section: "令23条1項 表(一)"
+            row: （一）小学校（義務教育学校の前期課程を含む。）における児童用のもの
+        - when:
+            all:
+              - {eq: [{fact: building.principal_use}, school_secondary]}
+              - {fact: s.for_pupils}
+          then: ii
+          cite:
+            section: "令23条1項 表(二)"
+            row: （二）中学校、高等学校若しくは中等教育学校における生徒用のもの
+        - when:
+            all:
+              - {term: large_retail_store}
+              - {fact: s.for_customers}
+          then: ii
+          cite:
+            section: "令23条1項 表(二)"
+            row: （二）物品販売業を営む店舗で床面積の合計が千五百平方メートルを超えるものにおける客用のもの
+        - when:
+            all:
+              - {in: [{fact: building.principal_use}, [theater, cinema, entertainment_hall, spectator_facility, public_hall, assembly_hall]]}
+              - {fact: s.for_customers}
+          then: ii
+          cite:
+            section: "令23条1項 表(二)"
+            row: （二）劇場、映画館、演芸場、観覧場、公会堂若しくは集会場における客用のもの
+        - when:
+            all:
+              - {not: {fact: s.in_basement}}
+              - {gt: [{fact: s.habitable_area_of_floor_above}, 200 m2]}
+          then: iii
+          cite:
+            section: "令23条1項 表(三)"
+            row: （三）直上階の居室の床面積の合計が二百平方メートルを超える地上階におけるもの
+        - when:
+            all:
+              - {fact: s.in_basement}
+              - {gt: [{fact: s.habitable_area_of_floor}, 100 m2]}
+          then: iii
+          cite:
+            section: "令23条1項 表(三)"
+            row: （三）居室の床面積の合計が百平方メートルを超える地階若しくは地下工作物内におけるもの
+        - else: iv
+          cite:
+            section: "令23条1項 表(四)"
+            row: （四）（一）から（三）までに掲げる階段以外のもの
+
+  - name: min_stair_width
+    title: 階段及びその踊場の幅の最小値 (minimum stair and landing width)
+    for: {s: Stair}
+    cite:
+      section: "令23条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_1
+      quote: ただし、屋外階段の幅は、第百二十条又は第百二十一条の規定による直通階段にあつては九十センチメートル以上、その他のものにあつては六十センチメートル以上（中略）とすることができる。
+    note: The width is measured per 令23条3項 (see the Stair.width predicate).
+    interpretation:
+      by: pack
+      note: >
+        The proviso 「とすることができる」 relaxes the table, so an outdoor stair takes
+        the smaller of the table value and 90 cm (direct stair) or 60 cm (other).
+        An outdoor direct stair of row (四) therefore stays at 75 cm. Some
+        authorities read 90 cm as the minimum for every outdoor direct stair;
+        confirm locally.
+    defers_to: ["令23条4項（国土交通大臣が定めた構造方法）"]
+    value:
+      cases:
+        - when: {fact: s.special_purpose_only}
+          then: not-applicable
+          cite:
+            section: "令27条"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_27
+            row: 昇降機機械室用階段、物見塔用階段その他特殊の用途に専用する階段
+        - when: {fact: s.uses_mlit_structure_23_4}
+          then: not-applicable
+          cite:
+            section: "令23条4項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_4
+            row: 国土交通大臣が定めた構造方法を用いる階段
+        - when:
+            all:
+              - {fact: s.outdoor}
+              - {fact: s.direct_stair_120_121}
+          then:
+            min:
+              - {lookup: T23, key: {term: stair_category_23, of: s}, column: width}
+              - 900 mm
+          cite:
+            section: "令23条1項ただし書"
+            row: 屋外階段で第百二十条又は第百二十一条の規定による直通階段にあつては九十センチメートル以上
+        - when: {fact: s.outdoor}
+          then:
+            min:
+              - {lookup: T23, key: {term: stair_category_23, of: s}, column: width}
+              - 600 mm
+          cite:
+            section: "令23条1項ただし書"
+            row: 屋外階段でその他のものにあつては六十センチメートル以上
+        - else: {lookup: T23, key: {term: stair_category_23, of: s}, column: width}
+          cite:
+            section: "令23条1項 表"
+            row: 階段及びその踊場の幅（表による）
+
+  - name: max_stair_riser
+    title: 蹴上げの寸法の最大値 (maximum riser)
+    for: {s: Stair}
+    cite:
+      section: "令23条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_1
+      quote: 住宅の階段（共同住宅の共用の階段を除く。）の蹴上げは二十三センチメートル以下（中略）とすることができる。
+    interpretation:
+      by: pack
+      note: The proviso relaxes the table, so a dwelling stair takes the larger of the table value and 23 cm.
+    defers_to: ["令23条4項（国土交通大臣が定めた構造方法）"]
+    value:
+      cases:
+        - when: {fact: s.special_purpose_only}
+          then: not-applicable
+          cite:
+            section: "令27条"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_27
+            row: 昇降機機械室用階段、物見塔用階段その他特殊の用途に専用する階段
+        - when: {fact: s.uses_mlit_structure_23_4}
+          then: not-applicable
+          cite:
+            section: "令23条4項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_4
+            row: 国土交通大臣が定めた構造方法を用いる階段
+        - when: {fact: s.within_dwelling}
+          then:
+            max:
+              - {lookup: T23, key: {term: stair_category_23, of: s}, column: riser}
+              - 230 mm
+          cite:
+            section: "令23条1項ただし書"
+            row: 住宅の階段（共同住宅の共用の階段を除く。）の蹴上げは二十三センチメートル以下
+        - else: {lookup: T23, key: {term: stair_category_23, of: s}, column: riser}
+          cite:
+            section: "令23条1項 表"
+            row: 蹴上げの寸法（表による）
+
+  - name: min_stair_tread
+    title: 踏面の寸法の最小値 (minimum tread)
+    for: {s: Stair}
+    cite:
+      section: "令23条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_1
+      quote: 住宅の階段（共同住宅の共用の階段を除く。）の（中略）踏面は十五センチメートル以上とすることができる。
+    note: Tread of winders is measured 30 cm from the narrow end (令23条2項; see the Stair.tread predicate).
+    interpretation:
+      by: pack
+      note: The proviso relaxes the table, so a dwelling stair takes the smaller of the table value and 15 cm.
+    defers_to: ["令23条4項（国土交通大臣が定めた構造方法）"]
+    value:
+      cases:
+        - when: {fact: s.special_purpose_only}
+          then: not-applicable
+          cite:
+            section: "令27条"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_27
+            row: 昇降機機械室用階段、物見塔用階段その他特殊の用途に専用する階段
+        - when: {fact: s.uses_mlit_structure_23_4}
+          then: not-applicable
+          cite:
+            section: "令23条4項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_4
+            row: 国土交通大臣が定めた構造方法を用いる階段
+        - when: {fact: s.within_dwelling}
+          then:
+            min:
+              - {lookup: T23, key: {term: stair_category_23, of: s}, column: tread}
+              - 150 mm
+          cite:
+            section: "令23条1項ただし書"
+            row: 住宅の階段（共同住宅の共用の階段を除く。）の踏面は十五センチメートル以上
+        - else: {lookup: T23, key: {term: stair_category_23, of: s}, column: tread}
+          cite:
+            section: "令23条1項 表"
+            row: 踏面の寸法（表による）
+
+  - name: max_stair_rise_without_landing
+    title: 踊場を設ける高さの間隔 (maximum rise between landings)
+    for: {s: Stair}
+    cite:
+      section: "令24条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_24-Pr_1
+      quote: 前条第一項の表の（一）又は（二）に該当する階段でその高さが三メートルをこえるものにあつては高さ三メートル以内ごとに、その他の階段でその高さが四メートルをこえるものにあつては高さ四メートル以内ごとに踊場を設けなければならない。
+    value:
+      cases:
+        - when: {fact: s.special_purpose_only}
+          then: not-applicable
+          cite:
+            section: "令27条"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_27
+            row: 昇降機機械室用階段、物見塔用階段その他特殊の用途に専用する階段
+        - when: {in: [{term: stair_category_23, of: s}, [i, ii]]}
+          then: 3 m
+          cite: {row: 前条第一項の表の（一）又は（二）に該当する階段 — 高さ三メートル以内ごと}
+        - else: 4 m
+          cite: {row: その他の階段 — 高さ四メートル以内ごと}
+
+  - name: min_landing_depth
+    title: 直階段の踊場の踏幅の最小値 (minimum landing depth of a straight stair)
+    for: {s: Stair}
+    cite:
+      section: "令24条2項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_24-Pr_2
+      quote: 前項の規定によつて設ける直階段の踊場の踏幅は、一・二メートル以上としなければならない。
+    value:
+      cases:
+        - when: {fact: s.special_purpose_only}
+          then: not-applicable
+          cite:
+            section: "令27条"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_27
+            row: 昇降機機械室用階段、物見塔用階段その他特殊の用途に専用する階段
+        - when: {not: {fact: s.straight}}
+          then: not-applicable
+          cite: {row: 直階段以外の階段}
+        - when: {le: [{fact: s.height}, {term: max_stair_rise_without_landing, of: s}]}
+          then: not-required
+          cite:
+            section: "令24条1項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_24-Pr_1
+            row: 高さが三メートル（四メートル）をこえない階段 — 前項の規定によつて設ける踊場がない
+        - else: 1.2 m
+          cite: {row: 前項の規定によつて設ける直階段の踊場の踏幅}
+
+  - name: intermediate_handrail_required
+    title: 階段の中間に手すりが必要か (is an intermediate handrail required?)
+    for: {s: Stair}
+    cite:
+      section: "令25条3項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_25-Pr_3
+      quote: 階段の幅が三メートルをこえる場合においては、中間に手すりを設けなければならない。ただし、けあげが十五センチメートル以下で、かつ、踏面が三十センチメートル以上のものにあつては、この限りでない。
+    interpretation:
+      by: pack
+      note: >
+        令25条4項 exempts 「高さ一メートル以下の階段の部分」. v0 has no stair parts,
+        so the exemption is applied to a whole stair of height 1 m or less only.
+        The width compared with 3 m is the Stair.width fact (measured per 令23条3項).
+    value:
+      cases:
+        - when: {fact: s.special_purpose_only}
+          then: not-applicable
+          cite:
+            section: "令27条"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_27
+            row: 昇降機機械室用階段、物見塔用階段その他特殊の用途に専用する階段
+        - when: {le: [{fact: s.height}, 1 m]}
+          then: not-applicable
+          cite:
+            section: "令25条4項"
+            url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_25-Pr_4
+            row: 高さ一メートル以下の階段の部分
+        - when: {le: [{fact: s.width}, 3 m]}
+          then: false
+          cite: {row: 階段の幅が三メートル以下}
+        - when:
+            all:
+              - {le: [{fact: s.riser}, 150 mm]}
+              - {ge: [{fact: s.tread}, 300 mm]}
+          then: false
+          cite: {row: ただし書 — けあげが十五センチメートル以下で、かつ、踏面が三十センチメートル以上のもの}
+        - else: true
+          cite: {row: 階段の幅が三メートルをこえる場合}
+
+norms:
+  - name: "令23条1項"
+    title: 階段及びその踊場の幅、蹴上げ及び踏面が令23条1項に適合する
+    modality: obligation
+    for: {s: Stair}
+    cite:
+      section: "令23条1項"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_23-Pr_1
+    require:
+      all:
+        - any:
+            - {eq: [{term: min_stair_width, of: s}, not-applicable]}
+            - {ge: [{fact: s.width}, {term: min_stair_width, of: s}]}
+        - any:
+            - {eq: [{term: max_stair_riser, of: s}, not-applicable]}
+            - {le: [{fact: s.riser}, {term: max_stair_riser, of: s}]}
+        - any:
+            - {eq: [{term: min_stair_tread, of: s}, not-applicable]}
+            - {ge: [{fact: s.tread}, {term: min_stair_tread, of: s}]}
+
+  - name: "令24条"
+    title: 踊場の位置及び踏幅が令24条に適合する
+    modality: obligation
+    for: {s: Stair}
+    cite:
+      section: "令24条"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_24
+    require:
+      all:
+        - any:
+            - {eq: [{term: max_stair_rise_without_landing, of: s}, not-applicable]}
+            - {le: [{fact: s.max_rise_between_landings}, {term: max_stair_rise_without_landing, of: s}]}
+        - any:
+            - {in: [{term: min_landing_depth, of: s}, [not-applicable, not-required]]}
+            - {ge: [{fact: s.landing_depth}, {term: min_landing_depth, of: s}]}
+
+  - name: "令25条"
+    title: 階段の手すり及び側壁が令25条に適合する
+    modality: obligation
+    for: {s: Stair}
+    cite:
+      section: "令25条"
+      url: https://laws.e-gov.go.jp/law/325CO0000000338/20261101_508CO0000000284#Mp-Ch_2-Se_3-At_25
+    interpretation:
+      by: pack
+      note: 令25条4項 is applied to a whole stair of height 1 m or less only (see intermediate_handrail_required).
+    require:
+      all:
+        - any:
+            - {fact: s.special_purpose_only}
+            - {le: [{fact: s.height}, 1 m]}
+            - {fact: s.has_handrail}
+        - any:
+            - {fact: s.special_purpose_only}
+            - {le: [{fact: s.height}, 1 m]}
+            - {fact: s.sides_enclosed}
+        - any:
+            - {not: {eq: [{term: intermediate_handrail_required, of: s}, true]}}
+            - {fact: s.has_intermediate_handrail}

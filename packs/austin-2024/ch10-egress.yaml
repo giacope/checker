@@ -1,0 +1,125 @@
+# Austin's substitute Table 1004.5, from §25-12-3 of Ordinance No. 20250410-045
+# (pages 8 to 11). Differences from the 2024 IBC table:
+#   - Standing space is 7 net, not 5 net.
+#   - No "Concentrated business use areas" row (the IBC row points to §1004.8,
+#     which Austin does not delete).
+#   - Adds "Information technology equipment facilities", 300 gross.
+#   - "Assembly with fixed seats" points to §1004.5, the table's own section;
+#     the IBC row points to §1004.6. Likely a leftover cross-reference to confirm
+#     with the city.
+
+tables:
+  - name: T1004.5
+    title: Maximum floor area allowances per occupant (Austin substitute)
+    cite:
+      section: "1004.5"
+      table: "1004.5"
+      url: https://services.austintexas.gov/edims/document.cfm?id=453143
+      note: City Code §25-12-3, substitute Table 1004.5 (ordinance pages 8 to 11)
+    key: Space.function
+    columns: [factor, basis]
+    rows:
+      - {key: accessory-storage-mechanical, factor: 300 sqft, basis: gross, row: "Accessory storage areas, mechanical equipment room"}
+      - {key: agricultural-building, factor: 300 sqft, basis: gross, row: Agricultural building}
+      - {key: aircraft-hangars, factor: 500 sqft, basis: gross, row: Aircraft hangars}
+      - {key: airport-baggage-claim, factor: 20 sqft, basis: gross, row: Airport terminal — Baggage claim}
+      - {key: airport-baggage-handling, factor: 300 sqft, basis: gross, row: Airport terminal — Baggage handling}
+      - {key: airport-concourse, factor: 100 sqft, basis: gross, row: Airport terminal — Concourse}
+      - {key: airport-waiting, factor: 15 sqft, basis: gross, row: Airport terminal — Waiting areas}
+      - {key: assembly-gaming-floors, factor: 11 sqft, basis: gross, row: "Assembly — Gaming floors (keno, slots, etc.)"}
+      - {key: assembly-exhibit-gallery-museum, factor: 30 sqft, basis: net, row: Assembly — Exhibit Gallery and Museum}
+      - {key: assembly-fixed-seats, see: "1004.5", row: Assembly with fixed seats, quote: "Assembly with fixed seats See Section 1004.5"}
+      - {key: assembly-concentrated, factor: 7 sqft, basis: net, row: Assembly without fixed seats — Concentrated}
+      - {key: assembly-standing, factor: 7 sqft, basis: net, row: Assembly without fixed seats — Standing space, quote: "Standing space 7 net"}
+      - {key: assembly-unconcentrated, factor: 15 sqft, basis: net, row: "Assembly without fixed seats — Unconcentrated (tables and chairs)"}
+      - {key: bowling-centers, factor: 7 sqft, basis: net, row: "Bowling centers, allow 5 persons for each lane including 15 feet of runway, and for additional areas"}
+      - {key: business, factor: 150 sqft, basis: gross, row: Business areas}
+      - {key: courtrooms, factor: 40 sqft, basis: net, row: Courtrooms—other than fixed seating areas}
+      - {key: day-care, factor: 35 sqft, basis: net, row: Daycare}
+      - {key: dormitories, factor: 50 sqft, basis: gross, row: Dormitories}
+      - {key: educational-classroom, factor: 20 sqft, basis: net, row: Educational — Classroom area}
+      - {key: educational-shops-vocational, factor: 50 sqft, basis: net, row: Educational — Shops and other vocational room areas}
+      - {key: exercise-rooms, factor: 50 sqft, basis: gross, row: Exercise rooms}
+      - {key: h5-fabrication-manufacturing, factor: 200 sqft, basis: gross, row: Group H-5 Fabrication and manufacturing areas}
+      - {key: industrial, factor: 100 sqft, basis: gross, row: Industrial areas}
+      - {key: information-technology-equipment, factor: 300 sqft, basis: gross, row: Information technology equipment facilities}
+      - {key: institutional-inpatient, factor: 240 sqft, basis: gross, row: Institutional areas — Inpatient treatment areas}
+      - {key: institutional-outpatient, factor: 100 sqft, basis: gross, row: Institutional areas — Outpatient areas}
+      - {key: institutional-sleeping, factor: 120 sqft, basis: gross, row: Institutional areas — Sleeping areas}
+      - {key: kitchens-commercial, factor: 200 sqft, basis: gross, row: "Kitchens, commercial"}
+      - {key: library-reading-rooms, factor: 50 sqft, basis: net, row: Library — Reading rooms}
+      - {key: library-stack-area, factor: 100 sqft, basis: gross, row: Library — Stack area}
+      - {key: locker-rooms, factor: 50 sqft, basis: gross, row: Locker rooms}
+      - {key: mall-buildings, see: "402.8.2", row: Mall buildings—covered and open}
+      - {key: mercantile, factor: 60 sqft, basis: gross, row: Mercantile}
+      - {key: storage-stock-shipping, factor: 300 sqft, basis: gross, row: "Storage, stock, shipping areas"}
+      - {key: parking-garages, factor: 200 sqft, basis: gross, row: Parking garages}
+      - {key: residential, factor: 200 sqft, basis: gross, row: Residential}
+      - {key: skating-rink-pool, factor: 50 sqft, basis: gross, row: "Skating rinks, swimming pools — Rink and pool"}
+      - {key: skating-decks, factor: 15 sqft, basis: gross, row: "Skating rinks, swimming pools — Decks"}
+      - {key: stages-platforms, factor: 15 sqft, basis: net, row: Stages and platforms}
+      - {key: warehouses, factor: 500 sqft, basis: gross, row: Warehouses}
+
+# Austin's Table 1006.3.4(1), from §25-12-3 of Ordinance No. 20250410-045
+# (pages 16 and 17), and its new §1006.3.4.2 (pages 17 and 18). The IBC table
+# allows a single exit from R-2 stories up to the third story above grade plane;
+# Austin's allows it up to the fifth, and from occupiable roofs over the first to
+# fourth story, and adds footnote d sending five-story buildings, and four-story
+# buildings with an occupiable roof above the third story, to §1006.3.4.2.
+# §25-12-1(B) does not list Table 1006.3.4(1) among the deleted provisions,
+# although §25-12-3 says each of its provisions substitutes a deleted one or is
+# an addition; this pack applies the printed substitute table.
+
+predicates:
+  - name: building.occupiable_roof_above_third_story
+    label: the building has an occupiable roof above the third story
+    type: bool
+    kind: given
+    refers_to: ["Austin Table 1006.3.4(1) footnote d"]
+
+  - name: building.meets_1006_3_4_2
+    label: the single-exit R-2 building meets every item of Austin §1006.3.4.2 (items 1 to 12)
+    type: bool
+    kind: given
+    refers_to: ["Austin 1006.3.4.2"]
+
+terms:
+  - name: single_exit_r2_dwelling_units
+    title: May a storey of a Group R-2 occupancy of dwelling units have one exit (Austin Table 1006.3.4(1))?
+    for: {f: Storey}
+    cite:
+      section: "1006.3.4"
+      table: "1006.3.4(1)"
+      url: https://services.austintexas.gov/edims/document.cfm?id=453143
+      note: City Code §25-12-3, substitute Table 1006.3.4(1) (ordinance pages 16 and 17)
+    status: draft
+    interpretation:
+      by: pack
+      note: >
+        Footnote d names five-story buildings and four-story buildings with an
+        occupiable roof above the third story; buildings of six or more stories are
+        not named, so the footnote is not applied to their lower stories.
+    defers_to: ["Austin Table 1006.3.4(1) footnote c and the occupiable-roof rows"]
+    value:
+      cases:
+        - when: {in: [{fact: f.position}, [lower-below, first-below, first, second, third, fourth, fifth]]}
+          cite:
+            row: "Basement, first, second, third, fourth, or fifth story above grade plane — R-2 a, b, c, d: 4 dwelling units, 125 feet"
+            quote: "Basement, first, second, third, fourth, or fifth story above grade plane and occupiable roofs over the first, second, third, or fourth story | R-2a,b,c,d | 4 dwelling units | 125 feet"
+          then:
+            all:
+              - {in: [{fact: building.sprinkler_system}, [nfpa13, nfpa13r]]}
+              - {fact: building.emergency_escape_openings}
+              - le: [{fact: f.dwelling_units}, 4]
+              - le: [{fact: f.max_travel_distance}, 125 ft]
+              - any:
+                  - lt: [{fact: building.storeys_above_ground}, 4]
+                  - gt: [{fact: building.storeys_above_ground}, 5]
+                  - all:
+                      - eq: [{fact: building.storeys_above_ground}, 4]
+                      - not: {fact: building.occupiable_roof_above_third_story}
+                  - {fact: building.meets_1006_3_4_2}
+        - else: false
+          cite:
+            row: "Sixth story above grade plane and higher — NP"
+            quote: "Sixth story above grade plane and higher | NP | NA | NA"

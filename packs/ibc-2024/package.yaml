@@ -1,0 +1,14 @@
+package: ibc-2024
+version: 0.1.0
+title: International Building Code, 2024 edition
+publisher: International Code Council
+source_url: https://codes.iccsafe.org/content/IBC2024P1
+# ICC holds copyright in the model code text. Packs store rule logic, table
+# values, short row labels, and links; full text stays on ICC Digital Codes
+# until there is a license.
+text_policy: link-only
+scope: >
+  Starter set for Chapter 10 (Means of egress): occupant load factors, egress
+  capacity factors, exit access travel distance, and corridor width, plus the
+  Chapter 2 definitions they use. Every element is a draft until a code
+  professional reviews it.

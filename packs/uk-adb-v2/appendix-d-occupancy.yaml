@@ -1,0 +1,137 @@
+# Appendix D, Methods of measurement: occupant number (D1, D2, Table D1).
+# PDF pages 185-186 (printed pages 173-174).
+
+tables:
+  - name: TD1
+    title: Floor space factors
+    cite:
+      section: "ADB2 Table D1"
+      table: "D1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=186
+    key: Space.accommodation
+    columns: [factor, persons_per_parking_space]
+    note: >-
+      factor is the floor space factor in m2 per person. Row 15 (car park) is
+      given as persons per parking space, not as a factor.
+    defers_to:
+      - "ADB2 Table D1 note 1 (floor space factor from actual data taken from similar premises)"
+      - "ADB2 Table D1 note 2 (accommodation not directly covered: a reasonable value based on a similar use)"
+      - "ADB2 Table D1 note 3 (most onerous factor where a part has more than one type of accommodation)"
+      - "ADB2 Table D1 note 4 (concourses in sports grounds: Concourses, Football Licensing Authority)"
+    rows:
+      - key: standing-spectator-or-bar-near-serving-point
+        factor: 0.3 m2
+        row: "1. Standing spectator areas, bar areas (within 2m of serving point), similar refreshment areas"
+      - key: assembly-hall-or-bar-without-fixed-seating
+        factor: 0.5 m2
+        row: "2. Amusement arcade, assembly hall (including a general purpose place of assembly), bingo hall, club, crush hall, dance floor or hall, venue for pop concerts and similar events and bar areas without fixed seating"
+      - key: concourse-or-queuing-area
+        factor: 0.7 m2
+        row: "3. Concourse or queuing area"
+      - key: committee-room-dining-room-restaurant-meeting-room
+        factor: 1.0 m2
+        row: "4. Committee room, common room, conference room, dining room, licensed betting office (public area), lounge or bar (other than in (1) above), meeting room, reading room, restaurant, staff room or waiting room"
+        note: "Note 5: alternatively the occupant number may be taken as the number of fixed seats provided, if the occupants will normally be seated."
+      - key: exhibition-hall-or-studio
+        factor: 1.5 m2
+        row: "5. Exhibition hall or studio (film, radio, television, recording)"
+      - key: skating-rink
+        factor: 2.0 m2
+        row: "6. Skating rink"
+      - key: shop-sales-area
+        factor: 2.0 m2
+        row: "7. Shop sales area"
+        note: >-
+          Note 6: Shops excluding those under item 10, but including:
+          supermarkets and department stores (main sales areas), shops for
+          personal services, such as hairdressing, and shops for the delivery or
+          collection of goods for cleaning, repair or other treatment or for
+          members of the public themselves carrying out such cleaning, repair or
+          other treatment.
+      - key: art-gallery-dormitory-factory-museum-workshop
+        factor: 5.0 m2
+        row: "8. Art gallery, dormitory, factory production area, museum or workshop"
+      - key: office
+        factor: 6.0 m2
+        row: "9. Office"
+      - key: shop-sales-area-bulky-goods
+        factor: 7.0 m2
+        row: "10. Shop sales area"
+        note: >-
+          Note 7: Shops (excluding those in covered shopping complexes but
+          including department stores) trading predominantly in furniture, floor
+          coverings, cycles, prams, large domestic appliances or other bulky
+          goods, or trading on a wholesale self-selection basis (cash and carry).
+      - key: kitchen-or-library
+        factor: 7.0 m2
+        row: "11. Kitchen or library"
+      - key: bedroom-or-study-bedroom
+        factor: 8.0 m2
+        row: "12. Bedroom or study-bedroom"
+      - key: bed-sitting-room-billiards-snooker
+        factor: 10.0 m2
+        row: "13. Bed-sitting room, billiards or snooker room or hall"
+      - key: storage-and-warehousing
+        factor: 30.0 m2
+        row: "14. Storage and warehousing"
+      - key: car-park
+        persons_per_parking_space: 2
+        row: "15. Car park — Two persons per parking space"
+
+terms:
+  - name: floor_space_factor
+    title: Floor space factor (m2 per person)
+    for: {s: Space}
+    cite:
+      section: "ADB2 Table D1"
+      table: "D1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=186
+    status: draft
+    value:
+      cases:
+        - when: {eq: [{fact: s.accommodation}, car-park]}
+          then: not-applicable
+          cite: {row: "15. Car park — Two persons per parking space (no floor space factor)"}
+        - else: {lookup: TD1, key: {fact: s.accommodation}, column: factor}
+          cite: {row: Floor space factor (m2/person)}
+
+  - name: occupant_number
+    title: Occupant number of a room or storey from the floor space factors
+    for: {s: Space}
+    cite:
+      section: "ADB2 D1"
+      url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=185
+      quote: >-
+        The number of occupants of a room, storey, building or part of a building
+        is either of the following. a. The maximum number of people it is
+        designed to hold. b. In buildings other than dwellings, the number of
+        people calculated by dividing the area of a room or storey(s) (m2) by a
+        floor space factor (m2 per person) such as given in Table D1 for guidance.
+    interpretation:
+      by: pack
+      note: >-
+        (1) This term computes D1(b). Where the designed maximum number (D1(a))
+        is known, use it instead of this term; v0 cannot choose between a known
+        and a computed value. (2) D1 does not say how to round; this pack rounds
+        up to a whole person. (3) The area is Space.floor_area measured as in D2.
+    defers_to:
+      - "ADB2 D1(a) (the maximum number of people the room is designed to hold)"
+      - "ADB2 Table D1 note 5 (number of fixed seats)"
+    status: draft
+    value:
+      cases:
+        - when: {eq: [{fact: s.accommodation}, car-park]}
+          then:
+            mul:
+              - {fact: s.parking_spaces}
+              - {lookup: TD1, key: {fact: s.accommodation}, column: persons_per_parking_space}
+          cite:
+            section: "ADB2 Table D1"
+            url: https://assets.publishing.service.gov.uk/media/6aa3bb7492e72b8ac437f145/AD_B2_2026.pdf#page=186
+            row: "15. Car park — Two persons per parking space"
+        - else:
+            ceil:
+              div:
+                - {fact: s.floor_area}
+                - {lookup: TD1, key: {fact: s.accommodation}, column: factor}
+          cite: {row: "D1(b) area of the room or storey (m2) divided by the floor space factor (m2 per person)"}
