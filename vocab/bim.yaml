@@ -1,0 +1,99 @@
+# Vocabulary for checking buildings against building codes.
+#
+# The contract between adapters (IFC models, drawing readers) and rule packs, the
+# counterpart of vocab/code.yaml. Attributes are descriptive measurements in any
+# unit; jurisdiction classifications (IBC occupancy group, 法別表第一 use, ADB purpose
+# group, "is this a direct stair") are not here: they come from a jurisdiction
+# profile, or from judged predicates in a pack. A pack predicate whose name differs
+# from the vocabulary names it with `vocab: <Type>.<attr>`. What the designer *states*
+# on the drawings (a code-analysis note saying "OCCUPANCY: B") is a measured fact
+# about the drawings, kept apart from the classification itself: the app offers it as
+# the suggested answer to the profile question, and a reviewer confirms it.
+#
+# Locators ("at"):
+#   ifc:<GlobalId>                                  an IFC model element
+#   <file>#page=<n>&bbox=<x0>,<y0>,<x1>,<y1>        a region of a drawing sheet (PDF or image):
+#                                                   page from 1, bbox in PDF points (1/72 in)
+#                                                   from the top-left corner of the page
+#   <file>#layout=<name>&bbox=<x0>,<y0>,<x1>,<y1>   a region of a DXF layout, in drawing units
+#                                                   with y up, as the file stores it
+#
+# Element ids, so the same thing read from a model and from the drawings merges:
+#   door:<mark>, space:<number>, stair:<name>, storey:<name>, corridor:<id>, ramp:<id>
+# with the mark, room number, or name as written; an element with no mark keeps
+# its source's own id (an IFC GlobalId).
+domain: bim
+subject: building
+
+types:
+  building:
+    description: The building as a whole.
+    attrs:
+      storeys_above_ground: {type: number, kind: measured}
+      storeys_below_ground: {type: number, kind: measured}
+      total_floor_area:     {type: area, kind: measured, label: sum of the floor areas of all storeys}
+      largest_storey_area:  {type: area, kind: measured}
+      building_height:      {type: length, kind: measured, label: height from grade plane to the highest roof}
+      sprinkler_system:     {type: enum, kind: given, values: [nfpa13, nfpa13r, nfpa13d, none], label: automatic sprinkler system throughout, by installation standard}
+      stated_occupancy_classification: {type: text, kind: measured, label: occupancy classification as stated on the drawings}
+      stated_construction_type:        {type: text, kind: measured, label: construction type as stated on the drawings}
+      stated_code_basis:               {type: text, kind: measured, label: building code and edition the drawings say they follow}
+
+  Storey:
+    description: One storey (IfcBuildingStorey, or a floor plan sheet).
+    attrs:
+      elevation:        {type: length, kind: measured}
+      floor_area:       {type: area, kind: measured}
+      exits:            {type: number, kind: measured, label: exits and exit-access stairways that serve the storey}
+      max_travel_distance: {type: length, kind: measured, label: longest travel distance to an exit on the storey}
+
+  Space:
+    description: A room or a floor area, and the escape route from it.
+    attrs:
+      name:            {type: text, kind: measured}
+      number:          {type: text, kind: measured, label: room number}
+      storey:          {type: text, kind: measured}
+      floor_area:      {type: area, kind: measured}
+      travel_distance: {type: length, kind: measured, label: longest travel distance to an exit, along the escape route}
+      common_path_of_travel: {type: length, kind: measured}
+      stated_occupant_load:  {type: number, kind: measured, label: occupant load as stated on the drawings}
+      exits:           {type: number, kind: measured, label: exits or exit-access doorways from the space}
+
+  Stair:
+    description: A stair (IfcStair), from one floor to the next.
+    attrs:
+      width:          {type: length, kind: measured, label: clear width of the flights}
+      riser_height:   {type: length, kind: measured}
+      tread_depth:    {type: length, kind: measured}
+      risers:         {type: number, kind: measured, label: number of risers in the flight}
+      rise:           {type: length, kind: measured, label: total rise of the stair}
+      headroom:       {type: length, kind: measured}
+      handrail_height: {type: length, kind: measured}
+      occupant_load:  {type: number, kind: measured, label: people the stair serves (derived from the areas it serves and a jurisdiction's occupant factors)}
+      is_external:    {type: bool, kind: measured}
+
+  Door:
+    description: A door (IfcDoor), one per opening.
+    attrs:
+      mark:        {type: text, kind: measured, label: door number on plans and schedule}
+      clear_width: {type: length, kind: measured, label: clear opening width of the active leaf}
+      leaf_width:  {type: length, kind: measured, label: nominal leaf width, as scheduled}
+      height:      {type: length, kind: measured}
+      leaves:      {type: number, kind: measured}
+      storey:      {type: text, kind: measured}
+      fire_rating: {type: text, kind: measured, label: fire-resistance rating as scheduled}
+      is_external: {type: bool, kind: measured}
+
+  Corridor:
+    description: A corridor, with its narrowest clear width.
+    attrs:
+      clear_width:   {type: length, kind: measured}
+      dead_end_length: {type: length, kind: measured}
+      storey:        {type: text, kind: measured}
+
+  Ramp:
+    description: A ramp run.
+    attrs:
+      slope:       {type: number, kind: measured, label: running slope as rise over run}
+      rise:        {type: length, kind: measured}
+      clear_width: {type: length, kind: measured}

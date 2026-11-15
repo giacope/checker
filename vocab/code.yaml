@@ -1,0 +1,116 @@
+# Vocabulary for checking software against security and data-protection norms.
+#
+# This file is the contract between adapters, which extract facts from a codebase,
+# and rule packs, which read them. It plays the role IFC plays for buildings: it
+# names element types and their descriptive attributes, never a jurisdiction's
+# classifications. Packs declare these as predicates with the same names (or map to
+# them with `vocab:`), and add their own judged classifications on top.
+#
+# Locator ("at"): a path relative to the repository root and a 1-based line,
+# "routes/login.ts:34". A fact about the system as a whole may cite several.
+domain: code
+subject: system
+
+types:
+  system:
+    description: The software system under review, as one deployable application.
+    attrs:
+      password_auth:            {type: bool, kind: measured, label: users authenticate with a password the system verifies}
+      password_is_sole_factor:  {type: bool, kind: judged, label: a password alone is enough to log in (no second factor is required)}
+      password_min_length:      {type: number, kind: measured, label: minimum password length enforced at registration or password change, in characters (0 if none)}
+      password_max_length:      {type: number, kind: measured, label: maximum password length accepted, in characters (100000 if no limit is enforced)}
+      password_composition_rules: {type: bool, kind: measured, label: the system requires character classes (digits, upper case, symbols) in passwords}
+      password_blocklist_check: {type: bool, kind: measured, label: new passwords are checked against a list of common or compromised passwords}
+      password_periodic_change: {type: bool, kind: measured, label: the system forces users to change passwords after a fixed period}
+      login_rate_limited:       {type: bool, kind: measured, label: failed login attempts are limited per account or per client}
+      processes_personal_data:  {type: bool, kind: measured, label: the system stores data about identifiable people (names, emails, addresses, ...)}
+      account_erasure:          {type: bool, kind: measured, label: there is a code path that deletes or irreversibly anonymises a user's personal data on request}
+      account_data_export:      {type: bool, kind: measured, label: there is a code path that gives users their personal data in a structured, machine-readable format (a download or export)}
+      csrf_protection:          {type: bool, kind: measured, label: state-changing requests that rely on cookies are checked to come from the application (anti-CSRF token or Origin/Sec-Fetch checks); true when no cookie authenticates requests}
+      tls_enforced:             {type: bool, kind: measured, label: the application refuses or redirects plain-HTTP requests in production (Rails config.force_ssl, Plug.SSL / force_ssl, an HTTPS-only proxy config in the repository)}
+      hsts:                     {type: bool, kind: measured, label: responses carry a Strict-Transport-Security header}
+      hsts_max_age:             {type: number, kind: measured, label: the HSTS max-age, in seconds}
+      content_security_policy:  {type: bool, kind: measured, label: HTML responses carry a Content-Security-Policy header (report-only does not count)}
+      debug_in_production:      {type: bool, kind: measured, label: the production configuration enables debug features (detailed error pages, debug toolbars, code reloading, DEBUG=True)}
+      log_redacts_credentials:  {type: bool, kind: measured, label: the framework's request logging filters password, token, and secret parameters (Rails filter_parameters, Phoenix filter_parameters, a logging filter)}
+
+  PasswordStore:
+    description: A place where a user's password is turned into the form that is stored or compared.
+    attrs:
+      algorithm: {type: enum, kind: measured, values: [plaintext, reversible, md5, sha1, sha256, sha512, bcrypt, scrypt, argon2, pbkdf2, other], label: the function applied to the password}
+      salted:    {type: bool, kind: measured, label: a per-password random salt is used}
+
+  Query:
+    description: A place where a database query (SQL, NoSQL, ORM raw query) is sent.
+    attrs:
+      construction: {type: enum, kind: measured, values: [parameterized, orm, concatenated, interpolated, operator_object], label: how untrusted values reach the query (operator_object is a NoSQL filter object built from request data)}
+      untrusted_input: {type: bool, kind: measured, label: data from a request (body, query, params, headers, cookies) can reach the query text or filter}
+
+  Cookie:
+    description: A place where the application sets a cookie, or configures the session cookie.
+    attrs:
+      is_session:   {type: bool, kind: judged, label: the cookie carries a session or authentication token}
+      secure:       {type: bool, kind: measured, label: the Secure attribute is set}
+      http_only:    {type: bool, kind: measured, label: the HttpOnly attribute is set}
+      same_site:    {type: enum, kind: measured, values: [strict, lax, none, unset], label: the SameSite attribute}
+
+  Secret:
+    description: A credential written as a literal in the repository (key, password, token, private key).
+    attrs:
+      kind:            {type: enum, kind: measured, values: [private_key, signing_key, api_key, password, connection_string, other]}
+      test_or_example: {type: bool, kind: judged, label: the literal is only a test fixture, an example, or a placeholder never used in a deployment}
+
+  TokenVerification:
+    description: A place where a bearer token (JWT or similar) is decoded or verified.
+    attrs:
+      verifies_signature: {type: bool, kind: measured, label: the signature is verified before claims are trusted}
+      allows_none_alg:    {type: bool, kind: measured, label: unsigned tokens (alg none) or algorithm confusion are accepted}
+
+  LogStatement:
+    description: A place where the application writes a log or console message.
+    attrs:
+      logs_credentials:   {type: bool, kind: measured, label: a password, token, or session identifier can be written to the log}
+      logs_personal_data: {type: bool, kind: measured, label: personal data (email, name, address, ...) can be written to the log}
+
+  Transfer:
+    description: A place where data leaves the system for a third party (analytics, payment, email, AI, CDN with user data).
+    attrs:
+      recipient:              {type: text, kind: measured, label: the third party}
+      personal_data:          {type: bool, kind: measured, label: personal data is part of what is sent}
+      third_country:          {type: bool, kind: judged, label: the recipient processes the data outside the EEA (or the UK, for UK GDPR)}
+      adequacy_or_safeguards: {type: bool, kind: given, label: "an adequacy decision covers the recipient, or appropriate safeguards (SCCs, BCRs) are in place; a contract fact, not visible in code"}
+
+  Dependency:
+    description: A third-party package the application installs, as pinned by a lock file (Gemfile.lock, mix.lock, package-lock.json, poetry.lock, uv.lock, requirements.txt).
+    attrs:
+      ecosystem:     {type: text, kind: measured, label: "the package ecosystem, as OSV names it (RubyGems, Hex, npm, PyPI)"}
+      name:          {type: text, kind: measured, label: "the package name"}
+      version:       {type: text, kind: measured, label: "the locked version"}
+      vulnerable:    {type: bool, kind: measured, label: "a published advisory (OSV, GitHub Security Advisories) affects this version"}
+      fix_available: {type: bool, kind: measured, label: "a released version fixes every advisory that affects this version"}
+      max_severity:  {type: enum, kind: measured, values: [none, low, moderate, high, critical, unknown], label: "the highest severity among the advisories"}
+      advisories:    {type: text, kind: measured, label: "advisory ids, comma-separated (GHSA-..., CVE-...)"}
+
+  CommandExecution:
+    description: A place where the application runs an operating-system command or a shell.
+    attrs:
+      construction:    {type: enum, kind: measured, values: [argv, constant, concatenated, interpolated], label: "argv: program and arguments passed separately, no shell; constant: a fixed command line; concatenated/interpolated: a shell command line built from values"}
+      untrusted_input: {type: bool, kind: measured, label: "data from a request can reach the command or its arguments"}
+
+  HtmlOutput:
+    description: A place where a value is written into HTML without the template engine's automatic escaping (Rails raw/html_safe/<%== %>, Phoenix raw/1, {{{ }}}, dangerouslySetInnerHTML, |safe, mark_safe).
+    attrs:
+      sanitized:       {type: bool, kind: measured, label: "the value passes through an HTML sanitizer (Rails sanitize, HtmlSanitizeEx, DOMPurify, bleach) before it is written"}
+      untrusted_input: {type: bool, kind: measured, label: "data a user supplied (a request, or stored user content) can reach the value"}
+
+  MassAssignment:
+    description: A place where request parameters are assigned to a stored model's attributes in bulk.
+    attrs:
+      allowlist:            {type: bool, kind: measured, label: "only explicitly listed fields are assigned (Rails permit(...) with a field list, Ecto cast/3 with a field list, a schema/DTO)"}
+      privileged_assignable: {type: bool, kind: judged, label: "a field that grants privileges or changes ownership (role, admin, is_superuser, user_id, account_id, balance) can be set this way"}
+
+  Deserialization:
+    description: A place where the application turns bytes or text into objects with a format that can instantiate arbitrary types (Marshal.load, YAML.load/unsafe_load, :erlang.binary_to_term, pickle.loads, yaml.load, node-serialize).
+    attrs:
+      safe_mode:       {type: bool, kind: measured, label: "the call restricts the types it creates (YAML.safe_load, binary_to_term with [:safe], yaml.safe_load, an allowlist)"}
+      untrusted_input: {type: bool, kind: measured, label: "data from a request, a cookie, or another party can reach the input"}
