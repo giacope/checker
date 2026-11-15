@@ -1,0 +1,1870 @@
+subject:
+  kind: system
+  id: hexpm
+sources:
+- id: static
+  kind: static_analysis
+  describes: hexpm
+  adapter: adapters.code_elixir
+  adapter_version: 0.1.0
+  commit: 7347bf2aa2a01a2f669cbfdd0120fb7ac7170dda
+  files_analysed: 687
+  unparsed: []
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/auth.ex:98
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/auth.ex:107
+  - value: true
+    source: static
+    at: lib/hexpm/ecto/changeset.ex:166
+  - value: true
+    source: static
+    at: lib/hexpm_web/controllers/sudo_controller.ex:220
+  - value: true
+    source: static
+    at: lib/hexpm_web/router.ex:201
+  password_min_length:
+  - value: 8
+    source: static
+    at: lib/hexpm/accounts/user.ex:74
+  - value: 8
+    source: static
+    at: lib/hexpm/accounts/user.ex:120
+  - value: 8
+    source: static
+    at: lib/hexpm/accounts/user.ex:131
+  - value: 8
+    source: static
+    at: lib/hexpm/accounts/user.ex:320
+  password_max_length:
+  - value: 100000
+    source: static
+    at: lib/hexpm/accounts/auth.ex:107
+  password_composition_rules:
+  - value: false
+    source: static
+    at: lib/hexpm/accounts/auth.ex:107
+  - value: false
+    source: static
+    at: lib/hexpm/accounts/user.ex:74
+  - value: false
+    source: static
+    at: lib/hexpm/accounts/user.ex:120
+  - value: false
+    source: static
+    at: lib/hexpm/accounts/user.ex:131
+  password_blocklist_check:
+  - value: true
+    source: static
+    at: lib/hexpm_web/controllers/dashboard/security_controller.ex:166
+  - value: true
+    source: static
+    at: lib/hexpm_web/controllers/dashboard/security_controller.ex:224
+  - value: true
+    source: static
+    at: lib/hexpm_web/controllers/password_controller.ex:48
+  password_periodic_change:
+  - value: false
+    source: static
+    at: lib/hexpm/accounts/auth.ex:107
+  login_rate_limited:
+  - value: true
+    source: static
+    at: lib/hexpm_web/controllers/login_controller.ex:28
+  - value: true
+    source: static
+    at: lib/hexpm_web/controllers/login_controller.ex:45
+  processes_personal_data:
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/account_deletion_request.ex:7
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/email.ex:11
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/organization_invitation.ex:10
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/password_reset.ex:7
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/scim/resource.ex:20
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/sso/identity.ex:9
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/sso/transaction.ex:22
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/user.ex:10
+  account_erasure:
+  - value: true
+    source: static
+    at: lib/hexpm/accounts/users.ex:181
+  csrf_protection:
+  - value: true
+    source: static
+    at: lib/hexpm_web/router.ex:58
+  - value: true
+    source: static
+    at: lib/hexpm_web/router.ex:119
+  tls_enforced:
+  - value: true
+    source: static
+    at: config/prod.exs:20
+  hsts:
+  - value: true
+    source: static
+    at: config/prod.exs:20
+  hsts_max_age:
+  - value: 31536000
+    source: static
+    at: config/prod.exs:20
+  content_security_policy:
+  - value: true
+    source: static
+    at: lib/hexpm_web/router.ex:25
+  - value: true
+    source: static
+    at: lib/hexpm_web/router.ex:115
+  - value: true
+    source: static
+    at: lib/hexpm_web/router.ex:128
+  debug_in_production:
+  - value: false
+    source: static
+    at: config/prod.exs:14
+  - value: false
+    source: static
+    at: config/runtime.exs:217
+  log_redacts_credentials:
+  - value: false
+    source: static
+    at: config/config.exs:181
+elements:
+- type: PasswordStore
+  id: PasswordStore@lib/hexpm/accounts/auth.ex:98
+  at: lib/hexpm/accounts/auth.ex:98
+  facts:
+    algorithm:
+    - value: bcrypt
+      source: static
+      at: lib/hexpm/accounts/auth.ex:98
+    salted:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/auth.ex:98
+- type: PasswordStore
+  id: PasswordStore@lib/hexpm/accounts/auth.ex:107
+  at: lib/hexpm/accounts/auth.ex:107
+  facts:
+    algorithm:
+    - value: bcrypt
+      source: static
+      at: lib/hexpm/accounts/auth.ex:107
+    salted:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/auth.ex:107
+- type: PasswordStore
+  id: PasswordStore@lib/hexpm/ecto/changeset.ex:166
+  at: lib/hexpm/ecto/changeset.ex:166
+  facts:
+    algorithm:
+    - value: bcrypt
+      source: static
+      at: lib/hexpm/ecto/changeset.ex:166
+    salted:
+    - value: true
+      source: static
+      at: lib/hexpm/ecto/changeset.ex:166
+- type: PasswordStore
+  id: PasswordStore@lib/hexpm_web/controllers/sudo_controller.ex:220
+  at: lib/hexpm_web/controllers/sudo_controller.ex:220
+  facts:
+    algorithm:
+    - value: bcrypt
+      source: static
+      at: lib/hexpm_web/controllers/sudo_controller.ex:220
+    salted:
+    - value: true
+      source: static
+      at: lib/hexpm_web/controllers/sudo_controller.ex:220
+- type: Query
+  id: Query@lib/hexpm/accounts/key.ex:104
+  at: lib/hexpm/accounts/key.ex:104
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/key.ex:104
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/key.ex:104
+- type: Query
+  id: Query@lib/hexpm/accounts/organization.ex:88
+  at: lib/hexpm/accounts/organization.ex:88
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/organization.ex:88
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/organization.ex:88
+- type: Query
+  id: Query@lib/hexpm/accounts/organization_invitations.ex:73
+  at: lib/hexpm/accounts/organization_invitations.ex:73
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/organization_invitations.ex:73
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/organization_invitations.ex:73
+- type: Query
+  id: Query@lib/hexpm/accounts/organization_invitations.ex:103
+  at: lib/hexpm/accounts/organization_invitations.ex:103
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/organization_invitations.ex:103
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/organization_invitations.ex:103
+- type: Query
+  id: Query@lib/hexpm/accounts/scim.ex:120
+  at: lib/hexpm/accounts/scim.ex:120
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/scim.ex:120
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/scim.ex:120
+- type: Query
+  id: Query@lib/hexpm/accounts/sso/enforcement.ex:277
+  at: lib/hexpm/accounts/sso/enforcement.ex:277
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/sso/enforcement.ex:277
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/sso/enforcement.ex:277
+- type: Query
+  id: Query@lib/hexpm/accounts/sso/enforcement.ex:281
+  at: lib/hexpm/accounts/sso/enforcement.ex:281
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/sso/enforcement.ex:281
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/sso/enforcement.ex:281
+- type: Query
+  id: Query@lib/hexpm/accounts/user.ex:167
+  at: lib/hexpm/accounts/user.ex:167
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/user.ex:167
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/user.ex:167
+- type: Query
+  id: Query@lib/hexpm/accounts/user.ex:180
+  at: lib/hexpm/accounts/user.ex:180
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/user.ex:180
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/user.ex:180
+- type: Query
+  id: Query@lib/hexpm/accounts/user.ex:192
+  at: lib/hexpm/accounts/user.ex:192
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/accounts/user.ex:192
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/user.ex:192
+- type: Query
+  id: Query@lib/hexpm/oauth/device_codes.ex:145
+  at: lib/hexpm/oauth/device_codes.ex:145
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/oauth/device_codes.ex:145
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/oauth/device_codes.ex:145
+- type: Query
+  id: Query@lib/hexpm/release_tasks.ex:180
+  at: lib/hexpm/release_tasks.ex:180
+  facts:
+    construction:
+    - value: parameterized
+      source: static
+      at: lib/hexpm/release_tasks.ex:180
+    untrusted_input:
+    - value: false
+      source: static
+      at: lib/hexpm/release_tasks.ex:180
+- type: Query
+  id: Query@lib/hexpm/repo.ex:219
+  at: lib/hexpm/repo.ex:219
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: lib/hexpm/repo.ex:219
+- type: Query
+  id: Query@lib/hexpm/repo.ex:227
+  at: lib/hexpm/repo.ex:227
+  facts:
+    construction:
+    - value: parameterized
+      source: static
+      at: lib/hexpm/repo.ex:227
+    untrusted_input:
+    - value: false
+      source: static
+      at: lib/hexpm/repo.ex:227
+- type: Query
+  id: Query@lib/hexpm/repository/policies.ex:16
+  at: lib/hexpm/repository/policies.ex:16
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/repository/policies.ex:16
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/policies.ex:16
+- type: Query
+  id: Query@lib/hexpm/repository/releases.ex:170
+  at: lib/hexpm/repository/releases.ex:170
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/repository/releases.ex:170
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/releases.ex:170
+- type: Query
+  id: Query@lib/hexpm/repository/sitemaps.ex:30
+  at: lib/hexpm/repository/sitemaps.ex:30
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/repository/sitemaps.ex:30
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/sitemaps.ex:30
+- type: Query
+  id: Query@lib/hexpm/security/advisories.ex:125
+  at: lib/hexpm/security/advisories.ex:125
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/security/advisories.ex:125
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/security/advisories.ex:125
+- type: Query
+  id: Query@lib/hexpm/short_urls/short_urls.ex:34
+  at: lib/hexpm/short_urls/short_urls.ex:34
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/short_urls/short_urls.ex:34
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/short_urls/short_urls.ex:34
+- type: Query
+  id: Query@lib/hexpm/utils.ex:388
+  at: lib/hexpm/utils.ex:388
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm/utils.ex:388
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm/utils.ex:388
+- type: Query
+  id: Query@lib/hexpm_web/controllers/api/staged_release_controller.ex:55
+  at: lib/hexpm_web/controllers/api/staged_release_controller.ex:55
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/hexpm_web/controllers/api/staged_release_controller.ex:55
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/hexpm_web/controllers/api/staged_release_controller.ex:55
+- type: Cookie
+  id: Cookie@lib/hexpm_web/endpoint.ex:7
+  at: lib/hexpm_web/endpoint.ex:7
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: lib/hexpm_web/endpoint.ex:7
+    http_only:
+    - value: true
+      source: static
+      at: lib/hexpm_web/endpoint.ex:7
+    same_site:
+    - value: unset
+      source: static
+      at: lib/hexpm_web/endpoint.ex:7
+- type: TokenVerification
+  id: TokenVerification@lib/hexpm/accounts/sso/oidc/oidcc.ex:213
+  at: lib/hexpm/accounts/sso/oidc/oidcc.ex:213
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/sso/oidc/oidcc.ex:213
+    allows_none_alg:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/sso/oidc/oidcc.ex:213
+- type: TokenVerification
+  id: TokenVerification@lib/hexpm/oauth/jwt.ex:89
+  at: lib/hexpm/oauth/jwt.ex:89
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/hexpm/oauth/jwt.ex:89
+    allows_none_alg:
+    - value: false
+      source: static
+      at: lib/hexpm/oauth/jwt.ex:89
+- type: TokenVerification
+  id: TokenVerification@lib/hexpm/oauth/jwt.ex:99
+  at: lib/hexpm/oauth/jwt.ex:99
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/hexpm/oauth/jwt.ex:99
+    allows_none_alg:
+    - value: false
+      source: static
+      at: lib/hexpm/oauth/jwt.ex:99
+- type: TokenVerification
+  id: TokenVerification@lib/hexpm/workload_identities/oidc.ex:181
+  at: lib/hexpm/workload_identities/oidc.ex:181
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/hexpm/workload_identities/oidc.ex:181
+    allows_none_alg:
+    - value: false
+      source: static
+      at: lib/hexpm/workload_identities/oidc.ex:181
+- type: TokenVerification
+  id: TokenVerification@lib/hexpm_web/plugs/sudo.ex:190
+  at: lib/hexpm_web/plugs/sudo.ex:190
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/hexpm_web/plugs/sudo.ex:190
+    allows_none_alg:
+    - value: false
+      source: static
+      at: lib/hexpm_web/plugs/sudo.ex:190
+- type: TokenVerification
+  id: TokenVerification@lib/hexpm_web/plugs/varsel_auth.ex:71
+  at: lib/hexpm_web/plugs/varsel_auth.ex:71
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/hexpm_web/plugs/varsel_auth.ex:71
+    allows_none_alg:
+    - value: false
+      source: static
+      at: lib/hexpm_web/plugs/varsel_auth.ex:71
+- type: TokenVerification
+  id: TokenVerification@lib/hexpm_web/readme_token.ex:22
+  at: lib/hexpm_web/readme_token.ex:22
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/hexpm_web/readme_token.ex:22
+    allows_none_alg:
+    - value: false
+      source: static
+      at: lib/hexpm_web/readme_token.ex:22
+- type: Secret
+  id: Secret@config/dev.exs:28
+  at: config/dev.exs:28
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: config/dev.exs:28
+    test_or_example:
+    - value: true
+      source: static
+      at: config/dev.exs:28
+- type: Secret
+  id: Secret@config/dev.exs:29
+  at: config/dev.exs:29
+  facts:
+    kind:
+    - value: private_key
+      source: static
+      at: config/dev.exs:29
+    test_or_example:
+    - value: true
+      source: static
+      at: config/dev.exs:29
+- type: Secret
+  id: Secret@config/dev.exs:49
+  at: config/dev.exs:49
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: config/dev.exs:49
+    test_or_example:
+    - value: true
+      source: static
+      at: config/dev.exs:49
+- type: Secret
+  id: Secret@config/dev.exs:70
+  at: config/dev.exs:70
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: config/dev.exs:70
+    test_or_example:
+    - value: true
+      source: static
+      at: config/dev.exs:70
+- type: Secret
+  id: Secret@config/dev.exs:108
+  at: config/dev.exs:108
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: config/dev.exs:108
+    test_or_example:
+    - value: true
+      source: static
+      at: config/dev.exs:108
+- type: Secret
+  id: Secret@config/hex.exs:4
+  at: config/hex.exs:4
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: config/hex.exs:4
+    test_or_example:
+    - value: true
+      source: static
+      at: config/hex.exs:4
+- type: Secret
+  id: Secret@config/hex.exs:5
+  at: config/hex.exs:5
+  facts:
+    kind:
+    - value: private_key
+      source: static
+      at: config/hex.exs:5
+    test_or_example:
+    - value: true
+      source: static
+      at: config/hex.exs:5
+- type: Secret
+  id: Secret@config/hex.exs:29
+  at: config/hex.exs:29
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: config/hex.exs:29
+    test_or_example:
+    - value: true
+      source: static
+      at: config/hex.exs:29
+- type: Secret
+  id: Secret@config/hex.exs:34
+  at: config/hex.exs:34
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: config/hex.exs:34
+    test_or_example:
+    - value: true
+      source: static
+      at: config/hex.exs:34
+- type: Secret
+  id: Secret@docker-compose.yaml:6
+  at: docker-compose.yaml:6
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: docker-compose.yaml:6
+- type: Secret
+  id: Secret@lib/hexpm/factory.ex:239
+  at: lib/hexpm/factory.ex:239
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: lib/hexpm/factory.ex:239
+    test_or_example:
+    - value: true
+      source: static
+      at: lib/hexpm/factory.ex:239
+- type: Secret
+  id: Secret@priv/repo/seeds.exs:40
+  at: priv/repo/seeds.exs:40
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: priv/repo/seeds.exs:40
+    test_or_example:
+    - value: true
+      source: static
+      at: priv/repo/seeds.exs:40
+- type: Secret
+  id: Secret@priv/repo/seeds.exs:41
+  at: priv/repo/seeds.exs:41
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: priv/repo/seeds.exs:41
+    test_or_example:
+    - value: true
+      source: static
+      at: priv/repo/seeds.exs:41
+- type: Secret
+  id: Secret@priv/repo/seeds.exs:55
+  at: priv/repo/seeds.exs:55
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: priv/repo/seeds.exs:55
+    test_or_example:
+    - value: true
+      source: static
+      at: priv/repo/seeds.exs:55
+- type: Secret
+  id: Secret@priv/repo/seeds.exs:56
+  at: priv/repo/seeds.exs:56
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: priv/repo/seeds.exs:56
+    test_or_example:
+    - value: true
+      source: static
+      at: priv/repo/seeds.exs:56
+- type: Transfer
+  id: Transfer@config/runtime.exs:145
+  at: config/runtime.exs:145
+  facts:
+    recipient:
+    - value: Sentry
+      source: static
+      at: config/runtime.exs:145
+    personal_data:
+    - value: true
+      source: static
+      at: config/runtime.exs:145
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/keys.ex:253
+  at: lib/hexpm/accounts/keys.ex:253
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/keys.ex:253
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/keys.ex:253
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:97
+  at: lib/hexpm/accounts/users.ex:97
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:97
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:97
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:188
+  at: lib/hexpm/accounts/users.ex:188
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:188
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:188
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:219
+  at: lib/hexpm/accounts/users.ex:219
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:219
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:219
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:269
+  at: lib/hexpm/accounts/users.ex:269
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:269
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:269
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:389
+  at: lib/hexpm/accounts/users.ex:389
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:389
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:389
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:417
+  at: lib/hexpm/accounts/users.ex:417
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:417
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:417
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:446
+  at: lib/hexpm/accounts/users.ex:446
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:446
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:446
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:469
+  at: lib/hexpm/accounts/users.ex:469
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:469
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:469
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:502
+  at: lib/hexpm/accounts/users.ex:502
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:502
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:502
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:574
+  at: lib/hexpm/accounts/users.ex:574
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:574
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:574
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:577
+  at: lib/hexpm/accounts/users.ex:577
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:577
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:577
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:630
+  at: lib/hexpm/accounts/users.ex:630
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:630
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:630
+- type: Transfer
+  id: Transfer@lib/hexpm/accounts/users.ex:806
+  at: lib/hexpm/accounts/users.ex:806
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/accounts/users.ex:806
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/users.ex:806
+- type: Transfer
+  id: Transfer@lib/hexpm/admin_tasks.ex:1159
+  at: lib/hexpm/admin_tasks.ex:1159
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/admin_tasks.ex:1159
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/admin_tasks.ex:1159
+- type: Transfer
+  id: Transfer@lib/hexpm/admin_tasks.ex:1369
+  at: lib/hexpm/admin_tasks.ex:1369
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/admin_tasks.ex:1369
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/admin_tasks.ex:1369
+- type: Transfer
+  id: Transfer@lib/hexpm/emails/outbox_worker.ex:134
+  at: lib/hexpm/emails/outbox_worker.ex:134
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/emails/outbox_worker.ex:134
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/emails/outbox_worker.ex:134
+- type: Transfer
+  id: Transfer@lib/hexpm/repository/owners.ex:145
+  at: lib/hexpm/repository/owners.ex:145
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/repository/owners.ex:145
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/owners.ex:145
+- type: Transfer
+  id: Transfer@lib/hexpm/repository/owners.ex:160
+  at: lib/hexpm/repository/owners.ex:160
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/repository/owners.ex:160
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/owners.ex:160
+- type: Transfer
+  id: Transfer@lib/hexpm/repository/owners.ex:308
+  at: lib/hexpm/repository/owners.ex:308
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/repository/owners.ex:308
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/owners.ex:308
+- type: Transfer
+  id: Transfer@lib/hexpm/repository/releases.ex:723
+  at: lib/hexpm/repository/releases.ex:723
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/repository/releases.ex:723
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/releases.ex:723
+- type: Transfer
+  id: Transfer@lib/hexpm/repository/typosquat_worker.ex:56
+  at: lib/hexpm/repository/typosquat_worker.ex:56
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/repository/typosquat_worker.ex:56
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/typosquat_worker.ex:56
+- type: Transfer
+  id: Transfer@lib/hexpm/store/s3.ex:96
+  at: lib/hexpm/store/s3.ex:96
+  facts:
+    recipient:
+    - value: AWS S3
+      source: static
+      at: lib/hexpm/store/s3.ex:96
+- type: Transfer
+  id: Transfer@lib/hexpm/store/s3.ex:106
+  at: lib/hexpm/store/s3.ex:106
+  facts:
+    recipient:
+    - value: AWS S3
+      source: static
+      at: lib/hexpm/store/s3.ex:106
+- type: Transfer
+  id: Transfer@lib/hexpm/workload_identities.ex:626
+  at: lib/hexpm/workload_identities.ex:626
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/workload_identities.ex:626
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/workload_identities.ex:626
+- type: Transfer
+  id: Transfer@lib/hexpm/workload_identities.ex:664
+  at: lib/hexpm/workload_identities.ex:664
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/workload_identities.ex:664
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/workload_identities.ex:664
+- type: Transfer
+  id: Transfer@lib/hexpm/workload_identities.ex:748
+  at: lib/hexpm/workload_identities.ex:748
+  facts:
+    recipient:
+    - value: SendGrid
+      source: static
+      at: lib/hexpm/workload_identities.ex:748
+    personal_data:
+    - value: true
+      source: static
+      at: lib/hexpm/workload_identities.ex:748
+- type: CommandExecution
+  id: CommandExecution@lib/hexpm/diff/generator.ex:227
+  at: lib/hexpm/diff/generator.ex:227
+  facts:
+    construction:
+    - value: argv
+      source: static
+      at: lib/hexpm/diff/generator.ex:227
+    untrusted_input:
+    - value: false
+      source: static
+      at: lib/hexpm/diff/generator.ex:227
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm/repository/packages.ex:476
+  at: lib/hexpm/repository/packages.ex:476
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm/repository/packages.ex:476
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm/repository/packages.ex:496
+  at: lib/hexpm/repository/packages.ex:496
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm/repository/packages.ex:496
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/live/diff_component.ex:52
+  at: lib/hexpm_web/live/diff_component.ex:52
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/live/diff_component.ex:52
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/live/preview_live.html.heex:78
+  at: lib/hexpm_web/live/preview_live.html.heex:78
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/live/preview_live.html.heex:78
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/markdown_engine.ex:40
+  at: lib/hexpm_web/markdown_engine.ex:40
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/markdown_engine.ex:40
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/blog/index.html.eex:29
+  at: lib/hexpm_web/templates/blog/index.html.eex:29
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/blog/index.html.eex:29
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/blog/index.html.eex:55
+  at: lib/hexpm_web/templates/blog/index.html.eex:55
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/blog/index.html.eex:55
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:174
+  at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:174
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:174
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:195
+  at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:195
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:195
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:202
+  at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:202
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:202
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:210
+  at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:210
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:210
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:219
+  at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:219
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/organization/components/billing_helpers.ex:219
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/organization/components/billing_subscription.ex:63
+  at: lib/hexpm_web/templates/dashboard/organization/components/billing_subscription.ex:63
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/organization/components/billing_subscription.ex:63
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/organization/components/billing_subscription.ex:497
+  at: lib/hexpm_web/templates/dashboard/organization/components/billing_subscription.ex:497
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/organization/components/billing_subscription.ex:497
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/dashboard/security/components/tfa_setup_modal.ex:51
+  at: lib/hexpm_web/templates/dashboard/security/components/tfa_setup_modal.ex:51
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/dashboard/security/components/tfa_setup_modal.ex:51
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/device/authorize.html.heex:4
+  at: lib/hexpm_web/templates/device/authorize.html.heex:4
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/device/authorize.html.heex:4
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/device/show.html.heex:4
+  at: lib/hexpm_web/templates/device/show.html.heex:4
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/device/show.html.heex:4
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/account_deleted.html.eex:6
+  at: lib/hexpm_web/templates/email/account_deleted.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/account_deleted.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/account_deletion_request.html.eex:10
+  at: lib/hexpm_web/templates/email/account_deletion_request.html.eex:10
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/account_deletion_request.html.eex:10
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/account_removed.html.eex:6
+  at: lib/hexpm_web/templates/email/account_removed.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/account_removed.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/account_removed.html.eex:20
+  at: lib/hexpm_web/templates/email/account_removed.html.eex:20
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/account_removed.html.eex:20
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/announcement.html.eex:7
+  at: lib/hexpm_web/templates/email/announcement.html.eex:7
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/announcement.html.eex:7
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/api_key_created.html.eex:14
+  at: lib/hexpm_web/templates/email/api_key_created.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/api_key_created.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/api_key_revoked.html.eex:14
+  at: lib/hexpm_web/templates/email/api_key_revoked.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/api_key_revoked.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/api_keys_all_revoked.html.eex:14
+  at: lib/hexpm_web/templates/email/api_keys_all_revoked.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/api_keys_all_revoked.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/email_added.html.eex:14
+  at: lib/hexpm_web/templates/email/email_added.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/email_added.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_invitation.html.eex:14
+  at: lib/hexpm_web/templates/email/organization_invitation.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_invitation.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_invite.html.eex:15
+  at: lib/hexpm_web/templates/email/organization_invite.html.eex:15
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_invite.html.eex:15
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_invite.html.eex:45
+  at: lib/hexpm_web/templates/email/organization_invite.html.eex:45
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_invite.html.eex:45
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_tfa.html.eex:6
+  at: lib/hexpm_web/templates/email/organization_tfa.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_tfa.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_tfa.html.eex:10
+  at: lib/hexpm_web/templates/email/organization_tfa.html.eex:10
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_tfa.html.eex:10
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_tfa.html.eex:14
+  at: lib/hexpm_web/templates/email/organization_tfa.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_tfa.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_user_invitation.html.eex:10
+  at: lib/hexpm_web/templates/email/organization_user_invitation.html.eex:10
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_user_invitation.html.eex:10
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_user_invitation.html.eex:14
+  at: lib/hexpm_web/templates/email/organization_user_invitation.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_user_invitation.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_workload_identity_add.html.eex:6
+  at: lib/hexpm_web/templates/email/organization_workload_identity_add.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_workload_identity_add.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_workload_identity_change.html.eex:6
+  at: lib/hexpm_web/templates/email/organization_workload_identity_change.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_workload_identity_change.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/organization_workload_identity_remove.html.eex:6
+  at: lib/hexpm_web/templates/email/organization_workload_identity_remove.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/organization_workload_identity_remove.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/owner_add.html.eex:6
+  at: lib/hexpm_web/templates/email/owner_add.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/owner_add.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/owner_add.html.eex:11
+  at: lib/hexpm_web/templates/email/owner_add.html.eex:11
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/owner_add.html.eex:11
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/owner_remove.html.eex:6
+  at: lib/hexpm_web/templates/email/owner_remove.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/owner_remove.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/owner_remove.html.eex:11
+  at: lib/hexpm_web/templates/email/owner_remove.html.eex:11
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/owner_remove.html.eex:11
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/owner_remove.html.eex:23
+  at: lib/hexpm_web/templates/email/owner_remove.html.eex:23
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/owner_remove.html.eex:23
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/owner_remove.html.eex:33
+  at: lib/hexpm_web/templates/email/owner_remove.html.eex:33
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/owner_remove.html.eex:33
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/package_published.html.eex:6
+  at: lib/hexpm_web/templates/email/package_published.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/package_published.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/package_removed.html.eex:6
+  at: lib/hexpm_web/templates/email/package_removed.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/package_removed.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/package_removed.html.eex:20
+  at: lib/hexpm_web/templates/email/package_removed.html.eex:20
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/package_removed.html.eex:20
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/package_search_disabled.html.eex:6
+  at: lib/hexpm_web/templates/email/package_search_disabled.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/package_search_disabled.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/package_search_disabled.html.eex:22
+  at: lib/hexpm_web/templates/email/package_search_disabled.html.eex:22
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/package_search_disabled.html.eex:22
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/password_changed.html.eex:14
+  at: lib/hexpm_web/templates/email/password_changed.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/password_changed.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/password_changed.html.eex:18
+  at: lib/hexpm_web/templates/email/password_changed.html.eex:18
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/password_changed.html.eex:18
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/password_reset_request.html.eex:14
+  at: lib/hexpm_web/templates/email/password_reset_request.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/password_reset_request.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/primary_email_changed.html.eex:15
+  at: lib/hexpm_web/templates/email/primary_email_changed.html.eex:15
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/primary_email_changed.html.eex:15
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/public_workload_identity_add.html.eex:6
+  at: lib/hexpm_web/templates/email/public_workload_identity_add.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/public_workload_identity_add.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/public_workload_identity_change.html.eex:6
+  at: lib/hexpm_web/templates/email/public_workload_identity_change.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/public_workload_identity_change.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/public_workload_identity_remove.html.eex:6
+  at: lib/hexpm_web/templates/email/public_workload_identity_remove.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/public_workload_identity_remove.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/release_removed.html.eex:6
+  at: lib/hexpm_web/templates/email/release_removed.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/release_removed.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/release_removed.html.eex:20
+  at: lib/hexpm_web/templates/email/release_removed.html.eex:20
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/release_removed.html.eex:20
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/secrets_detected.html.eex:6
+  at: lib/hexpm_web/templates/email/secrets_detected.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/secrets_detected.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/secrets_detected.html.eex:34
+  at: lib/hexpm_web/templates/email/secrets_detected.html.eex:34
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/secrets_detected.html.eex:34
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/security_password_reset.html.eex:15
+  at: lib/hexpm_web/templates/email/security_password_reset.html.eex:15
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/security_password_reset.html.eex:15
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/security_password_reset.html.eex:23
+  at: lib/hexpm_web/templates/email/security_password_reset.html.eex:23
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/security_password_reset.html.eex:23
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/security_password_reset.html.eex:57
+  at: lib/hexpm_web/templates/email/security_password_reset.html.eex:57
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/security_password_reset.html.eex:57
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/sso_break_glass.html.eex:6
+  at: lib/hexpm_web/templates/email/sso_break_glass.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/sso_break_glass.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/sso_break_glass.html.eex:18
+  at: lib/hexpm_web/templates/email/sso_break_glass.html.eex:18
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/sso_break_glass.html.eex:18
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/sso_identity_linked.html.eex:14
+  at: lib/hexpm_web/templates/email/sso_identity_linked.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/sso_identity_linked.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/sso_identity_unlinked.html.eex:10
+  at: lib/hexpm_web/templates/email/sso_identity_unlinked.html.eex:10
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/sso_identity_unlinked.html.eex:10
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/tfa_disabled.html.eex:10
+  at: lib/hexpm_web/templates/email/tfa_disabled.html.eex:10
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/tfa_disabled.html.eex:10
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/tfa_enabled.html.eex:10
+  at: lib/hexpm_web/templates/email/tfa_enabled.html.eex:10
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/tfa_enabled.html.eex:10
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/tfa_recovery_rotated.html.eex:10
+  at: lib/hexpm_web/templates/email/tfa_recovery_rotated.html.eex:10
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/tfa_recovery_rotated.html.eex:10
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/verification.html.eex:14
+  at: lib/hexpm_web/templates/email/verification.html.eex:14
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/verification.html.eex:14
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/workload_identity_add.html.eex:6
+  at: lib/hexpm_web/templates/email/workload_identity_add.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/workload_identity_add.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/workload_identity_add.html.eex:16
+  at: lib/hexpm_web/templates/email/workload_identity_add.html.eex:16
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/workload_identity_add.html.eex:16
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/workload_identity_change.html.eex:6
+  at: lib/hexpm_web/templates/email/workload_identity_change.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/workload_identity_change.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/workload_identity_change.html.eex:24
+  at: lib/hexpm_web/templates/email/workload_identity_change.html.eex:24
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/workload_identity_change.html.eex:24
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/email/workload_identity_remove.html.eex:6
+  at: lib/hexpm_web/templates/email/workload_identity_remove.html.eex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/email/workload_identity_remove.html.eex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/readme/no_readme.html.heex:6
+  at: lib/hexpm_web/templates/readme/no_readme.html.heex:6
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/readme/no_readme.html.heex:6
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/readme/show.html.heex:13
+  at: lib/hexpm_web/templates/readme/show.html.heex:13
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/readme/show.html.heex:13
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/readme/show.html.heex:16
+  at: lib/hexpm_web/templates/readme/show.html.heex:16
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/readme/show.html.heex:16
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/readme/show.html.heex:21
+  at: lib/hexpm_web/templates/readme/show.html.heex:21
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/readme/show.html.heex:21
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/templates/readme/show.html.heex:25
+  at: lib/hexpm_web/templates/readme/show.html.heex:25
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/templates/readme/show.html.heex:25
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/views/blog_view.ex:28
+  at: lib/hexpm_web/views/blog_view.ex:28
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/views/blog_view.ex:28
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/views/icons.ex:44
+  at: lib/hexpm_web/views/icons.ex:44
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/views/icons.ex:44
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/views/policy_view.ex:8
+  at: lib/hexpm_web/views/policy_view.ex:8
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/views/policy_view.ex:8
+- type: HtmlOutput
+  id: HtmlOutput@lib/hexpm_web/views/view_helpers.ex:521
+  at: lib/hexpm_web/views/view_helpers.ex:521
+  facts:
+    sanitized:
+    - value: false
+      source: static
+      at: lib/hexpm_web/views/view_helpers.ex:521
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/accounts/organization.ex:40
+  at: lib/hexpm/accounts/organization.ex:40
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/organization.ex:40
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/organization.ex:40
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/accounts/organization.ex:82
+  at: lib/hexpm/accounts/organization.ex:82
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/organization.ex:82
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/organization.ex:82
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/accounts/organization_user.ex:23
+  at: lib/hexpm/accounts/organization_user.ex:23
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/organization_user.ex:23
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/organization_user.ex:23
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/accounts/user.ex:41
+  at: lib/hexpm/accounts/user.ex:41
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/user.ex:41
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/user.ex:41
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/accounts/user.ex:112
+  at: lib/hexpm/accounts/user.ex:112
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/user.ex:112
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/user.ex:112
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/accounts/user.ex:129
+  at: lib/hexpm/accounts/user.ex:129
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/user.ex:129
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/user.ex:129
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/accounts/user.ex:318
+  at: lib/hexpm/accounts/user.ex:318
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/accounts/user.ex:318
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/accounts/user.ex:318
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/package_reports/report.ex:27
+  at: lib/hexpm/package_reports/report.ex:27
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/package_reports/report.ex:27
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/package_reports/report.ex:27
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/repository/package_owner.ex:16
+  at: lib/hexpm/repository/package_owner.ex:16
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/package_owner.ex:16
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/repository/package_owner.ex:16
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/repository/policy.ex:44
+  at: lib/hexpm/repository/policy.ex:44
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/repository/policy.ex:44
+- type: MassAssignment
+  id: MassAssignment@lib/hexpm/short_urls/short_url.ex:56
+  at: lib/hexpm/short_urls/short_url.ex:56
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/hexpm/short_urls/short_url.ex:56
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/hexpm/short_urls/short_url.ex:56
+- type: Deserialization
+  id: Deserialization@lib/hexpm_web/erlang_format.ex:18
+  at: lib/hexpm_web/erlang_format.ex:18
+  facts:
+    safe_mode:
+    - value: true
+      source: static
+      at: lib/hexpm_web/erlang_format.ex:18

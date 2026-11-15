@@ -1,0 +1,467 @@
+subject:
+  kind: system
+  id: full-stack-fastapi-template
+sources:
+- id: static
+  kind: static_analysis
+  describes: full-stack-fastapi-template
+  adapter: adapters.code_static
+  adapter_version: 0.1.0
+  commit: aabb90126964a164e02aff39e7c385bb0598236d
+  files_analysed: 120
+  unparsed: []
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: backend/app/api/routes/login.py:24
+  - value: true
+    source: static
+    at: backend/app/api/routes/private.py:32
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:110
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:117
+  - value: true
+    source: static
+    at: backend/app/core/security.py:32
+  - value: true
+    source: static
+    at: backend/app/core/security.py:36
+  - value: true
+    source: static
+    at: backend/app/crud.py:12
+  - value: true
+    source: static
+    at: backend/app/crud.py:25
+  password_min_length:
+  - value: 8
+    source: static
+    at: backend/app/models.py:22
+  - value: 8
+    source: static
+    at: backend/app/models.py:27
+  - value: 8
+    source: static
+    at: backend/app/models.py:37
+  - value: 8
+    source: static
+    at: backend/app/models.py:47
+  password_max_length:
+  - value: 128
+    source: static
+    at: backend/app/models.py:22
+  - value: 128
+    source: static
+    at: backend/app/models.py:27
+  - value: 128
+    source: static
+    at: backend/app/models.py:37
+  - value: 128
+    source: static
+    at: backend/app/models.py:47
+  password_composition_rules:
+  - value: false
+    source: static
+    at: backend/app/core/security.py:36
+  - value: false
+    source: static
+    at: backend/app/models.py:22
+  - value: false
+    source: static
+    at: backend/app/models.py:27
+  - value: false
+    source: static
+    at: backend/app/models.py:37
+  password_blocklist_check:
+  - value: false
+    source: static
+    at: backend/app/core/security.py:36
+  - value: false
+    source: static
+    at: backend/app/models.py:22
+  - value: false
+    source: static
+    at: backend/app/models.py:27
+  - value: false
+    source: static
+    at: backend/app/models.py:37
+  password_periodic_change:
+  - value: false
+    source: static
+    at: backend/app/core/security.py:36
+  login_rate_limited:
+  - value: false
+    source: static
+    at: backend/app/api/routes/login.py:24
+  processes_personal_data:
+  - value: true
+    source: static
+    at: backend/app/api/routes/private.py:17
+  - value: true
+    source: static
+    at: backend/app/api/routes/private.py:19
+  - value: true
+    source: static
+    at: backend/app/models.py:14
+  - value: true
+    source: static
+    at: backend/app/models.py:17
+  - value: true
+    source: static
+    at: backend/app/models.py:26
+  - value: true
+    source: static
+    at: backend/app/models.py:28
+  - value: true
+    source: static
+    at: backend/app/models.py:33
+  - value: true
+    source: static
+    at: backend/app/models.py:36
+  account_erasure:
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:141
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:230
+elements:
+- type: PasswordStore
+  id: PasswordStore@backend/app/api/routes/private.py:32
+  at: backend/app/api/routes/private.py:32
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/api/routes/private.py:32
+    salted:
+    - value: true
+      source: static
+      at: backend/app/api/routes/private.py:32
+- type: PasswordStore
+  id: PasswordStore@backend/app/api/routes/users.py:110
+  at: backend/app/api/routes/users.py:110
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/api/routes/users.py:110
+    salted:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:110
+- type: PasswordStore
+  id: PasswordStore@backend/app/api/routes/users.py:117
+  at: backend/app/api/routes/users.py:117
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/api/routes/users.py:117
+    salted:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:117
+- type: PasswordStore
+  id: PasswordStore@backend/app/core/security.py:32
+  at: backend/app/core/security.py:32
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/core/security.py:32
+    salted:
+    - value: true
+      source: static
+      at: backend/app/core/security.py:32
+- type: PasswordStore
+  id: PasswordStore@backend/app/core/security.py:36
+  at: backend/app/core/security.py:36
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/core/security.py:36
+    salted:
+    - value: true
+      source: static
+      at: backend/app/core/security.py:36
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:12
+  at: backend/app/crud.py:12
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:12
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:12
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:25
+  at: backend/app/crud.py:25
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:25
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:25
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:50
+  at: backend/app/crud.py:50
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:50
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:50
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:52
+  at: backend/app/crud.py:52
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:52
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:52
+- type: Query
+  id: Query@backend/app/api/routes/items.py:27
+  at: backend/app/api/routes/items.py:27
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:27
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:27
+- type: Query
+  id: Query@backend/app/api/routes/items.py:42
+  at: backend/app/api/routes/items.py:42
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:42
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:42
+- type: Query
+  id: Query@backend/app/api/routes/items.py:53
+  at: backend/app/api/routes/items.py:53
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:53
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:53
+- type: Query
+  id: Query@backend/app/api/routes/items.py:86
+  at: backend/app/api/routes/items.py:86
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:86
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:86
+- type: Query
+  id: Query@backend/app/api/routes/items.py:106
+  at: backend/app/api/routes/items.py:106
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:106
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:106
+- type: Query
+  id: Query@backend/app/api/routes/users.py:48
+  at: backend/app/api/routes/users.py:48
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:48
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:48
+- type: Query
+  id: Query@backend/app/api/routes/users.py:169
+  at: backend/app/api/routes/users.py:169
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:169
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:169
+- type: Query
+  id: Query@backend/app/api/routes/users.py:197
+  at: backend/app/api/routes/users.py:197
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:197
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:197
+- type: Query
+  id: Query@backend/app/api/routes/users.py:221
+  at: backend/app/api/routes/users.py:221
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:221
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:221
+- type: Query
+  id: Query@backend/app/api/routes/users.py:229
+  at: backend/app/api/routes/users.py:229
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:229
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:229
+- type: Query
+  id: Query@backend/app/crud.py:35
+  at: backend/app/crud.py:35
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/crud.py:35
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/crud.py:35
+- type: Query
+  id: Query@backend/app/crud.py:36
+  at: backend/app/crud.py:36
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/crud.py:36
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/crud.py:36
+- type: Cookie
+  id: Cookie@frontend/src/components/ui/sidebar.tsx:96
+  at: frontend/src/components/ui/sidebar.tsx:96
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/components/ui/sidebar.tsx:96
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/components/ui/sidebar.tsx:96
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/components/ui/sidebar.tsx:96
+- type: TokenVerification
+  id: TokenVerification@backend/app/api/deps.py:32
+  at: backend/app/api/deps.py:32
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: backend/app/api/deps.py:32
+    allows_none_alg:
+    - value: false
+      source: static
+      at: backend/app/api/deps.py:32
+- type: TokenVerification
+  id: TokenVerification@backend/app/utils.py:120
+  at: backend/app/utils.py:120
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: backend/app/utils.py:120
+    allows_none_alg:
+    - value: false
+      source: static
+      at: backend/app/utils.py:120
+- type: Secret
+  id: Secret@.env:6
+  at: .env:6
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: .env:6
+- type: Secret
+  id: Secret@.env:8
+  at: .env:8
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: .env:8
+- type: Secret
+  id: Secret@.env:17
+  at: .env:17
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: .env:17
+- type: Transfer
+  id: Transfer@backend/app/main.py:19
+  at: backend/app/main.py:19
+  facts:
+    recipient:
+    - value: Sentry
+      source: static
+      at: backend/app/main.py:19
+- type: Transfer
+  id: Transfer@backend/app/utils.py:56
+  at: backend/app/utils.py:56
+  facts:
+    recipient:
+    - value: email (SMTP relay)
+      source: static
+      at: backend/app/utils.py:56
+    personal_data:
+    - value: true
+      source: static
+      at: backend/app/utils.py:56

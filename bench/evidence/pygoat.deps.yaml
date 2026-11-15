@@ -1,0 +1,1847 @@
+subject:
+  kind: system
+  id: pygoat
+sources:
+- id: deps
+  kind: lockfile_osv
+  describes: pygoat
+  adapter: adapters.deps
+  adapter_version: 0.1.0
+  commit: 2aa4cc14f251e4a780e94e200aed6b36a5b15c21
+  lockfiles:
+  - path: requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 32
+  - path: challenge/labs/bopla_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 2
+  - path: challenge/labs/business_logic_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 6
+  - path: challenge/labs/security_headers_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 6
+  - path: dockerized_labs/a9_uckv_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 6
+  - path: dockerized_labs/auth_failure_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 2
+  - path: dockerized_labs/broken_access_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 2
+  - path: dockerized_labs/broken_auth_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 7
+  - path: dockerized_labs/command_injection_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/crypto_failure_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/dependency_attack_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/insec_des_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 2
+  - path: dockerized_labs/insecure_design_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 4
+  - path: dockerized_labs/insufficient_logging_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 6
+  - path: dockerized_labs/open_source_library_attack_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/package_injection_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/sde/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 2
+  - path: dockerized_labs/sec_misconfig/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/sensitive_data_exposure/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/software_integrity_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/sql_injection_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  - path: dockerized_labs/ssrf_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 0
+  - path: dockerized_labs/template_injection_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 6
+  - path: dockerized_labs/xss_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 6
+  - path: dockerized_labs/xxe_lab/requirements.txt
+    format: requirements.txt
+    ecosystem: PyPI
+    entries: 3
+  osv_queried_at: '2026-11-15T04:45:51Z'
+  offline: false
+facts: {}
+elements:
+- type: Dependency
+  id: Dependency@PyPI/argon2-cffi@21.3.0
+  at:
+  - requirements.txt#L1
+  - dockerized_labs/auth_failure_lab/requirements.txt#L3
+  - dockerized_labs/crypto_failure_lab/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:1
+    name:
+    - value: argon2-cffi
+      source: deps
+      at: requirements.txt:1
+    version:
+    - value: 21.3.0
+      source: deps
+      at: requirements.txt:1
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/argon2-cffi-bindings@21.2.0
+  at: requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:2
+    name:
+    - value: argon2-cffi-bindings
+      source: deps
+      at: requirements.txt:2
+    version:
+    - value: 21.2.0
+      source: deps
+      at: requirements.txt:2
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:2
+- type: Dependency
+  id: Dependency@PyPI/asgiref@3.6.0
+  at: requirements.txt#L3
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:3
+    name:
+    - value: asgiref
+      source: deps
+      at: requirements.txt:3
+    version:
+    - value: 3.6.0
+      source: deps
+      at: requirements.txt:3
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:3
+- type: Dependency
+  id: Dependency@PyPI/black@26.1.0
+  at: requirements.txt#L4
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:4
+    name:
+    - value: black
+      source: deps
+      at: requirements.txt:4
+    version:
+    - value: 26.1.0
+      source: deps
+      at: requirements.txt:4
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:4
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:4
+    max_severity:
+    - value: critical
+      source: deps
+      at: requirements.txt:4
+    advisories:
+    - value: GHSA-3936-cmfr-pm3m, CVE-2026-32274, GHSA-cg8m-r9f2-5wm2, CVE-2026-114134, GHSA-v53h-f6m7-xcgm, CVE-2026-31900
+      source: deps
+      at: requirements.txt:4
+- type: Dependency
+  id: Dependency@PyPI/blinker@1.6.2
+  at: dockerized_labs/broken_auth_lab/requirements.txt#L5
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/broken_auth_lab/requirements.txt:5
+    name:
+    - value: blinker
+      source: deps
+      at: dockerized_labs/broken_auth_lab/requirements.txt:5
+    version:
+    - value: 1.6.2
+      source: deps
+      at: dockerized_labs/broken_auth_lab/requirements.txt:5
+    vulnerable:
+    - value: false
+      source: deps
+      at: dockerized_labs/broken_auth_lab/requirements.txt:5
+- type: Dependency
+  id: Dependency@PyPI/certifi@2022.12.7
+  at: requirements.txt#L5
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:5
+    name:
+    - value: certifi
+      source: deps
+      at: requirements.txt:5
+    version:
+    - value: 2022.12.7
+      source: deps
+      at: requirements.txt:5
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:5
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:5
+    max_severity:
+    - value: critical
+      source: deps
+      at: requirements.txt:5
+    advisories:
+    - value: GHSA-248v-346w-9cwc, CVE-2024-39689, GHSA-6q48-6c7w-9gw2, GHSA-xqr8-7jwr-rhp7, CVE-2023-37920
+      source: deps
+      at: requirements.txt:5
+- type: Dependency
+  id: Dependency@PyPI/cffi@2.0.0
+  at: requirements.txt#L6
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:6
+    name:
+    - value: cffi
+      source: deps
+      at: requirements.txt:6
+    version:
+    - value: 2.0.0
+      source: deps
+      at: requirements.txt:6
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:6
+- type: Dependency
+  id: Dependency@PyPI/charset-normalizer@3.0.1
+  at: requirements.txt#L7
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:7
+    name:
+    - value: charset-normalizer
+      source: deps
+      at: requirements.txt:7
+    version:
+    - value: 3.0.1
+      source: deps
+      at: requirements.txt:7
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:7
+- type: Dependency
+  id: Dependency@PyPI/click@8.1.7
+  at:
+  - challenge/labs/business_logic_lab/requirements.txt#L4
+  - challenge/labs/security_headers_lab/requirements.txt#L4
+  - dockerized_labs/broken_auth_lab/requirements.txt#L4
+  - dockerized_labs/insufficient_logging_lab/requirements.txt#L3
+  - dockerized_labs/template_injection_lab/requirements.txt#L4
+  - dockerized_labs/xss_lab/requirements.txt#L4
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:4
+    name:
+    - value: click
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:4
+    version:
+    - value: 8.1.7
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:4
+    vulnerable:
+    - value: false
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:4
+- type: Dependency
+  id: Dependency@PyPI/crispy-bootstrap4@2022.1
+  at: requirements.txt#L9
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:9
+    name:
+    - value: crispy-bootstrap4
+      source: deps
+      at: requirements.txt:9
+    version:
+    - value: '2022.1'
+      source: deps
+      at: requirements.txt:9
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:9
+- type: Dependency
+  id: Dependency@PyPI/cryptography@39.0.1
+  at: requirements.txt#L8
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:8
+    name:
+    - value: cryptography
+      source: deps
+      at: requirements.txt:8
+    version:
+    - value: 39.0.1
+      source: deps
+      at: requirements.txt:8
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:8
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:8
+    max_severity:
+    - value: high
+      source: deps
+      at: requirements.txt:8
+    advisories:
+    - value: GHSA-3ww4-gg4f-jr7f, CVE-2023-50782, GHSA-537c-gmf6-5ccf, GHSA-5cpq-8wj7-hf2v, GHSA-6vqw-3v5j-54x4, CVE-2024-26130,
+        GHSA-9v9h-cgj8-h64p, CVE-2024-0727, GHSA-h4gh-qq45-vh27, GHSA-jfhm-5ghh-2f97, CVE-2023-49083, GHSA-jm77-qphf-c4w8,
+        GHSA-m959-cc7f-wv43, CVE-2026-34073, GHSA-r6ph-v2qm-q3c2, CVE-2026-26007, GHSA-v8gr-m533-ghj9, GHSA-jwv3-5hgf-82ww,
+        CVE-2026-69249, GHSA-m2h6-j472-rp4c, CVE-2026-69248
+      source: deps
+      at: requirements.txt:8
+- type: Dependency
+  id: Dependency@PyPI/defusedxml@0.7.1
+  at: requirements.txt#L10
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:10
+    name:
+    - value: defusedxml
+      source: deps
+      at: requirements.txt:10
+    version:
+    - value: 0.7.1
+      source: deps
+      at: requirements.txt:10
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:10
+- type: Dependency
+  id: Dependency@PyPI/dj-database-url@0.5.0
+  at: requirements.txt#L11
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:11
+    name:
+    - value: dj-database-url
+      source: deps
+      at: requirements.txt:11
+    version:
+    - value: 0.5.0
+      source: deps
+      at: requirements.txt:11
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:11
+- type: Dependency
+  id: Dependency@PyPI/django@3.2.18
+  at: dockerized_labs/sensitive_data_exposure/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:1
+    name:
+    - value: django
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:1
+    version:
+    - value: 3.2.18
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:1
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:1
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:1
+    max_severity:
+    - value: critical
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:1
+    advisories:
+    - value: GHSA-3h9f-r86x-qvjx, CVE-2026-48588, GHSA-6w2r-r2m5-xq5w, CVE-2025-57833, GHSA-7h4p-27mh-hmrw, CVE-2023-41164,
+        GHSA-7xr5-9hcq-chf9, CVE-2025-48432, GHSA-8cjm-8mp7-r2xf, CVE-2026-8404, GHSA-8qcx-xf44-272x, CVE-2026-53878, GHSA-923m-gv2p-w5qp,
+        CVE-2026-48587, GHSA-crhf-3pfg-w68w, CVE-2026-53877, GHSA-frmv-pr5f-9mcr, CVE-2025-64459, GHSA-h7pc-vwp9-298g, CVE-2026-6873,
+        GHSA-h8gc-pgj2-vjm3, CVE-2023-43665, GHSA-jh3w-4vvf-mjgr, CVE-2023-36053, GHSA-q238-5cxm-5c9h, CVE-2026-15830, GHSA-qmf9-6jqf-j8fq,
+        CVE-2023-46695, GHSA-qw25-v68c-qjf3, CVE-2025-64458, GHSA-r3xc-prgr-mg9p, CVE-2023-31047, GHSA-rrqc-c2jx-6jgv, CVE-2024-45231,
+        GHSA-vm8q-m57g-pff3, CVE-2024-27351, GHSA-wvqv-fj8w-qmhm, CVE-2026-15307, GHSA-xxj9-f6rv-m3x4, CVE-2024-24680
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/django@4.2
+  at: requirements.txt#L12
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:12
+    name:
+    - value: django
+      source: deps
+      at: requirements.txt:12
+    version:
+    - value: '4.2'
+      source: deps
+      at: requirements.txt:12
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:12
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:12
+    max_severity:
+    - value: critical
+      source: deps
+      at: requirements.txt:12
+    advisories:
+    - value: GHSA-2mcm-79hx-8fxw, CVE-2025-13473, GHSA-33mw-q7rj-mjwj, CVE-2025-14550, GHSA-3h9f-r86x-qvjx, CVE-2026-48588,
+        GHSA-4rrr-2h4v-f3j9, CVE-2026-1285, GHSA-5hgc-2vfp-mqvc, CVE-2024-45230, GHSA-5mf9-h53q-7mhq, CVE-2026-33033, GHSA-6426-9fv3-65x8,
+        CVE-2026-1312, GHSA-6w2r-r2m5-xq5w, CVE-2025-57833, GHSA-795c-9xpc-xw6g, CVE-2024-41990, GHSA-7h4p-27mh-hmrw, CVE-2023-41164,
+        GHSA-7xr5-9hcq-chf9, CVE-2025-48432, GHSA-8498-2h75-472j, CVE-2024-53907, GHSA-8cjm-8mp7-r2xf, CVE-2026-8404, GHSA-8j24-cjrq-gr2m,
+        CVE-2025-32873, GHSA-8p8v-wh79-9r56, CVE-2026-25673, GHSA-8qcx-xf44-272x, CVE-2026-53878, GHSA-923m-gv2p-w5qp, CVE-2026-48587,
+        GHSA-933h-hp56-hf7m, CVE-2026-33034, GHSA-9jmf-237g-qf46, CVE-2024-39330, GHSA-crhf-3pfg-w68w, CVE-2026-53877, GHSA-f6f8-9mx6-9mx2,
+        CVE-2024-39614, GHSA-frmv-pr5f-9mcr, CVE-2025-64459, GHSA-gvg8-93h5-g6qq, CVE-2026-1287, GHSA-h7pc-vwp9-298g, CVE-2026-6873,
+        GHSA-h8gc-pgj2-vjm3, CVE-2023-43665, GHSA-hpr9-3m2g-3j9p, CVE-2025-59681, GHSA-jh3w-4vvf-mjgr, CVE-2023-36053, GHSA-jh75-99hh-qvx9,
+        CVE-2024-41989, GHSA-m9g8-fxxm-xg86, CVE-2024-53908, GHSA-mjgh-79qc-68w3, CVE-2026-25674, GHSA-mmwr-2jhp-mc7j, CVE-2026-4292,
+        GHSA-mvfq-ggxm-9mc5, CVE-2026-3902, GHSA-mwm9-4648-f68q, CVE-2026-1207, GHSA-p3fp-8748-vqfq, CVE-2025-26699, GHSA-pv4p-cwwg-4rph,
+        CVE-2024-42005, GHSA-pwjp-ccjc-ghwg, CVE-2026-4277, GHSA-q238-5cxm-5c9h, CVE-2026-15830, GHSA-q95w-c7qg-hrff, CVE-2025-59682,
+        GHSA-qcgg-j2x8-h9g8, CVE-2024-56374, GHSA-qg2p-9jwr-mmqf, CVE-2024-38875, GHSA-qmf9-6jqf-j8fq, CVE-2023-46695, GHSA-qw25-v68c-qjf3,
+        CVE-2025-64458, GHSA-r3xc-prgr-mg9p, CVE-2023-31047, GHSA-r836-hh6v-rg5g, CVE-2024-41991, GHSA-rqw2-ghq9-44m7, CVE-2025-13372,
+        GHSA-rrqc-c2jx-6jgv, CVE-2024-45231, GHSA-vm8q-m57g-pff3, CVE-2024-27351, GHSA-vrcr-9hj9-jcg6, CVE-2025-64460, GHSA-wvqv-fj8w-qmhm,
+        CVE-2026-15307, GHSA-x7q2-wr7g-xqmf, CVE-2024-39329, GHSA-xxj9-f6rv-m3x4, CVE-2024-24680
+      source: deps
+      at: requirements.txt:12
+- type: Dependency
+  id: Dependency@PyPI/django-allauth@0.52.0
+  at: requirements.txt#L13
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:13
+    name:
+    - value: django-allauth
+      source: deps
+      at: requirements.txt:13
+    version:
+    - value: 0.52.0
+      source: deps
+      at: requirements.txt:13
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:13
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:13
+    max_severity:
+    - value: moderate
+      source: deps
+      at: requirements.txt:13
+    advisories:
+    - value: GHSA-2jpr-83rg-v67j, CVE-2026-27982, GHSA-8m3c-c723-h4p4, CVE-2025-65431, GHSA-qhmc-3mvr-f2j4, CVE-2025-65430
+      source: deps
+      at: requirements.txt:13
+- type: Dependency
+  id: Dependency@PyPI/django-crispy-forms@1.14.0
+  at: dockerized_labs/sensitive_data_exposure/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:2
+    name:
+    - value: django-crispy-forms
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:2
+    version:
+    - value: 1.14.0
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:2
+    vulnerable:
+    - value: false
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:2
+- type: Dependency
+  id: Dependency@PyPI/django-crispy-forms@2.3
+  at: requirements.txt#L14
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:14
+    name:
+    - value: django-crispy-forms
+      source: deps
+      at: requirements.txt:14
+    version:
+    - value: '2.3'
+      source: deps
+      at: requirements.txt:14
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:14
+- type: Dependency
+  id: Dependency@PyPI/docker@7.1.0
+  at: requirements.txt#L32
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:32
+    name:
+    - value: docker
+      source: deps
+      at: requirements.txt:32
+    version:
+    - value: 7.1.0
+      source: deps
+      at: requirements.txt:32
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:32
+- type: Dependency
+  id: Dependency@PyPI/flask@2.0.1
+  at:
+  - dockerized_labs/a9_uckv_lab/requirements.txt#L1
+  - dockerized_labs/command_injection_lab/requirements.txt#L1
+  - dockerized_labs/crypto_failure_lab/requirements.txt#L2
+  - dockerized_labs/open_source_library_attack_lab/requirements.txt#L1
+  - dockerized_labs/package_injection_lab/requirements.txt#L1
+  - dockerized_labs/software_integrity_lab/requirements.txt#L1
+  - dockerized_labs/sql_injection_lab/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:1
+    name:
+    - value: flask
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:1
+    version:
+    - value: 2.0.1
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:1
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:1
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:1
+    max_severity:
+    - value: high
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:1
+    advisories:
+    - value: GHSA-68rp-wp8r-4726, CVE-2026-27205, GHSA-m2qf-hxjv-5gpq, CVE-2023-30861
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/flask@2.0.3
+  at: dockerized_labs/sde/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:1
+    name:
+    - value: flask
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:1
+    version:
+    - value: 2.0.3
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:1
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:1
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:1
+    max_severity:
+    - value: high
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:1
+    advisories:
+    - value: GHSA-68rp-wp8r-4726, CVE-2026-27205, GHSA-m2qf-hxjv-5gpq, CVE-2023-30861
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/flask@2.2.5
+  at:
+  - dockerized_labs/insecure_design_lab/requirements.txt#L1
+  - dockerized_labs/sec_misconfig/requirements.txt#L1
+  - dockerized_labs/xxe_lab/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:1
+    name:
+    - value: flask
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:1
+    version:
+    - value: 2.2.5
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:1
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:1
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:1
+    max_severity:
+    - value: low
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:1
+    advisories:
+    - value: GHSA-68rp-wp8r-4726, CVE-2026-27205
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/flask@2.3.3
+  at:
+  - challenge/labs/bopla_lab/requirements.txt#L1
+  - challenge/labs/business_logic_lab/requirements.txt#L1
+  - challenge/labs/security_headers_lab/requirements.txt#L1
+  - dockerized_labs/broken_auth_lab/requirements.txt#L1
+  - dockerized_labs/dependency_attack_lab/requirements.txt#L1
+  - dockerized_labs/insufficient_logging_lab/requirements.txt#L1
+  - dockerized_labs/template_injection_lab/requirements.txt#L1
+  - dockerized_labs/xss_lab/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:1
+    name:
+    - value: flask
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:1
+    version:
+    - value: 2.3.3
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:1
+    vulnerable:
+    - value: true
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:1
+    fix_available:
+    - value: true
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:1
+    max_severity:
+    - value: low
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:1
+    advisories:
+    - value: GHSA-68rp-wp8r-4726, CVE-2026-27205
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/flask@3.0.0
+  at: dockerized_labs/insec_des_lab/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/insec_des_lab/requirements.txt:1
+    name:
+    - value: flask
+      source: deps
+      at: dockerized_labs/insec_des_lab/requirements.txt:1
+    version:
+    - value: 3.0.0
+      source: deps
+      at: dockerized_labs/insec_des_lab/requirements.txt:1
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/insec_des_lab/requirements.txt:1
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/insec_des_lab/requirements.txt:1
+    max_severity:
+    - value: low
+      source: deps
+      at: dockerized_labs/insec_des_lab/requirements.txt:1
+    advisories:
+    - value: GHSA-68rp-wp8r-4726, CVE-2026-27205
+      source: deps
+      at: dockerized_labs/insec_des_lab/requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/flask@3.0.2
+  at: dockerized_labs/broken_access_lab/requirements.txt#L1
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:1
+    name:
+    - value: flask
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:1
+    version:
+    - value: 3.0.2
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:1
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:1
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:1
+    max_severity:
+    - value: low
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:1
+    advisories:
+    - value: GHSA-68rp-wp8r-4726, CVE-2026-27205
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:1
+- type: Dependency
+  id: Dependency@PyPI/flask-login@0.5.0
+  at: dockerized_labs/insecure_design_lab/requirements.txt#L3
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:3
+    name:
+    - value: flask-login
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:3
+    version:
+    - value: 0.5.0
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:3
+    vulnerable:
+    - value: false
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:3
+- type: Dependency
+  id: Dependency@PyPI/flask-sqlalchemy@3.1.1
+  at:
+  - dockerized_labs/auth_failure_lab/requirements.txt#L2
+  - dockerized_labs/insecure_design_lab/requirements.txt#L2
+  - dockerized_labs/xxe_lab/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/auth_failure_lab/requirements.txt:2
+    name:
+    - value: flask-sqlalchemy
+      source: deps
+      at: dockerized_labs/auth_failure_lab/requirements.txt:2
+    version:
+    - value: 3.1.1
+      source: deps
+      at: dockerized_labs/auth_failure_lab/requirements.txt:2
+    vulnerable:
+    - value: false
+      source: deps
+      at: dockerized_labs/auth_failure_lab/requirements.txt:2
+- type: Dependency
+  id: Dependency@PyPI/gunicorn@20.1.0
+  at: dockerized_labs/a9_uckv_lab/requirements.txt#L6
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:6
+    name:
+    - value: gunicorn
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:6
+    version:
+    - value: 20.1.0
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:6
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:6
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:6
+    max_severity:
+    - value: high
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:6
+    advisories:
+    - value: GHSA-hc5x-x2vx-497g, CVE-2024-6827, GHSA-w3h3-4rj7-4ph4, CVE-2024-1135
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:6
+- type: Dependency
+  id: Dependency@PyPI/gunicorn@23.0.0
+  at: requirements.txt#L15
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:15
+    name:
+    - value: gunicorn
+      source: deps
+      at: requirements.txt:15
+    version:
+    - value: 23.0.0
+      source: deps
+      at: requirements.txt:15
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:15
+- type: Dependency
+  id: Dependency@PyPI/idna@3.4
+  at: requirements.txt#L16
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:16
+    name:
+    - value: idna
+      source: deps
+      at: requirements.txt:16
+    version:
+    - value: '3.4'
+      source: deps
+      at: requirements.txt:16
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:16
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:16
+    max_severity:
+    - value: moderate
+      source: deps
+      at: requirements.txt:16
+    advisories:
+    - value: GHSA-65pc-fj4g-8rjx, CVE-2026-45409, GHSA-jjg7-2v4v-x38h, CVE-2024-3651
+      source: deps
+      at: requirements.txt:16
+- type: Dependency
+  id: Dependency@PyPI/itsdangerous@2.1.2
+  at:
+  - challenge/labs/business_logic_lab/requirements.txt#L3
+  - challenge/labs/security_headers_lab/requirements.txt#L3
+  - dockerized_labs/broken_auth_lab/requirements.txt#L3
+  - dockerized_labs/insufficient_logging_lab/requirements.txt#L4
+  - dockerized_labs/template_injection_lab/requirements.txt#L5
+  - dockerized_labs/xss_lab/requirements.txt#L3
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:3
+    name:
+    - value: itsdangerous
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:3
+    version:
+    - value: 2.1.2
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:3
+    vulnerable:
+    - value: false
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:3
+- type: Dependency
+  id: Dependency@PyPI/jinja2@3.0.1
+  at:
+  - dockerized_labs/a9_uckv_lab/requirements.txt#L5
+  - dockerized_labs/command_injection_lab/requirements.txt#L3
+  - dockerized_labs/open_source_library_attack_lab/requirements.txt#L3
+  - dockerized_labs/package_injection_lab/requirements.txt#L3
+  - dockerized_labs/software_integrity_lab/requirements.txt#L3
+  - dockerized_labs/sql_injection_lab/requirements.txt#L3
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:5
+    name:
+    - value: jinja2
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:5
+    version:
+    - value: 3.0.1
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:5
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:5
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:5
+    max_severity:
+    - value: moderate
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:5
+    advisories:
+    - value: GHSA-cpwx-vrp4-4pq7, CVE-2025-27516, GHSA-gmj6-6f8f-6699, CVE-2024-56201, GHSA-h5c8-rqwp-cp95, CVE-2024-22195,
+        GHSA-h75v-3vvj-5mfj, CVE-2024-34064, GHSA-q2x7-8rv6-6q7h, CVE-2024-56326
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:5
+- type: Dependency
+  id: Dependency@PyPI/jinja2@3.1.2
+  at:
+  - challenge/labs/business_logic_lab/requirements.txt#L6
+  - challenge/labs/security_headers_lab/requirements.txt#L6
+  - dockerized_labs/broken_auth_lab/requirements.txt#L6
+  - dockerized_labs/dependency_attack_lab/requirements.txt#L3
+  - dockerized_labs/insufficient_logging_lab/requirements.txt#L5
+  - dockerized_labs/template_injection_lab/requirements.txt#L2
+  - dockerized_labs/xss_lab/requirements.txt#L6
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:6
+    name:
+    - value: jinja2
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:6
+    version:
+    - value: 3.1.2
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:6
+    vulnerable:
+    - value: true
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:6
+    fix_available:
+    - value: true
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:6
+    max_severity:
+    - value: moderate
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:6
+    advisories:
+    - value: GHSA-cpwx-vrp4-4pq7, CVE-2025-27516, GHSA-gmj6-6f8f-6699, CVE-2024-56201, GHSA-h5c8-rqwp-cp95, CVE-2024-22195,
+        GHSA-h75v-3vvj-5mfj, CVE-2024-34064, GHSA-q2x7-8rv6-6q7h, CVE-2024-56326
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:6
+- type: Dependency
+  id: Dependency@PyPI/markupsafe@2.1.3
+  at:
+  - challenge/labs/business_logic_lab/requirements.txt#L5
+  - challenge/labs/security_headers_lab/requirements.txt#L5
+  - dockerized_labs/broken_auth_lab/requirements.txt#L7
+  - dockerized_labs/insufficient_logging_lab/requirements.txt#L6
+  - dockerized_labs/template_injection_lab/requirements.txt#L6
+  - dockerized_labs/xss_lab/requirements.txt#L5
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:5
+    name:
+    - value: markupsafe
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:5
+    version:
+    - value: 2.1.3
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:5
+    vulnerable:
+    - value: false
+      source: deps
+      at: challenge/labs/business_logic_lab/requirements.txt:5
+- type: Dependency
+  id: Dependency@PyPI/oauthlib@3.2.2
+  at: requirements.txt#L17
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:17
+    name:
+    - value: oauthlib
+      source: deps
+      at: requirements.txt:17
+    version:
+    - value: 3.2.2
+      source: deps
+      at: requirements.txt:17
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:17
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:17
+    max_severity:
+    - value: high
+      source: deps
+      at: requirements.txt:17
+    advisories:
+    - value: GHSA-7984-qgvg-3j9c, CVE-2026-118669, GHSA-hj66-6f7g-4r5v, CVE-2026-49264, GHSA-xpv3-w29h-x7cv, CVE-2026-49265
+      source: deps
+      at: requirements.txt:17
+- type: Dependency
+  id: Dependency@PyPI/pillow@12.1.0
+  at: requirements.txt#L18
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:18
+    name:
+    - value: pillow
+      source: deps
+      at: requirements.txt:18
+    version:
+    - value: 12.1.0
+      source: deps
+      at: requirements.txt:18
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:18
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:18
+    max_severity:
+    - value: critical
+      source: deps
+      at: requirements.txt:18
+    advisories:
+    - value: GHSA-22hg-r758-rrw9, CVE-2026-112390, GHSA-24rc-8hj2-v98c, CVE-2026-96638, GHSA-254f-3936-288h, CVE-2026-112391,
+        GHSA-27h8-gf7j-v5hc, CVE-2026-112392, GHSA-332p-7hrc-92wf, CVE-2026-112393, GHSA-3j72-p6qg-6xp7, CVE-2026-96642, GHSA-4558-3h8r-v8xp,
+        CVE-2026-112394, GHSA-45hq-cxwh-f6vc, CVE-2026-55379, GHSA-462x-pgg6-55fp, CVE-2026-112395, GHSA-4rm8-3hmm-39fg, CVE-2026-96641,
+        GHSA-4rr5-89j8-mwwm, CVE-2026-112396, GHSA-4x4j-2g7c-83w6, CVE-2026-55798, GHSA-58r4-6rv3-gfh8, CVE-2026-112397, GHSA-5x8w-8jj5-q52h,
+        CVE-2026-112398, GHSA-5x94-69rx-g8h2, CVE-2026-54060, GHSA-5xm2-6676-qcp9, CVE-2026-112399, GHSA-5xmw-vc9v-4wf2, CVE-2026-42309,
+        GHSA-62p4-gmf7-7g93, CVE-2026-54058, GHSA-654x-cwwv-5j9c, CVE-2026-114501, GHSA-65qm-jvmh-6pqg, CVE-2026-112400, GHSA-6r8x-57c9-28j4,
+        CVE-2026-59199, GHSA-74r2-7ff9-mjj2, CVE-2026-112401, GHSA-78g4-xqwv-q3g8, GHSA-7mwm-ghpf-9vrm, CVE-2026-112402, GHSA-8g5g-8vmr-9782,
+        CVE-2026-112403, GHSA-8v84-f9pq-wr9x, CVE-2026-54059, GHSA-9hw9-ch79-4vh6, CVE-2026-59205, GHSA-9v9v-9qvf-h2hj, CVE-2026-96644,
+        GHSA-c6hw-5grf-ff96, CVE-2026-112404, GHSA-cfh3-3jmp-rvhc, CVE-2026-25990, GHSA-cp9v-662q-vvx9, CVE-2026-112405, GHSA-f2g6-542v-9j58,
+        CVE-2026-112406, GHSA-fc9g-5qg7-mf45, CVE-2026-112891, GHSA-fj7v-r99m-22gq, CVE-2026-59198, GHSA-g4qv-2jxx-769h, CVE-2026-96643,
+        GHSA-g7cr-3p24-7wf7, CVE-2026-96778, GHSA-g842-9rc4-69pw, CVE-2026-96637, GHSA-gg2r-wvfm-q9rx, CVE-2026-112892, GHSA-j4m9-6w36-pw47,
+        CVE-2026-112893, GHSA-jg86-v3jv-hrpm, CVE-2026-112894, GHSA-jjj6-mw9f-p565, CVE-2026-59200, GHSA-mrfp-p49p-3hf2, CVE-2026-96640,
+        GHSA-p4wg-p73j-c528, CVE-2026-112895, GHSA-p8hx-v2p6-rp84, CVE-2026-96636, GHSA-pchr-8j38-3x4p, CVE-2026-112896, GHSA-pg7v-jwj7-p798,
+        CVE-2026-59203, GHSA-phj9-mv4w-65pm, CVE-2026-55380, GHSA-pwv6-vv43-88gr, CVE-2026-42311, GHSA-q45j-58j2-45rg, CVE-2026-112897,
+        GHSA-r73j-pqj5-w3x7, CVE-2026-42310, GHSA-rfgq-q3w2-pmv2, CVE-2026-112898, GHSA-v9pv-5gc8-w2m6, CVE-2026-96639, GHSA-vjc4-5qp5-m44j,
+        CVE-2026-59204, GHSA-vx6w-vv9f-6gvg, CVE-2026-112899, GHSA-w889-685w-c8fh, CVE-2026-112900, GHSA-whj4-6x5x-4v2j, CVE-2026-40192,
+        GHSA-wjx4-4jcj-g98j, CVE-2026-42308, GHSA-wqgw-9xfh-qf2g, CVE-2026-128066, GHSA-xcvg-w56q-r89m, CVE-2026-128067, GHSA-xgh8-jp6q-p5x8,
+        CVE-2026-112901, GHSA-xj96-63gp-2gmr, CVE-2026-59197, GHSA-xvh5-g6gv-559v, CVE-2026-112902
+      source: deps
+      at: requirements.txt:18
+- type: Dependency
+  id: Dependency@PyPI/pillow@8.0.0
+  at: dockerized_labs/a9_uckv_lab/requirements.txt#L3
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:3
+    name:
+    - value: pillow
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:3
+    version:
+    - value: 8.0.0
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:3
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:3
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:3
+    max_severity:
+    - value: critical
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:3
+    advisories:
+    - value: GHSA-22hg-r758-rrw9, CVE-2026-112390, GHSA-254f-3936-288h, CVE-2026-112391, GHSA-27h8-gf7j-v5hc, CVE-2026-112392,
+        GHSA-332p-7hrc-92wf, CVE-2026-112393, GHSA-3f63-hfp8-52jq, CVE-2023-50447, GHSA-3j72-p6qg-6xp7, CVE-2026-96642, GHSA-3wvg-mj6g-m9cv,
+        CVE-2021-27922, GHSA-44wm-f244-xhp3, CVE-2024-28219, GHSA-4558-3h8r-v8xp, CVE-2026-112394, GHSA-45hq-cxwh-f6vc, CVE-2026-55379,
+        GHSA-4fx9-vc88-q2xc, GHSA-4rm8-3hmm-39fg, CVE-2026-96641, GHSA-4x4j-2g7c-83w6, CVE-2026-55798, GHSA-57h3-9rgr-c24m,
+        CVE-2021-25289, GHSA-58r4-6rv3-gfh8, CVE-2026-112397, GHSA-5x8w-8jj5-q52h, CVE-2026-112398, GHSA-5x94-69rx-g8h2, CVE-2026-54060,
+        GHSA-62p4-gmf7-7g93, CVE-2026-54058, GHSA-6r8x-57c9-28j4, CVE-2026-59199, GHSA-74r2-7ff9-mjj2, CVE-2026-112401, GHSA-7534-mm45-c74v,
+        CVE-2021-34552, GHSA-77gc-v2xv-rvvh, CVE-2021-25287, GHSA-7mwm-ghpf-9vrm, CVE-2026-112402, GHSA-7r7m-5h27-29hp, CVE-2021-28676,
+        GHSA-8g5g-8vmr-9782, CVE-2026-112403, GHSA-8ghj-p4vj-mr35, CVE-2023-44271, GHSA-8v84-f9pq-wr9x, CVE-2026-54059, GHSA-8vj2-vxx3-667w,
+        CVE-2022-22817, GHSA-8xjq-8fcg-g5hw, CVE-2021-25290, GHSA-95q3-8gr9-gm8w, CVE-2021-27923, GHSA-98vv-pw6r-q6q4, CVE-2021-23437,
+        GHSA-9hw9-ch79-4vh6, CVE-2026-59205, GHSA-9hx2-hgq2-2g4f, CVE-2021-25292, GHSA-9j59-75qj-795w, CVE-2022-24303, GHSA-9v9v-9qvf-h2hj,
+        CVE-2026-96644, GHSA-f2g6-542v-9j58, CVE-2026-112406, GHSA-f4w8-cv6p-x6r5, CVE-2021-27921, GHSA-f5g8-5qq7-938w, CVE-2020-35653,
+        GHSA-fj7v-r99m-22gq, CVE-2026-59198, GHSA-g6rj-rv7j-xwp4, CVE-2021-28675, GHSA-g842-9rc4-69pw, CVE-2026-96637, GHSA-gg2r-wvfm-q9rx,
+        CVE-2026-112892, GHSA-hf64-x4gq-p99h, CVE-2020-35655, GHSA-hjfx-8p6c-g7gx, CVE-2021-28678, GHSA-j7hp-h8jx-5ppr, CVE-2023-4863,
+        CVE-2023-5129, GHSA-jg86-v3jv-hrpm, CVE-2026-112894, GHSA-jjj6-mw9f-p565, CVE-2026-59200, GHSA-m2vv-5vj5-2hm7, CVE-2022-45198,
+        GHSA-mrfp-p49p-3hf2, CVE-2026-96640, GHSA-mvg9-xffr-p774, CVE-2021-25291, GHSA-p43w-g3c5-g5mq, CVE-2021-25293, GHSA-p4wg-p73j-c528,
+        CVE-2026-112895, GHSA-p8hx-v2p6-rp84, CVE-2026-96636, GHSA-pchr-8j38-3x4p, CVE-2026-112896, GHSA-phj9-mv4w-65pm, CVE-2026-55380,
+        GHSA-pw3c-h7wp-cvhx, CVE-2022-22815, GHSA-q45j-58j2-45rg, CVE-2026-112897, GHSA-q5hq-fp76-qmrc, CVE-2021-28677, GHSA-r73j-pqj5-w3x7,
+        CVE-2026-42310, GHSA-rwv7-3v45-hg29, CVE-2021-25288, GHSA-vqcj-wrf2-7v73, CVE-2020-35654, GHSA-vx6w-vv9f-6gvg, CVE-2026-112899,
+        GHSA-w889-685w-c8fh, CVE-2026-112900, GHSA-wjx4-4jcj-g98j, CVE-2026-42308, GHSA-wqgw-9xfh-qf2g, CVE-2026-128066, GHSA-xcvg-w56q-r89m,
+        CVE-2026-128067, GHSA-xgh8-jp6q-p5x8, CVE-2026-112901, GHSA-xj96-63gp-2gmr, CVE-2026-59197, GHSA-xrcv-f9gm-v42c, CVE-2022-22816,
+        GHSA-xvh5-g6gv-559v, CVE-2026-112902, GHSA-q4mp-jvh2-76fj, CVE-2022-45199, PYSEC-2023-175
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:3
+- type: Dependency
+  id: Dependency@PyPI/pre-commit@4.5.1
+  at: requirements.txt#L19
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:19
+    name:
+    - value: pre-commit
+      source: deps
+      at: requirements.txt:19
+    version:
+    - value: 4.5.1
+      source: deps
+      at: requirements.txt:19
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:19
+- type: Dependency
+  id: Dependency@PyPI/pycparser@2.21
+  at: requirements.txt#L20
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:20
+    name:
+    - value: pycparser
+      source: deps
+      at: requirements.txt:20
+    version:
+    - value: '2.21'
+      source: deps
+      at: requirements.txt:20
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:20
+- type: Dependency
+  id: Dependency@PyPI/pyjwt@2.4.0
+  at: requirements.txt#L21
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:21
+    name:
+    - value: pyjwt
+      source: deps
+      at: requirements.txt:21
+    version:
+    - value: 2.4.0
+      source: deps
+      at: requirements.txt:21
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:21
+    fix_available:
+    - value: false
+      source: deps
+      at: requirements.txt:21
+    max_severity:
+    - value: critical
+      source: deps
+      at: requirements.txt:21
+    advisories:
+    - value: GHSA-2gx3-rcp4-g85q, CVE-2026-101917, GHSA-42vr-xj54-vc7v, CVE-2026-101918, GHSA-752w-5fwx-jx9f, CVE-2026-32597,
+        GHSA-993g-76c3-p5m4, CVE-2026-48522, GHSA-9v7f-9g4p-ffgj, CVE-2026-102267, GHSA-ffc3-869f-jxw9, CVE-2026-102268, GHSA-fhv5-28vv-h8m8,
+        CVE-2026-48524, GHSA-hxm8-2xgr-2p9m, CVE-2026-102269, GHSA-jwrc-g2q2-pq5p, CVE-2026-102270, GHSA-p4g4-x82p-q773, CVE-2026-102271,
+        GHSA-pxh4-856f-4h89, GHSA-x33g-cr3x-6449, CVE-2026-102275, GHSA-xgmm-8j9v-c9wx, CVE-2026-48526, PYSEC-2025-183, CVE-2025-45768
+      source: deps
+      at: requirements.txt:21
+- type: Dependency
+  id: Dependency@PyPI/pyjwt@2.8.0
+  at: dockerized_labs/sec_misconfig/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:2
+    name:
+    - value: pyjwt
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:2
+    version:
+    - value: 2.8.0
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:2
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:2
+    fix_available:
+    - value: false
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:2
+    max_severity:
+    - value: critical
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:2
+    advisories:
+    - value: GHSA-2gx3-rcp4-g85q, CVE-2026-101917, GHSA-42vr-xj54-vc7v, CVE-2026-101918, GHSA-752w-5fwx-jx9f, CVE-2026-32597,
+        GHSA-993g-76c3-p5m4, CVE-2026-48522, GHSA-9v7f-9g4p-ffgj, CVE-2026-102267, GHSA-ffc3-869f-jxw9, CVE-2026-102268, GHSA-fhv5-28vv-h8m8,
+        CVE-2026-48524, GHSA-hxm8-2xgr-2p9m, CVE-2026-102269, GHSA-jwrc-g2q2-pq5p, CVE-2026-102270, GHSA-p4g4-x82p-q773, CVE-2026-102271,
+        GHSA-pxh4-856f-4h89, GHSA-w7vc-732c-9m39, CVE-2026-48525, GHSA-x33g-cr3x-6449, CVE-2026-102275, GHSA-xgmm-8j9v-c9wx,
+        CVE-2026-48526, PYSEC-2025-183, CVE-2025-45768
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:2
+- type: Dependency
+  id: Dependency@PyPI/python-dotenv@0.21.1
+  at: dockerized_labs/sec_misconfig/requirements.txt#L3
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:3
+    name:
+    - value: python-dotenv
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:3
+    version:
+    - value: 0.21.1
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:3
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:3
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:3
+    max_severity:
+    - value: moderate
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:3
+    advisories:
+    - value: GHSA-mf9w-mj56-hr94, CVE-2026-28684
+      source: deps
+      at: dockerized_labs/sec_misconfig/requirements.txt:3
+- type: Dependency
+  id: Dependency@PyPI/python3-openid@3.2.0
+  at: requirements.txt#L22
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:22
+    name:
+    - value: python3-openid
+      source: deps
+      at: requirements.txt:22
+    version:
+    - value: 3.2.0
+      source: deps
+      at: requirements.txt:22
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:22
+- type: Dependency
+  id: Dependency@PyPI/pytz@2020.1
+  at: requirements.txt#L23
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:23
+    name:
+    - value: pytz
+      source: deps
+      at: requirements.txt:23
+    version:
+    - value: '2020.1'
+      source: deps
+      at: requirements.txt:23
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:23
+- type: Dependency
+  id: Dependency@PyPI/pyyaml@5.1
+  at:
+  - requirements.txt#L24
+  - dockerized_labs/a9_uckv_lab/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:24
+    name:
+    - value: pyyaml
+      source: deps
+      at: requirements.txt:24
+    version:
+    - value: '5.1'
+      source: deps
+      at: requirements.txt:24
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:24
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:24
+    max_severity:
+    - value: critical
+      source: deps
+      at: requirements.txt:24
+    advisories:
+    - value: GHSA-3pqx-4fqf-j49f, CVE-2019-20477, GHSA-6757-jp84-gxfx, CVE-2020-1747, GHSA-8q59-q68h-6hv4, CVE-2020-14343
+      source: deps
+      at: requirements.txt:24
+- type: Dependency
+  id: Dependency@PyPI/requests@2.28.1
+  at: dockerized_labs/sensitive_data_exposure/requirements.txt#L4
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:4
+    name:
+    - value: requests
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:4
+    version:
+    - value: 2.28.1
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:4
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:4
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:4
+    max_severity:
+    - value: moderate
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:4
+    advisories:
+    - value: GHSA-9hjg-9r4m-mvj7, CVE-2024-47081, GHSA-9wx4-h78v-vm56, CVE-2024-35195, GHSA-gc5v-m9x4-r6x2, CVE-2026-25645,
+        GHSA-j8r2-6x86-q33q, CVE-2023-32681
+      source: deps
+      at: dockerized_labs/sensitive_data_exposure/requirements.txt:4
+- type: Dependency
+  id: Dependency@PyPI/requests@2.28.2
+  at: requirements.txt#L25
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:25
+    name:
+    - value: requests
+      source: deps
+      at: requirements.txt:25
+    version:
+    - value: 2.28.2
+      source: deps
+      at: requirements.txt:25
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:25
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:25
+    max_severity:
+    - value: moderate
+      source: deps
+      at: requirements.txt:25
+    advisories:
+    - value: GHSA-9hjg-9r4m-mvj7, CVE-2024-47081, GHSA-9wx4-h78v-vm56, CVE-2024-35195, GHSA-gc5v-m9x4-r6x2, CVE-2026-25645,
+        GHSA-j8r2-6x86-q33q, CVE-2023-32681
+      source: deps
+      at: requirements.txt:25
+- type: Dependency
+  id: Dependency@PyPI/requests-oauthlib@1.3.1
+  at: requirements.txt#L26
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:26
+    name:
+    - value: requests-oauthlib
+      source: deps
+      at: requirements.txt:26
+    version:
+    - value: 1.3.1
+      source: deps
+      at: requirements.txt:26
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:26
+- type: Dependency
+  id: Dependency@PyPI/sqlparse@0.3.1
+  at: requirements.txt#L27
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:27
+    name:
+    - value: sqlparse
+      source: deps
+      at: requirements.txt:27
+    version:
+    - value: 0.3.1
+      source: deps
+      at: requirements.txt:27
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:27
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:27
+    max_severity:
+    - value: high
+      source: deps
+      at: requirements.txt:27
+    advisories:
+    - value: GHSA-27jp-wm6q-gp25, GHSA-2m57-hf25-phgg, CVE-2024-4340, GHSA-3496-9g83-7v6x, CVE-2026-59894, GHSA-cfqr-cjx5-5jcm,
+        CVE-2026-84305, GHSA-f2ff-p2ww-7p4p, CVE-2026-71491, GHSA-prg7-hcfm-mfcr, CVE-2026-59893, GHSA-pwgv-4x5q-6m9f, CVE-2026-54284,
+        GHSA-rrm6-wvj7-cwh2, CVE-2023-30608
+      source: deps
+      at: requirements.txt:27
+- type: Dependency
+  id: Dependency@PyPI/urllib3@1.26.9
+  at: requirements.txt#L28
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:28
+    name:
+    - value: urllib3
+      source: deps
+      at: requirements.txt:28
+    version:
+    - value: 1.26.9
+      source: deps
+      at: requirements.txt:28
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:28
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:28
+    max_severity:
+    - value: high
+      source: deps
+      at: requirements.txt:28
+    advisories:
+    - value: GHSA-2xpw-w6gg-jr37, CVE-2025-66471, GHSA-34jh-p97f-mpxf, CVE-2024-37891, GHSA-38jv-5279-wg99, CVE-2026-21441,
+        GHSA-8988-9cw3-xx77, CVE-2026-97687, GHSA-g4mx-q9vg-27p4, CVE-2023-45803, GHSA-gm62-xv2j-4w53, CVE-2025-66418, GHSA-pq67-6m6q-mj2v,
+        CVE-2025-50181, GHSA-qccp-gfcp-xxvc, CVE-2026-44431, GHSA-v845-jxx5-vc9f, CVE-2023-43804, GHSA-vxq7-64xx-v4gw, CVE-2026-97689
+      source: deps
+      at: requirements.txt:28
+- type: Dependency
+  id: Dependency@PyPI/werkzeug@2.0.1
+  at:
+  - dockerized_labs/a9_uckv_lab/requirements.txt#L4
+  - dockerized_labs/command_injection_lab/requirements.txt#L2
+  - dockerized_labs/crypto_failure_lab/requirements.txt#L3
+  - dockerized_labs/open_source_library_attack_lab/requirements.txt#L2
+  - dockerized_labs/package_injection_lab/requirements.txt#L2
+  - dockerized_labs/software_integrity_lab/requirements.txt#L2
+  - dockerized_labs/sql_injection_lab/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:4
+    name:
+    - value: werkzeug
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:4
+    version:
+    - value: 2.0.1
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:4
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:4
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:4
+    max_severity:
+    - value: high
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:4
+    advisories:
+    - value: GHSA-29vq-49wr-vm6x, CVE-2026-27199, GHSA-2g68-c3qc-8985, CVE-2024-34069, GHSA-87hc-h4r5-73f7, CVE-2026-21860,
+        GHSA-f9vj-2wh5-fj8j, CVE-2024-49766, GHSA-g6x2-hccm-hh4m, CVE-2026-102598, GHSA-hgf8-39gv-g3f2, CVE-2025-66221, GHSA-hrfv-mqp8-q5rw,
+        CVE-2023-46136, GHSA-px8h-6qxv-m22q, CVE-2023-23934, GHSA-q34m-jh98-gwm2, CVE-2024-49767, GHSA-xg9f-g7g7-2323, CVE-2023-25577,
+        PYSEC-2022-203, CVE-2022-29361
+      source: deps
+      at: dockerized_labs/a9_uckv_lab/requirements.txt:4
+- type: Dependency
+  id: Dependency@PyPI/werkzeug@2.0.3
+  at: dockerized_labs/sde/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:2
+    name:
+    - value: werkzeug
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:2
+    version:
+    - value: 2.0.3
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:2
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:2
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:2
+    max_severity:
+    - value: high
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:2
+    advisories:
+    - value: GHSA-29vq-49wr-vm6x, CVE-2026-27199, GHSA-2g68-c3qc-8985, CVE-2024-34069, GHSA-87hc-h4r5-73f7, CVE-2026-21860,
+        GHSA-f9vj-2wh5-fj8j, CVE-2024-49766, GHSA-g6x2-hccm-hh4m, CVE-2026-102598, GHSA-hgf8-39gv-g3f2, CVE-2025-66221, GHSA-hrfv-mqp8-q5rw,
+        CVE-2023-46136, GHSA-px8h-6qxv-m22q, CVE-2023-23934, GHSA-q34m-jh98-gwm2, CVE-2024-49767, GHSA-xg9f-g7g7-2323, CVE-2023-25577,
+        PYSEC-2022-203, CVE-2022-29361
+      source: deps
+      at: dockerized_labs/sde/requirements.txt:2
+- type: Dependency
+  id: Dependency@PyPI/werkzeug@2.1.2
+  at: requirements.txt#L29
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:29
+    name:
+    - value: werkzeug
+      source: deps
+      at: requirements.txt:29
+    version:
+    - value: 2.1.2
+      source: deps
+      at: requirements.txt:29
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:29
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:29
+    max_severity:
+    - value: high
+      source: deps
+      at: requirements.txt:29
+    advisories:
+    - value: GHSA-29vq-49wr-vm6x, CVE-2026-27199, GHSA-2g68-c3qc-8985, CVE-2024-34069, GHSA-87hc-h4r5-73f7, CVE-2026-21860,
+        GHSA-f9vj-2wh5-fj8j, CVE-2024-49766, GHSA-g6x2-hccm-hh4m, CVE-2026-102598, GHSA-hgf8-39gv-g3f2, CVE-2025-66221, GHSA-hrfv-mqp8-q5rw,
+        CVE-2023-46136, GHSA-px8h-6qxv-m22q, CVE-2023-23934, GHSA-q34m-jh98-gwm2, CVE-2024-49767, GHSA-xg9f-g7g7-2323, CVE-2023-25577
+      source: deps
+      at: requirements.txt:29
+- type: Dependency
+  id: Dependency@PyPI/werkzeug@2.2.2
+  at:
+  - dockerized_labs/insecure_design_lab/requirements.txt#L4
+  - dockerized_labs/xxe_lab/requirements.txt#L3
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:4
+    name:
+    - value: werkzeug
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:4
+    version:
+    - value: 2.2.2
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:4
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:4
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:4
+    max_severity:
+    - value: high
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:4
+    advisories:
+    - value: GHSA-29vq-49wr-vm6x, CVE-2026-27199, GHSA-2g68-c3qc-8985, CVE-2024-34069, GHSA-87hc-h4r5-73f7, CVE-2026-21860,
+        GHSA-f9vj-2wh5-fj8j, CVE-2024-49766, GHSA-g6x2-hccm-hh4m, CVE-2026-102598, GHSA-hgf8-39gv-g3f2, CVE-2025-66221, GHSA-hrfv-mqp8-q5rw,
+        CVE-2023-46136, GHSA-px8h-6qxv-m22q, CVE-2023-23934, GHSA-q34m-jh98-gwm2, CVE-2024-49767, GHSA-xg9f-g7g7-2323, CVE-2023-25577
+      source: deps
+      at: dockerized_labs/insecure_design_lab/requirements.txt:4
+- type: Dependency
+  id: Dependency@PyPI/werkzeug@2.3.7
+  at:
+  - challenge/labs/bopla_lab/requirements.txt#L2
+  - challenge/labs/business_logic_lab/requirements.txt#L2
+  - challenge/labs/security_headers_lab/requirements.txt#L2
+  - dockerized_labs/broken_auth_lab/requirements.txt#L2
+  - dockerized_labs/dependency_attack_lab/requirements.txt#L2
+  - dockerized_labs/insufficient_logging_lab/requirements.txt#L2
+  - dockerized_labs/template_injection_lab/requirements.txt#L3
+  - dockerized_labs/xss_lab/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:2
+    name:
+    - value: werkzeug
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:2
+    version:
+    - value: 2.3.7
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:2
+    vulnerable:
+    - value: true
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:2
+    fix_available:
+    - value: true
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:2
+    max_severity:
+    - value: high
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:2
+    advisories:
+    - value: GHSA-29vq-49wr-vm6x, CVE-2026-27199, GHSA-2g68-c3qc-8985, CVE-2024-34069, GHSA-87hc-h4r5-73f7, CVE-2026-21860,
+        GHSA-f9vj-2wh5-fj8j, CVE-2024-49766, GHSA-g6x2-hccm-hh4m, CVE-2026-102598, GHSA-hgf8-39gv-g3f2, CVE-2025-66221, GHSA-hrfv-mqp8-q5rw,
+        CVE-2023-46136, GHSA-q34m-jh98-gwm2, CVE-2024-49767
+      source: deps
+      at: challenge/labs/bopla_lab/requirements.txt:2
+- type: Dependency
+  id: Dependency@PyPI/werkzeug@3.0.1
+  at:
+  - dockerized_labs/broken_access_lab/requirements.txt#L2
+  - dockerized_labs/insec_des_lab/requirements.txt#L2
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:2
+    name:
+    - value: werkzeug
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:2
+    version:
+    - value: 3.0.1
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:2
+    vulnerable:
+    - value: true
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:2
+    fix_available:
+    - value: true
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:2
+    max_severity:
+    - value: high
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:2
+    advisories:
+    - value: GHSA-29vq-49wr-vm6x, CVE-2026-27199, GHSA-2g68-c3qc-8985, CVE-2024-34069, GHSA-87hc-h4r5-73f7, CVE-2026-21860,
+        GHSA-f9vj-2wh5-fj8j, CVE-2024-49766, GHSA-g6x2-hccm-hh4m, CVE-2026-102598, GHSA-hgf8-39gv-g3f2, CVE-2025-66221, GHSA-q34m-jh98-gwm2,
+        CVE-2024-49767
+      source: deps
+      at: dockerized_labs/broken_access_lab/requirements.txt:2
+- type: Dependency
+  id: Dependency@PyPI/whitenoise@6.2.0
+  at: requirements.txt#L30
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:30
+    name:
+    - value: whitenoise
+      source: deps
+      at: requirements.txt:30
+    version:
+    - value: 6.2.0
+      source: deps
+      at: requirements.txt:30
+    vulnerable:
+    - value: false
+      source: deps
+      at: requirements.txt:30
+- type: Dependency
+  id: Dependency@PyPI/zipp@3.8.0
+  at: requirements.txt#L31
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: requirements.txt:31
+    name:
+    - value: zipp
+      source: deps
+      at: requirements.txt:31
+    version:
+    - value: 3.8.0
+      source: deps
+      at: requirements.txt:31
+    vulnerable:
+    - value: true
+      source: deps
+      at: requirements.txt:31
+    fix_available:
+    - value: true
+      source: deps
+      at: requirements.txt:31
+    max_severity:
+    - value: moderate
+      source: deps
+      at: requirements.txt:31
+    advisories:
+    - value: GHSA-jfmj-5v4g-7637, CVE-2024-5569
+      source: deps
+      at: requirements.txt:31

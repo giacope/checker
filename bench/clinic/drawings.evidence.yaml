@@ -1,0 +1,43 @@
+# Evidence read from the NIBS Medical/Dental Clinic drawing set (2012-03-27, redacted),
+# CC BY 4.0 per buildingSMART International "Medical-Dental Test Files" (2020).
+# The sheets are vector PDFs with no text layer; these values were read from rendered
+# sheets by Claude Opus 5.5 on 2026-11-14, standing in for the drawing-reader adapter.
+subject: {kind: building, id: NIBS Medical/Dental Clinic}
+sources:
+  - id: drawings
+    kind: drawings
+    describes: https://www.wbdg.org/FFC/BIM/LCie/Clinic%20Model/2012-03-27-ClinicDrawingsRedacted.zip
+
+facts:
+  occupancy_classification_note:
+    - {value: BUSINESS, at: "sheet:161 (A18-1) General Note 2, OCCUPANCY CLASSIFICATION = BUSINESS"}
+  sprinkler_system:
+    # "BUILDING IS FULLY SPRINKLERED" names no installation standard.
+    - {value: nfpa13, at: "sheet:161 (A18-1) General Note 1"}
+    - {value: nfpa13r, at: "sheet:161 (A18-1) General Note 1"}
+
+elements:
+  # The three IfcStair elements all sit at the model origin, so sheets cannot be matched
+  # to a GlobalId by position; all three stair sheets carry the same dimensions, so the
+  # same observations apply to each.
+  - &stair
+    type: Stair
+    id: 3NhaIUfh12PAdrGa$S3z3M
+    at: ["sheet:122 (A11-1)", "sheet:123 (A11-2)", "sheet:124 (A11-3)"]
+    facts:
+      riser_height: [{value: 176 mm, at: "sheet:122 (A11-1) section, 13 EQ. RISERS @ 176 mm EA."}]
+      tread_depth: [{value: 279 mm, at: "sheets 122-124, 12 EQUAL TREADS @ 279 mm EA."}]
+      width: [{value: 1210 mm, at: "sheets 122-124, flight width 1210"}]
+  - {<<: *stair, id: 0mxk1RW8H5mvX1dNnpRqIz}
+  - {<<: *stair, id: 0mxk1RW8H5mvX1dNnpRqBK}
+
+  - type: Space
+    id: First Floor
+    at: ["sheet:161 (A18-1)"]
+    facts:
+      travel_distance: [{value: 137 ft, at: "sheet:161 (A18-1) travel distance arrow 137 FT / 41.75 M"}]
+  - type: Space
+    id: Second Floor
+    at: ["sheet:162 (A18-2)"]
+    facts:
+      travel_distance: [{value: 153 ft, at: "sheet:162 (A18-2) travel distance arrow 153 FT. / 46.65 M"}]

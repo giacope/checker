@@ -1,0 +1,1396 @@
+subject:
+  kind: system
+  id: juice-shop
+sources:
+- id: static
+  kind: static_analysis
+  describes: juice-shop
+  adapter: adapters.code_static
+  adapter_version: 0.1.0
+  commit: 266448aba68cd8ba5915f526a128da4fa7bc3f9f
+  files_analysed: 427
+  unparsed: []
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: lib/insecurity.ts:41
+  - value: true
+    source: static
+    at: models/user.ts:73
+  - value: true
+    source: static
+    at: routes/2fa.ts:107
+  - value: true
+    source: static
+    at: routes/2fa.ts:152
+  - value: true
+    source: static
+    at: routes/changePassword.ts:39
+  - value: true
+    source: static
+    at: routes/login.ts:34
+  - value: true
+    source: static
+    at: routes/login.ts:59
+  - value: true
+    source: static
+    at: routes/login.ts:60
+  password_min_length:
+  - value: 0
+    source: static
+    at: data/datacreator.ts:195
+  - value: 0
+    source: static
+    at: models/user.ts:73
+  - value: 0
+    source: static
+    at: routes/changePassword.ts:39
+  - value: 0
+    source: static
+    at: routes/changePassword.ts:51
+  password_max_length:
+  - value: 100000
+    source: static
+    at: data/datacreator.ts:195
+  - value: 100000
+    source: static
+    at: models/user.ts:73
+  - value: 100000
+    source: static
+    at: routes/changePassword.ts:39
+  - value: 100000
+    source: static
+    at: routes/changePassword.ts:51
+  password_composition_rules:
+  - value: false
+    source: static
+    at: data/datacreator.ts:195
+  - value: false
+    source: static
+    at: models/user.ts:73
+  - value: false
+    source: static
+    at: routes/changePassword.ts:39
+  - value: false
+    source: static
+    at: routes/changePassword.ts:51
+  password_blocklist_check:
+  - value: false
+    source: static
+    at: data/datacreator.ts:195
+  - value: false
+    source: static
+    at: models/user.ts:73
+  - value: false
+    source: static
+    at: routes/changePassword.ts:39
+  - value: false
+    source: static
+    at: routes/changePassword.ts:51
+  password_periodic_change:
+  - value: false
+    source: static
+    at: data/datacreator.ts:195
+  - value: false
+    source: static
+    at: models/user.ts:73
+  - value: false
+    source: static
+    at: routes/changePassword.ts:39
+  - value: false
+    source: static
+    at: routes/changePassword.ts:51
+  login_rate_limited:
+  - value: false
+    source: static
+    at: server.ts:635
+  processes_personal_data:
+  - value: true
+    source: static
+    at: models/address.ts:41
+  - value: true
+    source: static
+    at: models/address.ts:44
+  - value: true
+    source: static
+    at: models/address.ts:52
+  - value: true
+    source: static
+    at: models/address.ts:58
+  - value: true
+    source: static
+    at: models/address.ts:64
+  - value: true
+    source: static
+    at: models/card.ts:37
+  - value: true
+    source: static
+    at: models/recycle.ts:33
+  - value: true
+    source: static
+    at: models/user.ts:44
+  account_erasure:
+  - value: false
+    source: static
+    at: routes/dataErasure.ts:83
+  - value: false
+    source: static
+    at: routes/dataErasure.ts:85
+elements:
+- type: PasswordStore
+  id: PasswordStore@lib/insecurity.ts:41
+  at: lib/insecurity.ts:41
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: lib/insecurity.ts:41
+    salted:
+    - value: false
+      source: static
+      at: lib/insecurity.ts:41
+- type: PasswordStore
+  id: PasswordStore@models/user.ts:73
+  at: models/user.ts:73
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: models/user.ts:73
+    salted:
+    - value: false
+      source: static
+      at: models/user.ts:73
+- type: PasswordStore
+  id: PasswordStore@routes/2fa.ts:107
+  at: routes/2fa.ts:107
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: routes/2fa.ts:107
+    salted:
+    - value: false
+      source: static
+      at: routes/2fa.ts:107
+- type: PasswordStore
+  id: PasswordStore@routes/2fa.ts:152
+  at: routes/2fa.ts:152
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: routes/2fa.ts:152
+    salted:
+    - value: false
+      source: static
+      at: routes/2fa.ts:152
+- type: PasswordStore
+  id: PasswordStore@routes/changePassword.ts:39
+  at: routes/changePassword.ts:39
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: routes/changePassword.ts:39
+    salted:
+    - value: false
+      source: static
+      at: routes/changePassword.ts:39
+- type: PasswordStore
+  id: PasswordStore@routes/login.ts:34
+  at: routes/login.ts:34
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: routes/login.ts:34
+    salted:
+    - value: false
+      source: static
+      at: routes/login.ts:34
+- type: Query
+  id: Query@lib/challengeUtils.ts:113
+  at: lib/challengeUtils.ts:113
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/challengeUtils.ts:113
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/challengeUtils.ts:113
+- type: Query
+  id: Query@lib/challengeUtils.ts:125
+  at: lib/challengeUtils.ts:125
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/challengeUtils.ts:125
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/challengeUtils.ts:125
+- type: Query
+  id: Query@routes/2fa.ts:26
+  at: routes/2fa.ts:26
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/2fa.ts:26
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/2fa.ts:26
+- type: Query
+  id: Query@routes/2fa.ts:40
+  at: routes/2fa.ts:40
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/2fa.ts:40
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/2fa.ts:40
+- type: Query
+  id: Query@routes/2fa.ts:124
+  at: routes/2fa.ts:124
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/2fa.ts:124
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/2fa.ts:124
+- type: Query
+  id: Query@routes/2fa.ts:157
+  at: routes/2fa.ts:157
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/2fa.ts:157
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/2fa.ts:157
+- type: Query
+  id: Query@routes/address.ts:11
+  at: routes/address.ts:11
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/address.ts:11
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/address.ts:11
+- type: Query
+  id: Query@routes/address.ts:18
+  at: routes/address.ts:18
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/address.ts:18
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/address.ts:18
+- type: Query
+  id: Query@routes/address.ts:29
+  at: routes/address.ts:29
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/address.ts:29
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/address.ts:29
+- type: Query
+  id: Query@routes/basket.ts:19
+  at: routes/basket.ts:19
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/basket.ts:19
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/basket.ts:19
+- type: Query
+  id: Query@routes/basketItems.ts:68
+  at: routes/basketItems.ts:68
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/basketItems.ts:68
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/basketItems.ts:68
+- type: Query
+  id: Query@routes/basketItems.ts:88
+  at: routes/basketItems.ts:88
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/basketItems.ts:88
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/basketItems.ts:88
+- type: Query
+  id: Query@routes/captcha.ts:37
+  at: routes/captcha.ts:37
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/captcha.ts:37
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/captcha.ts:37
+- type: Query
+  id: Query@routes/chat.ts:52
+  at: routes/chat.ts:52
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/chat.ts:52
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/chat.ts:52
+- type: Query
+  id: Query@routes/chat.ts:150
+  at: routes/chat.ts:150
+  facts:
+    construction:
+    - value: concatenated
+      source: static
+      at: routes/chat.ts:150
+    untrusted_input:
+    - value: false
+      source: static
+      at: routes/chat.ts:150
+- type: Query
+  id: Query@routes/chat.ts:163
+  at: routes/chat.ts:163
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/chat.ts:163
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/chat.ts:163
+- type: Query
+  id: Query@routes/dataErasure.ts:34
+  at: routes/dataErasure.ts:34
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/dataErasure.ts:34
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/dataErasure.ts:34
+- type: Query
+  id: Query@routes/dataErasure.ts:43
+  at: routes/dataErasure.ts:43
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/dataErasure.ts:43
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/dataErasure.ts:43
+- type: Query
+  id: Query@routes/dataExport.ts:26
+  at: routes/dataExport.ts:26
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/dataExport.ts:26
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/dataExport.ts:26
+- type: Query
+  id: Query@routes/dataExport.ts:33
+  at: routes/dataExport.ts:33
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/dataExport.ts:33
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/dataExport.ts:33
+- type: Query
+  id: Query@routes/dataExport.ts:40
+  at: routes/dataExport.ts:40
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/dataExport.ts:40
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/dataExport.ts:40
+- type: Query
+  id: Query@routes/delivery.ts:34
+  at: routes/delivery.ts:34
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/delivery.ts:34
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/delivery.ts:34
+- type: Query
+  id: Query@routes/deluxe.ts:19
+  at: routes/deluxe.ts:19
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/deluxe.ts:19
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/deluxe.ts:19
+- type: Query
+  id: Query@routes/deluxe.ts:25
+  at: routes/deluxe.ts:25
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/deluxe.ts:25
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/deluxe.ts:25
+- type: Query
+  id: Query@routes/deluxe.ts:35
+  at: routes/deluxe.ts:35
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/deluxe.ts:35
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/deluxe.ts:35
+- type: Query
+  id: Query@routes/imageCaptcha.ts:42
+  at: routes/imageCaptcha.ts:42
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/imageCaptcha.ts:42
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/imageCaptcha.ts:42
+- type: Query
+  id: Query@routes/likeProductReviews.ts:25
+  at: routes/likeProductReviews.ts:25
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/likeProductReviews.ts:25
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/likeProductReviews.ts:25
+- type: Query
+  id: Query@routes/likeProductReviews.ts:35
+  at: routes/likeProductReviews.ts:35
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/likeProductReviews.ts:35
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/likeProductReviews.ts:35
+- type: Query
+  id: Query@routes/likeProductReviews.ts:43
+  at: routes/likeProductReviews.ts:43
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/likeProductReviews.ts:43
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/likeProductReviews.ts:43
+- type: Query
+  id: Query@routes/likeProductReviews.ts:50
+  at: routes/likeProductReviews.ts:50
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/likeProductReviews.ts:50
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/likeProductReviews.ts:50
+- type: Query
+  id: Query@routes/login.ts:34
+  at: routes/login.ts:34
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: routes/login.ts:34
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/login.ts:34
+- type: Query
+  id: Query@routes/order.ts:35
+  at: routes/order.ts:35
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/order.ts:35
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/order.ts:35
+- type: Query
+  id: Query@routes/order.ts:51
+  at: routes/order.ts:51
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/order.ts:51
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/order.ts:51
+- type: Query
+  id: Query@routes/order.ts:125
+  at: routes/order.ts:125
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/order.ts:125
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/order.ts:125
+- type: Query
+  id: Query@routes/order.ts:148
+  at: routes/order.ts:148
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/order.ts:148
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/order.ts:148
+- type: Query
+  id: Query@routes/orderHistory.ts:17
+  at: routes/orderHistory.ts:17
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/orderHistory.ts:17
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/orderHistory.ts:17
+- type: Query
+  id: Query@routes/orderHistory.ts:36
+  at: routes/orderHistory.ts:36
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/orderHistory.ts:36
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/orderHistory.ts:36
+- type: Query
+  id: Query@routes/passkey.ts:64
+  at: routes/passkey.ts:64
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:64
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:64
+- type: Query
+  id: Query@routes/passkey.ts:83
+  at: routes/passkey.ts:83
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:83
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:83
+- type: Query
+  id: Query@routes/passkey.ts:140
+  at: routes/passkey.ts:140
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:140
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:140
+- type: Query
+  id: Query@routes/passkey.ts:164
+  at: routes/passkey.ts:164
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:164
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:164
+- type: Query
+  id: Query@routes/passkey.ts:190
+  at: routes/passkey.ts:190
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:190
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:190
+- type: Query
+  id: Query@routes/passkey.ts:210
+  at: routes/passkey.ts:210
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:210
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:210
+- type: Query
+  id: Query@routes/passkey.ts:247
+  at: routes/passkey.ts:247
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:247
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:247
+- type: Query
+  id: Query@routes/passkey.ts:268
+  at: routes/passkey.ts:268
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/passkey.ts:268
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/passkey.ts:268
+- type: Query
+  id: Query@routes/payment.ts:21
+  at: routes/payment.ts:21
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/payment.ts:21
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/payment.ts:21
+- type: Query
+  id: Query@routes/payment.ts:41
+  at: routes/payment.ts:41
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/payment.ts:41
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/payment.ts:41
+- type: Query
+  id: Query@routes/payment.ts:70
+  at: routes/payment.ts:70
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/payment.ts:70
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/payment.ts:70
+- type: Query
+  id: Query@routes/profileImageFileUpload.ts:48
+  at: routes/profileImageFileUpload.ts:48
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/profileImageFileUpload.ts:48
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/profileImageFileUpload.ts:48
+- type: Query
+  id: Query@routes/profileImageUrlUpload.ts:31
+  at: routes/profileImageUrlUpload.ts:31
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/profileImageUrlUpload.ts:31
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/profileImageUrlUpload.ts:31
+- type: Query
+  id: Query@routes/profileImageUrlUpload.ts:35
+  at: routes/profileImageUrlUpload.ts:35
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/profileImageUrlUpload.ts:35
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/profileImageUrlUpload.ts:35
+- type: Query
+  id: Query@routes/recycles.ts:12
+  at: routes/recycles.ts:12
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/recycles.ts:12
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/recycles.ts:12
+- type: Query
+  id: Query@routes/saveLoginIp.ts:31
+  at: routes/saveLoginIp.ts:31
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/saveLoginIp.ts:31
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/saveLoginIp.ts:31
+- type: Query
+  id: Query@routes/search.ts:23
+  at: routes/search.ts:23
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: routes/search.ts:23
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/search.ts:23
+- type: Query
+  id: Query@routes/search.ts:47
+  at: routes/search.ts:47
+  facts:
+    construction:
+    - value: parameterized
+      source: static
+      at: routes/search.ts:47
+    untrusted_input:
+    - value: false
+      source: static
+      at: routes/search.ts:47
+- type: Query
+  id: Query@routes/showProductReviews.ts:36
+  at: routes/showProductReviews.ts:36
+  facts:
+    construction:
+    - value: concatenated
+      source: static
+      at: routes/showProductReviews.ts:36
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/showProductReviews.ts:36
+- type: Query
+  id: Query@routes/trackOrder.ts:18
+  at: routes/trackOrder.ts:18
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: routes/trackOrder.ts:18
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/trackOrder.ts:18
+- type: Query
+  id: Query@routes/updateProductReviews.ts:17
+  at: routes/updateProductReviews.ts:17
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: routes/updateProductReviews.ts:17
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/updateProductReviews.ts:17
+- type: Query
+  id: Query@routes/updateUserProfile.ts:25
+  at: routes/updateUserProfile.ts:25
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/updateUserProfile.ts:25
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/updateUserProfile.ts:25
+- type: Query
+  id: Query@routes/userProfile.ts:41
+  at: routes/userProfile.ts:41
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/userProfile.ts:41
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/userProfile.ts:41
+- type: Query
+  id: Query@routes/wallet.ts:12
+  at: routes/wallet.ts:12
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/wallet.ts:12
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/wallet.ts:12
+- type: Query
+  id: Query@routes/wallet.ts:24
+  at: routes/wallet.ts:24
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: routes/wallet.ts:24
+    untrusted_input:
+    - value: true
+      source: static
+      at: routes/wallet.ts:24
+- type: Cookie
+  id: Cookie@frontend/src/app/Services/local-backup.service.ts:105
+  at: frontend/src/app/Services/local-backup.service.ts:105
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/Services/local-backup.service.ts:105
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/Services/local-backup.service.ts:105
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/Services/local-backup.service.ts:105
+- type: Cookie
+  id: Cookie@frontend/src/app/administration/administration.component.ts:65
+  at: frontend/src/app/administration/administration.component.ts:65
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/administration/administration.component.ts:65
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/administration/administration.component.ts:65
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/administration/administration.component.ts:65
+- type: Cookie
+  id: Cookie@frontend/src/app/challenge-solved-notification/challenge-solved-notification.component.ts:149
+  at: frontend/src/app/challenge-solved-notification/challenge-solved-notification.component.ts:149
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/challenge-solved-notification/challenge-solved-notification.component.ts:149
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/challenge-solved-notification/challenge-solved-notification.component.ts:149
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/challenge-solved-notification/challenge-solved-notification.component.ts:149
+- type: Cookie
+  id: Cookie@frontend/src/app/coding-challenge-page/helpers/handle-verdict.ts:35
+  at: frontend/src/app/coding-challenge-page/helpers/handle-verdict.ts:35
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/coding-challenge-page/helpers/handle-verdict.ts:35
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/coding-challenge-page/helpers/handle-verdict.ts:35
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/coding-challenge-page/helpers/handle-verdict.ts:35
+- type: Cookie
+  id: Cookie@frontend/src/app/login/login.component.ts:153
+  at: frontend/src/app/login/login.component.ts:153
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: frontend/src/app/login/login.component.ts:153
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/login/login.component.ts:153
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/login/login.component.ts:153
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/login/login.component.ts:153
+- type: Cookie
+  id: Cookie@frontend/src/app/navbar/navbar.component.ts:256
+  at: frontend/src/app/navbar/navbar.component.ts:256
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/navbar/navbar.component.ts:256
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/navbar/navbar.component.ts:256
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/navbar/navbar.component.ts:256
+- type: Cookie
+  id: Cookie@frontend/src/app/oauth/oauth.component.ts:51
+  at: frontend/src/app/oauth/oauth.component.ts:51
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: frontend/src/app/oauth/oauth.component.ts:51
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/oauth/oauth.component.ts:51
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/oauth/oauth.component.ts:51
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/oauth/oauth.component.ts:51
+- type: Cookie
+  id: Cookie@frontend/src/app/payment/payment.component.ts:234
+  at: frontend/src/app/payment/payment.component.ts:234
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: frontend/src/app/payment/payment.component.ts:234
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/payment/payment.component.ts:234
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/payment/payment.component.ts:234
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/payment/payment.component.ts:234
+- type: Cookie
+  id: Cookie@frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts:57
+  at: frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts:57
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts:57
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts:57
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts:57
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/two-factor-auth-enter/two-factor-auth-enter.component.ts:57
+- type: Cookie
+  id: Cookie@frontend/src/app/welcome-banner/welcome-banner.component.ts:69
+  at: frontend/src/app/welcome-banner/welcome-banner.component.ts:69
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/app/welcome-banner/welcome-banner.component.ts:69
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/app/welcome-banner/welcome-banner.component.ts:69
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/app/welcome-banner/welcome-banner.component.ts:69
+- type: Cookie
+  id: Cookie@lib/insecurity.ts:192
+  at: lib/insecurity.ts:192
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:192
+    secure:
+    - value: false
+      source: static
+      at: lib/insecurity.ts:192
+    http_only:
+    - value: false
+      source: static
+      at: lib/insecurity.ts:192
+    same_site:
+    - value: unset
+      source: static
+      at: lib/insecurity.ts:192
+- type: Cookie
+  id: Cookie@routes/updateUserProfile.ts:42
+  at: routes/updateUserProfile.ts:42
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: routes/updateUserProfile.ts:42
+    secure:
+    - value: false
+      source: static
+      at: routes/updateUserProfile.ts:42
+    http_only:
+    - value: false
+      source: static
+      at: routes/updateUserProfile.ts:42
+    same_site:
+    - value: unset
+      source: static
+      at: routes/updateUserProfile.ts:42
+- type: TokenVerification
+  id: TokenVerification@lib/insecurity.ts:52
+  at: lib/insecurity.ts:52
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:52
+    allows_none_alg:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:52
+- type: TokenVerification
+  id: TokenVerification@lib/insecurity.ts:53
+  at: lib/insecurity.ts:53
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:53
+    allows_none_alg:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:53
+- type: TokenVerification
+  id: TokenVerification@lib/insecurity.ts:55
+  at: lib/insecurity.ts:55
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:55
+    allows_none_alg:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:55
+- type: TokenVerification
+  id: TokenVerification@lib/insecurity.ts:56
+  at: lib/insecurity.ts:56
+  facts:
+    verifies_signature:
+    - value: false
+      source: static
+      at: lib/insecurity.ts:56
+    allows_none_alg:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:56
+- type: TokenVerification
+  id: TokenVerification@lib/insecurity.ts:189
+  at: lib/insecurity.ts:189
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:189
+    allows_none_alg:
+    - value: true
+      source: static
+      at: lib/insecurity.ts:189
+- type: TokenVerification
+  id: TokenVerification@routes/passkey.ts:50
+  at: routes/passkey.ts:50
+  facts:
+    verifies_signature:
+    - value: false
+      source: static
+      at: routes/passkey.ts:50
+    allows_none_alg:
+    - value: true
+      source: static
+      at: routes/passkey.ts:50
+- type: TokenVerification
+  id: TokenVerification@routes/passkey.ts:53
+  at: routes/passkey.ts:53
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: routes/passkey.ts:53
+    allows_none_alg:
+    - value: true
+      source: static
+      at: routes/passkey.ts:53
+- type: TokenVerification
+  id: TokenVerification@routes/verify.ts:119
+  at: routes/verify.ts:119
+  facts:
+    verifies_signature:
+    - value: false
+      source: static
+      at: routes/verify.ts:119
+    allows_none_alg:
+    - value: true
+      source: static
+      at: routes/verify.ts:119
+- type: TokenVerification
+  id: TokenVerification@routes/verify.ts:125
+  at: routes/verify.ts:125
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: routes/verify.ts:125
+    allows_none_alg:
+    - value: true
+      source: static
+      at: routes/verify.ts:125
+- type: Secret
+  id: Secret@frontend/src/app/login/login.component.ts:73
+  at: frontend/src/app/login/login.component.ts:73
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: frontend/src/app/login/login.component.ts:73
+- type: Secret
+  id: Secret@lib/insecurity.ts:21
+  at: lib/insecurity.ts:21
+  facts:
+    kind:
+    - value: private_key
+      source: static
+      at: lib/insecurity.ts:21
+- type: Secret
+  id: Secret@lib/insecurity.ts:42
+  at: lib/insecurity.ts:42
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: lib/insecurity.ts:42
+- type: Secret
+  id: Secret@routes/login.ts:59
+  at: routes/login.ts:59
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: routes/login.ts:59
+- type: Secret
+  id: Secret@routes/login.ts:60
+  at: routes/login.ts:60
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: routes/login.ts:60
+- type: Secret
+  id: Secret@routes/login.ts:61
+  at: routes/login.ts:61
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: routes/login.ts:61
+- type: Secret
+  id: Secret@routes/login.ts:62
+  at: routes/login.ts:62
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: routes/login.ts:62
+- type: Secret
+  id: Secret@routes/login.ts:63
+  at: routes/login.ts:63
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: routes/login.ts:63
+- type: Secret
+  id: Secret@routes/login.ts:64
+  at: routes/login.ts:64
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: routes/login.ts:64
+- type: Secret
+  id: Secret@routes/login.ts:65
+  at: routes/login.ts:65
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: routes/login.ts:65
+- type: Secret
+  id: Secret@server.ts:321
+  at: server.ts:321
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: server.ts:321
+- type: LogStatement
+  id: LogStatement@lib/startup/validateConfig.ts:144
+  at: lib/startup/validateConfig.ts:144
+  facts:
+    logs_credentials:
+    - value: false
+      source: static
+      at: lib/startup/validateConfig.ts:144
+    logs_personal_data:
+    - value: true
+      source: static
+      at: lib/startup/validateConfig.ts:144
+- type: Transfer
+  id: Transfer@lib/webhook.ts:18
+  at: lib/webhook.ts:18
+  facts:
+    recipient:
+    - value: configured endpoint (SOLUTIONS_WEBHOOK)
+      source: static
+      at: lib/webhook.ts:18
+- type: Transfer
+  id: Transfer@routes/chat.ts:204
+  at: routes/chat.ts:204
+  facts:
+    recipient:
+    - value: LLM API, OpenAI-compatible (application.chatBot.llmApiUrl)
+      source: static
+      at: routes/chat.ts:204

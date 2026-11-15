@@ -1,0 +1,1548 @@
+{
+  "ifc": "Clinic_A_20110906.ifc",
+  "evidence": {
+    "stairs": [
+      {
+        "guid": "3NhaIUfh12PAdrGa$S3z3M",
+        "riser_height": "175.8 mm",
+        "tread_depth": "280.0 mm",
+        "width": "1000 mm"
+      },
+      {
+        "guid": "0mxk1RW8H5mvX1dNnpRqIz",
+        "riser_height": "175.8 mm",
+        "tread_depth": "280.0 mm",
+        "width": "1000 mm"
+      },
+      {
+        "guid": "0mxk1RW8H5mvX1dNnpRqBK",
+        "riser_height": "175.8 mm",
+        "tread_depth": "280.0 mm",
+        "width": "1000 mm"
+      }
+    ],
+    "second_floor_area_sqft": 27012,
+    "space_area_m2": 5115,
+    "habitable_m2": {
+      "First Floor": 1307,
+      "Second Floor": 805
+    }
+  },
+  "checks": [
+    {
+      "pack": "austin-2024",
+      "norm": "1011.2",
+      "element": "Stair 3NhaIUfh12PAdrGa$S3z3M",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 8,
+        "True": 8
+      },
+      "deciding": [
+        "t.width"
+      ],
+      "facts": {
+        "building.occupancy_group": {
+          "B": [
+            "drawing A18-1 (161) Life Safety Composite First Floor Plan, General Note 2: OCCUPANCY CLASSIFICATION = BUSINESS"
+          ]
+        },
+        "building.sprinkler_system": {
+          "nfpa13": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ],
+          "nfpa13r": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ]
+        },
+        "building.emergency_voice_alarm": {
+          "true": [
+            "open: no source"
+          ],
+          "false": [
+            "open: no source"
+          ]
+        },
+        "t.occupant_load": {
+          "91": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ],
+          "136": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ]
+        },
+        "t.width": {
+          "1000 mm": [
+            "IFC 3NhaIUfh12PAdrGa$S3z3M PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "austin-2024",
+      "norm": "1011.5.2",
+      "element": "Stair 3NhaIUfh12PAdrGa$S3z3M",
+      "verdict": "uncertain",
+      "outcomes": {
+        "True": 2,
+        "False": 2
+      },
+      "deciding": [
+        "t.tread_depth"
+      ],
+      "facts": {
+        "t.riser_height": {
+          "175.8 mm": [
+            "IFC 3NhaIUfh12PAdrGa$S3z3M Pset_StairCommon.RiserHeight"
+          ],
+          "176 mm": [
+            "drawing A11-1 (122) Stair #1 section: 13 EQ. RISERS @ 176 mm EA."
+          ]
+        },
+        "t.tread_depth": {
+          "280 mm": [
+            "IFC 3NhaIUfh12PAdrGa$S3z3M Pset_StairCommon.TreadLength"
+          ],
+          "279 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): 12 EQUAL TREADS @ 279 mm EA."
+          ]
+        }
+      }
+    },
+    {
+      "pack": "austin-2024",
+      "norm": "1011.2",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqIz",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 8,
+        "True": 8
+      },
+      "deciding": [
+        "t.width"
+      ],
+      "facts": {
+        "building.occupancy_group": {
+          "B": [
+            "drawing A18-1 (161) Life Safety Composite First Floor Plan, General Note 2: OCCUPANCY CLASSIFICATION = BUSINESS"
+          ]
+        },
+        "building.sprinkler_system": {
+          "nfpa13": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ],
+          "nfpa13r": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ]
+        },
+        "building.emergency_voice_alarm": {
+          "true": [
+            "open: no source"
+          ],
+          "false": [
+            "open: no source"
+          ]
+        },
+        "t.occupant_load": {
+          "91": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ],
+          "136": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ]
+        },
+        "t.width": {
+          "1000 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqIz PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "austin-2024",
+      "norm": "1011.5.2",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqIz",
+      "verdict": "uncertain",
+      "outcomes": {
+        "True": 2,
+        "False": 2
+      },
+      "deciding": [
+        "t.tread_depth"
+      ],
+      "facts": {
+        "t.riser_height": {
+          "175.8 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqIz Pset_StairCommon.RiserHeight"
+          ],
+          "176 mm": [
+            "drawing A11-1 (122) Stair #1 section: 13 EQ. RISERS @ 176 mm EA."
+          ]
+        },
+        "t.tread_depth": {
+          "280 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqIz Pset_StairCommon.TreadLength"
+          ],
+          "279 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): 12 EQUAL TREADS @ 279 mm EA."
+          ]
+        }
+      }
+    },
+    {
+      "pack": "austin-2024",
+      "norm": "1011.2",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqBK",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 8,
+        "True": 8
+      },
+      "deciding": [
+        "t.width"
+      ],
+      "facts": {
+        "building.occupancy_group": {
+          "B": [
+            "drawing A18-1 (161) Life Safety Composite First Floor Plan, General Note 2: OCCUPANCY CLASSIFICATION = BUSINESS"
+          ]
+        },
+        "building.sprinkler_system": {
+          "nfpa13": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ],
+          "nfpa13r": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ]
+        },
+        "building.emergency_voice_alarm": {
+          "true": [
+            "open: no source"
+          ],
+          "false": [
+            "open: no source"
+          ]
+        },
+        "t.occupant_load": {
+          "91": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ],
+          "136": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ]
+        },
+        "t.width": {
+          "1000 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqBK PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "austin-2024",
+      "norm": "1011.5.2",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqBK",
+      "verdict": "uncertain",
+      "outcomes": {
+        "True": 2,
+        "False": 2
+      },
+      "deciding": [
+        "t.tread_depth"
+      ],
+      "facts": {
+        "t.riser_height": {
+          "175.8 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqBK Pset_StairCommon.RiserHeight"
+          ],
+          "176 mm": [
+            "drawing A11-1 (122) Stair #1 section: 13 EQ. RISERS @ 176 mm EA."
+          ]
+        },
+        "t.tread_depth": {
+          "280 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqBK Pset_StairCommon.TreadLength"
+          ],
+          "279 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): 12 EQUAL TREADS @ 279 mm EA."
+          ]
+        }
+      }
+    },
+    {
+      "pack": "austin-2024",
+      "norm": "1017.2",
+      "element": "First Floor, longest path on the life safety plan",
+      "verdict": "True",
+      "outcomes": {
+        "True": 4
+      },
+      "deciding": [],
+      "facts": {
+        "building.occupancy_group": {
+          "B": [
+            "drawing A18-1 (161) Life Safety Composite First Floor Plan, General Note 2: OCCUPANCY CLASSIFICATION = BUSINESS"
+          ]
+        },
+        "building.sprinkler_system": {
+          "nfpa13": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ],
+          "nfpa13r": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ]
+        },
+        "building.emergency_voice_alarm": {
+          "true": [
+            "open: no source"
+          ],
+          "false": [
+            "open: no source"
+          ]
+        },
+        "s.exit_access_travel_distance": {
+          "137 ft": [
+            "drawing A18-1 (161): travel distance arrow 137 FT / 41.75 M"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "austin-2024",
+      "norm": "1017.2",
+      "element": "Second Floor, longest path on the life safety plan",
+      "verdict": "True",
+      "outcomes": {
+        "True": 4
+      },
+      "deciding": [],
+      "facts": {
+        "building.occupancy_group": {
+          "B": [
+            "drawing A18-1 (161) Life Safety Composite First Floor Plan, General Note 2: OCCUPANCY CLASSIFICATION = BUSINESS"
+          ]
+        },
+        "building.sprinkler_system": {
+          "nfpa13": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ],
+          "nfpa13r": [
+            "drawing A18-1 (161), General Note 1: BUILDING IS FULLY SPRINKLERED"
+          ]
+        },
+        "building.emergency_voice_alarm": {
+          "true": [
+            "open: no source"
+          ],
+          "false": [
+            "open: no source"
+          ]
+        },
+        "s.exit_access_travel_distance": {
+          "153 ft": [
+            "drawing A18-2 (162): travel distance arrow 153 FT. / 46.65 M"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "jp-bsa-egress",
+      "norm": "令23条1項",
+      "element": "Stair 3NhaIUfh12PAdrGa$S3z3M",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 4,
+        "True": 4
+      },
+      "deciding": [
+        "s.width"
+      ],
+      "facts": {
+        "s.special_purpose_only": {
+          "false": [
+            "drawings: egress stairs"
+          ]
+        },
+        "s.uses_mlit_structure_23_4": {
+          "false": [
+            "assumed"
+          ]
+        },
+        "s.outdoor": {
+          "false": [
+            "IFC Pset_StairCommon.IsExternal"
+          ]
+        },
+        "s.direct_stair_120_121": {
+          "true": [
+            "A18-2 stair well exits"
+          ]
+        },
+        "s.within_dwelling": {
+          "false": [
+            "no dwellings"
+          ]
+        },
+        "s.in_basement": {
+          "false": [
+            "IFC base level First Floor"
+          ]
+        },
+        "s.habitable_area_of_floor": {
+          "1307 m2": [
+            "IFC 居室 area, first floor"
+          ]
+        },
+        "s.habitable_area_of_floor_above": {
+          "805 m2": [
+            "IFC 居室 area, second floor"
+          ]
+        },
+        "s.width": {
+          "1000 mm": [
+            "IFC 3NhaIUfh12PAdrGa$S3z3M PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        },
+        "s.riser": {
+          "175.8 mm": [
+            "IFC 3NhaIUfh12PAdrGa$S3z3M Pset_StairCommon.RiserHeight"
+          ],
+          "176 mm": [
+            "drawing A11-1 (122) Stair #1 section: 13 EQ. RISERS @ 176 mm EA."
+          ]
+        },
+        "s.tread": {
+          "280 mm": [
+            "IFC 3NhaIUfh12PAdrGa$S3z3M Pset_StairCommon.TreadLength"
+          ],
+          "279 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): 12 EQUAL TREADS @ 279 mm EA."
+          ]
+        }
+      }
+    },
+    {
+      "pack": "jp-bsa-egress",
+      "norm": "令23条1項",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqIz",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 4,
+        "True": 4
+      },
+      "deciding": [
+        "s.width"
+      ],
+      "facts": {
+        "s.special_purpose_only": {
+          "false": [
+            "drawings: egress stairs"
+          ]
+        },
+        "s.uses_mlit_structure_23_4": {
+          "false": [
+            "assumed"
+          ]
+        },
+        "s.outdoor": {
+          "false": [
+            "IFC Pset_StairCommon.IsExternal"
+          ]
+        },
+        "s.direct_stair_120_121": {
+          "true": [
+            "A18-2 stair well exits"
+          ]
+        },
+        "s.within_dwelling": {
+          "false": [
+            "no dwellings"
+          ]
+        },
+        "s.in_basement": {
+          "false": [
+            "IFC base level First Floor"
+          ]
+        },
+        "s.habitable_area_of_floor": {
+          "1307 m2": [
+            "IFC 居室 area, first floor"
+          ]
+        },
+        "s.habitable_area_of_floor_above": {
+          "805 m2": [
+            "IFC 居室 area, second floor"
+          ]
+        },
+        "s.width": {
+          "1000 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqIz PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        },
+        "s.riser": {
+          "175.8 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqIz Pset_StairCommon.RiserHeight"
+          ],
+          "176 mm": [
+            "drawing A11-1 (122) Stair #1 section: 13 EQ. RISERS @ 176 mm EA."
+          ]
+        },
+        "s.tread": {
+          "280 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqIz Pset_StairCommon.TreadLength"
+          ],
+          "279 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): 12 EQUAL TREADS @ 279 mm EA."
+          ]
+        }
+      }
+    },
+    {
+      "pack": "jp-bsa-egress",
+      "norm": "令23条1項",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqBK",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 4,
+        "True": 4
+      },
+      "deciding": [
+        "s.width"
+      ],
+      "facts": {
+        "s.special_purpose_only": {
+          "false": [
+            "drawings: egress stairs"
+          ]
+        },
+        "s.uses_mlit_structure_23_4": {
+          "false": [
+            "assumed"
+          ]
+        },
+        "s.outdoor": {
+          "false": [
+            "IFC Pset_StairCommon.IsExternal"
+          ]
+        },
+        "s.direct_stair_120_121": {
+          "true": [
+            "A18-2 stair well exits"
+          ]
+        },
+        "s.within_dwelling": {
+          "false": [
+            "no dwellings"
+          ]
+        },
+        "s.in_basement": {
+          "false": [
+            "IFC base level First Floor"
+          ]
+        },
+        "s.habitable_area_of_floor": {
+          "1307 m2": [
+            "IFC 居室 area, first floor"
+          ]
+        },
+        "s.habitable_area_of_floor_above": {
+          "805 m2": [
+            "IFC 居室 area, second floor"
+          ]
+        },
+        "s.width": {
+          "1000 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqBK PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        },
+        "s.riser": {
+          "175.8 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqBK Pset_StairCommon.RiserHeight"
+          ],
+          "176 mm": [
+            "drawing A11-1 (122) Stair #1 section: 13 EQ. RISERS @ 176 mm EA."
+          ]
+        },
+        "s.tread": {
+          "280 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqBK Pset_StairCommon.TreadLength"
+          ],
+          "279 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): 12 EQUAL TREADS @ 279 mm EA."
+          ]
+        }
+      }
+    },
+    {
+      "pack": "uk-adb-v2",
+      "norm": "ADB2 2.7",
+      "element": "First Floor, longest path on the life safety plan",
+      "verdict": "uncertain",
+      "outcomes": {
+        "True": 1,
+        "False": 1
+      },
+      "deciding": [
+        "s.one_direction_travel_distance"
+      ],
+      "facts": {
+        "s.travel_distance": {
+          "137 ft": [
+            "drawing A18-1 (161): travel distance arrow 137 FT / 41.75 M"
+          ]
+        },
+        "s.alternative_escape_routes": {
+          "true": [
+            "drawings: two or more exit stairs per floor"
+          ]
+        },
+        "s.is_plant_room": {
+          "false": [
+            "not a plant room"
+          ]
+        },
+        "s.plant_escape_route_in_open_air": {
+          "false": [
+            "n/a"
+          ]
+        },
+        "s.seating_in_rows": {
+          "false": [
+            "no fixed seating"
+          ]
+        },
+        "s.one_direction_travel_distance": {
+          "0 m": [
+            "open: not on the drawings, between 0 and the full route"
+          ],
+          "137 ft": [
+            "open: not on the drawings, between 0 and the full route"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "uk-adb-v2",
+      "norm": "ADB2 2.7",
+      "element": "Second Floor, longest path on the life safety plan",
+      "verdict": "False",
+      "outcomes": {
+        "False": 2
+      },
+      "deciding": [],
+      "facts": {
+        "s.travel_distance": {
+          "153 ft": [
+            "drawing A18-2 (162): travel distance arrow 153 FT. / 46.65 M"
+          ]
+        },
+        "s.alternative_escape_routes": {
+          "true": [
+            "drawings: two or more exit stairs per floor"
+          ]
+        },
+        "s.is_plant_room": {
+          "false": [
+            "not a plant room"
+          ]
+        },
+        "s.plant_escape_route_in_open_air": {
+          "false": [
+            "n/a"
+          ]
+        },
+        "s.seating_in_rows": {
+          "false": [
+            "no fixed seating"
+          ]
+        },
+        "s.one_direction_travel_distance": {
+          "0 m": [
+            "open: not on the drawings, between 0 and the full route"
+          ],
+          "153 ft": [
+            "open: not on the drawings, between 0 and the full route"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "uk-adb-v2",
+      "norm": "ADB2 3.10",
+      "element": "Stair 3NhaIUfh12PAdrGa$S3z3M",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 2,
+        "True": 6
+      },
+      "deciding": [
+        "s.serves_assembly_area_of_100m2_or_more",
+        "s.width"
+      ],
+      "facts": {
+        "s.people_served": {
+          "91": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ],
+          "136": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ]
+        },
+        "s.floors_served": {
+          "2": [
+            "IFC storeys"
+          ]
+        },
+        "s.serves_area_with_occupancy_over_50": {
+          "true": [
+            "occupant load above"
+          ]
+        },
+        "s.serves_assembly_area_of_100m2_or_more": {
+          "true": [
+            "judged: open"
+          ],
+          "false": [
+            "judged: open"
+          ]
+        },
+        "s.widest_exit_width": {
+          "915 mm": [
+            "IFC: stair doors are 915 mm leaves (assumed the widest)"
+          ]
+        },
+        "s.rise": {
+          "4.57 m": [
+            "IFC storey elevations"
+          ]
+        },
+        "s.width": {
+          "1000 mm": [
+            "IFC 3NhaIUfh12PAdrGa$S3z3M PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "uk-adb-v2",
+      "norm": "ADB2 3.10",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqIz",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 2,
+        "True": 6
+      },
+      "deciding": [
+        "s.serves_assembly_area_of_100m2_or_more",
+        "s.width"
+      ],
+      "facts": {
+        "s.people_served": {
+          "91": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ],
+          "136": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ]
+        },
+        "s.floors_served": {
+          "2": [
+            "IFC storeys"
+          ]
+        },
+        "s.serves_area_with_occupancy_over_50": {
+          "true": [
+            "occupant load above"
+          ]
+        },
+        "s.serves_assembly_area_of_100m2_or_more": {
+          "true": [
+            "judged: open"
+          ],
+          "false": [
+            "judged: open"
+          ]
+        },
+        "s.widest_exit_width": {
+          "915 mm": [
+            "IFC: stair doors are 915 mm leaves (assumed the widest)"
+          ]
+        },
+        "s.rise": {
+          "4.57 m": [
+            "IFC storey elevations"
+          ]
+        },
+        "s.width": {
+          "1000 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqIz PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "uk-adb-v2",
+      "norm": "ADB2 3.10",
+      "element": "Stair 0mxk1RW8H5mvX1dNnpRqBK",
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 2,
+        "True": 6
+      },
+      "deciding": [
+        "s.serves_assembly_area_of_100m2_or_more",
+        "s.width"
+      ],
+      "facts": {
+        "s.people_served": {
+          "91": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ],
+          "136": [
+            "IFC space areas, second floor 27012 sqft, Table 1004.5 business 150 or outpatient 100 gross, two exit stairs (A18-2)"
+          ]
+        },
+        "s.floors_served": {
+          "2": [
+            "IFC storeys"
+          ]
+        },
+        "s.serves_area_with_occupancy_over_50": {
+          "true": [
+            "occupant load above"
+          ]
+        },
+        "s.serves_assembly_area_of_100m2_or_more": {
+          "true": [
+            "judged: open"
+          ],
+          "false": [
+            "judged: open"
+          ]
+        },
+        "s.widest_exit_width": {
+          "915 mm": [
+            "IFC: stair doors are 915 mm leaves (assumed the widest)"
+          ]
+        },
+        "s.rise": {
+          "4.57 m": [
+            "IFC storey elevations"
+          ]
+        },
+        "s.width": {
+          "1000 mm": [
+            "IFC 0mxk1RW8H5mvX1dNnpRqBK PSet_Revit_Dimensions.Width"
+          ],
+          "1210 mm": [
+            "drawing A11-1 (122), A11-2 (123), A11-3 (124): flight width 1210"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "1 M_Double-Flush, leaf 865 mm",
+      "guids": [
+        "1qc5HjZvrCsga38tqxQ3VC"
+      ],
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 1,
+        "True": 1
+      },
+      "deciding": [
+        "d.clear_width"
+      ],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "801 mm": [
+            "IFC M_Double-Flush leaf 865 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "821 mm": [
+            "IFC M_Double-Flush leaf 865 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "8 M_Toilet Partition, leaf 865 mm",
+      "guids": [
+        "35QeWibpT4DfyH3NIf2nOv",
+        "0ClPCUC7jCQRnj1dhupHk0",
+        "3qpE7fVkr8dRZ2wfCc6tWA",
+        "3qpE7fVkr8dRZ2wfCc6tjC",
+        "3qpE7fVkr8dRZ2wfCc6tpH",
+        "3qpE7fVkr8dRZ2wfCc6tsf",
+        "3qpE7fVkr8dRZ2wfCc6tw0",
+        "3qpE7fVkr8dRZ2wfCc6tut"
+      ],
+      "verdict": "uncertain",
+      "outcomes": {
+        "False": 1,
+        "True": 1
+      },
+      "deciding": [
+        "d.clear_width"
+      ],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "801 mm": [
+            "IFC M_Toilet Partition leaf 865 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "821 mm": [
+            "IFC M_Toilet Partition leaf 865 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "2 M_Curtain Wall Dbl Glass, leaf 900 mm",
+      "guids": [
+        "0otfaO0qPDAhynjJ6DnLXx",
+        "3o5ntlA212uQCF0q6eQsZI"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "836 mm": [
+            "IFC M_Curtain Wall Dbl Glass leaf 900 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "856 mm": [
+            "IFC M_Curtain Wall Dbl Glass leaf 900 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "2 M_Curtain Wall Sgl Glass, leaf 900 mm",
+      "guids": [
+        "0bpfxAz3XBrAx$RjFuHv4q",
+        "3LjuaIy0TB9BYwqsSadrQS"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "836 mm": [
+            "IFC M_Curtain Wall Sgl Glass leaf 900 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "856 mm": [
+            "IFC M_Curtain Wall Sgl Glass leaf 900 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "2 M_Curtain Wall Sgl Glass, leaf 901 mm",
+      "guids": [
+        "0bpfxAz3XBrAx$RjFuHvgA",
+        "1oCmeD_UH0NAQ13DTKAKXn"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "837 mm": [
+            "IFC M_Curtain Wall Sgl Glass leaf 901 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "857 mm": [
+            "IFC M_Curtain Wall Sgl Glass leaf 901 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "5 M_Double-Flush, leaf 915 mm",
+      "guids": [
+        "35QeWibpT4DfyH3NIf2sUZ",
+        "0mxk1RW8H5mvX1dNnpRqy_",
+        "0mxk1RW8H5mvX1dNnpRqwu",
+        "0mxk1RW8H5mvX1dNnpRqn4",
+        "2H9Xpd9Nf1Uu7_jFnBZWSx"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "851 mm": [
+            "IFC M_Double-Flush leaf 915 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "871 mm": [
+            "IFC M_Double-Flush leaf 915 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "227 M_Single-Flush, leaf 915 mm",
+      "guids": [
+        "1byTDaqS91rBnWJlv$nn_r",
+        "1byTDaqS91rBnWJlv$nnv2",
+        "1byTDaqS91rBnWJlv$nnu8",
+        "1byTDaqS91rBnWJlv$nnxF",
+        "1byTDaqS91rBnWJlv$nndY",
+        "1byTDaqS91rBnWJlv$nncb",
+        "1byTDaqS91rBnWJlv$nnW1",
+        "1byTDaqS91rBnWJlv$nnj_",
+        "1byTDaqS91rBnWJlv$nnkx",
+        "1byTDaqS91rBnWJlv$nnfS",
+        "1byTDaqS91rBnWJlv$nnhB",
+        "1byTDaqS91rBnWJlv$nng6",
+        "1byTDaqS91rBnWJlv$nnKl",
+        "1byTDaqS91rBnWJlv$nnNu",
+        "1byTDaqS91rBnWJlv$nnMl",
+        "1byTDaqS91rBnWJlv$nnMB",
+        "1byTDaqS91rBnWJlv$nnHw",
+        "1byTDaqS91rBnWJlv$nnJP",
+        "1byTDaqS91rBnWJlv$nnIo",
+        "1byTDaqS91rBnWJlv$nnTt",
+        "1byTDaqS91rBnWJlv$nnSA",
+        "1byTDaqS91rBnWJlv$nnU$",
+        "1byTDaqS91rBnWJlv$nnPu",
+        "1byTDaqS91rBnWJlv$nnOd",
+        "1byTDaqS91rBnWJlv$nnRu",
+        "1byTDaqS91rBnWJlv$nnQb",
+        "1byTDaqS91rBnWJlv$nn54",
+        "1byTDaqS91rBnWJlv$nn4z",
+        "1byTDaqS91rBnWJlv$nn72",
+        "1byTDaqS91rBnWJlv$nn6$",
+        "1byTDaqS91rBnWJlv$nn1R",
+        "1byTDaqS91rBnWJlv$nn0o",
+        "1byTDaqS91rBnWJlv$nn3d",
+        "1byTDaqS91rBnWJlv$nnC3",
+        "1byTDaqS91rBnWJlv$nnE_",
+        "1byTDaqS91rBnWJlv$nn9n",
+        "1byTDaqS91rBnWJlv$nn82",
+        "1byTDaqS91rBnWJlv$nmrp",
+        "1byTDaqS91rBnWJlv$nmsg",
+        "1byTDaqS91rBnWJlv$nms7",
+        "1byTDaqS91rBnWJlv$nmnC",
+        "1byTDaqS91rBnWJlv$nmmF",
+        "1byTDaqS91rBnWJlv$nmpw",
+        "1byTDaqS91rBnWJlv$nmoB",
+        "1byTDaqS91rBnWJlv$nmzE",
+        "1byTDaqS91rBnWJlv$nmyn",
+        "1byTDaqS91rBnWJlv$nm$e",
+        "1byTDaqS91rBnWJlv$nmuz",
+        "1byTDaqS91rBnWJlv$nmxs",
+        "1byTDaqS91rBnWJlv$nmwJ",
+        "1byTDaqS91rBnWJlv$nmaW",
+        "1byTDaqS91rBnWJlv$nmdJ",
+        "1byTDaqS91rBnWJlv$nmXk",
+        "1byTDaqS91rBnWJlv$nmWh",
+        "1byTDaqS91rBnWJlv$nmW0",
+        "1byTDaqS91rBnWJlv$nmZR",
+        "1byTDaqS91rBnWJlv$nmj8",
+        "1byTDaqS91rBnWJlv$nmlz",
+        "1byTDaqS91rBnWJlv$nmku",
+        "1byTDaqS91rBnWJlv$nmfx",
+        "1byTDaqS91rBnWJlv$nmeg",
+        "1byTDaqS91rBnWJlv$nmeL",
+        "1byTDaqS91rBnWJlv$nmhs",
+        "1byTDaqS91rBnWJlv$nmg3",
+        "1byTDaqS91rBnWJlv$nmLC",
+        "1byTDaqS91rBnWJlv$nmKL",
+        "1byTDaqS91rBnWJlv$nmMw",
+        "1byTDaqS91rBnWJlv$nmHr",
+        "1byTDaqS91rBnWJlv$nmGk",
+        "1byTDaqS91rBnWJlv$nmJJ",
+        "1byTDaqS91rBnWJlv$nmIS",
+        "1byTDaqS91rBnWJlv$nmTD",
+        "1byTDaqS91rBnWJlv$nmSy",
+        "1byTDaqS91rBnWJlv$nmQZ",
+        "1byTDaqS91rBnWJlv$nm5e",
+        "1byTDaqS91rBnWJlv$nm7E",
+        "1byTDaqS91rBnWJlv$nm6r",
+        "1byTDaqS91rBnWJlv$nm10",
+        "1byTDaqS91rBnWJlv$nmDB",
+        "1byTDaqS91rBnWJlv$nmCW",
+        "1byTDaqS91rBnWJlv$nmCV",
+        "1byTDaqS91rBnWJlv$nm9g",
+        "1byTDaqS91rBnWJlv$nm9F",
+        "1byTDaqS91rBnWJlv$nmAj",
+        "1byTDaqS91rBnWJlv$nmA0",
+        "1byTDaqS91rBnWJlv$n$rP",
+        "1byTDaqS91rBnWJlv$n$qC",
+        "1byTDaqS91rBnWJlv$n$t9",
+        "1byTDaqS91rBnWJlv$n$sW",
+        "1byTDaqS91rBnWJlv$n$nD",
+        "1byTDaqS91rBnWJlv$n$m2",
+        "1byTDaqS91rBnWJlv$n$pH",
+        "1byTDaqS91rBnWJlv$n$uh",
+        "1byTDaqS91rBnWJlv$n$ds",
+        "1byTDaqS91rBnWJlv$n$cb",
+        "1byTDaqS91rBnWJlv$n$Wu",
+        "1byTDaqS91rBnWJlv$n$WN",
+        "1byTDaqS91rBnWJlv$n$Zq",
+        "1byTDaqS91rBnWJlv$n$jF",
+        "1byTDaqS91rBnWJlv$n$iu",
+        "1byTDaqS91rBnWJlv$n$lh",
+        "1byTDaqS91rBnWJlv$n$fc",
+        "1byTDaqS91rBnWJlv$n$f7",
+        "1byTDaqS91rBnWJlv$n$e0",
+        "1byTDaqS91rBnWJlv$n$gx",
+        "1byTDaqS91rBnWJlv$n$Ls",
+        "1byTDaqS91rBnWJlv$n$Kj",
+        "1byTDaqS91rBnWJlv$n$Mi",
+        "1byTDaqS91rBnWJlv$n$M9",
+        "1byTDaqS91rBnWJlv$n$H4",
+        "1byTDaqS91rBnWJlv$n$GX",
+        "1byTDaqS91rBnWJlv$n$TS",
+        "1byTDaqS91rBnWJlv$n$Vz",
+        "1byTDaqS91rBnWJlv$n$Um",
+        "1byTDaqS91rBnWJlv$n$P5",
+        "1byTDaqS91rBnWJlv$n$OE",
+        "1byTDaqS91rBnWJlv$n$Rv",
+        "1byTDaqS91rBnWJlv$n$Qk",
+        "1byTDaqS91rBnWJlv$n$5v",
+        "1byTDaqS91rBnWJlv$n$7g",
+        "1byTDaqS91rBnWJlv$n$0$",
+        "1byTDaqS91rBnWJlv$n$0M",
+        "1byTDaqS91rBnWJlv$n$Db",
+        "1byTDaqS91rBnWJlv$n$CQ",
+        "1byTDaqS91rBnWJlv$n$Ex",
+        "1byTDaqS91rBnWJlv$n$9Q",
+        "1byTDaqS91rBnWJlv$n_s5",
+        "1byTDaqS91rBnWJlv$n_yt",
+        "1byTDaqS91rBnWJlv$n__m",
+        "35QeWibpT4DfyH3NIf2oNE",
+        "35QeWibpT4DfyH3NIf2oNd",
+        "35QeWibpT4DfyH3NIf2oBp",
+        "35QeWibpT4DfyH3NIf2oAY",
+        "35QeWibpT4DfyH3NIf2oDt",
+        "35QeWibpT4DfyH3NIf2oC0",
+        "35QeWibpT4DfyH3NIf2oFr",
+        "35QeWibpT4DfyH3NIf2oEe",
+        "35QeWibpT4DfyH3NIf2o1m",
+        "35QeWibpT4DfyH3NIf2o03",
+        "35QeWibpT4DfyH3NIf2o3Q",
+        "35QeWibpT4DfyH3NIf2o3X",
+        "35QeWibpT4DfyH3NIf2o5b",
+        "35QeWibpT4DfyH3NIf2o7O",
+        "35QeWibpT4DfyH3NIf2o7X",
+        "35QeWibpT4DfyH3NIf2ovI",
+        "35QeWibpT4DfyH3NIf2ouF",
+        "35QeWibpT4DfyH3NIf2ohQ",
+        "35QeWibpT4DfyH3NIf2ogt",
+        "35QeWibpT4DfyH3NIf2oj8",
+        "35QeWibpT4DfyH3NIf2ojX",
+        "35QeWibpT4DfyH3NIf2oil",
+        "35QeWibpT4DfyH3NIf2olL",
+        "35QeWibpT4DfyH3NIf2olz",
+        "35QeWibpT4DfyH3NIf2oXS",
+        "35QeWibpT4DfyH3NIf2oXr",
+        "35QeWibpT4DfyH3NIf2oWQ",
+        "35QeWibpT4DfyH3NIf2obk",
+        "35QeWibpT4DfyH3NIf2odN",
+        "35QeWibpT4DfyH3NIf2nRq",
+        "35QeWibpT4DfyH3NIf2nTY",
+        "35QeWibpT4DfyH3NIf2nSp",
+        "35QeWibpT4DfyH3NIf2nVW",
+        "35QeWibpT4DfyH3NIf2nHB",
+        "35QeWibpT4DfyH3NIf2nG0",
+        "35QeWibpT4DfyH3NIf2nIt",
+        "35QeWibpT4DfyH3NIf2nLm",
+        "35QeWibpT4DfyH3NIf2nKz",
+        "35QeWibpT4DfyH3NIf2nNu",
+        "35QeWibpT4DfyH3NIf2nMH",
+        "35QeWibpT4DfyH3NIf2n92",
+        "35QeWibpT4DfyH3NIf2nB7",
+        "35QeWibpT4DfyH3NIf2nA4",
+        "35QeWibpT4DfyH3NIf2nDz",
+        "35QeWibpT4DfyH3NIf2nCI",
+        "35QeWibpT4DfyH3NIf2n1I",
+        "35QeWibpT4DfyH3NIf2n09",
+        "35QeWibpT4DfyH3NIf2n3I",
+        "35QeWibpT4DfyH3NIf2n25",
+        "35QeWibpT4DfyH3NIf2n5C",
+        "35QeWibpT4DfyH3NIf2n4J",
+        "35QeWibpT4DfyH3NIf2n7C",
+        "35QeWibpT4DfyH3NIf2n6z",
+        "35QeWibpT4DfyH3NIf2nvC",
+        "35QeWibpT4DfyH3NIf2nuL",
+        "35QeWibpT4DfyH3NIf2nxi",
+        "35QeWibpT4DfyH3NIf2nzB",
+        "35QeWibpT4DfyH3NIf2n$O",
+        "35QeWibpT4DfyH3NIf2npj",
+        "35QeWibpT4DfyH3NIf2no0",
+        "35QeWibpT4DfyH3NIf2nrl",
+        "35QeWibpT4DfyH3NIf2nqk",
+        "35QeWibpT4DfyH3NIf2nsN",
+        "35QeWibpT4DfyH3NIf2nf$",
+        "35QeWibpT4DfyH3NIf2nez",
+        "35QeWibpT4DfyH3NIf2ngM",
+        "35QeWibpT4DfyH3NIf2njx",
+        "35QeWibpT4DfyH3NIf2nl2",
+        "35QeWibpT4DfyH3NIf2nk$",
+        "35QeWibpT4DfyH3NIf2nXy",
+        "35QeWibpT4DfyH3NIf2nWf",
+        "35QeWibpT4DfyH3NIf2nYS",
+        "35QeWibpT4DfyH3NIf2nbp",
+        "35QeWibpT4DfyH3NIf2nds",
+        "35QeWibpT4DfyH3NIf2ncB",
+        "35QeWibpT4DfyH3NIf2mPA",
+        "35QeWibpT4DfyH3NIf2mOF",
+        "35QeWibpT4DfyH3NIf2mOc",
+        "35QeWibpT4DfyH3NIf2mR5",
+        "35QeWibpT4DfyH3NIf2mQM",
+        "35QeWibpT4DfyH3NIf2mTr",
+        "35QeWibpT4DfyH3NIf2mS8",
+        "35QeWibpT4DfyH3NIf2mVx",
+        "35QeWibpT4DfyH3NIf2mHI",
+        "35QeWibpT4DfyH3NIf2mGD",
+        "35QeWibpT4DfyH3NIf2mJK",
+        "35QeWibpT4DfyH3NIf2sGN",
+        "35QeWibpT4DfyH3NIf2sJ8",
+        "35QeWibpT4DfyH3NIf2sIn",
+        "0mxk1RW8H5mvX1dNnpRqtX",
+        "0mxk1RW8H5mvX1dNnpRqso",
+        "0tIhQ6hmz02e5gznEed7$9",
+        "0tIhQ6hmz02e5gznEed4FD",
+        "1uDBQ9y7vCyxXlpVEuen9f",
+        "3pms57Ad5AVAb74jf4yKZb",
+        "0ztdC3L1HAzhbhMHypqcYf",
+        "0ztdC3L1HAzhbhMHypqcDa",
+        "1eHJakbVPEdf9cGdMXVBAY"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "851 mm": [
+            "IFC M_Single-Flush leaf 915 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "871 mm": [
+            "IFC M_Single-Flush leaf 915 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "1 M_Single-Flush, leaf 1000 mm",
+      "guids": [
+        "1byTDaqS91rBnWJlv$n$_5"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "936 mm": [
+            "IFC M_Single-Flush leaf 1000 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "956 mm": [
+            "IFC M_Single-Flush leaf 1000 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "2 M_Single-Flush, leaf 1220 mm",
+      "guids": [
+        "1byTDaqS91rBnWJlv$n$wG",
+        "1byTDaqS91rBnWJlv$n_q6"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "1156 mm": [
+            "IFC M_Single-Flush leaf 1220 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "1176 mm": [
+            "IFC M_Single-Flush leaf 1220 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    },
+    {
+      "pack": "ada-2010",
+      "norm": "404.2.3",
+      "element": "4 M_Curtain Wall Dbl Chain Link, leaf 1351 mm",
+      "guids": [
+        "1I_Rp6d3j27fE7zFUMgaqf",
+        "1I_Rp6d3j27fE7zFUMgaqj",
+        "2NHD_$8fb3ZexljM$wSStT",
+        "3eIXtbz01CQuZOCQ8qhuxf"
+      ],
+      "verdict": "True",
+      "outcomes": {
+        "True": 2
+      },
+      "deciding": [],
+      "facts": {
+        "d.on_accessible_route": {
+          "true": [
+            "assumed: every door"
+          ]
+        },
+        "d.opening_depth": {
+          "6 in": [
+            "assumed: stud wall"
+          ]
+        },
+        "d.projection_below_34in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.projection_34_to_80in": {
+          "0 in": [
+            "assumed"
+          ]
+        },
+        "d.clear_width": {
+          "1287 mm": [
+            "IFC M_Curtain Wall Dbl Chain Link leaf 1351 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ],
+          "1307 mm": [
+            "IFC M_Curtain Wall Dbl Chain Link leaf 1351 mm (OverallWidth per leaf) minus 44 to 64 mm"
+          ]
+        }
+      }
+    }
+  ]
+}

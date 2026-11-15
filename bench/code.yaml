@@ -1,0 +1,28 @@
+# Code benchmark: the same checks run four ways on four public repositories.
+#   direct   a model reads the repository and the standards and gives verdicts
+#   kernel   the packs evaluated on facts from the static adapter
+#   kernel+  the packs on static facts reconciled with the model's own facts
+#   truth    labels from bench/code-truth/<repo>.yaml
+# Repositories are pinned to the commit cloned on 2026-11-14.
+repos:
+  juice-shop:   {url: https://github.com/juice-shop/juice-shop, sha: 266448aba68cd8ba5915f526a128da4fa7bc3f9f, licence: MIT, kind: "deliberately vulnerable (TypeScript, Express, Sequelize)"}
+  NodeGoat:     {url: https://github.com/OWASP/NodeGoat, sha: c5cb68a7084e4ae7dcc60e6a98768720a81841e8, licence: Apache-2.0, kind: "deliberately vulnerable (Node, Express, MongoDB)"}
+  pygoat:       {url: https://github.com/adeyosemanputra/pygoat, sha: 2aa4cc14f251e4a780e94e200aed6b36a5b15c21, licence: MIT, kind: "deliberately vulnerable (Python, Django)"}
+  full-stack-fastapi-template: {url: https://github.com/fastapi/full-stack-fastapi-template, sha: aabb90126964a164e02aff39e7c385bb0598236d, licence: MIT, kind: "production template, the control (Python, FastAPI, SQLModel)"}
+
+# Each check names the standard and the topic, not the threshold: finding the
+# current requirement is part of the task for a model answering directly.
+# `type` is the vocabulary element type it ranges over (vocab/code.yaml), or system.
+checks:
+  C1:  {standard: OWASP ASVS 5.0, topic: "passwords are stored with an approved, salted password hashing function", type: PasswordStore}
+  C2:  {standard: OWASP ASVS 5.0, topic: "database queries (SQL and NoSQL) are protected against injection", type: Query}
+  C3:  {standard: OWASP ASVS 5.0, topic: "cookies carrying session tokens have the required attributes", type: Cookie}
+  C4:  {standard: OWASP ASVS 5.0, topic: "self-contained tokens (JWT) are verified before their contents are trusted", type: TokenVerification}
+  C5:  {standard: OWASP ASVS 5.0, topic: "secrets (keys, passwords, tokens) are not stored in source code", type: Secret}
+  C6:  {standard: OWASP ASVS 5.0, topic: "credentials and session tokens are not written to logs", type: LogStatement}
+  C7:  {standard: NIST SP 800-63B-4, topic: "minimum password length", type: system}
+  C8:  {standard: NIST SP 800-63B-4, topic: "no password composition rules", type: system}
+  C9:  {standard: NIST SP 800-63B-4, topic: "new passwords are checked against a blocklist", type: system}
+  C10: {standard: NIST SP 800-63B-4, topic: "failed authentication attempts are rate limited", type: system}
+  C11: {standard: GDPR (Regulation (EU) 2016/679) Art. 17, topic: "personal data can be erased on request", type: system}
+  C12: {standard: GDPR Chapter V (Art. 44 to 46), topic: "transfers of personal data to third parties outside the EEA have a legal basis", type: Transfer}

@@ -1,0 +1,1244 @@
+{
+  "model": "claude-opus-5-5",
+  "runs": [
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-1(B) deletes IBC 2024 Table 1004.5",
+          "§25-12-3 local Table 1004.5: Standing space 7 net"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "§25-12-3 local Table 1004.5 (standing space 7 net)",
+          "IBC 2024 §1004.5"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "§25-12-3 local Table 1004.5 (business areas 150 gross)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "§25-12-3 local Table 1004.5 (unconcentrated, tables and chairs, 15 net)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "§25-12-3 local Table 1004.5 (information technology equipment facilities 300 gross)"
+        ],
+        "confidence": 0.93
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1005.3.2 (0.2 in/occupant)",
+          "§1020.3",
+          "Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1005.3.2 Exception 1 (0.15 in/occupant with NFPA 13/13R sprinklers plus voice/alarm per §907.5.2.2)",
+          "§1020.3",
+          "Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1020.3",
+          "Table 1020.3 (occupant load less than 50: 36 in)",
+          "§1005.3.2"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (corridors and areas serving stretcher traffic in ambulatory care facilities: 72 in)",
+          "§1020.3",
+          "Ch. 2 definition of ambulatory care facility"
+        ],
+        "confidence": 0.88
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 §1017.2",
+          "Table 1017.2 (B, sprinklered: 300, footnote c = §903.3.1.1)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 footnote c (300 ft only with §903.3.1.1 NFPA 13; otherwise the unsprinklered value of 200 applies)",
+          "§1017.2"
+        ],
+        "confidence": 0.75
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 (A, E, F-1, M, R, S-1 sprinklered: 250, footnote b)"
+        ],
+        "confidence": 0.93
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code 25-12-3, Ord. 20250410-045, amended Table 1004.5 (Assembly without fixed seats, Standing space: 7 net)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Standing space 7 net)",
+          "2024 IBC 1004.5"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Business areas 150 gross)",
+          "2024 IBC 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Unconcentrated, tables and chairs: 15 net)",
+          "2024 IBC 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Information technology equipment facilities 300 gross)",
+          "2024 IBC 1004.5"
+        ],
+        "confidence": 0.93
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC 1005.3.2 (0.2 in/occupant)",
+          "2024 IBC 1020.3",
+          "2024 IBC Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC 1005.3.2 Exception 1 (0.15 in/occupant with NFPA 13/13R sprinklers and EVACS)",
+          "2024 IBC 1020.3",
+          "2024 IBC Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.88
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Table 1020.3 (occupant load less than 50: 36 in)",
+          "2024 IBC 1005.3.2"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Table 1020.3 (corridors serving stretcher traffic in ambulatory care facilities: 72 in)",
+          "2024 IBC 1005.3.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC 1017.2",
+          "2024 IBC Table 1017.2 (Group B, sprinklered: 300 ft)"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A11",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Table 1017.2 and footnote (sprinklered per 903.3.1.1 or 903.3.1.2)",
+          "2024 IBC 903.3.1.2"
+        ],
+        "confidence": 0.6
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC 1017.2",
+          "2024 IBC Table 1017.2 (Group M, sprinklered: 250 ft)"
+        ],
+        "confidence": 0.9
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3 (Ord. 20250410-045), amended Table 1004.5 – Standing space 7 net"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (standing space 7 net)",
+          "IBC 2024 §1004.5"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (business areas 150 gross)",
+          "IBC 2024 §1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (unconcentrated tables and chairs 15 net)",
+          "IBC 2024 §1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (information technology equipment facilities 300 gross)",
+          "IBC 2024 §1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1005.3.2 (0.2 in/occupant)",
+          "IBC 2024 §1020.3",
+          "Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1005.3.2 Exception 1 (0.15 in/occupant)",
+          "IBC 2024 §1020.3",
+          "Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.88
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1020.3",
+          "Table 1020.3 (occupant load less than 50: 36 in)",
+          "§1005.3.2"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1020.3",
+          "Table 1020.3 (stretcher traffic in ambulatory care facilities: 72 in)",
+          "§1005.3.2"
+        ],
+        "confidence": 0.88
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 §1017.2",
+          "Table 1017.2 (B, sprinklered: 300, footnote c)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 §1017.2",
+          "Table 1017.2 footnote c (only §903.3.1.1 / NFPA 13 qualifies for B)",
+          "§903.3.1.2"
+        ],
+        "confidence": 0.75
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 §1017.2",
+          "Table 1017.2 (M, sprinklered: 250, footnote b)"
+        ],
+        "confidence": 0.95
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-1(B) (deletes IBC Table 1004.5)",
+          "Austin §25-12-3 amended Table 1004.5 (Assembly without fixed seats – Standing space: 7 net)",
+          "Ordinance No. 20250410-045 (2024 IBC, effective July 10, 2025)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (standing space 7 net)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Business areas 150 gross)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Unconcentrated, tables and chairs 15 net)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Information technology equipment facilities 300 gross)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Section 1020.3",
+          "IBC 2024 Table 1020.3 (44 in)",
+          "IBC 2024 Section 1005.3.2 (0.2 in/occupant)"
+        ],
+        "confidence": 0.88
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Section 1020.3",
+          "IBC 2024 Table 1020.3 (44 in)",
+          "IBC 2024 Section 1005.3.2 Exception 1 (0.15 in/occupant with sprinklers and EVAC)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (occupant load less than 50: 36 in)",
+          "IBC 2024 Section 1005.3.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (stretcher traffic in ambulatory care facilities: 72 in)",
+          "IBC 2024 Section 1020.3"
+        ],
+        "confidence": 0.88
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Section 1017.2",
+          "IBC 2024 Table 1017.2 (B, with sprinkler system: 300, footnote c)"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 (B: 200 without sprinkler; the 300 ft value requires 903.3.1.1 per footnote c)"
+        ],
+        "confidence": 0.75
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Section 1017.2",
+          "IBC 2024 Table 1017.2 (M, with sprinkler system: 250, footnote b)"
+        ],
+        "confidence": 0.92
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-1(B) (model Table 1004.5 deleted)",
+          "§25-12-3 Austin amended Table 1004.5 (Standing space 7 net)",
+          "Ord. No. 20250410-045, effective July 10, 2025"
+        ],
+        "confidence": 0.93
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Standing space 7 net)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Business areas 150 gross)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Unconcentrated, tables and chairs, 15 net)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Information technology equipment facilities 300 gross)",
+          "IBC 2024 Section 1004.5"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Section 1005.3.2 (0.2 in/occupant)",
+          "IBC 2024 Section 1020.3",
+          "IBC 2024 Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Section 1005.3.2 Exception 1 (0.15 in/occupant)",
+          "IBC 2024 Section 1020.3",
+          "IBC 2024 Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Section 1020.3",
+          "IBC 2024 Table 1020.3 (occupant load less than 50: 36 in)",
+          "IBC 2024 Section 1005.3.2"
+        ],
+        "confidence": 0.92
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Section 1020.3",
+          "IBC 2024 Table 1020.3 (stretcher traffic in ambulatory care facilities: 72 in)",
+          "IBC 2024 Section 202 (Ambulatory care facility)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Section 1017.2",
+          "IBC 2024 Table 1017.2 (B, with sprinkler system, 300 ft, footnote c: 903.3.1.1)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Section 1017.2",
+          "IBC 2024 Table 1017.2 (B: 200 ft without sprinkler; 300 ft only with 903.3.1.1, footnote c)",
+          "IFC/IBC 2024 Section 903.3.1.2 (NFPA 13R)"
+        ],
+        "confidence": 0.8
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Section 1017.2",
+          "IBC 2024 Table 1017.2 (M, with sprinkler system, 250 ft, footnote b)"
+        ],
+        "confidence": 0.95
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-1(B) deletes IBC Table 1004.5",
+          "Austin §25-12-3 local Table 1004.5 (Assembly without fixed seats – Standing space: 7 net)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (standing space 7 net)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Business areas 150 gross)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Unconcentrated, tables and chairs: 15 net)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Information technology equipment facilities 300 gross)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "Table 1020.3",
+          "1005.3.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "Table 1020.3",
+          "1005.3.2 Exception 1"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (occupant load less than 50)",
+          "1005.3.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (stretcher traffic in ambulatory care facilities)",
+          "Section 202 Ambulatory care facility"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 1017.2",
+          "Table 1017.2 note c"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 note c (B sprinkler increase requires 903.3.1.1)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 note b"
+        ],
+        "confidence": 0.95
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-1(B) (deletes IBC Table 1004.5)",
+          "§25-12-3 Austin amended Table 1004.5 (Standing space = 7 net)",
+          "Ord. No. 20250410-045"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "IBC 2024 §1004.5",
+          "Austin amended Table 1004.5 (Standing space 7 net)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "IBC 2024 §1004.5",
+          "Austin amended Table 1004.5 (Business areas 150 gross)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "IBC 2024 §1004.5",
+          "Austin amended Table 1004.5 (Unconcentrated, tables and chairs 15 net)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "IBC 2024 §1004.5",
+          "Austin amended Table 1004.5 (Information technology equipment facilities 300 gross)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1005.3.2 (0.2 in/occupant)",
+          "IBC 2024 §1020.3",
+          "IBC 2024 Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 §1005.3.2 Exception 1 (0.15 in/occupant with NFPA 13/13R and EVACS)",
+          "IBC 2024 §1020.3",
+          "IBC 2024 Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (occupant load less than 50 = 36 in)",
+          "IBC 2024 §1005.3.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (stretcher traffic, outpatient care where patients are incapable of self-preservation = 72 in)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 §1017.2",
+          "IBC 2024 Table 1017.2 (Group B, sprinklered, footnote c: NFPA 13 per 903.3.1.1)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 (Group B 300 ft only with 903.3.1.1 per footnote c; otherwise 200 ft)"
+        ],
+        "confidence": 0.8
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 §1017.2",
+          "IBC 2024 Table 1017.2 (Group M, sprinklered, footnote b)"
+        ],
+        "confidence": 0.9
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3 (Ord. 20250410-045), local replacement of IBC 2024 Table 1004.5: Assembly without fixed seats, Standing space = 7 net"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (standing space 7 net)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Business areas 150 gross)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Unconcentrated, tables and chairs 15 net)"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (Information technology equipment facilities 300 gross)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1005.3.2 (0.2 in/occupant)",
+          "IBC 2024 1020.3",
+          "Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1005.3.2 Exception 1 (0.15 in/occupant with sprinklers and EVACS)",
+          "IBC 2024 1020.3",
+          "Table 1020.3 (44 in)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "Table 1020.3 (occupant load less than 50: 36 in)",
+          "1005.3.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "Table 1020.3 (stretcher traffic in ambulatory care facilities: 72 in)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 1017.2",
+          "Table 1017.2 (Group B, sprinklered: 300 ft)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 and footnote b (NFPA 13R allowed only where Section 903 permits; 903.3.1.2 is for Group R only, so the Group B building counts as unsprinklered: 200 ft)",
+          "903.3.1.2"
+        ],
+        "confidence": 0.6
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 1017.2",
+          "Table 1017.2 (Group M, sprinklered: 250 ft)"
+        ],
+        "confidence": 0.9
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code 25-12-1(B) and 25-12-3 (Ord. 20250410-045): Austin's replacement Table 1004.5, 'Standing space 7 net' (the model 2024 IBC uses 5 net)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (standing space 7 net)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.8
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (business areas 150 gross)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (unconcentrated, tables and chairs, 15 net)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin amended Table 1004.5 (information technology equipment facilities 300 gross)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "Table 1020.3 (44 in)",
+          "1005.3.2 (0.2 in/occupant)",
+          "1005.1"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "Table 1020.3 (44 in)",
+          "1005.3.2 Exception 1 (0.15 in/occupant with 903.3.1.1/903.3.1.2 and 907.5.2.2 voice/alarm)"
+        ],
+        "confidence": 0.8
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (occupant load less than 50: 36 in)",
+          "1005.3.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (corridors serving stretcher traffic in ambulatory care facilities: 72 in)",
+          "202 definition of ambulatory care facility",
+          "1020.3"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 (B, sprinklered: 300, note c)",
+          "1017.2"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 note c (903.3.1.1 only), so B with only NFPA 13R uses the unsprinklered 200 ft value",
+          "1017.2"
+        ],
+        "confidence": 0.75
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 (A, E, F-1, M, R, S-1, sprinklered: 250, note b)",
+          "1017.2"
+        ],
+        "confidence": 0.9
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin Ord. 20250410-045 §25-12-1(B) deletes model IBC Table 1004.5",
+          "Austin §25-12-3 local Table 1004.5 (Assembly without fixed seats – Standing space: 7 net)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin local Table 1004.5 (standing space 7 net)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.8
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin local Table 1004.5 (Business areas 150 gross)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin local Table 1004.5 (Unconcentrated tables and chairs 15 net)",
+          "IBC 2024 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin local Table 1004.5 (Information technology equipment facilities 300 gross)"
+        ],
+        "confidence": 0.93
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "IBC 2024 Table 1020.3",
+          "IBC 2024 1005.3.2 (0.2 in/occupant)"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 1020.3",
+          "IBC 2024 Table 1020.3",
+          "IBC 2024 1005.3.2 Exception 1 (0.15 in/occupant)"
+        ],
+        "confidence": 0.88
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (occupant load less than 50)"
+        ],
+        "confidence": 0.93
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "IBC 2024 Table 1020.3 (stretcher traffic in ambulatory care facilities)",
+          "IBC 2024 Section 202 Ambulatory care facility"
+        ],
+        "confidence": 0.9
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 footnote c"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 (footnote c requires 903.3.1.1 only)"
+        ],
+        "confidence": 0.85
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "IBC 2024 Table 1017.2 footnote b"
+        ],
+        "confidence": 0.95
+      }
+    ]
+  ],
+  "notes": [
+    "Run 4: array wrapped in a ```json code fence; extracted.",
+    "Run 6: array wrapped in a ```json code fence; extracted.",
+    "Run 8: array wrapped in a ```json code fence; extracted.",
+    "Run 8: reply had explanatory prose after the JSON (basis and assumptions); extracted the array.",
+    "Run 10: array wrapped in a ```json code fence; extracted."
+  ]
+}

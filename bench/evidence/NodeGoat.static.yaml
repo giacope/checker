@@ -1,0 +1,291 @@
+subject:
+  kind: system
+  id: NodeGoat
+sources:
+- id: static
+  kind: static_analysis
+  describes: NodeGoat
+  adapter: adapters.code_static
+  adapter_version: 0.1.0
+  commit: c5cb68a7084e4ae7dcc60e6a98768720a81841e8
+  files_analysed: 41
+  unparsed: []
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: app/data/user-dao.js:25
+  - value: true
+    source: static
+    at: app/data/user-dao.js:75
+  password_min_length:
+  - value: 1
+    source: static
+    at: app/routes/session.js:171
+  password_max_length:
+  - value: 20
+    source: static
+    at: app/routes/session.js:171
+  password_composition_rules:
+  - value: false
+    source: static
+    at: app/data/user-dao.js:25
+  - value: false
+    source: static
+    at: app/routes/session.js:171
+  password_blocklist_check:
+  - value: false
+    source: static
+    at: app/data/user-dao.js:25
+  - value: false
+    source: static
+    at: app/routes/session.js:171
+  password_periodic_change:
+  - value: false
+    source: static
+    at: app/data/user-dao.js:25
+  login_rate_limited:
+  - value: false
+    source: static
+    at: app/routes/index.js:34
+  processes_personal_data:
+  - value: true
+    source: static
+    at: app/data/user-dao.js:21
+  - value: true
+    source: static
+    at: app/data/user-dao.js:22
+  - value: true
+    source: static
+    at: app/data/user-dao.js:23
+  account_erasure:
+  - value: false
+    source: static
+    at: app/data/user-dao.js:21
+  - value: false
+    source: static
+    at: app/data/user-dao.js:22
+  - value: false
+    source: static
+    at: app/data/user-dao.js:23
+elements:
+- type: PasswordStore
+  id: PasswordStore@app/data/user-dao.js:25
+  at: app/data/user-dao.js:25
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: app/data/user-dao.js:25
+    salted:
+    - value: false
+      source: static
+      at: app/data/user-dao.js:25
+- type: PasswordStore
+  id: PasswordStore@app/data/user-dao.js:75
+  at: app/data/user-dao.js:75
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: app/data/user-dao.js:75
+    salted:
+    - value: false
+      source: static
+      at: app/data/user-dao.js:75
+- type: Query
+  id: Query@app/data/allocations-dao.js:29
+  at: app/data/allocations-dao.js:29
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: app/data/allocations-dao.js:29
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/allocations-dao.js:29
+- type: Query
+  id: Query@app/data/allocations-dao.js:86
+  at: app/data/allocations-dao.js:86
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: app/data/allocations-dao.js:86
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/allocations-dao.js:86
+- type: Query
+  id: Query@app/data/benefits-dao.js:24
+  at: app/data/benefits-dao.js:24
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: app/data/benefits-dao.js:24
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/benefits-dao.js:24
+- type: Query
+  id: Query@app/data/contributions-dao.js:28
+  at: app/data/contributions-dao.js:28
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: app/data/contributions-dao.js:28
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/contributions-dao.js:28
+- type: Query
+  id: Query@app/data/contributions-dao.js:57
+  at: app/data/contributions-dao.js:57
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: app/data/contributions-dao.js:57
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/contributions-dao.js:57
+- type: Query
+  id: Query@app/data/user-dao.js:91
+  at: app/data/user-dao.js:91
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: app/data/user-dao.js:91
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/user-dao.js:91
+- type: Query
+  id: Query@app/data/user-dao.js:98
+  at: app/data/user-dao.js:98
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: app/data/user-dao.js:98
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/user-dao.js:98
+- type: Query
+  id: Query@app/data/user-dao.js:104
+  at: app/data/user-dao.js:104
+  facts:
+    construction:
+    - value: operator_object
+      source: static
+      at: app/data/user-dao.js:104
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/data/user-dao.js:104
+- type: Cookie
+  id: Cookie@server.js:78
+  at: server.js:78
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: server.js:78
+    secure:
+    - value: false
+      source: static
+      at: server.js:78
+    http_only:
+    - value: true
+      source: static
+      at: server.js:78
+    same_site:
+    - value: unset
+      source: static
+      at: server.js:78
+- type: Secret
+  id: Secret@artifacts/cert/server.key:1
+  at: artifacts/cert/server.key:1
+  facts:
+    kind:
+    - value: private_key
+      source: static
+      at: artifacts/cert/server.key:1
+- type: Secret
+  id: Secret@artifacts/db-reset.js:18
+  at: artifacts/db-reset.js:18
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: artifacts/db-reset.js:18
+- type: Secret
+  id: Secret@artifacts/db-reset.js:27
+  at: artifacts/db-reset.js:27
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: artifacts/db-reset.js:27
+- type: Secret
+  id: Secret@artifacts/db-reset.js:35
+  at: artifacts/db-reset.js:35
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: artifacts/db-reset.js:35
+- type: Secret
+  id: Secret@config/env/all.js:8
+  at: config/env/all.js:8
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: config/env/all.js:8
+- type: Secret
+  id: Secret@config/env/all.js:9
+  at: config/env/all.js:9
+  facts:
+    kind:
+    - value: other
+      source: static
+      at: config/env/all.js:9
+- type: Secret
+  id: Secret@config/env/development.js:6
+  at: config/env/development.js:6
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: config/env/development.js:6
+- type: LogStatement
+  id: LogStatement@app/routes/session.js:64
+  at: app/routes/session.js:64
+  facts:
+    logs_credentials:
+    - value: false
+      source: static
+      at: app/routes/session.js:64
+    logs_personal_data:
+    - value: true
+      source: static
+      at: app/routes/session.js:64
+- type: LogStatement
+  id: LogStatement@artifacts/db-reset.js:99
+  at: artifacts/db-reset.js:99
+  facts:
+    logs_credentials:
+    - value: false
+      source: static
+      at: artifacts/db-reset.js:99
+    logs_personal_data:
+    - value: true
+      source: static
+      at: artifacts/db-reset.js:99

@@ -1,0 +1,164 @@
+# Ground truth for the code benchmark (bench/code.yaml), repository full-stack-fastapi-template (the control).
+# Vocabulary: vocab/code.yaml. Locators are path:line relative to the repository root.
+repo: full-stack-fastapi-template
+url: https://github.com/fastapi/full-stack-fastapi-template
+sha: aabb90126964a164e02aff39e7c385bb0598236d
+labelled: 2026-11-14
+scope: >
+  backend/app (excluding alembic/versions), backend/Dockerfile, the compose files, the root .env
+  and frontend/.env, and frontend/src (application source, excluding the generated
+  frontend/src/client). Excluded: backend/tests, frontend/tests, built frontend output
+  (backend/app/frontend, not committed), docs, .github, the .agents/.claude skill files.
+  private.py routes only mount when FASTAPI_ENV == "development" (backend/app/api/main.py:13-14).
+standards:
+  asvs: OWASP ASVS 5.0.0 (tag v5.0.0_release)
+  nist: NIST SP 800-63B-4 final
+  gdpr: Regulation (EU) 2016/679, Art. 17 and Art. 44 to 46
+
+system:
+  password_auth:
+    value: true
+    at: [backend/app/api/routes/login.py:23, backend/app/crud.py:45]
+    note: "OAuth2 password form at /login/access-token. crud.authenticate verifies the password hash."
+  password_is_sole_factor:
+    value: true
+    at: [backend/app/api/routes/login.py:30, backend/app/api/routes/login.py:38]
+    note: "A correct password returns an access token directly; there is no MFA."
+  password_min_length:
+    value: 8
+    at: [backend/app/models.py:22, backend/app/models.py:27, backend/app/models.py:37, backend/app/models.py:47, backend/app/models.py:126]
+    note: "Pydantic min_length=8 on create, signup, admin update, password change and reset. The frontend zod schemas repeat 8 (frontend/src/routes/signup.tsx:30)."
+  password_max_length:
+    value: 128
+    at: [backend/app/models.py:22]
+    note: "max_length=128 on every password field."
+  password_composition_rules:
+    value: false
+    at: [backend/app/models.py:22]
+    note: "Length only. No character-class rules in the backend or frontend."
+  password_blocklist_check:
+    value: false
+    at: [backend/app/crud.py:10, backend/app/api/routes/users.py:103, backend/app/api/routes/login.py:77]
+    note: "No comparison against common or compromised passwords on signup, change or reset."
+  password_periodic_change:
+    value: false
+    at: [backend/app/models.py:51]
+    note: "No password age or expiry field."
+  login_rate_limited:
+    value: false
+    at: [backend/app/api/routes/login.py:23, compose.deploy.yml:13]
+    note: "No limiter dependency or failed-attempt counter in the app. The Traefik configuration defines no rateLimit middleware."
+  processes_personal_data:
+    value: true
+    at: [backend/app/models.py:14, backend/app/models.py:17]
+    note: "Email (unique, login identifier) and full_name, plus user-owned items."
+  account_erasure:
+    value: true
+    at: [backend/app/api/routes/users.py:132, backend/app/api/routes/users.py:214, backend/app/models.py:55, backend/app/models.py:91]
+    note: "DELETE /users/me (self-service, not for superusers) and DELETE /users/{id} (superuser) delete the user row. Items cascade (cascade_delete and ondelete=CASCADE)."
+
+elements:
+  # ---- PasswordStore
+  - {type: PasswordStore, at: "backend/app/core/security.py:36", facts: {algorithm: argon2, salted: true}, note: "get_password_hash -> pwdlib PasswordHash with Argon2Hasher first (security.py:11-16). Defaults come from argon2-cffi 25.1.0 RFC_9106_LOW_MEMORY: argon2id, t=3, m=64 MiB, p=4, 16-byte random salt."}
+  - {type: PasswordStore, at: "backend/app/core/security.py:32", facts: {algorithm: argon2, salted: true}, note: "verify_and_update also accepts legacy bcrypt hashes (BcryptHasher, default 12 rounds) and rehashes them to argon2 on login (crud.py:55-59)."}
+  - {type: PasswordStore, at: "backend/app/crud.py:12", facts: {algorithm: argon2, salted: true}, note: "create_user (signup, admin create, first superuser at core/db.py:28-33)."}
+  - {type: PasswordStore, at: "backend/app/crud.py:25", facts: {algorithm: argon2, salted: true}, note: "update_user (admin update and password reset)."}
+  - {type: PasswordStore, at: "backend/app/api/routes/users.py:117", facts: {algorithm: argon2, salted: true}, note: "PATCH /users/me/password; checks the current password first (:110)."}
+  - {type: PasswordStore, at: "backend/app/api/routes/private.py:32", facts: {algorithm: argon2, salted: true}, note: "Development-only unauthenticated user creation (mounted only when FASTAPI_ENV=development)."}
+
+  # ---- Query (all SQLModel/SQLAlchemy with bound parameters)
+  - {type: Query, at: "backend/app/crud.py:35", facts: {construction: orm, untrusted_input: true}, note: "select(User).where(User.email == email); email comes from the login form, the password-recovery path parameter and request bodies."}
+  - {type: Query, at: "backend/app/api/routes/users.py:46", facts: {construction: orm, untrusted_input: true}, note: "offset(skip).limit(limit) with int query parameters."}
+  - {type: Query, at: "backend/app/api/routes/users.py:169", facts: {construction: orm, untrusted_input: true}, note: "session.get(User, user_id) with a UUID path parameter (also :197, :221)."}
+  - {type: Query, at: "backend/app/api/routes/users.py:228", facts: {construction: orm, untrusted_input: true}, note: "delete(Item).where(owner_id == user_id)."}
+  - {type: Query, at: "backend/app/api/routes/items.py:35", facts: {construction: orm, untrusted_input: true}, note: "Owner-filtered select with int skip/limit; session.get(Item, id) at :53, :86, :106."}
+  - {type: Query, at: "backend/app/api/deps.py:41", facts: {construction: orm, untrusted_input: true}, note: "session.get(User, token sub), after JWT verification."}
+
+  # ---- Cookie
+  - {type: Cookie, at: "frontend/src/components/ui/sidebar.tsx:96", facts: {is_session: false, secure: false, http_only: false, same_site: unset}, note: "Client-side UI preference cookie (sidebar open state) set by document.cookie. The server sets no cookies at all. The access token is a bearer token kept in localStorage (frontend/src/hooks/useAuth.ts:45), not in a cookie."}
+
+  # ---- TokenVerification
+  - {type: TokenVerification, at: "backend/app/api/deps.py:32", facts: {verifies_signature: true, allows_none_alg: false}, note: "PyJWT 2.15 jwt.decode(token, SECRET_KEY, algorithms=['HS256']). The signature is checked against a fixed allowlist and exp is verified by default (the token always carries exp, security.py:24). The key comes from env config."}
+  - {type: TokenVerification, at: "backend/app/utils.py:120", facts: {verifies_signature: true, allows_none_alg: false}, note: "Password-reset token: the same key and HS256 allowlist; exp and nbf are verified (set at :111)."}
+
+  # ---- Secret (all placeholders)
+  - {type: Secret, at: ".env:6", facts: {kind: signing_key, test_or_example: true}, note: "SECRET_KEY=changethis placeholder. Settings refuses the value at start-up unless FASTAPI_ENV=development (backend/app/core/config.py:68-81)."}
+  - {type: Secret, at: ".env:8", facts: {kind: password, test_or_example: true}, note: "FIRST_SUPERUSER_PASSWORD placeholder 'changethis', rejected the same way (config.py:84-86)."}
+  - {type: Secret, at: ".env:17", facts: {kind: password, test_or_example: true}, note: "POSTGRES_PASSWORD placeholder 'changethis'. It reaches DATABASE_URL (compose.yml:64), whose password is rejected the same way (config.py:82-83)."}
+  - {type: Secret, at: "backend/app/crud.py:42", facts: {kind: other, test_or_example: true}, note: "DUMMY_HASH, an argon2 hash of a random password used only to equalise timing for unknown emails. Not a usable credential."}
+
+  # ---- LogStatement (can log credentials or personal data)
+  - {type: LogStatement, at: "compose.deploy.yml:30", facts: {logs_credentials: true, logs_personal_data: true}, note: "Traefik --accesslog in the production overlay. The default record holds the full request URI with query string (traefik pkg/middlewares/accesslog/logger.go: RequestPath includes RawQuery) and the client IP. Reset links are FRONTEND_HOST/reset-password?token=<JWT> (backend/app/utils.py:73), so the 48-hour reset token is logged when the user opens the link. /api/v1/password-recovery/{email} (login.py:53) logs the email."}
+  - {type: LogStatement, at: "compose.yml:16", facts: {logs_credentials: true, logs_personal_data: true}, note: "The same --accesslog in the base compose file."}
+  - {type: LogStatement, at: "backend/Dockerfile:65", facts: {logs_credentials: true, logs_personal_data: true}, note: "fastapi run -> uvicorn with its default access log, which logs path plus query string (uvicorn protocols/utils.get_path_with_query_string). The backend serves the SPA (backend/app/main.py:36), so GET /reset-password?token=... and the password-recovery email path reach this log."}
+
+  # ---- Transfer
+  - {type: Transfer, at: "backend/app/main.py:19", facts: {recipient: "Sentry (Functional Software Inc.) or the host in SENTRY_DSN", personal_data: true, third_country: null, adequacy_or_safeguards: null}, note: "Enabled when SENTRY_DSN is set outside development. With the sentry-sdk defaults (send_default_pii off, request bodies and local variables on, denylist scrubbing of password/token keys), error and trace events still carry request URLs and bodies with emails and full names. The region (sentry.io US vs de.sentry.io EU, or self-hosted) depends on the DSN."}
+  - {type: Transfer, at: "backend/app/utils.py:56", facts: {recipient: "SMTP relay configured by SMTP_HOST", personal_data: true, third_country: null, adequacy_or_safeguards: null}, note: "Sends the recipient address, the username or email, and reset links. The new-account email from POST /users/ includes the plaintext password (api/routes/users.py:71). Where the provider is depends on deployment."}
+
+verdicts:
+  C1:
+    verdict: pass
+    requirement: "ASVS 5.0 11.4.2 (L2): 'Verify that passwords are stored using an approved, computationally intensive, key derivation function (also known as a \"password hashing function\"), with parameter settings configured based on current guidance.' Appendix C: argon2id 't >= 3: m >= 12288 (12 MiB), p = 1'; bcrypt 'cost >= 10'."
+    failing: []
+  C2:
+    verdict: pass
+    requirement: "ASVS 5.0 1.2.4 (L1): 'Verify that data selection or database queries (e.g., SQL, HQL, NoSQL, Cypher) use parameterized queries, ORMs, entity frameworks, or are otherwise protected from SQL Injection and other database injection attacks.'"
+    failing: []
+  C3:
+    verdict: not_applicable
+    requirement: "ASVS 5.0 3.3.1 (L1) 'Verify that cookies have the 'Secure' attribute set ...'; 3.3.4 (L2) HttpOnly for cookies 'not meant to be accessible to client-side scripts (such as a session token)'."
+    failing: []
+    note: "No cookie carries a session token. The server sets none, and the bearer JWT lives in localStorage (frontend/src/hooks/useAuth.ts:45), which ASVS 14.3.3 allows for session tokens. The only cookie is a client UI preference (sidebar.tsx:96)."
+  C4:
+    verdict: pass
+    requirement: "ASVS 5.0 9.1.1 (L1): 'Verify that self-contained tokens are validated using their digital signature or MAC to protect against tampering before accepting the token's contents.'; 9.1.2 (L1) allowlist 'must not include the 'None' algorithm'; 9.2.1 (L1) 'nbf' and 'exp' must be verified."
+    failing: []
+    note: "Both decode sites (deps.py:32, utils.py:120) pin algorithms=['HS256'] and PyJWT verifies the signature and exp/nbf. L2 9.2.2/9.2.3 are not met (access and reset tokens share key and algorithm with no typ or aud claim), but a cross-use fails in practice: an access-token sub (UUID) is not an email, and a reset-token sub (email) is not a UUID."
+  C5:
+    verdict: pass
+    requirement: "ASVS 5.0 13.3.1 (L2): '... Secrets must not be included in application source code or included in build artifacts.'"
+    failing: []
+    note: "The only literals are 'changethis' placeholders in .env, and config.py:68-87 refuses them outside development. The image does not copy .env (backend/Dockerfile:48-54), and the deploy compose does not pass FASTAPI_ENV to the backend (compose.yml:55-65), so the guard raises. Whether a vault is used (the rest of 13.3.1) is a deployment fact."
+  C6:
+    verdict: fail
+    requirement: "ASVS 5.0 16.2.5 (L2): 'Verify that when logging sensitive data, the application enforces logging based on the data's protection level. For example, it may not be allowed to log certain data, such as credentials or payment details. Other data, such as session tokens, may only be logged by being hashed or masked'. Related: 14.2.1 (L1) 'the URL and query string do not contain sensitive information, such as an API key or session token.'"
+    failing: [compose.deploy.yml:30, compose.yml:16, backend/Dockerfile:65, backend/app/utils.py:73]
+    note: "No application log statement writes a credential (the only one, utils.py:57, logs the SMTP status repr). The failure is configured access logging combined with a password-reset token in a URL query string, which writes a usable 48-hour credential unmasked to the Traefik and uvicorn access logs."
+  C7:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length.'"
+    failing: [backend/app/models.py:22, backend/app/models.py:27, backend/app/models.py:37, backend/app/models.py:47, backend/app/models.py:126]
+    note: "The minimum is 8 and the password is the only factor. 8 would satisfy ASVS 6.2.1 but not 800-63B-4."
+  C8:
+    verdict: pass
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'Verifiers and CSPs SHALL NOT impose other composition rules (e.g., requiring mixtures of different character types) for passwords.'"
+    failing: []
+  C9:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'When processing a request to establish or change a password, verifiers SHALL compare the prospective secret against a blocklist that contains known commonly used, expected, or compromised passwords.'"
+    failing: [backend/app/crud.py:10, backend/app/api/routes/users.py:103, backend/app/api/routes/login.py:77]
+  C10:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'Verifiers SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber account, as described in Sec. 3.2.2.'"
+    failing: [backend/app/api/routes/login.py:23]
+    note: "The app has no limit and the shipped Traefik config (compose.yml:3-18, compose.deploy.yml:3-32) adds none. Users/me/password (users.py:103) is also unthrottled."
+  C11:
+    verdict: pass
+    requirement: "GDPR Art. 17(1): 'The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay and the controller shall have the obligation to erase personal data without undue delay ...'"
+    failing: []
+    note: "Self-service delete at users.py:132-143 and superuser delete at :214-232, with item cascade (models.py:55, :91). Copies outside the database (access logs, Sentry events, sent emails) are not erased by code."
+  C12:
+    verdict: uncertain
+    requirement: "GDPR Art. 44: 'Any transfer of personal data ... to a third country ... shall take place only if ... the conditions laid down in this Chapter are complied with'; Art. 45(1) adequacy decision; Art. 46(1) 'only if the controller or processor has provided appropriate safeguards'."
+    failing: []
+    deciding: "Both transfers are configured at deployment: Sentry (main.py:19), only if SENTRY_DSN is set, and the SMTP provider (utils.py:56). It depends on the DSN's region or a self-hosted Sentry, which provider SMTP_HOST points to, and whether that recipient is covered by the EU-US Data Privacy Framework, SCCs or a DPA. None of this is in the repository."
+
+confidence_notes:
+  - "C6 is the least certain. No application log statement leaks credentials. The fail rests on combining the shipped access-log configuration (Traefik --accesslog, uvicorn's default access log) with the reset token in the reset-link query string. A labeller who counts only explicit log calls in application code would say pass."
+  - "C1: Appendix C lists argon2id parameters only for p=1. pwdlib's default is p=4 with 64 MiB total (16 MiB per lane) and t=3, which is at least as strong as the listed t>=3, m>=12 MiB row. I read it as approved."
+  - "C3 not_applicable relies on the bearer token being in localStorage, not a cookie. Someone might read the check as 'session tokens must be in cookies with those attributes', but no ASVS 5.0 requirement says that, and 14.3.3 exempts session tokens from the browser-storage rule."
+  - "C10: a reverse proxy or WAF in a real deployment could add throttling, but the repository ships its proxy configuration without any, and NIST puts the duty on the verifier. So fail, not uncertain."
+  - "C12 / Transfer facts: third_country is null for both, because the region depends on configuration. personal_data true for Sentry rests on sentry-sdk defaults (bodies and local variables sent, pii-flagged headers and IP not sent)."
+  - "Outside the twelve checks: POST /users/ emails the new user's plaintext password (users.py:69-77, email-templates/new_account.html), and the access token lives for 8 days (config.py:25)."
+  - ".env:2 sets FASTAPI_ENV=development. If someone runs the app directly with this .env, the changethis guard drops to a warning. The compose deploy path does not pass that variable to the container, so C5 stays pass."

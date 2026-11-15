@@ -1,0 +1,257 @@
+# Ground truth for the code benchmark: OWASP Juice Shop.
+# Labels rest on application code and its runtime configuration (server.ts, lib/, routes/,
+# models/, data/ runtime loaders and data/static/*.yml, config/, views/, encryptionkeys/,
+# ctf.key, terraform/ and infrastructure/ which the app serves at /infrastructure).
+# Out of scope: test/, frontend/, node_modules/, docs, rsn/ (dev tooling),
+# data/static/codefixes/ (code snippets shown to players, never executed).
+# Secret values are deliberately not reproduced here; locators point to them.
+repo: juice-shop
+url: https://github.com/juice-shop/juice-shop
+sha: 266448aba68cd8ba5915f526a128da4fa7bc3f9f
+labelled: 2026-11-14
+standards:
+  asvs: "OWASP ASVS 5.0.0 (tag v5.0.0_release, github.com/OWASP/ASVS 5cf9b03, 2025-05-30)"
+  nist: "NIST SP 800-63B-4 final (pages.nist.gov/800-63-4/sp800-63b)"
+  gdpr: "Regulation (EU) 2016/679 (EUR-Lex CELEX:32016R0679)"
+
+system:
+  password_auth:
+    value: true
+    at: [routes/login.ts:34, server.ts:635]
+    note: "POST /rest/user/login compares email + md5(password) in SQL."
+  password_is_sole_factor:
+    value: true
+    at: [routes/login.ts:37, models/user.ts:109]
+    note: "TOTP is only demanded when the user opted in (totpSecret defaults to ''); passkeys are an alternative, not a second factor."
+  password_min_length:
+    value: 0
+    at: [server.ts:440, server.ts:442, routes/verify.ts:23, routes/changePassword.ts:19, routes/resetPassword.ts:26]
+    note: "Server only rejects empty passwords, and on registration only when email, password and passwordRepeat are all present (the emptyUserRegistration challenge registers an empty password). The 5-character minimum exists only in the excluded Angular frontend."
+  password_max_length:
+    value: 100000
+    at: [server.ts:440, models/user.ts:70]
+    note: "No server-side maximum; only Express body/URL size limits apply. Frontend max 40 is out of scope."
+  password_composition_rules:
+    value: false
+    at: [server.ts:440, routes/changePassword.ts:19, routes/resetPassword.ts:26]
+    note: "No character-class checks anywhere server-side."
+  password_blocklist_check:
+    value: false
+    at: [server.ts:440, routes/changePassword.ts:51, routes/resetPassword.ts:44]
+    note: "Registration, change and reset store any non-empty password; no list lookup exists."
+  password_periodic_change:
+    value: false
+    at: [models/user.ts:20]
+    note: "No password age field or expiry logic."
+  login_rate_limited:
+    value: false
+    at: [server.ts:635, server.ts:375, server.ts:491]
+    note: "No limiter on /rest/user/login or /rest/passkey/login-verify. Limiters exist only for reset-password (per IP via X-Forwarded-For under trust proxy, spoofable) and the 2FA endpoints (100 per 5 min per IP), never per account."
+  processes_personal_data:
+    value: true
+    at: [models/user.ts:44, models/user.ts:56, models/user.ts:101, models/address.ts:41, models/card.ts:37, routes/order.ts:164]
+    note: "Usernames, emails, last login IP, postal addresses, payment cards, orders."
+  account_erasure:
+    value: false
+    at: [routes/dataErasure.ts:83, routes/dataErasure.ts:88, server.ts:399]
+    note: "The erasure form only inserts a PrivacyRequest row (deletionRequested=true) and clears the cookie; no code reads PrivacyRequests or deletes the user. DELETE /api/Users/:id is denyAll."
+
+elements:
+  # ---------------- PasswordStore ----------------
+  - {type: PasswordStore, at: "lib/insecurity.ts:41", facts: {algorithm: md5, salted: false}, note: "security.hash = crypto.createHash('md5'); the function every password site below uses."}
+  - {type: PasswordStore, at: "models/user.ts:73", facts: {algorithm: md5, salted: false}, note: "User.password setter stores security.hash(clearTextPassword); covers registration (finale), change, reset and seeding."}
+  - {type: PasswordStore, at: "routes/login.ts:34", facts: {algorithm: md5, salted: false}, note: "Login compares password = md5(req.body.password) inside the SQL string."}
+  - {type: PasswordStore, at: "routes/changePassword.ts:39", facts: {algorithm: md5, salted: false}, note: "Current password checked as md5 against the stored hash."}
+  - {type: PasswordStore, at: "routes/2fa.ts:107", facts: {algorithm: md5, salted: false}, note: "2FA setup re-confirms password via md5 compare."}
+  - {type: PasswordStore, at: "routes/2fa.ts:152", facts: {algorithm: md5, salted: false}, note: "2FA disable re-confirms password via md5 compare."}
+
+  # ---------------- Query (reachable by untrusted input) ----------------
+  - {type: Query, at: "routes/login.ts:34", facts: {construction: interpolated, untrusted_input: true}, note: "Raw SQL template literal with req.body.email (SQL injection, loginAdmin/Jim/Bender challenges)."}
+  - {type: Query, at: "routes/search.ts:23", facts: {construction: interpolated, untrusted_input: true}, note: "Raw SQL LIKE with req.query.q (UNION injection challenge); only truncated to 200 chars."}
+  - {type: Query, at: "routes/showProductReviews.ts:36", facts: {construction: concatenated, untrusted_input: true}, note: "MarsDB $where 'this.product == ' + req.params.id; string kept (trunc 40) unless noSqlCommandChallenge is disabled (Docker/Heroku), then Number()."}
+  - {type: Query, at: "routes/trackOrder.ts:18", facts: {construction: interpolated, untrusted_input: true}, note: "MarsDB $where with req.params.id in a JS string; sanitized only when reflectedXssChallenge is disabled (Docker/Heroku)."}
+  - {type: Query, at: "routes/updateProductReviews.ts:18", facts: {construction: operator_object, untrusted_input: true}, note: "update({_id: req.body.id}, ..., {multi: true}); id may be an operator object such as {$ne: -1}."}
+  - {type: Query, at: "routes/likeProductReviews.ts:25", facts: {construction: operator_object, untrusted_input: true}, note: "findOne({_id: req.body.id}) with JSON body value."}
+  - {type: Query, at: "routes/likeProductReviews.ts:35", facts: {construction: operator_object, untrusted_input: true}, note: "update({_id: id}, {$inc}) with the same body value."}
+  - {type: Query, at: "routes/likeProductReviews.ts:43", facts: {construction: operator_object, untrusted_input: true}, note: "findOne({_id: id}) again."}
+  - {type: Query, at: "routes/likeProductReviews.ts:50", facts: {construction: operator_object, untrusted_input: true}, note: "update({_id: id}, {$set: likedBy})."}
+  - {type: Query, at: "routes/chat.ts:150", facts: {construction: concatenated, untrusted_input: true}, note: "$where 'this.product == ' + Number(id), id is an LLM tool argument driven by the user's message; Number() coercion neutralises injection (yields a number or NaN)."}
+  - {type: Query, at: "routes/chat.ts:124", facts: {construction: orm, untrusted_input: true}, note: "Sequelize Op.like with `%${query}%` as a bound value (only LIKE wildcards controllable)."}
+  - {type: Query, at: "routes/chat.ts:167", facts: {construction: orm, untrusted_input: true}, note: "ordersCollection.findOne({orderId}); zod forces a string, no operator object."}
+  - {type: Query, at: "routes/chat.ts:52", facts: {construction: orm, untrusted_input: true}, note: "findByPk(userId) where userId comes from an unverified JWT decode (chat.ts:45)."}
+  - {type: Query, at: "server.ts:540", facts: {construction: orm, untrusted_input: true}, note: "finale-rest auto-generated CRUD for 14 models (/api/<Model>s), request params/body passed to Sequelize."}
+  - {type: Query, at: "routes/resetPassword.ts:35", facts: {construction: orm, untrusted_input: true}, note: "Sequelize include where {email} from req.body (operators require Symbol keys, so JSON cannot inject them)."}
+  - {type: Query, at: "routes/resetPassword.ts:44", facts: {construction: orm, untrusted_input: true}, note: "user.update({password: body.new})."}
+  - {type: Query, at: "routes/securityQuestion.ts:15", facts: {construction: orm, untrusted_input: true}, note: "where {email: query.email.toString()}."}
+  - {type: Query, at: "routes/changePassword.ts:51", facts: {construction: orm, untrusted_input: true}, note: "user.update({password: query.new})."}
+  - {type: Query, at: "routes/updateUserProfile.ts:38", facts: {construction: orm, untrusted_input: true}, note: "user.update({username: req.body.username})."}
+  - {type: Query, at: "routes/saveLoginIp.ts:32", facts: {construction: orm, untrusted_input: true}, note: "user.update({lastLoginIp}) from the True-Client-IP header."}
+  - {type: Query, at: "routes/profileImageUrlUpload.ts:36", facts: {construction: orm, untrusted_input: true}, note: "user.update({profileImage: url}) from req.body.imageUrl."}
+  - {type: Query, at: "routes/recycles.ts:12", facts: {construction: orm, untrusted_input: true}, note: "RecycleModel.findAll where id: JSON.parse(req.params.id); arrays become IN (IDOR), no operator injection."}
+  - {type: Query, at: "routes/basket.ts:19", facts: {construction: orm, untrusted_input: true}, note: "BasketModel.findOne where id = req.params.id."}
+  - {type: Query, at: "routes/order.ts:35", facts: {construction: orm, untrusted_input: true}, note: "BasketModel.findOne where id = req.params.id."}
+  - {type: Query, at: "routes/order.ts:125", facts: {construction: orm, untrusted_input: true}, note: "DeliveryModel.findOne where id = req.body.orderDetails.deliveryMethodId."}
+  - {type: Query, at: "routes/order.ts:164", facts: {construction: orm, untrusted_input: true}, note: "ordersCollection.insert with req.body.orderDetails paymentId/addressId."}
+  - {type: Query, at: "routes/coupon.ts:18", facts: {construction: orm, untrusted_input: true}, note: "BasketModel.findByPk(params.id); update coupon from params at :24."}
+  - {type: Query, at: "routes/basketItems.ts:68", facts: {construction: orm, untrusted_input: true}, note: "BasketItemModel.findOne where id = req.params.id."}
+  - {type: Query, at: "routes/basketItems.ts:88", facts: {construction: orm, untrusted_input: true}, note: "QuantityModel.findOne where ProductId from req.body."}
+  - {type: Query, at: "routes/basketItems.ts:49", facts: {construction: orm, untrusted_input: true}, note: "BasketItem save with values from the raw JSON body (clarinet parse)."}
+  - {type: Query, at: "routes/address.ts:18", facts: {construction: orm, untrusted_input: true}, note: "AddressModel.findOne where id = req.params.id (UserId server-set by appendUserId)."}
+  - {type: Query, at: "routes/address.ts:29", facts: {construction: orm, untrusted_input: true}, note: "AddressModel.destroy where id = req.params.id."}
+  - {type: Query, at: "routes/payment.ts:41", facts: {construction: orm, untrusted_input: true}, note: "CardModel.findOne where id = req.params.id."}
+  - {type: Query, at: "routes/payment.ts:70", facts: {construction: orm, untrusted_input: true}, note: "CardModel.destroy where id = req.params.id."}
+  - {type: Query, at: "routes/delivery.ts:34", facts: {construction: orm, untrusted_input: true}, note: "DeliveryModel.findOne where id = req.params.id."}
+  - {type: Query, at: "routes/wallet.ts:24", facts: {construction: orm, untrusted_input: true}, note: "CardModel.findOne where id = req.body.paymentId; increment by req.body.balance at :27."}
+  - {type: Query, at: "routes/deluxe.ts:35", facts: {construction: orm, untrusted_input: true}, note: "CardModel.findOne where id = req.body.paymentId."}
+  - {type: Query, at: "routes/captcha.ts:37", facts: {construction: orm, untrusted_input: true}, note: "CaptchaModel.findOne where captchaId = req.body.captchaId."}
+  - {type: Query, at: "routes/memory.ts:17", facts: {construction: orm, untrusted_input: true}, note: "MemoryModel.create with req.body.caption."}
+  - {type: Query, at: "routes/createProductReviews.ts:23", facts: {construction: orm, untrusted_input: true}, note: "reviewsCollection.insert of req.params.id, req.body.message/author (insert, no filter)."}
+  - {type: Query, at: "routes/orderHistory.ts:36", facts: {construction: orm, untrusted_input: true}, note: "ordersCollection.update({_id: req.params.id}); a path param is always a string, so no operator object."}
+  - {type: Query, at: "routes/passkey.ts:140", facts: {construction: orm, untrusted_input: true}, note: "PasskeyModel.findOne where credentialID from the verified attestation."}
+  - {type: Query, at: "routes/passkey.ts:164", facts: {construction: orm, untrusted_input: true}, note: "include where {email} from req.body, typeof string checked."}
+  - {type: Query, at: "routes/passkey.ts:190", facts: {construction: orm, untrusted_input: true}, note: "PasskeyModel.findOne where credentialID = assertion.id (string checked)."}
+  - {type: Query, at: "routes/passkey.ts:268", facts: {construction: orm, untrusted_input: true}, note: "PasskeyModel.destroy where id = req.params.id."}
+  - {type: Query, at: "routes/2fa.ts:26", facts: {construction: orm, untrusted_input: true}, note: "findByPk(userId) from a tmpToken that is forgeable (alg none accepted)."}
+
+  # ---------------- Cookie ----------------
+  - {type: Cookie, at: "lib/insecurity.ts:192", facts: {is_session: true, secure: false, http_only: false, same_site: unset}, note: "res.cookie('token', jwt) with no options, on every request that carries a new valid-looking JWT."}
+  - {type: Cookie, at: "routes/updateUserProfile.ts:42", facts: {is_session: true, secure: false, http_only: false, same_site: unset}, note: "res.cookie('token', updatedToken) after a profile update, with no options."}
+  - {type: Cookie, at: "routes/dataErasure.ts:88", facts: {is_session: false, secure: false, http_only: false, same_site: unset}, note: "res.clearCookie('token'): an expiring Set-Cookie that carries no token value."}
+  - {type: Cookie, at: "server.ts:333", facts: {is_session: false, secure: false, http_only: false, same_site: unset}, note: "i18n configured to read the 'language' cookie; the server never sets it (the frontend does)."}
+
+  # ---------------- TokenVerification ----------------
+  - {type: TokenVerification, at: "lib/insecurity.ts:52", facts: {verifies_signature: true, allows_none_alg: true}, note: "express-jwt 0.1.3 (package.json) with the RSA public key as 'secret' and no algorithm allowlist; the old jsonwebtoken/jws takes alg from the header (none, HS256 keyed with the public key)."}
+  - {type: TokenVerification, at: "lib/insecurity.ts:55", facts: {verifies_signature: true, allows_none_alg: true}, note: "security.verify = jws.verify(token, publicKey), the legacy 2-arg API, algorithm from the header. Used by isAccounting/isDeluxe/isCustomer (:156,:166,:171), 2fa.ts, currentUser.ts, deluxe.ts:45."}
+  - {type: TokenVerification, at: "lib/insecurity.ts:189", facts: {verifies_signature: true, allows_none_alg: true}, note: "jsonwebtoken 0.4.0 jwt.verify(token, publicKey) with no algorithms option; accepted tokens go into authenticatedUsers, which most routes trust."}
+  - {type: TokenVerification, at: "lib/insecurity.ts:156", facts: {verifies_signature: true, allows_none_alg: true}, note: "isAccounting: verify && decode, role claim trusted (also isDeluxe :166, isCustomer :171)."}
+  - {type: TokenVerification, at: "routes/2fa.ts:20", facts: {verifies_signature: true, allows_none_alg: true}, note: "tmpToken verified with security.verify, then userId/type claims trusted to complete login."}
+  - {type: TokenVerification, at: "routes/2fa.ts:115", facts: {verifies_signature: true, allows_none_alg: true}, note: "setupToken verified with security.verify; TOTP secret claim trusted."}
+  - {type: TokenVerification, at: "routes/currentUser.ts:17", facts: {verifies_signature: true, allows_none_alg: true}, note: "security.verify(req.cookies.token) gates whoami."}
+  - {type: TokenVerification, at: "routes/verify.ts:125", facts: {verifies_signature: true, allows_none_alg: true}, note: "Challenge detector: jwt.verify(token, publicKey) is meant to succeed for alg none / HS256 tokens, which shows the library accepts them."}
+  - {type: TokenVerification, at: "routes/chat.ts:45", facts: {verifies_signature: false, allows_none_alg: true}, note: "getUserId: security.decode (jws.decode) with no verification; the id claim selects whose username/email is loaded (chat.ts:52, :163)."}
+  - {type: TokenVerification, at: "routes/chat.ts:224", facts: {verifies_signature: false, allows_none_alg: true}, note: "decode-only role claim used for the aiDebugging challenge check."}
+  - {type: TokenVerification, at: "routes/authenticatedUsers.ts:20", facts: {verifies_signature: false, allows_none_alg: false}, note: "jsonwebtoken decode of a server-held token (tokenOf map) to show iat only; not a trust decision on client input."}
+  - {type: TokenVerification, at: "routes/passkey.ts:50", facts: {verifies_signature: true, allows_none_alg: false}, note: "Ceremony tokens: header must be HS256 and key is a per-process random 32-byte secret (:42) before jwt.verify at :53."}
+
+  # ---------------- Secret ----------------
+  - {type: Secret, at: "lib/insecurity.ts:21", facts: {kind: private_key, test_or_example: false}, note: "RSA private key that signs every session JWT (authorize :54) and keys the deluxe HMAC (:150)."}
+  - {type: Secret, at: "lib/insecurity.ts:42", facts: {kind: signing_key, test_or_example: false}, note: "Literal HMAC-SHA256 key for security answers (models/securityAnswer.ts:45, resetPassword.ts:41)."}
+  - {type: Secret, at: "server.ts:321", facts: {kind: signing_key, test_or_example: false}, note: "cookie-parser signing secret literal."}
+  - {type: Secret, at: "ctf.key:1", facts: {kind: signing_key, test_or_example: false}, note: "HMAC-SHA1 key for CTF flags, read by lib/utils.ts:76 when CTF_KEY env is unset."}
+  - {type: Secret, at: "encryptionkeys/premium.key:1", facts: {kind: other, test_or_example: false}, note: "Key for the premium paywall content, listed publicly at /encryptionkeys (server.ts:302-303); challenge material."}
+  - {type: Secret, at: "routes/checkKeys.ts:10", facts: {kind: private_key, test_or_example: false}, note: "Wallet mnemonic literal; private key derived at :12 and compared with user submissions."}
+  - {type: Secret, at: "routes/verify.ts:100", facts: {kind: other, test_or_example: false}, note: "Shared key literal that gates /solve/challenges/server-side."}
+  - {type: Secret, at: "routes/continueCode.ts:13", facts: {kind: other, test_or_example: false}, note: "Hashids salt for continue codes (progress tokens)."}
+  - {type: Secret, at: "routes/continueCode.ts:25", facts: {kind: other, test_or_example: false}, note: "Hashids salt (findIt continue codes)."}
+  - {type: Secret, at: "routes/continueCode.ts:38", facts: {kind: other, test_or_example: false}, note: "Hashids salt (fixIt continue codes)."}
+  - {type: Secret, at: "routes/restoreProgress.ts:18", facts: {kind: other, test_or_example: false}, note: "Same Hashids salt duplicated for decoding."}
+  - {type: Secret, at: "routes/restoreProgress.ts:42", facts: {kind: other, test_or_example: false}, note: "Same findIt salt duplicated."}
+  - {type: Secret, at: "routes/restoreProgress.ts:62", facts: {kind: other, test_or_example: false}, note: "Same fixIt salt duplicated."}
+  - {type: Secret, at: "data/static/users.yml:3", facts: {kind: password, test_or_example: false}, note: "Plaintext passwords (and security answers) of ~25 seeded accounts, lines 3-296, incl. admin; created on every start by data/datacreator.ts:189-199."}
+  - {type: Secret, at: "data/static/users.yml:151", facts: {kind: other, test_or_example: false}, note: "TOTP seed of a seeded 2FA user."}
+  - {type: Secret, at: "routes/login.ts:59", facts: {kind: password, test_or_example: false}, note: "Seeded-account passwords repeated as literals in challenge checks, lines 59-65."}
+  - {type: Secret, at: "routes/changePassword.ts:54", facts: {kind: password, test_or_example: false}, note: "Seeded account's target password literal in challenge check."}
+  - {type: Secret, at: "routes/resetPassword.ts:58", facts: {kind: other, test_or_example: false}, note: "Security-question answers of seeded accounts as literals, lines 58-63."}
+  - {type: Secret, at: "terraform/networking.tf:171", facts: {kind: private_key, test_or_example: false}, note: "TLS private key inline in IaC (same key material as lib/insecurity.ts:21)."}
+  - {type: Secret, at: "infrastructure/terraform/networking.tf:171", facts: {kind: private_key, test_or_example: false}, note: "Same inline private key; served to clients via /infrastructure (server.ts:273-290)."}
+  - {type: Secret, at: "models/index.ts:34", facts: {kind: password, test_or_example: true}, note: "Sequelize('database','username','password') placeholder credentials; SQLite ignores them."}
+  - {type: Secret, at: "routes/verify.ts:338", facts: {kind: api_key, test_or_example: true}, note: "Leaked-API-key challenge value used only as a LIKE search pattern; authenticates nothing."}
+
+  # ---------------- LogStatement ----------------
+  - {type: LogStatement, at: "server.ts:370", facts: {logs_credentials: true, logs_personal_data: true}, note: "morgan 'combined' access log writes the full URL: GET /rest/user/change-password?current=&new=&repeat= (server.ts:636, changePassword.ts:14-17) puts passwords in logs/; also client IP and ?email= of security-question. Logs are browsable at /support/logs (server.ts:306-308)."}
+  - {type: LogStatement, at: "server.ts:722", facts: {logs_credentials: true, logs_personal_data: true}, note: "errorhandler() console-logs every error outside NODE_ENV=test: 'Blocked illegal activity by <IP>', masked emails (dataExport.ts:35), and SQLite errors from login.ts:34 that can echo the email and md5 of the submitted password."}
+  - {type: LogStatement, at: "data/datacreator.ts:708", facts: {logs_credentials: true, logs_personal_data: false}, note: "On seed failure logs a seeded user's security answer in clear (account-recovery secret)."}
+
+  # ---------------- Transfer ----------------
+  - {type: Transfer, at: "routes/chat.ts:204", facts: {recipient: "OpenAI-compatible LLM API at config application.chatBot.llmApiUrl (default http://localhost:11434/v1, a local Ollama; config/default.yml:22), key from LLM_API_KEY (chat.ts:111)", personal_data: true, third_country: null, adequacy_or_safeguards: null}, note: "streamText sends the user's chat messages, the username in the system prompt (chat.ts:83, :193) and tool results (reviews with author/likedBy emails, own orders). Who receives them depends on deployment config."}
+
+verdicts:
+  C1:
+    verdict: fail
+    requirement: "ASVS 5.0 11.4.2"
+    quote: "Verify that passwords are stored using an approved, computationally intensive, key derivation function (also known as a \"password hashing function\")"
+    also: "11.4.1: \"Disallowed hash functions, such as MD5, must not be used for any cryptographic purpose.\""
+    failing: [lib/insecurity.ts:41, models/user.ts:73, routes/login.ts:34, routes/changePassword.ts:39, routes/2fa.ts:107, routes/2fa.ts:152]
+    reason: "Unsalted single-round MD5."
+  C2:
+    verdict: fail
+    requirement: "ASVS 5.0 1.2.4"
+    quote: "Verify that data selection or database queries (e.g., SQL, HQL, NoSQL, Cypher) use parameterized queries, ORMs, entity frameworks, or are otherwise protected from SQL Injection and other database injection attacks."
+    failing: [routes/login.ts:34, routes/search.ts:23, routes/showProductReviews.ts:36, routes/trackOrder.ts:18, routes/updateProductReviews.ts:18, routes/likeProductReviews.ts:25, routes/likeProductReviews.ts:35, routes/likeProductReviews.ts:43, routes/likeProductReviews.ts:50]
+    reason: "Two raw SQL strings and two MarsDB $where strings built from request data; NoSQL filters take operator objects straight from req.body. The remaining Sequelize/MarsDB calls bind values safely; chat.ts:150 is concatenated but neutralised by Number()."
+  C3:
+    verdict: fail
+    requirement: "ASVS 5.0 3.3.1, 3.3.4 (also 3.3.2)"
+    quote: "3.3.1: \"Verify that cookies have the 'Secure' attribute set\"; 3.3.4: \"if the value of a cookie is not meant to be accessible to client-side scripts (such as a session token), the cookie must have the 'HttpOnly' attribute set\"; 3.3.2: \"each cookie's 'SameSite' attribute value is set according to the purpose of the cookie\""
+    failing: [lib/insecurity.ts:192, routes/updateUserProfile.ts:42]
+    reason: "The session JWT cookie is set with no Secure, HttpOnly, SameSite or __Host-/__Secure- prefix."
+  C4:
+    verdict: fail
+    requirement: "ASVS 5.0 9.1.1, 9.1.2"
+    quote: "9.1.1: \"Verify that self-contained tokens are validated using their digital signature or MAC to protect against tampering before accepting the token's contents.\" 9.1.2: \"only algorithms on an allowlist can be used ... and must not include the 'None' algorithm. ... additional controls will be needed to prevent key confusion.\""
+    failing: [lib/insecurity.ts:52, lib/insecurity.ts:55, lib/insecurity.ts:156, lib/insecurity.ts:189, routes/2fa.ts:20, routes/2fa.ts:115, routes/currentUser.ts:17, routes/verify.ts:125, routes/chat.ts:45, routes/chat.ts:224]
+    reason: "All session-JWT checks use express-jwt 0.1.3 / jsonwebtoken 0.4.0 / legacy jws with no algorithm allowlist, so alg none and HS256 keyed with the RSA public key pass (the app's own jwtUnsigned/jwtForged challenge detectors depend on this). chat.ts trusts decoded claims with no check at all. Only passkey ceremony tokens (passkey.ts:50) are pinned."
+  C5:
+    verdict: fail
+    requirement: "ASVS 5.0 13.3.1"
+    quote: "Secrets must not be included in application source code or included in build artifacts."
+    failing: [lib/insecurity.ts:21, lib/insecurity.ts:42, server.ts:321, ctf.key:1, encryptionkeys/premium.key:1, routes/checkKeys.ts:10, routes/verify.ts:100, routes/continueCode.ts:13, routes/continueCode.ts:25, routes/continueCode.ts:38, routes/restoreProgress.ts:18, routes/restoreProgress.ts:42, routes/restoreProgress.ts:62, data/static/users.yml:3, data/static/users.yml:151, routes/login.ts:59, routes/changePassword.ts:54, routes/resetPassword.ts:58, terraform/networking.tf:171, infrastructure/terraform/networking.tf:171]
+    reason: "The JWT signing private key, HMAC keys, cookie secret, wallet mnemonic and seeded-account passwords are literals in the repo. models/index.ts:34 and routes/verify.ts:338 are placeholders and are not counted."
+  C6:
+    verdict: fail
+    requirement: "ASVS 5.0 16.2.5"
+    quote: "it may not be allowed to log certain data, such as credentials or payment details. Other data, such as session tokens, may only be logged by being hashed or masked, either in full or partially."
+    also: "14.2.1: \"the URL and query string do not contain sensitive information\" (the root cause of the morgan leak)."
+    failing: [server.ts:370, server.ts:722, data/datacreator.ts:708]
+    reason: "The access log records the password-change query string in clear; errorhandler logs IPs and SQL fragments; seed-failure logs print security answers. No session token was found written to a log (the Authorization header is not in morgan 'combined')."
+  C7:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 Sec. 3.1.1.2 item 1"
+    quote: "Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length. ... [MFA-only passwords] SHALL require them to be a minimum of eight characters in length."
+    failing: [server.ts:440, server.ts:442, routes/changePassword.ts:19, routes/resetPassword.ts:26]
+    reason: "Server enforces no minimum (non-empty at best); the password is the sole factor by default, so 15 applies, and even the 8-character floor fails."
+  C8:
+    verdict: pass
+    requirement: "NIST SP 800-63B-4 Sec. 3.1.1.2 item 5 (and 3.1.1.1)"
+    quote: "Verifiers and CSPs SHALL NOT impose other composition rules (e.g., requiring mixtures of different character types) for passwords."
+    failing: []
+    reason: "No server-side character-class rule exists (server.ts:440-451, changePassword.ts:19-25, resetPassword.ts:26-33)."
+  C9:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 Sec. 3.1.1.2"
+    quote: "When processing a request to establish or change a password, verifiers SHALL compare the prospective secret against a blocklist that contains known commonly used, expected, or compromised passwords."
+    failing: [server.ts:440, routes/changePassword.ts:51, routes/resetPassword.ts:44]
+    reason: "No blocklist check at registration, change or reset."
+  C10:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 Sec. 3.1.1.2 and 3.2.2"
+    quote: "Verifiers SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber account ... limit consecutive failed authentication attempts using a specific authenticator on a single subscriber account to no more than 100"
+    failing: [server.ts:635, routes/login.ts:34]
+    reason: "The password login route has no limiter or lockout. Existing limiters (server.ts:375, :491, :498, :504) cover other routes, count per IP rather than per account, and the reset limiter's key is spoofable."
+  C11:
+    verdict: fail
+    requirement: "GDPR Art. 17(1)"
+    quote: "The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay and the controller shall have the obligation to erase personal data without undue delay"
+    failing: [routes/dataErasure.ts:83, server.ts:399]
+    reason: "The request is only recorded (deletionRequested=true) while the page says it 'will be processed shortly' (views/dataErasureResult.hbs:28). No code processes PrivacyRequests or deletes the user, the email or related rows, and the user DELETE API is denyAll."
+  C12:
+    verdict: uncertain
+    requirement: "GDPR Art. 44, 45(1), 46(1)"
+    quote: "Art. 44: \"Any transfer of personal data ... to a third country ... shall take place only if ... the conditions laid down in this Chapter are complied with\"; Art. 46(1): \"In the absence of a decision pursuant to Article 45(3), a controller or processor may transfer personal data to a third country ... only if the controller or processor has provided appropriate safeguards\""
+    failing: []
+    deciding: "Deployment config application.chatBot.llmApiUrl / LLM_API_KEY: the default is a local Ollama (no third party, no transfer). If an operator points it at a hosted provider outside the EEA, the verdict depends on an adequacy decision (e.g. EU-US DPF certification) or SCCs/DPA with that provider, which are contract facts the repo cannot show."
+    elements: [routes/chat.ts:204]
+
+confidence_notes:
+  - "C4 rests on how the pinned legacy libraries behave (express-jwt 0.1.3, jsonwebtoken 0.4.0, the jws they pull in); node_modules is not in the checkout and no lockfile is committed. The app's own detectors (routes/verify.ts:86-133) solve the 'unsigned JWT' and 'forged HS256 JWT' challenges only when jwt.verify(token, publicKey) succeeds for those headers, which confirms the behaviour by design. Older jsonwebtoken CVE-2015-9235 fits too."
+  - "Raw-SQL/$where element construction: template literals are labelled interpolated, '+' concatenation is labelled concatenated. showProductReviews.ts:36 and trackOrder.ts:18 are injectable in the default config (safetyMode auto, not Docker/Heroku). In Docker/Heroku the input is coerced or sanitised (showProductReviews.ts:31, trackOrder.ts:15). Labelled failing on the code as written."
+  - "chat.ts:150 is concatenated with untrusted input but protected by Number(); labelled concatenated and kept out of C2's failing list. A purely structural rule would flag it."
+  - "Equality filters with string-only values (orderHistory.ts:36 path param, chat.ts:167 zod string) are labelled orm rather than operator_object, because a string cannot carry operators."
+  - "Sequelize where-clauses that take req.body values (resetPassword.ts:35, wallet.ts:24, captcha.ts:37 ...) are labelled orm. Sequelize v6 only honours Symbol operators, so JSON cannot inject them (arrays become IN)."
+  - "password_min_length = 0: registration skips the empty check when passwordRepeat is absent, and the app ships an 'emptyUserRegistration' challenge. If a reader counts the non-empty checks on change/reset, the value would be 1; C7 fails either way. Registration also trims passwords (server.ts:444) and login does not, an ASVS 6.2.8 issue outside these checks."
+  - "Most of the real session cookie handling is in the frontend (out of scope), which also sets 'token' client-side. Server-set cookies alone are enough to fail C3."
+  - "C6: data/datacreator.ts:708 logs only seed-fixture security answers, and only on insert failure; it is a minor locator. The errorhandler credential leak (SQL error echoing the md5 of the password) depends on the SQLite error text; the IP/email part is certain. lib/webhook.ts:40 logs the SOLUTIONS_WEBHOOK URL, which could carry a token if an operator uses a tokenised webhook URL; not labelled."
+  - "Security answers are stored with HMAC-SHA256 under a hard-coded key (models/securityAnswer.ts:45). This is a knowledge-based recovery secret, not a password, so it is not a PasswordStore element. It counts under C5 for the key."
+  - "C11 could be argued 'uncertain' if an operator erased data by hand outside the code. Labelled fail because nothing in the system ever reads PrivacyRequests, there is no admin path, and the UI implies processing that never happens. Note also that sequelize.sync({force:true}) (server.ts:776) wipes the whole DB on every restart; this is not erasure on request."
+  - "C12: no other server-side transfer of personal data exists. lib/webhook.ts:18 sends challenge/host metadata only; Alchemy websockets (routes/nftMint.ts:18, routes/web3Wallet.ts:20) only listen for chain events; profileImageUrlUpload.ts:24 fetches a user-chosen URL (SSRF) and sends no user data. Google OAuth runs client-side in the excluded frontend. The Google clientId in config/default.yml:65 is a public identifier, not a Secret."
+  - "Seeded-account passwords (users.yml, login.ts:59) are labelled real secrets (test_or_example false) because every deployment creates those accounts, admin included. A grader treating demo data as fixtures would flip them; C5 still fails on lib/insecurity.ts:21."

@@ -1,0 +1,59 @@
+# How each jurisdiction classifies the clinic. A profile is one more evidence
+# source: `building` adds facts about the subject, and a type name adds facts to
+# every element of that type. A list is a value set (the classification is open).
+# `norms` selects the norms checked; `occupant_load` per stair is derived here
+# because v0 has no aggregation over spaces (see bench/clinic/check.py).
+
+austin-2024:
+  norms: ["1011.2", "1011.5.2", "1017.2"]
+  building:
+    occupancy_group: B                     # sheet 161, General Note 2
+    emergency_voice_alarm: [true, false]   # no source states it
+  Stair:
+    # Second-floor space area over Table 1004.5 (business 150 or outpatient 100 gross),
+    # split over the two exit stairs on sheet 162.
+    occupant_load: [91, 136]
+
+jp-bsa-egress:
+  norms: ["令23条1項"]
+  building:
+    principal_use: clinic_without_inpatient_beds   # given in the benchmark prompt
+    stories: 2
+  Stair:
+    special_purpose_only: false
+    uses_mlit_structure_23_4: false
+    outdoor: false
+    direct_stair_120_121: true
+    within_dwelling: false
+    in_basement: false
+    habitable_area_of_floor: 1307 m2          # IFC 居室 area, first floor (Office, Healing, Exam, Waiting, Conference)
+    habitable_area_of_floor_above: 805 m2     # IFC 居室 area, second floor
+
+uk-adb-v2:
+  norms: ["ADB2 2.7", "ADB2 3.10"]
+  building:
+    purpose_group: assembly-and-recreation    # Table 0.1: "clinics, health centres and surgeries"
+    primarily_for_disabled_people: false
+  Space:
+    alternative_escape_routes: true
+    is_plant_room: false
+    plant_escape_route_in_open_air: false
+    seating_in_rows: false
+  elements:
+    # Not on the drawings: anywhere from none of the route to all of it.
+    First Floor: {one_direction_travel_distance: [0 m, 41.75 m]}
+    Second Floor: {one_direction_travel_distance: [0 m, 46.65 m]}
+  Stair:
+    occupant_load: [91, 136]
+    floors_served: 2
+    serves_area_with_occupancy_over_50: true
+    serves_assembly_area_of_100m2_or_more: [true, false]   # judged
+    widest_exit_width: 915 mm                              # stair doors are 915 mm leaves
+
+ada-2010:
+  norms: ["404.2.3"]
+  Door:
+    on_accessible_route: true      # given: every door
+    opening_depth: 6 in            # stud walls
+    projection_below_34in: 0 in
+    projection_34_to_80in: 0 in

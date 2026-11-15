@@ -1,0 +1,179 @@
+{
+ "expected": {
+  "C1": "pass",
+  "C2": "fail",
+  "C4": "fail",
+  "C6": "fail",
+  "C7": "pass",
+  "C9": "pass",
+  "C10": "pass",
+  "C12": "uncertain"
+ },
+ "runs": {
+  "without model": {
+   "verdicts": {
+    "C1": {
+     "verdict": "not_applicable",
+     "failing": [],
+     "open": []
+    },
+    "C2": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C3": {
+     "verdict": "uncertain",
+     "failing": [],
+     "open": [
+      "Cookie.is_session"
+     ]
+    },
+    "C4": {
+     "verdict": "not_applicable",
+     "failing": [],
+     "open": []
+    },
+    "C5": {
+     "verdict": "uncertain",
+     "failing": [],
+     "open": [
+      "Secret.test_or_example"
+     ]
+    },
+    "C6": {
+     "verdict": "not_applicable",
+     "failing": [],
+     "open": []
+    },
+    "C7": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C8": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C9": {
+     "verdict": "fail",
+     "failing": [
+      "fastapi-acme"
+     ],
+     "open": []
+    },
+    "C10": {
+     "verdict": "fail",
+     "failing": [
+      "fastapi-acme"
+     ],
+     "open": []
+    },
+    "C11": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C12": {
+     "verdict": "uncertain",
+     "failing": [],
+     "open": [
+      "Transfer.adequacy_or_safeguards",
+      "Transfer.personal_data",
+      "Transfer.third_country"
+     ]
+    }
+   },
+   "models": []
+  },
+  "with model": {
+   "verdicts": {
+    "C1": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C2": {
+     "verdict": "fail",
+     "failing": [
+      "backend/app/crud.py:39"
+     ],
+     "open": []
+    },
+    "C3": {
+     "verdict": "uncertain",
+     "failing": [],
+     "open": [
+      "Cookie.is_session"
+     ]
+    },
+    "C4": {
+     "verdict": "fail",
+     "failing": [
+      "backend/app/utils.py:122"
+     ],
+     "open": []
+    },
+    "C5": {
+     "verdict": "uncertain",
+     "failing": [],
+     "open": [
+      "Secret.test_or_example"
+     ]
+    },
+    "C6": {
+     "verdict": "fail",
+     "failing": [
+      "backend/app/api/routes/login.py:68"
+     ],
+     "open": []
+    },
+    "C7": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C8": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C9": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C10": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C11": {
+     "verdict": "pass",
+     "failing": [],
+     "open": []
+    },
+    "C12": {
+     "verdict": "uncertain",
+     "failing": [],
+     "open": [
+      "Transfer.adequacy_or_safeguards",
+      "Transfer.personal_data",
+      "Transfer.third_country"
+     ]
+    }
+   },
+   "models": [
+    {
+     "model": "acme-platform@3.2",
+     "language": "python",
+     "file": "acme-platform.yaml",
+     "sha256": "4688e7416765452646c378c17dc31acb4849742d792d203ac6f7f791a5a63c5d",
+     "rules": 10,
+     "places": 10
+    }
+   ]
+  }
+ }
+}

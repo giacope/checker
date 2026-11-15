@@ -1,0 +1,1469 @@
+{
+  "model": "gemini-4-carbon",
+  "runs": [
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2 Exception 1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 422.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 Note c",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 Notes b and c",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 Note b",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1.0
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 202",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1.0
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2 Exception 1",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 422.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote c)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnotes b and c)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote b)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2 Exception 1",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote c)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote c)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.97
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote b)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-3",
+          "2024 IBC Section 202",
+          "2024 IBC Section 1004.5",
+          "2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "Austin City Code § 25-12-3 (IBC Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "Austin City Code § 25-12-3 (IBC Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "Austin City Code § 25-12-3 (IBC Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "Austin City Code § 25-12-3 (IBC Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3",
+          "2024 IBC § 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3",
+          "2024 IBC § 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3",
+          "2024 IBC § 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3",
+          "2024 IBC § 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3",
+          "2024 IBC § 1004.5",
+          "2024 IBC Table 1004.5 (as amended by Austin City Code § 25-12-3)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC § 1005.1",
+          "2024 IBC § 1005.3.2",
+          "2024 IBC § 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC § 1005.1",
+          "2024 IBC § 1005.3.2 Exception 1",
+          "2024 IBC § 1020.3",
+          "2024 IBC Table 1020.3",
+          "Austin City Code § 25-12-3 (IBC § 901.1)",
+          "2024 IFC § 903.3.1.1",
+          "2024 IFC § 907.5.2.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC § 1005.1",
+          "2024 IBC § 1005.3.2",
+          "2024 IBC § 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC § 202",
+          "2024 IBC § 304.1",
+          "2024 IBC § 1005.3.2",
+          "2024 IBC § 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC § 1017.2",
+          "2024 IBC Table 1017.2 Footnote c",
+          "Austin City Code § 25-12-3 (IBC § 901.1)",
+          "2024 IFC § 903.3.1.1"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC § 1017.2",
+          "2024 IBC Table 1017.2 Footnote c",
+          "Austin City Code § 25-12-3 (IBC § 901.1)",
+          "2024 IFC § 903.3.1.1",
+          "2024 IFC § 903.3.1.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC § 1017.2",
+          "2024 IBC Table 1017.2 Footnote b",
+          "Austin City Code § 25-12-3 (IBC § 901.1)",
+          "2024 IFC § 903.3.1.1"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3",
+          "Table 1004.5",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3",
+          "Table 1004.5"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3",
+          "Table 1004.5"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3",
+          "Table 1004.5"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3",
+          "Table 1004.5"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2 Exception 1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 Footnote c",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1.0
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 Footnote c",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 Footnote b",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1.0
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 1005.3.2"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "2024 IBC Section 102.1"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 1
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3 (Table 1004.5)",
+          "2024 IBC Section 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-1(B)",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.97
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC Section 1004.5",
+          "Austin City Code § 25-12-3 (Table 1004.5)"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.1",
+          "2024 IBC Section 1005.3.2 Exception 1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 907.5.2.2"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 1005.3.2",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC Section 202",
+          "2024 IBC Section 304.1",
+          "2024 IBC Section 422.1",
+          "2024 IBC Section 1020.3",
+          "2024 IBC Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote c)",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote c)",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1",
+          "2024 IFC Section 903.3.1.2"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC Section 1017.2",
+          "2024 IBC Table 1017.2 (Footnote b)",
+          "Austin City Code § 25-12-3 (Section 901.1)",
+          "2024 IFC Section 903.3.1.1"
+        ],
+        "confidence": 0.99
+      }
+    ]
+  ],
+  "notes": []
+}

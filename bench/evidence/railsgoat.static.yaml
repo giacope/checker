@@ -1,0 +1,820 @@
+subject:
+  kind: system
+  id: railsgoat
+sources:
+- id: static
+  kind: static_analysis
+  describes: railsgoat
+  adapter: adapters.code_ruby
+  adapter_version: 0.1.0
+  commit: f5951f13089d85c979de09e7da3c8c0fb982f94a
+  files_analysed: 121
+  unparsed: []
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: app/controllers/sessions_controller.rb:11
+  - value: true
+    source: static
+    at: app/controllers/sessions_controller.rb:15
+  - value: true
+    source: static
+    at: app/models/user.rb:45
+  - value: true
+    source: static
+    at: app/models/user.rb:55
+  password_min_length:
+  - value: 6
+    source: static
+    at: app/models/user.rb:5
+  password_max_length:
+  - value: 40
+    source: static
+    at: app/models/user.rb:5
+  password_composition_rules:
+  - value: false
+    source: static
+    at: app/controllers/password_resets_controller.rb:9
+  - value: false
+    source: static
+    at: app/controllers/users_controller.rb:34
+  - value: false
+    source: static
+    at: app/models/user.rb:5
+  password_blocklist_check:
+  - value: false
+    source: static
+    at: app/controllers/password_resets_controller.rb:9
+  - value: false
+    source: static
+    at: app/controllers/users_controller.rb:34
+  - value: false
+    source: static
+    at: app/models/user.rb:5
+  password_periodic_change:
+  - value: false
+    source: static
+    at: app/controllers/password_resets_controller.rb:9
+  - value: false
+    source: static
+    at: app/controllers/users_controller.rb:34
+  login_rate_limited:
+  - value: false
+    source: static
+    at: app/controllers/sessions_controller.rb:11
+  processes_personal_data:
+  - value: true
+    source: static
+    at: db/schema.rb:15
+  - value: true
+    source: static
+    at: db/schema.rb:93
+  - value: true
+    source: static
+    at: db/schema.rb:96
+  - value: true
+    source: static
+    at: db/schema.rb:97
+  - value: true
+    source: static
+    at: db/schema.rb:108
+  - value: true
+    source: static
+    at: db/schema.rb:112
+  account_erasure:
+  - value: true
+    source: static
+    at: app/controllers/admin_controller.rb:60
+  csrf_protection:
+  - value: false
+    source: static
+    at: app/controllers/application_controller.rb:2
+  tls_enforced:
+  - value: false
+    source: static
+    at: config/environments/production.rb:1
+  hsts:
+  - value: false
+    source: static
+    at: config/environments/production.rb:1
+  content_security_policy:
+  - value: false
+    source: static
+    at: config/application.rb:1
+  debug_in_production:
+  - value: false
+    source: static
+    at: config/environments/production.rb:9
+  log_redacts_credentials:
+  - value: false
+    source: static
+    at: config/application.rb:38
+  - value: false
+    source: static
+    at: config/initializers/filter_parameter_logging.rb:5
+  account_data_export:
+  - value: false
+    source: static
+    at: app/models/user.rb:4
+elements:
+- type: PasswordStore
+  id: PasswordStore@app/models/user.rb:45
+  at: app/models/user.rb:45
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: app/models/user.rb:45
+    salted:
+    - value: false
+      source: static
+      at: app/models/user.rb:45
+- type: PasswordStore
+  id: PasswordStore@app/models/user.rb:55
+  at: app/models/user.rb:55
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: app/models/user.rb:55
+    salted:
+    - value: false
+      source: static
+      at: app/models/user.rb:55
+- type: Query
+  id: Query@app/controllers/admin_controller.rb:28
+  at: app/controllers/admin_controller.rb:28
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/admin_controller.rb:28
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/admin_controller.rb:28
+- type: Query
+  id: Query@app/controllers/admin_controller.rb:34
+  at: app/controllers/admin_controller.rb:34
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/admin_controller.rb:34
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/admin_controller.rb:34
+- type: Query
+  id: Query@app/controllers/admin_controller.rb:45
+  at: app/controllers/admin_controller.rb:45
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/admin_controller.rb:45
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/admin_controller.rb:45
+- type: Query
+  id: Query@app/controllers/admin_controller.rb:56
+  at: app/controllers/admin_controller.rb:56
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/admin_controller.rb:56
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/admin_controller.rb:56
+- type: Query
+  id: Query@app/controllers/application_controller.rb:20
+  at: app/controllers/application_controller.rb:20
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/application_controller.rb:20
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/application_controller.rb:20
+- type: Query
+  id: Query@app/controllers/application_controller.rb:55
+  at: app/controllers/application_controller.rb:55
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/application_controller.rb:55
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/application_controller.rb:55
+- type: Query
+  id: Query@app/controllers/messages_controller.rb:11
+  at: app/controllers/messages_controller.rb:11
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/messages_controller.rb:11
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/messages_controller.rb:11
+- type: Query
+  id: Query@app/controllers/messages_controller.rb:15
+  at: app/controllers/messages_controller.rb:15
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/messages_controller.rb:15
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/messages_controller.rb:15
+- type: Query
+  id: Query@app/controllers/messages_controller.rb:26
+  at: app/controllers/messages_controller.rb:26
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/messages_controller.rb:26
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/messages_controller.rb:26
+- type: Query
+  id: Query@app/controllers/password_resets_controller.rb:30
+  at: app/controllers/password_resets_controller.rb:30
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/password_resets_controller.rb:30
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/password_resets_controller.rb:30
+- type: Query
+  id: Query@app/controllers/pay_controller.rb:29
+  at: app/controllers/pay_controller.rb:29
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/pay_controller.rb:29
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/pay_controller.rb:29
+- type: Query
+  id: Query@app/controllers/users_controller.rb:29
+  at: app/controllers/users_controller.rb:29
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: app/controllers/users_controller.rb:29
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/users_controller.rb:29
+- type: Query
+  id: Query@app/controllers/users_controller.rb:32
+  at: app/controllers/users_controller.rb:32
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/users_controller.rb:32
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/users_controller.rb:32
+- type: Query
+  id: Query@app/controllers/work_info_controller.rb:4
+  at: app/controllers/work_info_controller.rb:4
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/controllers/work_info_controller.rb:4
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/work_info_controller.rb:4
+- type: Query
+  id: Query@app/models/analytics.rb:3
+  at: app/models/analytics.rb:3
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: app/models/analytics.rb:3
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/models/analytics.rb:3
+- type: Query
+  id: Query@app/models/user.rb:43
+  at: app/models/user.rb:43
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: app/models/user.rb:43
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/models/user.rb:43
+- type: Cookie
+  id: Cookie@app/controllers/dashboard_controller.rb:11
+  at: app/controllers/dashboard_controller.rb:11
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: app/controllers/dashboard_controller.rb:11
+    http_only:
+    - value: false
+      source: static
+      at: app/controllers/dashboard_controller.rb:11
+    same_site:
+    - value: unset
+      source: static
+      at: app/controllers/dashboard_controller.rb:11
+- type: Cookie
+  id: Cookie@app/controllers/sessions_controller.rb:22
+  at: app/controllers/sessions_controller.rb:22
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: app/controllers/sessions_controller.rb:22
+    secure:
+    - value: false
+      source: static
+      at: app/controllers/sessions_controller.rb:22
+    http_only:
+    - value: false
+      source: static
+      at: app/controllers/sessions_controller.rb:22
+    same_site:
+    - value: unset
+      source: static
+      at: app/controllers/sessions_controller.rb:22
+- type: Cookie
+  id: Cookie@config/initializers/session_store.rb:4
+  at: config/initializers/session_store.rb:4
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: config/initializers/session_store.rb:4
+    secure:
+    - value: false
+      source: static
+      at: config/initializers/session_store.rb:4
+    http_only:
+    - value: false
+      source: static
+      at: config/initializers/session_store.rb:4
+    same_site:
+    - value: unset
+      source: static
+      at: config/initializers/session_store.rb:4
+- type: Secret
+  id: Secret@config/initializers/secret_token.rb:8
+  at: config/initializers/secret_token.rb:8
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: config/initializers/secret_token.rb:8
+- type: Secret
+  id: Secret@db/seeds.rb:10
+  at: db/seeds.rb:10
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:10
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:10
+- type: Secret
+  id: Secret@db/seeds.rb:11
+  at: db/seeds.rb:11
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:11
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:11
+- type: Secret
+  id: Secret@db/seeds.rb:19
+  at: db/seeds.rb:19
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:19
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:19
+- type: Secret
+  id: Secret@db/seeds.rb:20
+  at: db/seeds.rb:20
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:20
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:20
+- type: Secret
+  id: Secret@db/seeds.rb:28
+  at: db/seeds.rb:28
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:28
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:28
+- type: Secret
+  id: Secret@db/seeds.rb:29
+  at: db/seeds.rb:29
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:29
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:29
+- type: Secret
+  id: Secret@db/seeds.rb:37
+  at: db/seeds.rb:37
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:37
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:37
+- type: Secret
+  id: Secret@db/seeds.rb:38
+  at: db/seeds.rb:38
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:38
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:38
+- type: Secret
+  id: Secret@db/seeds.rb:46
+  at: db/seeds.rb:46
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:46
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:46
+- type: Secret
+  id: Secret@db/seeds.rb:47
+  at: db/seeds.rb:47
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:47
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:47
+- type: Secret
+  id: Secret@db/seeds.rb:55
+  at: db/seeds.rb:55
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:55
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:55
+- type: Secret
+  id: Secret@db/seeds.rb:56
+  at: db/seeds.rb:56
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:56
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:56
+- type: Secret
+  id: Secret@db/seeds.rb:64
+  at: db/seeds.rb:64
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:64
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:64
+- type: Secret
+  id: Secret@db/seeds.rb:65
+  at: db/seeds.rb:65
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: db/seeds.rb:65
+    test_or_example:
+    - value: true
+      source: static
+      at: db/seeds.rb:65
+- type: Transfer
+  id: Transfer@app/mailers/user_mailer.rb:9
+  at: app/mailers/user_mailer.rb:9
+  facts:
+    recipient:
+    - value: email (SMTP relay)
+      source: static
+      at: app/mailers/user_mailer.rb:9
+    personal_data:
+    - value: true
+      source: static
+      at: app/mailers/user_mailer.rb:9
+- type: CommandExecution
+  id: CommandExecution@app/models/benefits.rb:15
+  at: app/models/benefits.rb:15
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: app/models/benefits.rb:15
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/models/benefits.rb:15
+- type: HtmlOutput
+  id: HtmlOutput@app/controllers/password_resets_controller.rb:36
+  at: app/controllers/password_resets_controller.rb:36
+  facts:
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/password_resets_controller.rb:36
+    sanitized:
+    - value: false
+      source: static
+      at: app/controllers/password_resets_controller.rb:36
+- type: HtmlOutput
+  id: HtmlOutput@app/views/admin/get_all_users.html.erb:37
+  at: app/views/admin/get_all_users.html.erb:37
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/admin/get_all_users.html.erb:37
+    sanitized:
+    - value: false
+      source: static
+      at: app/views/admin/get_all_users.html.erb:37
+- type: HtmlOutput
+  id: HtmlOutput@app/views/dashboard/home.html.erb:49
+  at: app/views/dashboard/home.html.erb:49
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/dashboard/home.html.erb:49
+    sanitized:
+    - value: true
+      source: static
+      at: app/views/dashboard/home.html.erb:49
+- type: HtmlOutput
+  id: HtmlOutput@app/views/dashboard/home.html.erb:63
+  at: app/views/dashboard/home.html.erb:63
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/dashboard/home.html.erb:63
+    sanitized:
+    - value: true
+      source: static
+      at: app/views/dashboard/home.html.erb:63
+- type: HtmlOutput
+  id: HtmlOutput@app/views/dashboard/home.html.erb:73
+  at: app/views/dashboard/home.html.erb:73
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/dashboard/home.html.erb:73
+    sanitized:
+    - value: true
+      source: static
+      at: app/views/dashboard/home.html.erb:73
+- type: HtmlOutput
+  id: HtmlOutput@app/views/layouts/application.html.erb:427
+  at: app/views/layouts/application.html.erb:427
+  facts:
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/views/layouts/application.html.erb:427
+    sanitized:
+    - value: false
+      source: static
+      at: app/views/layouts/application.html.erb:427
+- type: HtmlOutput
+  id: HtmlOutput@app/views/layouts/shared/_header.html.erb:47
+  at: app/views/layouts/shared/_header.html.erb:47
+  facts:
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/views/layouts/shared/_header.html.erb:47
+    sanitized:
+    - value: false
+      source: static
+      at: app/views/layouts/shared/_header.html.erb:47
+- type: HtmlOutput
+  id: HtmlOutput@app/views/messages/index.html.erb:167
+  at: app/views/messages/index.html.erb:167
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/messages/index.html.erb:167
+    sanitized:
+    - value: false
+      source: static
+      at: app/views/messages/index.html.erb:167
+- type: HtmlOutput
+  id: HtmlOutput@app/views/paid_time_off/index.html.erb:210
+  at: app/views/paid_time_off/index.html.erb:210
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/paid_time_off/index.html.erb:210
+    sanitized:
+    - value: false
+      source: static
+      at: app/views/paid_time_off/index.html.erb:210
+- type: HtmlOutput
+  id: HtmlOutput@app/views/pay/index.html.erb:230
+  at: app/views/pay/index.html.erb:230
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/pay/index.html.erb:230
+    sanitized:
+    - value: true
+      source: static
+      at: app/views/pay/index.html.erb:230
+- type: HtmlOutput
+  id: HtmlOutput@app/views/pay/index.html.erb:292
+  at: app/views/pay/index.html.erb:292
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/pay/index.html.erb:292
+    sanitized:
+    - value: true
+      source: static
+      at: app/views/pay/index.html.erb:292
+- type: HtmlOutput
+  id: HtmlOutput@app/views/pay/index.html.erb:315
+  at: app/views/pay/index.html.erb:315
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/pay/index.html.erb:315
+    sanitized:
+    - value: true
+      source: static
+      at: app/views/pay/index.html.erb:315
+- type: HtmlOutput
+  id: HtmlOutput@app/views/users/account_settings.html.erb:81
+  at: app/views/users/account_settings.html.erb:81
+  facts:
+    untrusted_input:
+    - value: false
+      source: static
+      at: app/views/users/account_settings.html.erb:81
+    sanitized:
+    - value: false
+      source: static
+      at: app/views/users/account_settings.html.erb:81
+- type: MassAssignment
+  id: MassAssignment@app/controllers/admin_controller.rb:45
+  at: app/controllers/admin_controller.rb:45
+  facts:
+    allowlist:
+    - value: false
+      source: static
+      at: app/controllers/admin_controller.rb:45
+    privileged_assignable:
+    - value: true
+      source: static
+      at: app/controllers/admin_controller.rb:45
+- type: MassAssignment
+  id: MassAssignment@app/controllers/messages_controller.rb:26
+  at: app/controllers/messages_controller.rb:26
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: app/controllers/messages_controller.rb:26
+    privileged_assignable:
+    - value: true
+      source: static
+      at: app/controllers/messages_controller.rb:26
+- type: MassAssignment
+  id: MassAssignment@app/controllers/schedule_controller.rb:8
+  at: app/controllers/schedule_controller.rb:8
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: app/controllers/schedule_controller.rb:8
+    privileged_assignable:
+    - value: false
+      source: static
+      at: app/controllers/schedule_controller.rb:8
+- type: MassAssignment
+  id: MassAssignment@app/controllers/users_controller.rb:11
+  at: app/controllers/users_controller.rb:11
+  facts:
+    allowlist:
+    - value: false
+      source: static
+      at: app/controllers/users_controller.rb:11
+    privileged_assignable:
+    - value: true
+      source: static
+      at: app/controllers/users_controller.rb:11
+- type: MassAssignment
+  id: MassAssignment@app/controllers/users_controller.rb:32
+  at: app/controllers/users_controller.rb:32
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: app/controllers/users_controller.rb:32
+    privileged_assignable:
+    - value: true
+      source: static
+      at: app/controllers/users_controller.rb:32
+- type: Deserialization
+  id: Deserialization@app/controllers/password_resets_controller.rb:6
+  at: app/controllers/password_resets_controller.rb:6
+  facts:
+    untrusted_input:
+    - value: true
+      source: static
+      at: app/controllers/password_resets_controller.rb:6
+    safe_mode:
+    - value: false
+      source: static
+      at: app/controllers/password_resets_controller.rb:6

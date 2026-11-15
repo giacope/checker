@@ -1,0 +1,151 @@
+# Consistency benchmark, Japan. Each question is asked of models answering
+# directly (with web access to e-Gov) and of the kernel. `ref` says how the
+# kernel computes the reference answer from the pack.
+jurisdiction: 建築基準法・建築基準法施行令（e-Gov、2026-11-14時点）
+pack: packs/jp-bsa-egress
+preamble: >
+  日本国内で2026年11月に確認申請を行う建築物について、建築基準法及び建築基準法施行令の現行規定に基づき
+  回答してください。地方公共団体の条例や告示による付加・緩和、避難安全検証法、特定行政庁の認定は考慮しません。
+  各問について、法令が求める値を指定された単位で一つだけ答えてください。
+questions:
+  - id: J1
+    ask: 小学校（3階建て、延べ面積4,000㎡）の児童用の屋内階段で、直通階段である。階段及びその踊場の幅の最小値は？
+    unit: mm
+    ref:
+      term: min_stair_width
+      building: {principal_use: school_elementary, stories: 3, total_floor_area: 4000 m2}
+      instance: {special_purpose_only: false, uses_mlit_structure_23_4: false, outdoor: false, direct_stair_120_121: true, within_dwelling: false, for_pupils: true, for_customers: false, in_basement: false, habitable_area_of_floor_above: 100 m2}
+
+  - id: J2
+    ask: 前問と同じ小学校の児童用屋内階段の蹴上げの最大値は？
+    unit: mm
+    ref:
+      term: max_stair_riser
+      building: {principal_use: school_elementary, stories: 3, total_floor_area: 4000 m2}
+      instance: {special_purpose_only: false, uses_mlit_structure_23_4: false, outdoor: false, direct_stair_120_121: true, within_dwelling: false, for_pupils: true, for_customers: false, in_basement: false, habitable_area_of_floor_above: 100 m2}
+
+  - id: J3
+    ask: 2階建ての一戸建て住宅（延べ面積120㎡）の住戸内の屋内階段。蹴上げの最大値は？
+    unit: mm
+    ref:
+      term: max_stair_riser
+      building: {principal_use: detached_house, stories: 2, total_floor_area: 120 m2}
+      instance: {special_purpose_only: false, uses_mlit_structure_23_4: false, outdoor: false, direct_stair_120_121: true, within_dwelling: true, for_pupils: false, for_customers: false, in_basement: false, habitable_area_of_floor_above: 50 m2}
+
+  - id: J4
+    ask: >
+      地上3階建ての事務所（耐火構造、延べ面積1,500㎡）の1階から2階への屋内直通階段。2階の居室の床面積の合計は250㎡。
+      階段及びその踊場の幅の最小値は？
+    unit: mm
+    ref:
+      term: min_stair_width
+      building: {principal_use: office, stories: 3, total_floor_area: 1500 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {special_purpose_only: false, uses_mlit_structure_23_4: false, outdoor: false, direct_stair_120_121: true, within_dwelling: false, for_pupils: false, for_customers: false, in_basement: false, habitable_area_of_floor_above: 250 m2}
+
+  - id: J5
+    ask: >
+      地上3階建ての事務所（耐火構造、延べ面積1,500㎡）の1階から2階への屋内直通階段。2階の居室の床面積の合計はちょうど200㎡。
+      階段及びその踊場の幅の最小値は？
+    unit: mm
+    ref:
+      term: min_stair_width
+      building: {principal_use: office, stories: 3, total_floor_area: 1500 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {special_purpose_only: false, uses_mlit_structure_23_4: false, outdoor: false, direct_stair_120_121: true, within_dwelling: false, for_pupils: false, for_customers: false, in_basement: false, habitable_area_of_floor_above: 200 m2}
+
+  - id: J6
+    ask: >
+      物品販売業を営む店舗（3階建て、物品販売の用途に供する床面積の合計2,000㎡）の客用の屋外階段で、令120条の直通階段である。
+      階段の幅の最小値は？
+    unit: mm
+    ref:
+      term: min_stair_width
+      building: {principal_use: retail_store, store_floor_area: 2000 m2, stories: 3, total_floor_area: 2000 m2}
+      instance: {special_purpose_only: false, uses_mlit_structure_23_4: false, outdoor: true, direct_stair_120_121: true, within_dwelling: false, for_pupils: false, for_customers: true, in_basement: false, habitable_area_of_floor_above: 100 m2}
+
+  - id: J7
+    ask: >
+      地上3階建ての事務所（耐火構造、延べ面積1,500㎡、無窓居室なし）の3階の廊下。両側に居室がある中廊下で、
+      3階の居室の床面積の合計は250㎡（3室以下の専用廊下ではない）。廊下の幅の最小値は？
+    unit: mm
+    ref:
+      term: min_corridor_width_119
+      building: {principal_use: office, stories: 3, total_floor_area: 1500 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {exclusive_to_three_rooms_or_fewer: false, in_basement: false, floor_habitable_area: 250 m2, rooms_on_both_sides: true}
+
+  - id: J8
+    ask: 前問と同じ事務所・同じ条件で、片側にのみ居室がある片廊下の場合、廊下の幅の最小値は？
+    unit: mm
+    ref:
+      term: min_corridor_width_119
+      building: {principal_use: office, stories: 3, total_floor_area: 1500 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {exclusive_to_three_rooms_or_fewer: false, in_basement: false, floor_habitable_area: 250 m2, rooms_on_both_sides: false}
+
+  - id: J9
+    ask: >
+      地上6階建ての病院（主要構造部は耐火構造、延べ面積4,800㎡）の3階の病室。無窓居室ではなく、居室及び避難経路の
+      内装は準不燃材料ではない。病室から直通階段に至る歩行距離の上限は？
+    unit: m
+    ref:
+      term: max_walking_distance_to_direct_stair
+      building: {principal_use: hospital, stories: 6, total_floor_area: 4800 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {on_evacuation_floor: false, windowless_116_2_1: false, finish_quasi_noncombustible: false, main_use_room: true, storey: 3}
+
+  - id: J10
+    ask: >
+      地上6階建ての病院（主要構造部は耐火構造、延べ面積4,800㎡）の3階の病室。無窓居室ではなく、居室及び地上に通ずる
+      主たる廊下・階段等の壁及び天井の室内に面する部分の仕上げを準不燃材料でしている。病室から直通階段に至る歩行距離の上限は？
+    unit: m
+    ref:
+      term: max_walking_distance_to_direct_stair
+      building: {principal_use: hospital, stories: 6, total_floor_area: 4800 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {on_evacuation_floor: false, windowless_116_2_1: false, finish_quasi_noncombustible: true, main_use_room: true, storey: 3}
+
+  - id: J11
+    ask: >
+      地上20階建ての事務所（主要構造部は耐火構造、延べ面積30,000㎡）の15階の事務室。無窓居室ではなく、内装は準不燃材料ではない。
+      事務室から直通階段に至る歩行距離の上限は？
+    unit: m
+    ref:
+      term: max_walking_distance_to_direct_stair
+      building: {principal_use: office, stories: 20, total_floor_area: 30000 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {on_evacuation_floor: false, windowless_116_2_1: false, finish_quasi_noncombustible: false, main_use_room: false, storey: 15}
+
+  - id: J12
+    ask: >
+      地上20階建ての事務所（主要構造部は耐火構造、延べ面積30,000㎡）の15階の事務室。無窓居室ではなく、居室及び地上に通ずる
+      主たる廊下・階段等の壁及び天井の室内に面する部分の仕上げを準不燃材料でしている。事務室から直通階段に至る歩行距離の上限は？
+    unit: m
+    ref:
+      term: max_walking_distance_to_direct_stair
+      building: {principal_use: office, stories: 20, total_floor_area: 30000 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {on_evacuation_floor: false, windowless_116_2_1: false, finish_quasi_noncombustible: true, main_use_room: false, storey: 15}
+
+  - id: J13
+    ask: >
+      地上6階建ての病院（主要構造部は耐火構造、延べ面積4,800㎡）の3階（避難階ではなく、避難階の直上階でもない）。
+      3階の病室の床面積の合計は120㎡、居室の床面積の合計は150㎡。この階から避難階又は地上に通ずる二以上の直通階段が必要か？
+      必要なら1、不要なら0で答えてください。
+    unit: 1 or 0
+    ref:
+      term: two_direct_stairs_required
+      building: {principal_use: hospital, stories: 6, total_floor_area: 4800 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {storey: 3, is_evacuation_floor: false, directly_above_evacuation_floor: false, habitable_area: 150 m2, ward_area: 120 m2}
+
+  - id: J14
+    ask: >
+      地上3階建ての事務所（主要構造部は耐火構造、延べ面積1,500㎡、無窓居室なし）の2階。1階が避難階で、2階はその直上階。
+      2階の居室の床面積の合計は350㎡。この階から避難階又は地上に通ずる二以上の直通階段が必要か？必要なら1、不要なら0で答えてください。
+    unit: 1 or 0
+    ref:
+      term: two_direct_stairs_required
+      building: {principal_use: office, stories: 3, total_floor_area: 1500 m2, main_structure: fire_resistant, adult_entertainment_use: false}
+      instance: {storey: 2, is_evacuation_floor: false, directly_above_evacuation_floor: true, habitable_area: 350 m2}
+
+  - id: J15
+    ask: >
+      物品販売業を営む店舗（3階建て、物品販売の用途に供する床面積の合計2,400㎡、床面積が最大の階は800㎡）。
+      令125条3項により避難階に設ける屋外への出口の幅の合計の最小値は？
+    unit: mm
+    ref:
+      term: min_total_exterior_exit_width_125_3
+      building: {principal_use: retail_store, store_floor_area: 2400 m2, stories: 3, total_floor_area: 2400 m2, largest_floor_area: 800 m2}

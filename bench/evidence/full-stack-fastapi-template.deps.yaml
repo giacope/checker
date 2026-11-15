@@ -1,0 +1,1611 @@
+subject:
+  kind: system
+  id: full-stack-fastapi-template
+sources:
+- id: deps
+  kind: lockfile_osv
+  describes: full-stack-fastapi-template
+  adapter: adapters.deps
+  adapter_version: 0.1.0
+  commit: aabb90126964a164e02aff39e7c385bb0598236d
+  lockfiles:
+  - path: uv.lock
+    format: uv.lock
+    ecosystem: PyPI
+    entries: 79
+  osv_queried_at: '2026-11-15T04:45:51Z'
+  offline: false
+facts: {}
+elements:
+- type: Dependency
+  id: Dependency@PyPI/alembic@1.20.0
+  at: uv.lock#L23
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:23
+    name:
+    - value: alembic
+      source: deps
+      at: uv.lock:23
+    version:
+    - value: 1.20.0
+      source: deps
+      at: uv.lock:23
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:23
+- type: Dependency
+  id: Dependency@PyPI/annotated-doc@0.0.4
+  at: uv.lock#L37
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:37
+    name:
+    - value: annotated-doc
+      source: deps
+      at: uv.lock:37
+    version:
+    - value: 0.0.4
+      source: deps
+      at: uv.lock:37
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:37
+- type: Dependency
+  id: Dependency@PyPI/annotated-types@0.7.0
+  at: uv.lock#L46
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:46
+    name:
+    - value: annotated-types
+      source: deps
+      at: uv.lock:46
+    version:
+    - value: 0.7.0
+      source: deps
+      at: uv.lock:46
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:46
+- type: Dependency
+  id: Dependency@PyPI/anyio@4.14.2
+  at: uv.lock#L55
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:55
+    name:
+    - value: anyio
+      source: deps
+      at: uv.lock:55
+    version:
+    - value: 4.14.2
+      source: deps
+      at: uv.lock:55
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:55
+- type: Dependency
+  id: Dependency@PyPI/argon2-cffi@25.1.0
+  at: uv.lock#L124
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:124
+    name:
+    - value: argon2-cffi
+      source: deps
+      at: uv.lock:124
+    version:
+    - value: 25.1.0
+      source: deps
+      at: uv.lock:124
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:124
+- type: Dependency
+  id: Dependency@PyPI/argon2-cffi-bindings@25.1.0
+  at: uv.lock#L136
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:136
+    name:
+    - value: argon2-cffi-bindings
+      source: deps
+      at: uv.lock:136
+    version:
+    - value: 25.1.0
+      source: deps
+      at: uv.lock:136
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:136
+- type: Dependency
+  id: Dependency@PyPI/ast-serialize@0.8.0
+  at: uv.lock#L167
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:167
+    name:
+    - value: ast-serialize
+      source: deps
+      at: uv.lock:167
+    version:
+    - value: 0.8.0
+      source: deps
+      at: uv.lock:167
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:167
+- type: Dependency
+  id: Dependency@PyPI/bcrypt@5.0.0
+  at: uv.lock#L231
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:231
+    name:
+    - value: bcrypt
+      source: deps
+      at: uv.lock:231
+    version:
+    - value: 5.0.0
+      source: deps
+      at: uv.lock:231
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:231
+- type: Dependency
+  id: Dependency@PyPI/certifi@2026.10.19
+  at: uv.lock#L282
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:282
+    name:
+    - value: certifi
+      source: deps
+      at: uv.lock:282
+    version:
+    - value: 2026.10.19
+      source: deps
+      at: uv.lock:282
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:282
+- type: Dependency
+  id: Dependency@PyPI/cffi@2.0.0
+  at: uv.lock#L291
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:291
+    name:
+    - value: cffi
+      source: deps
+      at: uv.lock:291
+    version:
+    - value: 2.0.0
+      source: deps
+      at: uv.lock:291
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:291
+- type: Dependency
+  id: Dependency@PyPI/click@8.4.2
+  at: uv.lock#L324
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:324
+    name:
+    - value: click
+      source: deps
+      at: uv.lock:324
+    version:
+    - value: 8.4.2
+      source: deps
+      at: uv.lock:324
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:324
+- type: Dependency
+  id: Dependency@PyPI/colorama@0.4.6
+  at: uv.lock#L336
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:336
+    name:
+    - value: colorama
+      source: deps
+      at: uv.lock:336
+    version:
+    - value: 0.4.6
+      source: deps
+      at: uv.lock:336
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:336
+- type: Dependency
+  id: Dependency@PyPI/coverage@7.16.1
+  at: uv.lock#L345
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:345
+    name:
+    - value: coverage
+      source: deps
+      at: uv.lock:345
+    version:
+    - value: 7.16.1
+      source: deps
+      at: uv.lock:345
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:345
+- type: Dependency
+  id: Dependency@PyPI/detect-installer@0.1.0
+  at: uv.lock#L414
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:414
+    name:
+    - value: detect-installer
+      source: deps
+      at: uv.lock:414
+    version:
+    - value: 0.1.0
+      source: deps
+      at: uv.lock:414
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:414
+- type: Dependency
+  id: Dependency@PyPI/dkimpy@1.1.8
+  at: uv.lock#L423
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:423
+    name:
+    - value: dkimpy
+      source: deps
+      at: uv.lock:423
+    version:
+    - value: 1.1.8
+      source: deps
+      at: uv.lock:423
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:423
+- type: Dependency
+  id: Dependency@PyPI/dnspython@2.9.0
+  at: uv.lock#L432
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:432
+    name:
+    - value: dnspython
+      source: deps
+      at: uv.lock:432
+    version:
+    - value: 2.9.0
+      source: deps
+      at: uv.lock:432
+    vulnerable:
+    - value: true
+      source: deps
+      at: uv.lock:432
+    fix_available:
+    - value: true
+      source: deps
+      at: uv.lock:432
+    max_severity:
+    - value: high
+      source: deps
+      at: uv.lock:432
+    advisories:
+    - value: GHSA-vvf4-9x63-8xvv, CVE-2026-128089
+      source: deps
+      at: uv.lock:432
+- type: Dependency
+  id: Dependency@PyPI/email-validator@2.3.0
+  at: uv.lock#L441
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:441
+    name:
+    - value: email-validator
+      source: deps
+      at: uv.lock:441
+    version:
+    - value: 2.3.0
+      source: deps
+      at: uv.lock:441
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:441
+- type: Dependency
+  id: Dependency@PyPI/emails@1.1.2
+  at: uv.lock#L454
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:454
+    name:
+    - value: emails
+      source: deps
+      at: uv.lock:454
+    version:
+    - value: 1.1.2
+      source: deps
+      at: uv.lock:454
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:454
+- type: Dependency
+  id: Dependency@PyPI/fastapi@0.141.1
+  at: uv.lock#L468
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:468
+    name:
+    - value: fastapi
+      source: deps
+      at: uv.lock:468
+    version:
+    - value: 0.141.1
+      source: deps
+      at: uv.lock:468
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:468
+- type: Dependency
+  id: Dependency@PyPI/fastapi-cli@0.0.32
+  at: uv.lock#L497
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:497
+    name:
+    - value: fastapi-cli
+      source: deps
+      at: uv.lock:497
+    version:
+    - value: 0.0.32
+      source: deps
+      at: uv.lock:497
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:497
+- type: Dependency
+  id: Dependency@PyPI/fastapi-cloud-cli@0.21.0
+  at: uv.lock#L517
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:517
+    name:
+    - value: fastapi-cloud-cli
+      source: deps
+      at: uv.lock:517
+    version:
+    - value: 0.21.0
+      source: deps
+      at: uv.lock:517
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:517
+- type: Dependency
+  id: Dependency@PyPI/fastar@0.11.0
+  at: uv.lock#L537
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:537
+    name:
+    - value: fastar
+      source: deps
+      at: uv.lock:537
+    version:
+    - value: 0.11.0
+      source: deps
+      at: uv.lock:537
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:537
+- type: Dependency
+  id: Dependency@PyPI/greenlet@3.5.2
+  at: uv.lock#L577
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:577
+    name:
+    - value: greenlet
+      source: deps
+      at: uv.lock:577
+    version:
+    - value: 3.5.2
+      source: deps
+      at: uv.lock:577
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:577
+- type: Dependency
+  id: Dependency@PyPI/h11@0.16.0
+  at: uv.lock#L616
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:616
+    name:
+    - value: h11
+      source: deps
+      at: uv.lock:616
+    version:
+    - value: 0.16.0
+      source: deps
+      at: uv.lock:616
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:616
+- type: Dependency
+  id: Dependency@PyPI/httpcore@1.0.9
+  at: uv.lock#L625
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:625
+    name:
+    - value: httpcore
+      source: deps
+      at: uv.lock:625
+    version:
+    - value: 1.0.9
+      source: deps
+      at: uv.lock:625
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:625
+- type: Dependency
+  id: Dependency@PyPI/httptools@0.8.0
+  at: uv.lock#L638
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:638
+    name:
+    - value: httptools
+      source: deps
+      at: uv.lock:638
+    version:
+    - value: 0.8.0
+      source: deps
+      at: uv.lock:638
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:638
+- type: Dependency
+  id: Dependency@PyPI/httpx@0.28.1
+  at: uv.lock#L660
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:660
+    name:
+    - value: httpx
+      source: deps
+      at: uv.lock:660
+    version:
+    - value: 0.28.1
+      source: deps
+      at: uv.lock:660
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:660
+- type: Dependency
+  id: Dependency@PyPI/idna@3.18
+  at: uv.lock#L675
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:675
+    name:
+    - value: idna
+      source: deps
+      at: uv.lock:675
+    version:
+    - value: '3.18'
+      source: deps
+      at: uv.lock:675
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:675
+- type: Dependency
+  id: Dependency@PyPI/iniconfig@2.3.0
+  at: uv.lock#L684
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:684
+    name:
+    - value: iniconfig
+      source: deps
+      at: uv.lock:684
+    version:
+    - value: 2.3.0
+      source: deps
+      at: uv.lock:684
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:684
+- type: Dependency
+  id: Dependency@PyPI/jinja2@3.1.6
+  at: uv.lock#L693
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:693
+    name:
+    - value: jinja2
+      source: deps
+      at: uv.lock:693
+    version:
+    - value: 3.1.6
+      source: deps
+      at: uv.lock:693
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:693
+- type: Dependency
+  id: Dependency@PyPI/librt@0.15.0
+  at: uv.lock#L705
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:705
+    name:
+    - value: librt
+      source: deps
+      at: uv.lock:705
+    version:
+    - value: 0.15.0
+      source: deps
+      at: uv.lock:705
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:705
+- type: Dependency
+  id: Dependency@PyPI/mako@1.4.2
+  at: uv.lock#L775
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:775
+    name:
+    - value: mako
+      source: deps
+      at: uv.lock:775
+    version:
+    - value: 1.4.2
+      source: deps
+      at: uv.lock:775
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:775
+- type: Dependency
+  id: Dependency@PyPI/markdown-it-py@4.2.0
+  at: uv.lock#L787
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:787
+    name:
+    - value: markdown-it-py
+      source: deps
+      at: uv.lock:787
+    version:
+    - value: 4.2.0
+      source: deps
+      at: uv.lock:787
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:787
+- type: Dependency
+  id: Dependency@PyPI/markupsafe@3.0.3
+  at: uv.lock#L799
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:799
+    name:
+    - value: markupsafe
+      source: deps
+      at: uv.lock:799
+    version:
+    - value: 3.0.3
+      source: deps
+      at: uv.lock:799
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:799
+- type: Dependency
+  id: Dependency@PyPI/mdurl@0.1.2
+  at: uv.lock#L829
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:829
+    name:
+    - value: mdurl
+      source: deps
+      at: uv.lock:829
+    version:
+    - value: 0.1.2
+      source: deps
+      at: uv.lock:829
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:829
+- type: Dependency
+  id: Dependency@PyPI/mypy@2.3.1
+  at: uv.lock#L838
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:838
+    name:
+    - value: mypy
+      source: deps
+      at: uv.lock:838
+    version:
+    - value: 2.3.1
+      source: deps
+      at: uv.lock:838
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:838
+- type: Dependency
+  id: Dependency@PyPI/mypy-extensions@1.1.0
+  at: uv.lock#L880
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:880
+    name:
+    - value: mypy-extensions
+      source: deps
+      at: uv.lock:880
+    version:
+    - value: 1.1.0
+      source: deps
+      at: uv.lock:880
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:880
+- type: Dependency
+  id: Dependency@PyPI/packaging@26.2
+  at: uv.lock#L889
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:889
+    name:
+    - value: packaging
+      source: deps
+      at: uv.lock:889
+    version:
+    - value: '26.2'
+      source: deps
+      at: uv.lock:889
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:889
+- type: Dependency
+  id: Dependency@PyPI/pathspec@1.1.1
+  at: uv.lock#L898
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:898
+    name:
+    - value: pathspec
+      source: deps
+      at: uv.lock:898
+    version:
+    - value: 1.1.1
+      source: deps
+      at: uv.lock:898
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:898
+- type: Dependency
+  id: Dependency@PyPI/pluggy@1.6.0
+  at: uv.lock#L907
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:907
+    name:
+    - value: pluggy
+      source: deps
+      at: uv.lock:907
+    version:
+    - value: 1.6.0
+      source: deps
+      at: uv.lock:907
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:907
+- type: Dependency
+  id: Dependency@PyPI/prek@0.5.3
+  at: uv.lock#L916
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:916
+    name:
+    - value: prek
+      source: deps
+      at: uv.lock:916
+    version:
+    - value: 0.5.3
+      source: deps
+      at: uv.lock:916
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:916
+- type: Dependency
+  id: Dependency@PyPI/psycopg@3.3.6
+  at: uv.lock#L932
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:932
+    name:
+    - value: psycopg
+      source: deps
+      at: uv.lock:932
+    version:
+    - value: 3.3.6
+      source: deps
+      at: uv.lock:932
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:932
+- type: Dependency
+  id: Dependency@PyPI/psycopg-binary@3.3.6
+  at: uv.lock#L949
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:949
+    name:
+    - value: psycopg-binary
+      source: deps
+      at: uv.lock:949
+    version:
+    - value: 3.3.6
+      source: deps
+      at: uv.lock:949
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:949
+- type: Dependency
+  id: Dependency@PyPI/puremagic@2.2.0
+  at: uv.lock#L978
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:978
+    name:
+    - value: puremagic
+      source: deps
+      at: uv.lock:978
+    version:
+    - value: 2.2.0
+      source: deps
+      at: uv.lock:978
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:978
+- type: Dependency
+  id: Dependency@PyPI/pwdlib@0.3.1
+  at: uv.lock#L987
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:987
+    name:
+    - value: pwdlib
+      source: deps
+      at: uv.lock:987
+    version:
+    - value: 0.3.1
+      source: deps
+      at: uv.lock:987
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:987
+- type: Dependency
+  id: Dependency@PyPI/pycparser@3.0
+  at: uv.lock#L1004
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1004
+    name:
+    - value: pycparser
+      source: deps
+      at: uv.lock:1004
+    version:
+    - value: '3.0'
+      source: deps
+      at: uv.lock:1004
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1004
+- type: Dependency
+  id: Dependency@PyPI/pydantic@2.13.5
+  at: uv.lock#L1013
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1013
+    name:
+    - value: pydantic
+      source: deps
+      at: uv.lock:1013
+    version:
+    - value: 2.13.5
+      source: deps
+      at: uv.lock:1013
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1013
+- type: Dependency
+  id: Dependency@PyPI/pydantic-core@2.46.5
+  at: uv.lock#L1033
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1033
+    name:
+    - value: pydantic-core
+      source: deps
+      at: uv.lock:1033
+    version:
+    - value: 2.46.5
+      source: deps
+      at: uv.lock:1033
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1033
+- type: Dependency
+  id: Dependency@PyPI/pydantic-extra-types@2.11.1
+  at: uv.lock#L1074
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1074
+    name:
+    - value: pydantic-extra-types
+      source: deps
+      at: uv.lock:1074
+    version:
+    - value: 2.11.1
+      source: deps
+      at: uv.lock:1074
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1074
+- type: Dependency
+  id: Dependency@PyPI/pydantic-settings@2.15.0
+  at: uv.lock#L1087
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1087
+    name:
+    - value: pydantic-settings
+      source: deps
+      at: uv.lock:1087
+    version:
+    - value: 2.15.0
+      source: deps
+      at: uv.lock:1087
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1087
+- type: Dependency
+  id: Dependency@PyPI/pygments@2.20.0
+  at: uv.lock#L1101
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1101
+    name:
+    - value: pygments
+      source: deps
+      at: uv.lock:1101
+    version:
+    - value: 2.20.0
+      source: deps
+      at: uv.lock:1101
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1101
+- type: Dependency
+  id: Dependency@PyPI/pyjwt@2.15.0
+  at: uv.lock#L1110
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1110
+    name:
+    - value: pyjwt
+      source: deps
+      at: uv.lock:1110
+    version:
+    - value: 2.15.0
+      source: deps
+      at: uv.lock:1110
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1110
+- type: Dependency
+  id: Dependency@PyPI/pytest@9.1.1
+  at: uv.lock#L1119
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1119
+    name:
+    - value: pytest
+      source: deps
+      at: uv.lock:1119
+    version:
+    - value: 9.1.1
+      source: deps
+      at: uv.lock:1119
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1119
+- type: Dependency
+  id: Dependency@PyPI/python-dateutil@2.9.0.post0
+  at: uv.lock#L1135
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1135
+    name:
+    - value: python-dateutil
+      source: deps
+      at: uv.lock:1135
+    version:
+    - value: 2.9.0.post0
+      source: deps
+      at: uv.lock:1135
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1135
+- type: Dependency
+  id: Dependency@PyPI/python-dotenv@1.2.2
+  at: uv.lock#L1147
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1147
+    name:
+    - value: python-dotenv
+      source: deps
+      at: uv.lock:1147
+    version:
+    - value: 1.2.2
+      source: deps
+      at: uv.lock:1147
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1147
+- type: Dependency
+  id: Dependency@PyPI/python-multipart@0.0.32
+  at: uv.lock#L1156
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1156
+    name:
+    - value: python-multipart
+      source: deps
+      at: uv.lock:1156
+    version:
+    - value: 0.0.32
+      source: deps
+      at: uv.lock:1156
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1156
+- type: Dependency
+  id: Dependency@PyPI/pyyaml@6.0.3
+  at: uv.lock#L1165
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1165
+    name:
+    - value: pyyaml
+      source: deps
+      at: uv.lock:1165
+    version:
+    - value: 6.0.3
+      source: deps
+      at: uv.lock:1165
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1165
+- type: Dependency
+  id: Dependency@PyPI/rich@15.0.0
+  at: uv.lock#L1191
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1191
+    name:
+    - value: rich
+      source: deps
+      at: uv.lock:1191
+    version:
+    - value: 15.0.0
+      source: deps
+      at: uv.lock:1191
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1191
+- type: Dependency
+  id: Dependency@PyPI/rich-toolkit@0.20.1
+  at: uv.lock#L1204
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1204
+    name:
+    - value: rich-toolkit
+      source: deps
+      at: uv.lock:1204
+    version:
+    - value: 0.20.1
+      source: deps
+      at: uv.lock:1204
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1204
+- type: Dependency
+  id: Dependency@PyPI/rignore@0.7.6
+  at: uv.lock#L1218
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1218
+    name:
+    - value: rignore
+      source: deps
+      at: uv.lock:1218
+    version:
+    - value: 0.7.6
+      source: deps
+      at: uv.lock:1218
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1218
+- type: Dependency
+  id: Dependency@PyPI/ruff@0.16.9
+  at: uv.lock#L1256
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1256
+    name:
+    - value: ruff
+      source: deps
+      at: uv.lock:1256
+    version:
+    - value: 0.16.9
+      source: deps
+      at: uv.lock:1256
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1256
+- type: Dependency
+  id: Dependency@PyPI/sentry-sdk@2.70.0
+  at: uv.lock#L1281
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1281
+    name:
+    - value: sentry-sdk
+      source: deps
+      at: uv.lock:1281
+    version:
+    - value: 2.70.0
+      source: deps
+      at: uv.lock:1281
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1281
+- type: Dependency
+  id: Dependency@PyPI/shellingham@1.5.4
+  at: uv.lock#L1299
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1299
+    name:
+    - value: shellingham
+      source: deps
+      at: uv.lock:1299
+    version:
+    - value: 1.5.4
+      source: deps
+      at: uv.lock:1299
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1299
+- type: Dependency
+  id: Dependency@PyPI/six@1.17.0
+  at: uv.lock#L1308
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1308
+    name:
+    - value: six
+      source: deps
+      at: uv.lock:1308
+    version:
+    - value: 1.17.0
+      source: deps
+      at: uv.lock:1308
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1308
+- type: Dependency
+  id: Dependency@PyPI/smokeshow@0.5.0
+  at: uv.lock#L1317
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1317
+    name:
+    - value: smokeshow
+      source: deps
+      at: uv.lock:1317
+    version:
+    - value: 0.5.0
+      source: deps
+      at: uv.lock:1317
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1317
+- type: Dependency
+  id: Dependency@PyPI/sqlalchemy@2.0.51
+  at: uv.lock#L1330
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1330
+    name:
+    - value: sqlalchemy
+      source: deps
+      at: uv.lock:1330
+    version:
+    - value: 2.0.51
+      source: deps
+      at: uv.lock:1330
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1330
+- type: Dependency
+  id: Dependency@PyPI/sqlmodel@0.0.47
+  at: uv.lock#L1357
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1357
+    name:
+    - value: sqlmodel
+      source: deps
+      at: uv.lock:1357
+    version:
+    - value: 0.0.47
+      source: deps
+      at: uv.lock:1357
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1357
+- type: Dependency
+  id: Dependency@PyPI/starlette@1.3.1
+  at: uv.lock#L1371
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1371
+    name:
+    - value: starlette
+      source: deps
+      at: uv.lock:1371
+    version:
+    - value: 1.3.1
+      source: deps
+      at: uv.lock:1371
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1371
+- type: Dependency
+  id: Dependency@PyPI/ty@0.0.84
+  at: uv.lock#L1383
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1383
+    name:
+    - value: ty
+      source: deps
+      at: uv.lock:1383
+    version:
+    - value: 0.0.84
+      source: deps
+      at: uv.lock:1383
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1383
+- type: Dependency
+  id: Dependency@PyPI/typer@0.27.2
+  at: uv.lock#L1408
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1408
+    name:
+    - value: typer
+      source: deps
+      at: uv.lock:1408
+    version:
+    - value: 0.27.2
+      source: deps
+      at: uv.lock:1408
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1408
+- type: Dependency
+  id: Dependency@PyPI/typing-extensions@4.15.0
+  at: uv.lock#L1423
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1423
+    name:
+    - value: typing-extensions
+      source: deps
+      at: uv.lock:1423
+    version:
+    - value: 4.15.0
+      source: deps
+      at: uv.lock:1423
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1423
+- type: Dependency
+  id: Dependency@PyPI/typing-inspection@0.4.2
+  at: uv.lock#L1432
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1432
+    name:
+    - value: typing-inspection
+      source: deps
+      at: uv.lock:1432
+    version:
+    - value: 0.4.2
+      source: deps
+      at: uv.lock:1432
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1432
+- type: Dependency
+  id: Dependency@PyPI/tzdata@2026.2
+  at: uv.lock#L1444
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1444
+    name:
+    - value: tzdata
+      source: deps
+      at: uv.lock:1444
+    version:
+    - value: '2026.2'
+      source: deps
+      at: uv.lock:1444
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1444
+- type: Dependency
+  id: Dependency@PyPI/urllib3@2.8.0
+  at: uv.lock#L1453
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1453
+    name:
+    - value: urllib3
+      source: deps
+      at: uv.lock:1453
+    version:
+    - value: 2.8.0
+      source: deps
+      at: uv.lock:1453
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1453
+- type: Dependency
+  id: Dependency@PyPI/uvicorn@0.49.0
+  at: uv.lock#L1462
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1462
+    name:
+    - value: uvicorn
+      source: deps
+      at: uv.lock:1462
+    version:
+    - value: 0.49.0
+      source: deps
+      at: uv.lock:1462
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1462
+- type: Dependency
+  id: Dependency@PyPI/uvloop@0.22.1
+  at: uv.lock#L1486
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1486
+    name:
+    - value: uvloop
+      source: deps
+      at: uv.lock:1486
+    version:
+    - value: 0.22.1
+      source: deps
+      at: uv.lock:1486
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1486
+- type: Dependency
+  id: Dependency@PyPI/watchfiles@1.2.0
+  at: uv.lock#L1506
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1506
+    name:
+    - value: watchfiles
+      source: deps
+      at: uv.lock:1506
+    version:
+    - value: 1.2.0
+      source: deps
+      at: uv.lock:1506
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1506
+- type: Dependency
+  id: Dependency@PyPI/websockets@16.0
+  at: uv.lock#L1553
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1553
+    name:
+    - value: websockets
+      source: deps
+      at: uv.lock:1553
+    version:
+    - value: '16.0'
+      source: deps
+      at: uv.lock:1553
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1553
+- type: Dependency
+  id: Dependency@PyPI/zizmor@1.30.1
+  at: uv.lock#L1580
+  facts:
+    ecosystem:
+    - value: PyPI
+      source: deps
+      at: uv.lock:1580
+    name:
+    - value: zizmor
+      source: deps
+      at: uv.lock:1580
+    version:
+    - value: 1.30.1
+      source: deps
+      at: uv.lock:1580
+    vulnerable:
+    - value: false
+      source: deps
+      at: uv.lock:1580

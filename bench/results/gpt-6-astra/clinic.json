@@ -1,0 +1,833 @@
+{
+  "model": "gpt-6-astra",
+  "runs": [
+    {
+      "verdicts": [
+        {
+          "check": "C1",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Resolve the stair-width discrepancy and the occupant load assigned to this stair. The IFC's 1000 mm width meets the 914 mm minimum for fewer than 50 occupants but not the general 1118 mm minimum. The wider drawing configuration can meet the general minimum; capacity requirements must also be satisfied. An exit-capacity annotation is not an assigned occupant load.",
+          "evidence": "IfcStair #65707, PSet_Revit_Dimensions.Width = 1.000 m. Its flights #65319 and #65525 have 1.100 m transverse geometric extents. This is Stair #1, corresponding to spaces 1AS1/2AS1. Sheet A11-1 (122) instead dimensions a 2685 mm overall arrangement divided into equal flights, with landing dimensions of 1210/1489 mm. IBC 1011.2 requires 1118 mm generally or 914 mm when serving fewer than 50 occupants; Ordinance 20250410-045 does not amend that section."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Resolve whether the IFC or drawing width governs, and determine the assigned occupant load. A 1000 mm stair meets the fewer-than-50-occupants minimum but fails the general 1118 mm minimum; the drawing's 1210 mm configuration can meet the latter, subject to capacity.",
+          "evidence": "IfcStair #87374, PSet_Revit_Dimensions.Width = 1.000 m; flights #86989 and #87195 have 1.100 m transverse geometric extents. This is Stair #3, spaces 1CS3/2CS3. Sheet A11-3 (124) dimensions two 1210 mm flight zones and a 1210 mm landing. A18-2 (162) labels this stairwell exit capacity as 147 people, not its actual assigned occupant load."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "Resolve whether the IFC or drawing width governs, and determine the assigned occupant load. A 1000 mm stair meets the fewer-than-50-occupants minimum but fails the general 1118 mm minimum; the drawing's 1210 mm configuration can meet the latter, subject to capacity.",
+          "evidence": "IfcStair #96096, PSet_Revit_Dimensions.Width = 1.000 m; flights #95710 and #95916 have 1.050 m transverse geometric extents. This is Stair #2, spaces 1BS2/2BS2. Sheet A11-2 (123) dimensions two 1210 mm flight zones and a 1210 mm landing. A18-2 (162) labels this stairwell exit capacity as 147 people, not its actual assigned occupant load."
+        },
+        {
+          "check": "C2",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The dimensional properties and drawings comply, but the explicit IfcStairFlight length attributes require a unit-error resolution. Riser heights of 175.769–176 mm pass; interpreting the raw flight RiserHeight of 0.576670705 in the model's metre units gives 576.671 mm and fails. The raw flight attributes numerically correspond to feet, unlike their property-set equivalents.",
+          "evidence": "IfcStair #65707 Pset_StairCommon.RiserHeight = 0.1757692307694019 m and TreadLength = 0.280 m; PSet_Revit_Dimensions.Actual Riser Height and Actual Tread Depth agree. Flights #65319/#65525 have the same property-set dimensions but explicit RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170604. A11-1 (122) and A11-4 (125) specify 176 mm risers and 279 mm treads. IBC 1011.5.2 specifies 102–178 mm risers and at least 279 mm rectangular treads."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "The properties/drawings give compliant 175.769–176 mm risers and 279–280 mm treads. The explicit flight attributes instead imply a 576.671 mm riser if read in the declared metre units. Confirm that these attributes are unconverted feet rather than authoritative dimensions.",
+          "evidence": "IfcStair #87374 Pset_StairCommon.RiserHeight = 0.1757692307694019 m and TreadLength = 0.280 m; its Revit actual-dimension properties agree. Flights #86989/#87195 have explicit RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170604, while Pset_StairFlightCommon gives 0.1757692307694019/0.280 m. A11-3 (124) and A11-4 (125): 176 mm risers, 279 mm treads."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The properties/drawings give compliant 175.769–176 mm risers and 279–280 mm treads. The explicit flight attributes instead imply a 576.671 mm riser if read in the declared metre units. Confirm that these attributes are unconverted feet rather than authoritative dimensions.",
+          "evidence": "IfcStair #96096 Pset_StairCommon.RiserHeight = 0.1757692307694019 m and TreadLength = 0.280 m; its Revit actual-dimension properties agree. Flights #95710/#95916 have explicit RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170604, while Pset_StairFlightCommon gives 0.1757692307694019/0.280 m. A11-2 (123) and A11-4 (125): 176 mm risers, 279 mm treads."
+        },
+        {
+          "check": "C3",
+          "element": "First Floor",
+          "verdict": "pass",
+          "evidence": "A18-1 (161) labels the longest travel distance 137 ft / 41.75 m and states BUSINESS occupancy and BUILDING IS FULLY SPRINKLERED. IBC Table 1017.2 permits 300 ft / 91.44 m for qualifying sprinklered Group B buildings. The indicated distance also meets the 200 ft / 60.96 m unsprinklered limit, so uncertainty about the sprinkler specification does not change this width-independent travel-distance result."
+        },
+        {
+          "check": "C3",
+          "element": "Second Floor",
+          "verdict": "pass",
+          "evidence": "A18-2 (162) labels the longest travel distance 153 ft / 46.65 m and states BUSINESS occupancy and BUILDING IS FULLY SPRINKLERED. This is below both the 300 ft / 91.44 m sprinklered and 200 ft / 60.96 m unsprinklered Group B limits in IBC Table 1017.2."
+        },
+        {
+          "check": "C4",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Table row (3), not the residual 750 mm row, applies: the immediately upper floor has more than 200 m² of habitable rooms. The IFC width and landing configuration fail the 1200 mm requirement; the drawing configuration can satisfy it. Reconcile finished stair/landing widths and the flight-attribute unit discrepancy identified under C2.",
+          "evidence": "IfcStair #65707 PSet_Revit_Dimensions.Width = 1000 mm; landing IfcSlab #65550 has a 1150 mm short geometric dimension. A11-1 (122) shows the wider 2685 mm equal-flight arrangement and 1210/1489 mm landing dimensions. Property-set riser/tread = 175.769/280 mm; A11-1 and A11-4 specify 176/279 mm. Row (3) requires width ≥1200 mm, riser ≤200 mm and tread ≥240 mm. Upper-floor IfcSpaces #22479 (2A01), #24255 (2A14), #24608 (2C03), #30167 (2D18), #30573 (2D20), and #36173 (2D21), PSet_Revit_Dimensions.Area, alone total 235.480 m² of conference, administration, consultation, office and classroom rooms."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "The applicable minimum stair and landing width is 1200 mm under row (3). The IFC's 1000 mm width and 1150 mm landing dimension fail; the drawing's 1210 mm configuration can pass. Finished widths and the flight-attribute units must be reconciled.",
+          "evidence": "IfcStair #87374 PSet_Revit_Dimensions.Width = 1000 mm; landing IfcSlab #87220 has a 1150 mm short geometric dimension. A11-3 (124): 1210 mm flight zones and landing, 176 mm risers, 279 mm treads. Pset_StairCommon gives 175.769 mm risers and 280 mm treads. Upper-floor habitable-room area exceeds 200 m²: the six IfcSpaces identified in the preceding C4 entry total 235.480 m². Applicable limits: 1200/200/240 mm; permitted handrail deductions must be assessed under Article 23(3)."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The applicable minimum stair and landing width is 1200 mm under row (3). The IFC's 1000 mm width and 1150 mm landing dimension fail; the drawing's 1210 mm configuration can pass. Finished widths and the flight-attribute units must be reconciled.",
+          "evidence": "IfcStair #96096 PSet_Revit_Dimensions.Width = 1000 mm; landing IfcSlab #95941 has a 1150 mm short geometric dimension. A11-2 (123): 1210 mm flight zones and landing, 176 mm risers, 279 mm treads. Pset_StairCommon gives 175.769 mm risers and 280 mm treads. Upper-floor habitable-room area exceeds 200 m²: the six IfcSpaces identified above total 235.480 m². Applicable limits: 1200/200/240 mm; Article 23(3) governs permitted handrail deductions."
+        },
+        {
+          "check": "C5",
+          "element": "First Floor",
+          "verdict": "uncertain",
+          "deciding": "The 41.75 m overall route passes the purpose-group-5 'elsewhere' multidirectional limit of 45 m, but fails the 18 m multidirectional limit for buildings primarily for disabled people and the 32 m limit for seating-in-rows areas. An outpatient-clinic label does not establish that it is primarily for disabled people. Paragraph 2.7 also requires the initial one-direction portion to meet its separate limit: 18 m for 'elsewhere', or 9 m for primarily-disabled use. Its compliant length is not established by the overall-distance annotation.",
+          "evidence": "A18-1 (161): longest annotated route 137 ft / 41.75 m, with multiple building exits shown. ADB Volume 2 paragraph 2.7 requires both the overall alternative-route limit and the initial one-direction limit; Table 2.1 purpose group 5 gives 9/18 m, 15/32 m, or 18/45 m depending on the use."
+        },
+        {
+          "check": "C5",
+          "element": "Second Floor",
+          "verdict": "fail",
+          "deciding": "The longest indicated travel distance is 46.65 m, exceeding even the least restrictive applicable purpose-group-5 multidirectional limit of 45 m. Choosing the primarily-disabled or seating-in-rows category, or a one-direction condition, only reduces the allowable distance.",
+          "evidence": "A18-2 (162): 153 ft / 46.65 m longest travel-distance annotation. ADB Volume 2 paragraph 2.7 and Table 2.1: purpose-group-5 multidirectional limits are 18, 32 or 45 m."
+        },
+        {
+          "check": "C6",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Resolve the clear-width discrepancy and establish the stair's Table 3.1 category and evacuation population. The 1000 mm IFC width can satisfy the small-load category but not a 1100 mm requirement; the wider drawing configuration can satisfy 1100 mm. Higher populations can require more. Paragraph 3.10 additionally requires width no less than the accessing exits and no reduction toward the final exit; a nominal stair-width property alone does not establish these conditions.",
+          "evidence": "IfcStair #65707 PSet_Revit_Dimensions.Width = 1000 mm; geometric flight extent = 1100 mm. A11-1 (122) instead shows a 2685 mm overall equal-flight arrangement. ADB 3.10 and Table 3.1 provide the 800 mm small-load and 1100 mm applicable assembly/larger-load minima; Appendix D4 requires clear width between walls or balustrades, allowing qualifying handrail/string intrusions up to 100 mm on each side. First-to-second-floor rise is 4570 mm, so the >30 m stair-height condition is not controlling."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "A reconciled clear width of 1000 mm may pass the small-load category but fails a 1100 mm Table 3.1 requirement; the 1210 mm drawing configuration can pass that requirement. Determine the assigned evacuation population, applicable category and any required capacity increase, and verify the width does not reduce toward the final exit.",
+          "evidence": "IfcStair #87374 PSet_Revit_Dimensions.Width = 1000 mm; geometric flight extents = 1100 mm. A11-3 (124) shows 1210 mm flight zones. A5-3 (81) schedules the accessing door 2CS3 at 915 mm nominal width. A18-2 (162) states 147-person exit capacity, which is not a population assignment. ADB 3.10, Table 3.1 and Appendix D4 govern."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "A reconciled clear width of 1000 mm may pass the small-load category but fails a 1100 mm Table 3.1 requirement; the 1210 mm drawing configuration can pass that requirement. Determine the assigned evacuation population, applicable category and any required capacity increase, and verify the width does not reduce toward the final exit.",
+          "evidence": "IfcStair #96096 PSet_Revit_Dimensions.Width = 1000 mm; geometric flight extents = 1050 mm. A11-2 (123) shows 1210 mm flight zones. A5-3 (81) schedules accessing door 2BS2 at 915 mm nominal width. A18-2 (162) states 147-person exit capacity, not assigned population. ADB 3.10, Table 3.1 and Appendix D4 govern."
+        }
+      ],
+      "doors_not_certain": [
+        {
+          "guid": "0mxk1RW8H5mvX1dNnpRqy_",
+          "verdict": "uncertain",
+          "reason": "Door mark 1E15A: IfcDoor #104264 OverallWidth and PSet_Revit_Type_Dimensions.Width are 1830 mm for a double door, with 51 mm thickness, permitting compliant individual-leaf clear width. Sheet A5-2 (80) instead schedules PR 760 mm leaves, each too narrow to provide the 32 in clear opening required for an active leaf. The choice of source changes the verdict; adding both leaves together is not the manual-double-door test."
+        },
+        {
+          "guid": "1qc5HjZvrCsga38tqxQ3VC",
+          "verdict": "uncertain",
+          "reason": "Door mark 1C11: IfcDoor #213477 OverallWidth = 1730 mm; geometric panels #213383/#213390 are each 865 mm wide and approximately 51 mm thick. A simple full-thickness deduction leaves only 814 mm before any stop/astragal or hinge-offset effect, so the actual face-to-stop opening at 90 degrees must be established rather than treating 1730 mm as clear width. A5-1 (79) instead schedules two 915 mm leaves, 45 mm thick. The sources and unresolved meeting-edge/hinge geometry admit compliant and noncompliant clear openings."
+        },
+        {
+          "guid": "35QeWibpT4DfyH3NIf2nOv",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C08tp1: IFC OverallWidth/type Width = 865 mm and type Thickness = 25 mm; these are not a certified face-to-stop clear opening. Subtracting the leaf thickness gives 840 mm before unresolved hinge/stop deductions. Clear width at least 32 in passes; less fails. A13-2/A13-3 (133/134) do not dimension the required clear opening or partition-door stop geometry."
+        },
+        {
+          "guid": "0ClPCUC7jCQRnj1dhupHk0",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C07tp1: IFC nominal width 865 mm, thickness 25 mm; nominal minus thickness is 840 mm, not a verified 90-degree face-to-stop dimension. The unspecified partition-door hinge/stop arrangement decides whether clear width reaches 32 in. A13-2/A13-3 (133/134) provide no explicit clear-width dimension."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tWA",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A09tp1: IFC nominal width 865 mm and thickness 25 mm do not establish the required clear opening. A13-2/A13-3 (133/134) show the two stalls with differing door configurations but do not specify their face-to-stop clear widths. Resolve the drawing/model configuration and hinge/stop deductions; clear width ≥32 in passes and <32 in fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tjC",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A09tp2: IFC nominal width 865 mm and thickness 25 mm yield 840 mm before unresolved hinge/stop deductions. A13-2/A13-3 (133/134) do not dimension the required 90-degree clear opening. Compliance turns on whether the actual clear width is at least 32 in."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tpH",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A12tp1: IFC nominal width 865 mm, thickness 25 mm; no populated lining/stop dimensions establish the face-to-stop opening at 90 degrees. A13-2/A13-3 (133/134) likewise provide no explicit clear-width dimension. Actual clear width ≥32 in passes; less fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tsf",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C23tp1: IFC nominal width 865 mm and thickness 25 mm permit, but do not establish, a compliant clear opening. The 840 mm nominal-minus-thickness result still depends on unspecified hinge and stop geometry. A13-2/A13-3 (133/134) do not give a face-to-stop clear dimension; the deciding threshold is 32 in."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tw0",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C24tp1: IFC nominal width 865 mm and thickness 25 mm are not clear-opening dimensions. A13-2/A13-3 (133/134) show differing stall-door configurations without explicit clear-width dimensions. Resolve the matching configuration and hinge/stop deductions; actual clear width ≥32 in passes and <32 in fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tut",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C24tp2: IFC nominal width 865 mm and thickness 25 mm give 840 mm before unresolved hinge/stop deductions. A13-2/A13-3 (133/134) do not establish its required 90-degree face-to-stop opening. Compliance depends on whether actual clear width reaches 32 in."
+        }
+      ],
+      "conflicts_found": [
+        "All three IfcStair elements have PSet_Revit_Dimensions.Width = 1000 mm. A11-2/A11-3 (123/124) instead show 1210 mm flight zones; A11-1 (122) shows the wider 2685 mm equal-flight arrangement. Model flight transverse extents are 1100 mm for Stair #1/#3 and 1050 mm for Stair #2, themselves different from the parent Width property.",
+        "The modeled intermediate landings have 1150 mm short dimensions, whereas A11-1 through A11-3 (122–124) use 1210 mm and larger landing dimensions.",
+        "The model divides each stair into flights with 12 and 14 risers. A11-1 through A11-3 (122–124) show two flights of 13 risers. The model's parent stair NumberOfTreads is 25, while its child flights contain 11 and 13 treads and the drawings show 12 treads per flight.",
+        "Stair property sets specify 175.769230769 mm risers and 280 mm treads; drawings A11-1 through A11-4 (122–125) specify 176 mm risers and 279 mm treads. The riser difference is consistent with rounding, but the tread dimensions are not identical.",
+        "Explicit IfcStairFlight attributes give RiserHeight approximately 0.576670705 and TreadLength approximately 0.918635171 despite metre project units; these disagree with both their own property sets and the drawings. Multiplication by 0.3048 recovers the property-set metre values, indicating an apparent unconverted-feet export defect.",
+        "Door 1E15A is a 1830 mm-wide double door in the IFC but is scheduled as a pair of 760 mm leaves on A5-2 (80).",
+        "Door 1C11 is a 1730 mm-wide double door with two 865 mm geometric leaves in the IFC but is scheduled as a pair of 915 mm leaves on A5-1 (79).",
+        "Door 1BC3 has IFC nominal width 1000 mm but scheduled width 1065 mm on A5-1 (79).",
+        "Door 1EC4 is modeled as a single 1220 mm leaf; A5-2 (80) specifies an unequal pair of 1220 mm and 305 mm leaves.",
+        "Curtain-wall door mark 1CA1 has IFC total width 1800 mm, whereas the corresponding central-entry door schedule on A5-1 (79) specifies a pair of 915 mm leaves. The IFC mark also differs from the drawing's 1AC1 designation.",
+        "Curtain-wall doors 1DC5a/1DC5b have IFC widths approximately 901.001/899.549 mm and heights 2325 mm; A5-2 (80) schedules 915 mm width and 2355 mm height.",
+        "The modeled flush-door families generally specify 51 mm leaf thickness and 2134 mm height, versus 45 mm thickness and 2135 mm height in schedules A5-1 through A5-3 (79–81).",
+        "The toilet-partition IFC family specifies 1500 mm door height, while A13-3 (134) depicts 1830 mm partition doors with 200 mm bottom clearance. A13-2/A13-3 also depict differing stall-door configurations, whereas all eight modeled partition doors use the same 865 mm-width family."
+      ]
+    },
+    {
+      "verdicts": [
+        {
+          "check": "C1",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The controlling stair width and assigned occupant load are unresolved. The IFC's 1000 mm width meets the 914 mm exception only if the stair serves fewer than 50 occupants; it does not meet the normal 1118 mm minimum. The wider drawn stair can meet that minimum, subject to its finished width and capacity calculation. Exit capacity is not evidence of the number of occupants assigned to the stair.",
+          "evidence": "IfcStair #65707, PSet_Revit_Dimensions.Width = 1.000 m; this is Stair 1 at the central lobby. Sheet A11-1, sheet 122, shows a 2685 mm overall stair arrangement divided into equal flights, rather than the IFC's 1000 mm width. Austin Ordinance 20250410-045 does not amend §1011.2."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "IFC width 1000 mm versus the wider drawn arrangement; also whether the assigned occupant load is below 50 or at least 50. The IFC width passes the 914 mm exception but fails the normal 1118 mm minimum. The drawings' stated capacity of 147 people is not an assigned occupant load.",
+          "evidence": "IfcStair #87374, PSet_Revit_Dimensions.Width = 1.000 m; its position corresponds to Stair 3. A11-3, sheet 124, dimensions each half of the stair arrangement at 1210 mm. A18-2, sheet 162, labels the north stairwell exit capacity as 147 people."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "IFC width 1000 mm versus the wider drawn arrangement; also whether the assigned occupant load is below 50 or at least 50. The IFC width passes the 914 mm exception but fails the normal 1118 mm minimum. The drawings' stated capacity of 147 people is not an assigned occupant load.",
+          "evidence": "IfcStair #96096, PSet_Revit_Dimensions.Width = 1.000 m; its position corresponds to Stair 2. A11-2, sheet 123, dimensions each half of the stair arrangement at 1210 mm. A18-2, sheet 162, labels the south stairwell exit capacity as 147 people."
+        },
+        {
+          "check": "C2",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The actual stair properties and drawing dimensions comply, but the constituent IfcStairFlight attributes contradict them. Riser heights of 175.769 or 176 mm pass; the directly encoded flight RiserHeight of 576.671 mm fails the 178 mm maximum. The latter appears to be an unconverted feet value, but the IFC declares metres and does not provide authority to silently correct it.",
+          "evidence": "IfcStair #65707 Pset_StairCommon.RiserHeight = 0.1757692307694019 m and TreadLength = 0.280 m; PSet_Revit_Dimensions repeats these actual dimensions. Flights #65319 and #65525 directly encode RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170603675, while their Pset_StairFlightCommon gives 0.1757692307694019 and 0.280 m. IfcSIUnit #15 declares metres. A11-1, sheet 122, specifies 176 mm risers and 279 mm treads. §1011.5.2 requires risers 102–178 mm and rectangular treads at least 279 mm."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "The actual-property and drawing readings pass, whereas the directly encoded flight riser height fails. Deciding values are 175.769–176 mm versus 576.671 mm. The apparent feet-to-metres export error must be resolved rather than selecting one contradictory IFC value without qualification.",
+          "evidence": "IfcStair #87374 Pset_StairCommon and PSet_Revit_Dimensions give 175.769230769 mm actual risers and 280 mm treads. Flights #86989 and #87195 directly encode RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170603675 in a metre-based IFC, but their common property sets give 0.1757692307694019 and 0.280 m. A11-3, sheet 124, gives 176 mm risers and 279 mm treads."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The actual-property and drawing readings pass, whereas the directly encoded flight riser height fails. Deciding values are 175.769–176 mm versus 576.671 mm. The apparent feet-to-metres export error must be resolved rather than selecting one contradictory IFC value without qualification.",
+          "evidence": "IfcStair #96096 Pset_StairCommon and PSet_Revit_Dimensions give 175.769230769 mm actual risers and 280 mm treads. Flights #95710 and #95916 directly encode RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170603675 in a metre-based IFC, but their common property sets give 0.1757692307694019 and 0.280 m. A11-2, sheet 123, gives 176 mm risers and 279 mm treads."
+        },
+        {
+          "check": "C3",
+          "element": "First Floor",
+          "verdict": "pass",
+          "evidence": "A18-1, sheet 161, gives the longest indicated travel distance as 137 ft / 41.75 m. Its general notes identify Business occupancy and a fully sprinklered building. Table 1017.2 permits 300 ft / 91.44 m for sprinklered Group B; the indicated distance is also below the 200 ft / 60.96 m unsprinklered limit. Austin Ordinance 20250410-045 does not amend §1017.2."
+        },
+        {
+          "check": "C3",
+          "element": "Second Floor",
+          "verdict": "pass",
+          "evidence": "A18-2, sheet 162, gives the longest indicated travel distance as 153 ft / 46.65 m and identifies Business occupancy and a fully sprinklered building. This is below both the sprinklered Group B limit of 300 ft / 91.44 m and the unsprinklered limit of 200 ft / 60.96 m in Table 1017.2."
+        },
+        {
+          "check": "C4",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Table row (三), not the hospital or institutional classification, applies because the upper storey's occupied rooms exceed 200 m². Required stair and landing width is 1200 mm, riser maximum 200 mm and tread minimum 240 mm. The 1000 mm IFC stair width fails; the wider drawing arrangement may pass when its finished stair and landing widths are established. The contradictory direct flight riser attributes also require resolution.",
+          "evidence": "IfcStair #65707 Width = 1.000 m, actual RiserHeight = 0.1757692307694019 m, TreadLength = 0.280 m. Landing IfcSlab #65550 has a modelled plan extent approximately 2.585 by 1.150 m. A11-1, sheet 122, shows a 2685 mm overall equal-flight arrangement, landing dimensions including 1210 and 1489 mm, 176 mm risers and 279 mm treads. Upper-floor occupied-room areas are established by IfcSpace PSet_Revit_Dimensions.Area, including 2D18 = 84.803 m², 2A11 = 33.483 m², 2D21 = 27.303 m², 2A03 = 16.009 m², 2A04 = 16.014 m², 2D11 = 15.855 m² and 2D09 = 14.393 m²: these seven rooms alone exceed 200 m²."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Row (三) requires stair and landing widths of at least 1200 mm. The IFC's 1000 mm stair fails. The drawing labels 1210 mm half-widths and a 1210 mm landing dimension, but the legally measured finished widths, including treatment of wall finishes and permitted handrail deductions, need reconciliation with the model. A final width below 1200 mm fails; at least 1200 mm, with the 176 mm riser and 279 mm tread reading, passes.",
+          "evidence": "IfcStair #87374 Width = 1.000 m, actual riser = 175.769 mm, tread = 280 mm; landing #87220 has plan extent approximately 2.320 by 1.150 m. A11-3, sheet 124, shows 2420 mm overall divided into 1210 mm halves, landing dimensions including 1210 and 1489 mm, 176 mm risers and 279 mm treads. The Second Floor's occupied-room areas exceed 200 m², as demonstrated by the IfcSpace areas cited for the other C4 stair. Direct flight attributes #86989/#87195 additionally contradict the actual riser properties."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "Row (三) requires stair and landing widths of at least 1200 mm. The IFC's 1000 mm stair fails. The drawing labels 1210 mm half-widths and a 1210 mm landing dimension, but the legally measured finished widths, including treatment of wall finishes and permitted handrail deductions, need reconciliation with the model. A final width below 1200 mm fails; at least 1200 mm, with the 176 mm riser and 279 mm tread reading, passes.",
+          "evidence": "IfcStair #96096 Width = 1.000 m, actual riser = 175.769 mm, tread = 280 mm; landing #95941 has plan extent approximately 1.150 by 2.286 m. A11-2, sheet 123, shows 1210 mm half-widths, landing dimensions including 1210, 1263 and 1489 mm, 176 mm risers and 279 mm treads. The Second Floor's occupied-room areas exceed 200 m². Direct flight attributes #95710/#95916 additionally contradict the actual riser properties."
+        },
+        {
+          "check": "C5",
+          "element": "First Floor",
+          "verdict": "uncertain",
+          "deciding": "The 41.75 m total passes the purpose-group-5 'elsewhere' limit of 45 m only if the one-direction portion also does not exceed 18 m. Paragraph 2.7 requires both tests; the life-safety annotation does not separately establish the one-direction portion. If the premises qualify as primarily for disabled people, the applicable limits are instead 9 m one-direction and 18 m overall, and this route fails.",
+          "evidence": "A18-1, sheet 161: longest indicated route 137 ft / 41.75 m. Approved Document B Volume 2 paragraph 2.7 and Table 2.1: purpose group 5 elsewhere = 18/45 m; buildings primarily for disabled people = 9/18 m. The inputs do not expressly establish that latter operational classification or dimension the common one-direction part of the indicated route."
+        },
+        {
+          "check": "C5",
+          "element": "Second Floor",
+          "verdict": "fail",
+          "deciding": "The longest indicated distance, 46.65 m, exceeds even the most permissive applicable purpose-group-5 Table 2.1 limit, 45 m. A shorter one-direction section cannot cure failure of the overall-distance test.",
+          "evidence": "A18-2, sheet 162: longest indicated route 153 ft / 46.65 m. Paragraph 2.7(a) requires the total to meet the multiple-direction limit. Table 2.1 purpose group 5 gives at most 45 m, with lower limits for seating in rows or buildings primarily for disabled people."
+        },
+        {
+          "check": "C6",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The actual escape-stair width, the area and population assigned to it, and the width of each accessing exit must be established. The IFC's 1000 mm is below the 1100 mm Table 3.1 minimum when the relevant assembly-area or over-50-person condition applies. It can meet the smaller-stair minimum if those conditions do not apply. The wider drawing arrangement may comply, but paragraph 3.10 also prohibits narrowing and requires the stair to be at least as wide as accessing exits.",
+          "evidence": "IfcStair #65707 PSet_Revit_Dimensions.Width = 1.000 m. A11-1, sheet 122, shows the different 2685 mm overall equal-flight arrangement. A18-2, sheet 162, does not state an assigned population for this central stair. Approved Document B paragraph 3.10 and Table 3.1 distinguish the 1100 mm cases from stairs serving no more than 50 people; purpose group 5 is applied as instructed."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "The IFC's 1000 mm width fails an applicable 1100 mm minimum, while the drawn 1210 mm arrangement may satisfy it. The Table 3.1 category and assigned population, rather than the exit's stated capacity, decide whether the 1100 mm minimum or the smaller-stair case applies. Finished width, accessing-exit width and downstream narrowing must also agree.",
+          "evidence": "IfcStair #87374 Width = 1.000 m. A11-3, sheet 124, shows 1210 mm half-widths. A18-2, sheet 162, gives north stairwell exit capacity 147 people, not the population likely to use it in a fire. A5-3, sheet 81, schedules the Second Floor stair door 2CS3 at 915 mm nominal width."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The IFC's 1000 mm width fails an applicable 1100 mm minimum, while the drawn 1210 mm arrangement may satisfy it. The Table 3.1 category and assigned population, rather than the exit's stated capacity, decide whether the 1100 mm minimum or the smaller-stair case applies. Finished width, accessing-exit width and downstream narrowing must also agree.",
+          "evidence": "IfcStair #96096 Width = 1.000 m. A11-2, sheet 123, shows 1210 mm half-widths. A18-2, sheet 162, gives south stairwell exit capacity 147 people, not the population likely to use it in a fire. A5-3, sheet 81, schedules the Second Floor stair door 2BS2 at 915 mm nominal width."
+        }
+      ],
+      "doors_not_certain": [
+        {
+          "guid": "0mxk1RW8H5mvX1dNnpRqy_",
+          "verdict": "uncertain",
+          "reason": "Door mark 1E15A. IfcDoor #104264 OverallWidth = 1830 mm; its double-door geometry has nominal 915 mm leaves, with PSet_Revit_Type_Dimensions.Thickness = 51 mm. A5-2, sheet 80, instead schedules PR 760: two 760 mm leaves. A 760 mm leaf cannot supply the required 815 mm clear opening; the model's wider leaves can. The two leaves cannot simply be added for the accessible active-leaf test."
+        },
+        {
+          "guid": "1qc5HjZvrCsga38tqxQ3VC",
+          "verdict": "uncertain",
+          "reason": "Door mark 1C11. IfcDoor #213477 OverallWidth = 1730 mm; its two leaf profiles #213383/#213390 are each 865 mm wide and 51 mm thick. The nominal width-minus-thickness result is only 814 mm, before resolving hinge position and meeting-stop details, so it does not establish the stated 815 mm metric clear width. A5-1, sheet 79, instead schedules PR 915 with 45 mm thickness, a materially wider pair. Actual active-leaf clearance at 90 degrees and the source conflict decide the result."
+        },
+        {
+          "guid": "35QeWibpT4DfyH3NIf2nOv",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C08tp1, IfcDoor #83397: OverallWidth = 865 mm and type Thickness = 25 mm. These give a nominal 840 mm before hinge and stop effects, not a certified face-to-stop clear opening. Its IfcDoorLiningProperties are unpopulated, and A13-2/A13-3, sheets 133–134, do not dimension the required 90-degree clear opening. Clearance at least 815 mm passes; less fails."
+        },
+        {
+          "guid": "0ClPCUC7jCQRnj1dhupHk0",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C07tp1: IFC OverallWidth = 865 mm and type Thickness = 25 mm, giving nominal 840 mm before hinge and stop effects. The available partition plans/elevations A13-2/A13-3, sheets 133–134, do not establish face-to-stop clearance at 90 degrees. An actual clearance at least 815 mm passes; less fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tWA",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A09tp1: IFC OverallWidth = 865 mm and type Thickness = 25 mm. The nominal 840 mm remainder leaves only 25 mm above the stated 815 mm requirement for unresolved hinge/stop effects. A13-2/A13-3, sheets 133–134, do not dimension the actual clear opening. Nominal leaf width alone does not prove compliance."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tjC",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A09tp2: IFC OverallWidth = 865 mm and type Thickness = 25 mm. The nominal 840 mm remainder is not the required face-to-stop measurement, and the stop/hinge details are unspecified. A13-2/A13-3, sheets 133–134, do not dimension the clear opening. At least 815 mm passes; less fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tpH",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A12tp1: IFC OverallWidth = 865 mm and type Thickness = 25 mm. The nominal 840 mm remainder is not a demonstrated 90-degree clear opening. The IFC lining properties and A13-2/A13-3, sheets 133–134, leave the decisive stop and hinge geometry unresolved. At least 815 mm clear passes; less fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tsf",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C23tp1: IFC OverallWidth = 865 mm and type Thickness = 25 mm. Nominal width minus thickness is 840 mm, but neither the unpopulated lining properties nor A13-2/A13-3, sheets 133–134, establish the actual face-to-stop opening. At least 815 mm clear passes; less fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tw0",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C24tp1: IFC OverallWidth = 865 mm and type Thickness = 25 mm. Nominal width minus thickness is 840 mm; the required face-to-stop clearance remains dependent on unspecified hinge and stop details. A13-2/A13-3, sheets 133–134, do not dimension that clearance. At least 815 mm passes; less fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tut",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C24tp2, the northern small compartment: IFC OverallWidth = 865 mm and type Thickness = 25 mm, potentially giving a compliant opening. A13-2, sheet 133, depicts a substantially narrower inward-swinging leaf, approximately 610 mm when compared with the adjacent 1525 mm dimension, which cannot supply 815 mm clear. The drawing/model disagreement and absence of a dimensioned clear-opening detail prevent a certain verdict."
+        }
+      ],
+      "conflicts_found": [
+        "All three IfcStair elements have PSet_Revit_Dimensions.Width = 1000 mm. A11-1, sheet 122, instead shows Stair 1 as a 2685 mm overall equal-flight arrangement; A11-2 and A11-3, sheets 123–124, show 1210 mm half-widths for Stairs 2 and 3. These are not interchangeable with a verified finished clear width.",
+        "The IFC stair landing slabs #65550, #87220 and #95941 have a 1150 mm short plan dimension; the stair drawings include 1210 mm landing dimensions and different overall landing arrangements.",
+        "Each IFC stair decomposes into flights with 12 and 14 risers and 11 and 13 treads. A11-1 through A11-3, sheets 122–124, show two flights of 13 risers and 12 treads each.",
+        "The IFC actual stair property sets give 175.769230769 mm risers and 280 mm treads; A11-1 through A11-3 specify 176 mm risers and 279 mm treads. The riser difference is consistent with rounding, but the tread dimensions differ.",
+        "The six direct IfcStairFlight.RiserHeight attributes are 0.576670704624022 and their TreadLength attributes are approximately 0.918635170603675, despite the IFC declaring metre length units. These disagree with both the same flights' common property sets and the drawings. Multiplying the direct attributes by 0.3048 recovers the property-set dimensions, indicating an apparent feet-to-metres export defect.",
+        "Door 1E15A, GUID 0mxk1RW8H5mvX1dNnpRqy_, is a 1830 mm pair in the IFC but PR 760, a 1520 mm pair, in A5-2, sheet 80.",
+        "Door 1C11, GUID 1qc5HjZvrCsga38tqxQ3VC, is a 1730 mm pair in the IFC but PR 915, a 1830 mm pair, in A5-1, sheet 79.",
+        "Door 1BC3, GUID 1byTDaqS91rBnWJlv$n$_5, is 1000 mm wide in the IFC but 1065 mm in A5-1, sheet 79.",
+        "Door 1EC4, GUID 1byTDaqS91rBnWJlv$n_q6, is a single 1220 mm leaf in the IFC; A5-2, sheet 80, schedules an unequal pair of 1220 and 305 mm leaves.",
+        "The IFC flush-door families use 51 mm leaf thickness and 2134 mm height; the corresponding A5-1 through A5-3 schedules generally specify 45 mm thickness and 2135 mm height.",
+        "The two IFC curtain-wall double-glass doors have 1800 mm overall width and mark 1CA1; the main entrance is identified as 1AC1 and scheduled PR 915 in A5-1, sheet 79.",
+        "The IFC curtain-wall single-glass doors marked 1DC5a and 1DC5b have widths approximately 901.001 and 899.549 mm and height 2325 mm; A5-2, sheet 80, schedules these marks at 915 mm width and 2355 mm height.",
+        "The IFC toilet-partition door family has 1500 mm-high leaves, whereas A13-3, sheet 134, dimensions the partition doors at 1830 mm high with a 200 mm bottom clearance. Several IFC partition doors instead have a 250 mm base offset.",
+        "The small northern compartment door in toilet 2C24 is modelled with the same 865 mm leaf width as the other partition doors, whereas A13-2, sheet 133, depicts a roughly 610 mm leaf."
+      ]
+    },
+    {
+      "verdicts": [
+        {
+          "check": "C1",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The actual stair width and occupant load served are unresolved. IFC Width = 1000 mm meets the 914 mm exception for fewer than 50 occupants, but not the ordinary 1118 mm minimum. The drawings show a wider stair that could meet the ordinary minimum. Required capacity must also be established; the exit-capacity annotations are not occupant loads.",
+          "evidence": "IfcStair #65707, PSet_Revit_Dimensions.Width = 1.0 m; associated flight geometry spans 1100 mm transversely. This is Stair #1, matched to spaces 1AS1/2AS1. A11-1, sheet 122, dimensions a 2685 mm enclosure divided into equal flight bays, with landing dimensions 1210 and 1489 mm. IBC 1011.2 requires 1118 mm, or 914 mm where the load served is less than 50."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "IFC Width = 1000 mm passes the minimum-width exception if the stair serves fewer than 50 occupants, but fails the ordinary 1118 mm minimum. The drawing's 1210 mm half-enclosure dimension could accommodate a complying stair, but it is not an explicit clear-width measurement. Confirm effective width and occupant load served.",
+          "evidence": "IfcStair #87374, PSet_Revit_Dimensions.Width = 1.0 m; associated flight geometry spans 1100 mm transversely. Spatial correspondence identifies Stair #3, spaces 1CS3/2CS3, not Stair #2. A11-3, sheet 124, shows a 2420 mm enclosure divided into two 1210 mm bays. A18-2 labels stair exit capacity 147 people; it does not establish actual demand."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "IFC Width = 1000 mm passes the 914 mm minimum only if the stair serves fewer than 50 occupants; it fails the ordinary 1118 mm minimum. Drawing dimensions could support a wider complying stair. Actual effective width, occupant allocation and capacity demand decide the result.",
+          "evidence": "IfcStair #96096, PSet_Revit_Dimensions.Width = 1.0 m; associated flight geometry spans 1050 mm transversely. Spatial correspondence identifies Stair #2, spaces 1BS2/2BS2. A11-2, sheet 123, shows two 1210 mm half-enclosure dimensions. A18-2's 147-person stair annotation is capacity, not occupant load."
+        },
+        {
+          "check": "C2",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The physical geometry, stair property sets and drawings comply, but the direct IfcStairFlight riser attributes contradict them under the file's metre units. Correcting the apparent feet-to-metres export error gives a complying 175.769 mm riser; accepting the direct attribute literally gives a failing 576.671 mm riser.",
+          "evidence": "IfcStair #65707 Pset_StairCommon.RiserHeight = 0.1757692307694019 m and TreadLength = 0.28 m; PSet_Revit_Dimensions repeats these actual dimensions. Flights #65319/#65525 have matching property-set values but direct RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170603675, despite metre project units. Multiplying those direct values by 0.3048 reproduces the property-set dimensions. A11-1, sheet 122, specifies 176 mm risers and 279 mm treads. IBC limits are risers 102–178 mm and rectangular treads at least 279 mm."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Compliance depends on resolving the IFC flight-attribute unit discrepancy: 175.769 mm risers after the apparent feet conversion comply; literal metre interpretation gives 576.671 mm risers and fails.",
+          "evidence": "IfcStair #87374 Pset_StairCommon and PSet_Revit_Dimensions give actual riser 0.1757692307694019 m and tread 0.28 m. Flights #86989/#87195 repeat these in Pset_StairFlightCommon but directly encode RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170603675. A11-3, sheet 124, specifies 176 mm risers and 279 mm treads. The corroborated physical dimensions satisfy IBC 1011.5.2."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "Compliance depends on whether the direct flight dimensions are corrected for their apparent feet-to-metres export error or accepted literally: 175.769 mm risers comply; 576.671 mm risers do not.",
+          "evidence": "IfcStair #96096 Pset_StairCommon and PSet_Revit_Dimensions give actual riser 0.1757692307694019 m and tread 0.28 m. Flights #95710/#95916 have matching property-set dimensions, but direct RiserHeight = 0.576670704624022 and TreadLength approximately 0.918635170603675. A11-2, sheet 123, specifies 176 mm risers and 279 mm treads, satisfying IBC 1011.5.2."
+        },
+        {
+          "check": "C3",
+          "element": "First Floor",
+          "verdict": "pass",
+          "deciding": "",
+          "evidence": "A18-1, sheet 161, labels the longest travel distance 137 ft / 41.75 m and states BUSINESS occupancy and BUILDING IS FULLY SPRINKLERED. IBC Table 1017.2 permits 300 ft / 91.44 m for sprinklered Group B; the distance also falls below the 200 ft / 60.96 m unsprinklered limit. Ordinance 20250410-045 does not replace 1017.2."
+        },
+        {
+          "check": "C3",
+          "element": "Second Floor",
+          "verdict": "pass",
+          "deciding": "",
+          "evidence": "A18-2, sheet 162, labels the longest travel distance 153 ft / 46.65 m and states BUSINESS occupancy and BUILDING IS FULLY SPRINKLERED. IBC Table 1017.2 permits 300 ft / 91.44 m for sprinklered Group B; this distance is also below the unsprinklered 200 ft / 60.96 m limit."
+        },
+        {
+          "check": "C4",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Article 23(1), table row (3), requires stair and landing widths of at least 1200 mm, risers no greater than 200 mm and treads at least 240 mm. The IFC's 1000 mm stair-width property and 1150 mm intermediate-landing depth fail; drawing dimensions could comply. Confirm actual widths using Article 23(3)'s handrail allowance and resolve the flight-attribute unit discrepancy.",
+          "evidence": "IfcStair #65707 PSet_Revit_Dimensions.Width = 1.0 m; landing #65550 geometry has a 1.15 m dimension in the travel direction. Pset_StairCommon gives riser 175.769 mm and tread 280 mm. A11-1, sheet 122, shows a 2685 mm enclosure with equal flight bays, landing dimensions 1210/1489 mm, risers 176 mm and treads 279 mm. Row (3) applies because upper-storey occupied rooms exceed 200 m²: IFC areas for 2D18, 2D20, 2D21, 2A01 and 2C03 alone total approximately 202.642 m²."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "The applicable limits are width at least 1200 mm, riser at most 200 mm and tread at least 240 mm. IFC width and landing geometry fail the width requirement; the drawing's 1210 mm bays and landing dimension could comply depending on the effective width after the permitted handrail allowance. The flight-attribute unit conflict also needs resolution.",
+          "evidence": "IfcStair #87374 PSet_Revit_Dimensions.Width = 1000 mm; landing #87220 geometry has a 1150 mm travel-direction dimension. Pset_StairCommon gives 175.769 mm risers and 280 mm treads. Stair #3 drawing A11-3, sheet 124, gives two 1210 mm bays, a 1210 mm intermediate landing, 176 mm risers and 279 mm treads. The Second Floor occupied-room area exceeds Article 23(1) row (3)'s 200 m² threshold."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The model's 1000 mm width and 1150 mm landing dimension fail the applicable 1200 mm minimum. The drawings could satisfy it, but their half-enclosure dimensions do not independently establish effective stair width. Confirm effective widths and resolve whether the direct flight riser attributes retain feet.",
+          "evidence": "IfcStair #96096 PSet_Revit_Dimensions.Width = 1000 mm; landing #95941 geometry has a 1150 mm travel-direction dimension. Pset_StairCommon gives 175.769 mm risers and 280 mm treads. Stair #2 drawing A11-2, sheet 123, shows two 1210 mm bays and landing dimensions 1210, 1263, 1489 and 1542 mm, with 176 mm risers and 279 mm treads. Article 23(1) row (3) applies because the immediately higher floor has more than 200 m² of occupied rooms."
+        },
+        {
+          "check": "C5",
+          "element": "First Floor",
+          "verdict": "uncertain",
+          "deciding": "The 41.75 m overall distance meets purpose-group-5 'elsewhere' travel in more than one direction, whose limit is 45 m. It fails if the relevant Table 2.1 category is buildings primarily for disabled people, limited to 18 m, or seating in rows, limited to 32 m. Even in the 'elsewhere' category, paragraph 2.7 requires each initial one-direction portion to be no longer than 18 m; that length is not established by the overall-distance annotation.",
+          "evidence": "A18-1, sheet 161, gives 137 ft / 41.75 m. ADB Volume 2 paragraph 2.7 requires both the overall alternative-route limit and the initial one-direction limit. Table 2.1 purpose group 5 gives one-direction/multiple-direction limits of 9/18 m for buildings primarily for disabled people, 15/32 m for seating in rows, and 18/45 m elsewhere."
+        },
+        {
+          "check": "C5",
+          "element": "Second Floor",
+          "verdict": "fail",
+          "deciding": "The longest stated distance, 46.65 m, exceeds even the most permissive applicable purpose-group-5 multiple-direction limit of 45 m. More restrictive Table 2.1 categories cannot make it comply.",
+          "evidence": "A18-2, sheet 162, labels the longest route 153 ft / 46.65 m. ADB Volume 2 paragraph 2.7 and Table 2.1 give a maximum of 45 m for purpose-group-5 'elsewhere' travel in more than one direction."
+        },
+        {
+          "check": "C6",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The required minimum depends on the people served and the area served. A 1000 mm stair can meet the 800 mm category for stairs serving no more than 50 people, but not the 1100 mm category for larger loads up to 220 or qualifying assembly areas. Higher loads require capacity calculations. The drawings show a wider alternative; the input does not establish the actual effective width, load allocation or every entrance-to-stair width needed by paragraph 3.10.",
+          "evidence": "IfcStair #65707 PSet_Revit_Dimensions.Width = 1000 mm. A11-1, sheet 122, shows a 2685 mm enclosure divided into equal bays. ADB 3.10 requires width at least equal to accessing exits, compliance with Table 3.1, and no reduction towards the final exit. The floor-to-floor height is 4.57 m, so the provision for stairs taller than 30 m does not control."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Actual effective width and the number of people likely to use the stair decide the result: the model's 1000 mm can satisfy the small-load category but not a 1100 mm requirement; a sufficiently clear stair within the drawing's 1210 mm bay could satisfy the latter. The 147-person exit-capacity annotation cannot be substituted for the people served.",
+          "evidence": "IfcStair #87374 PSet_Revit_Dimensions.Width = 1000 mm; A11-3, sheet 124, shows Stair #3 with 1210 mm half-enclosure dimensions. A18-2 labels exit capacity 147 people without establishing occupant allocation. ADB 3.10 and Table 3.1 require at least 800 mm in the small-load category or 1100 mm for the relevant larger-load category, plus entrance-width and non-reduction checks."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The IFC's 1000 mm width could comply for a qualifying stair serving no more than 50 people, but fails where 1100 mm is required. The drawing could provide a complying wider stair. Actual effective width, people served and widths of exits giving access remain deciding facts.",
+          "evidence": "IfcStair #96096 PSet_Revit_Dimensions.Width = 1000 mm. Stair #2 drawing A11-2, sheet 123, shows 1210 mm half-enclosure dimensions. A18-2's 147-person annotation denotes exit capacity, not load. ADB 3.10 and Table 3.1 govern the minimum width and require the stair to be at least as wide as its accessing exits."
+        }
+      ],
+      "doors_not_certain": [
+        {
+          "guid": "0mxk1RW8H5mvX1dNnpRqy_",
+          "verdict": "uncertain",
+          "reason": "Door 1E15A, IfcDoor #104264, is a double door with OverallWidth 1830 mm and type Thickness 51 mm, representing approximately 915 mm leaves. A5-2, sheet 80, instead schedules PR 760, 45 mm thick, for gas storage. A 760 mm leaf cannot supply the required 815 mm clear opening; the model's larger leaves can. The governing leaf size and face-to-stop clearance at 90 degrees decide compliance."
+        },
+        {
+          "guid": "1qc5HjZvrCsga38tqxQ3VC",
+          "verdict": "uncertain",
+          "reason": "Door 1C11, IfcDoor #213477, has OverallWidth 1730 mm, two modeled 865 mm leaves and type Thickness 51 mm. The simple leaf-width-minus-thickness allowance is only 814 mm before any stop deduction, not a demonstrated 815 mm clear opening. A5-1, sheet 79, instead schedules PR 915 with 45 mm thickness, allowing a substantially wider opening. Resolve the model/schedule conflict and establish the face-to-stop clearance at 90 degrees rather than treating the pair's overall width as clear width."
+        }
+      ],
+      "conflicts_found": [
+        "All three stairs have IFC PSet_Revit_Dimensions.Width = 1000 mm, while drawings A11-1–A11-3 describe wider stair layouts: Stair #1 has a 2685 mm enclosure divided into equal bays; Stairs #2 and #3 have 1210 mm half-enclosure dimensions. These drawing dimensions are not explicitly clear widths and must not be substituted for clear width without accounting for their reference faces.",
+        "The IFC intermediate landings #65550, #87220 and #95941 each have a 1150 mm travel-direction dimension. A11-1–A11-3 show corresponding landing dimensions of at least 1210 mm.",
+        "Each IFC stair is split into flights with 12 and 14 risers and 11 and 13 treads. A11-1–A11-3 show two flights of 13 risers and 12 treads. Both sources indicate 26 risers overall.",
+        "The IFC stair and flight property sets give actual risers 175.769 mm and treads 280 mm. A11-1–A11-3 give nominal risers 176 mm and treads 279 mm; the riser difference is consistent with rounding, while the tread and flight-layout dimensions differ.",
+        "The direct IfcStairFlight RiserHeight and TreadLength attributes encode approximately 0.576671 and 0.918635 in a metre-unit file, conflicting with their own property sets, physical geometry and the drawings. These numbers reproduce the property-set dimensions when interpreted as feet and multiplied by 0.3048; the export-unit discrepancy requires explicit resolution.",
+        "Door 1E15A is an 1830 mm pair in IFC but PR 760 in drawing A5-2, sheet 80.",
+        "Door 1C11 is a 1730 mm pair, with 865 mm modeled leaves, in IFC but PR 915 in drawing A5-1, sheet 79.",
+        "Door 1BC3 has IFC OverallWidth 1000 mm; A5-1, sheet 79, schedules 1065 mm.",
+        "Door 1EC4 is modeled as a single 1220 mm door; A5-2, sheet 80, schedules an unequal pair, 1220/305 mm, with the larger leaf active.",
+        "The standard IFC flush-door families use 51 mm leaf thickness and 2134 mm height; the corresponding schedules A5-1–A5-3 generally specify 45 mm thickness and 2135 mm height."
+      ]
+    },
+    {
+      "verdicts": [
+        {
+          "check": "C1",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Stair #1 has conflicting width information. The IFC's 1000 mm width satisfies the 914 mm minimum only if the stair serves fewer than 50 occupants; it does not satisfy the normal 1118 mm minimum. The drawings depict a wider stair. The governing finished width and assigned occupant load must be resolved, including capacity under §1005.1.",
+          "evidence": "IfcStair #65707, PSet_Revit_Dimensions.Width = 1.000 m. Its flight geometry is 1.100 m wide, which is not itself a clear-width measurement. Sheet A11-1 (122) shows a 2685 mm overall two-flight arrangement and different guard/stringer construction. A18-2 (162) does not assign an occupant load to this stair."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Stair #3 is 1000 mm wide in the IFC but has 1210 mm half-stair dimensions in the drawings. A 1000 mm stair can satisfy the minimum only for an occupant load below 50; a finished width of at least 1118 mm satisfies the normal minimum, subject to capacity. The drawing's stated exit capacity is not an assigned occupant load.",
+          "evidence": "IfcStair #87374, PSet_Revit_Dimensions.Width = 1.000 m; flight geometry width = 1.100 m. A11-3 (124) dimensions the two halves at 1210 mm each. A18-2 (162) labels this stairwell's exit capacity as 147 people, not its occupant load."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "Stair #2 is 1000 mm wide in the IFC but has 1210 mm half-stair dimensions in the drawings. A 1000 mm stair satisfies the minimum only below 50 occupants; the normal minimum is 1118 mm, with additional capacity requirements. Neither a resolved finished width nor an assigned occupant load is established.",
+          "evidence": "IfcStair #96096, PSet_Revit_Dimensions.Width = 1.000 m; flight geometry width = 1.050 m. A11-2 (123) shows 1210 mm half-stair dimensions. A18-2 (162) gives stairwell exit capacity = 147 people."
+        },
+        {
+          "check": "C2",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The stair properties and physical geometry indicate a complying 175.769 mm riser and 280 mm tread, and the drawings specify 176 mm and 279 mm. However, the constituent IfcStairFlight.RiserHeight attributes contain 0.576670704624022 under a metre-based project. Taken literally, that is a failing 576.671 mm riser. These attributes appear to contain unconverted feet, but that interpretation requires accepting the geometry/property sets over the conflicting attributes.",
+          "evidence": "IfcStair #65707 Pset_StairCommon.RiserHeight = 0.1757692307694019 m and TreadLength = 0.280 m; matching PSet_Revit_Dimensions actual dimensions. IfcStairFlight #65319 and #65525 RiserHeight = 0.576670704624022, while their Pset_StairFlightCommon.RiserHeight = 0.1757692307694019 m. A11-1 (122): 13 risers per flight at 176 mm and 12 treads at 279 mm. §1011.5.2 requires risers 102–178 mm and rectangular treads at least 279 mm."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Actual stair properties, geometry and drawings comply, but literal interpretation of the conflicting metre-based IfcStairFlight.RiserHeight attributes fails. Resolve whether those attributes contain an unconverted feet value: 0.576671 ft corresponds to 175.769 mm, whereas 0.576671 m does not comply.",
+          "evidence": "IfcStair #87374 Pset_StairCommon.RiserHeight = 0.1757692307694019 m, TreadLength = 0.280 m. IfcStairFlight #86989 and #87195 RiserHeight = 0.576670704624022; their common property sets give 0.1757692307694019 m. A11-3 (124): 176 mm risers and 279 mm treads. Limits: riser 102–178 mm; tread at least 279 mm."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "Actual stair properties, geometry and drawings comply, but literal interpretation of the conflicting metre-based IfcStairFlight.RiserHeight attributes fails. The apparent feet-to-metres export error must be resolved rather than silently choosing a source.",
+          "evidence": "IfcStair #96096 Pset_StairCommon.RiserHeight = 0.1757692307694019 m, TreadLength = 0.280 m. IfcStairFlight #95710 and #95916 RiserHeight = 0.576670704624022; their common property sets give 0.1757692307694019 m. A11-2 (123): 176 mm risers and 279 mm treads. Limits: riser 102–178 mm; tread at least 279 mm."
+        },
+        {
+          "check": "C3",
+          "element": "First Floor",
+          "verdict": "pass",
+          "evidence": "A18-1 (161) identifies Business occupancy, a fully sprinklered building, and the longest annotated travel distance as 137 ft / 41.75 m. This is below the 300 ft / 91.44 m limit for sprinklered Group B in 2024 IBC Table 1017.2. Ordinance 20250410-045 does not amend §1017.2."
+        },
+        {
+          "check": "C3",
+          "element": "Second Floor",
+          "verdict": "pass",
+          "evidence": "A18-2 (162) identifies Business occupancy, a fully sprinklered building, and the longest annotated travel distance as 153 ft / 46.65 m. This is below the 300 ft / 91.44 m limit for sprinklered Group B in 2024 IBC Table 1017.2."
+        },
+        {
+          "check": "C4",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Table row (三) applies, requiring stair and landing width at least 1200 mm, riser at most 200 mm, and tread at least 240 mm. The IFC's 1000 mm stair width fails; the wider drawing arrangement could comply only if its finished statutory width is at least 1200 mm. The actual riser/tread property values comply, but the conflicting literal flight riser attributes do not.",
+          "evidence": "IfcStair #65707: PSet_Revit_Dimensions.Width = 1.000 m; Pset_StairCommon.RiserHeight = 0.1757692307694019 m and TreadLength = 0.280 m. Landing #65550 geometry has a 1.150 m return depth. A11-1 (122) shows different flight/landing construction, including 1210 mm landing dimensions and a 2685 mm two-flight arrangement. Second Floor office IfcSpaces alone total 219.603 m² in PSet_Revit_Dimensions.Area, exceeding the 200 m² habitable-room trigger; these include #22634, #22746, #22851, #29052, #29303, #30167, #30467, #32331, #33006, #33097, #33194 and #34286."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Row (三), not the 750 mm residual category, applies. IFC width 1000 mm fails the 1200 mm requirement. The drawings' nominal 1210 mm half-stair dimensions are potentially sufficient, but finished widths, the permitted handrail exclusion and landing dimensions must be reconciled. Actual riser/tread properties comply; literal flight riser attributes fail.",
+          "evidence": "IfcStair #87374: Width = 1.000 m, actual riser = 0.1757692307694019 m, tread = 0.280 m. Landing #87220 has 1.150 m return depth. A11-3 (124): 1210 mm half-stair and landing dimensions, 176 mm risers, 279 mm treads. Second Floor office spaces alone provide 219.603 m² of habitable area, establishing row (三)'s trigger."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "Row (三) requires 1200 mm stair and landing width. The IFC's 1000 mm stair width fails, whereas the drawing's 1210 mm dimensions could satisfy the requirement if they resolve to at least 1200 mm after the applicable measurement rules. Actual riser/tread values comply; the inconsistent literal flight riser attributes do not.",
+          "evidence": "IfcStair #96096: Width = 1.000 m, actual riser = 0.1757692307694019 m, tread = 0.280 m. Landing #95941 has 1.150 m return depth. A11-2 (123): 1210 mm half-stair dimensions, 176 mm risers and 279 mm treads. Second Floor office spaces alone total 219.603 m², exceeding row (三)'s 200 m² trigger."
+        },
+        {
+          "check": "C5",
+          "element": "First Floor",
+          "verdict": "uncertain",
+          "deciding": "The 41.75 m longest route is within the 45 m limit for purpose-group-5 'elsewhere' where alternative escape directions are available, but not within the 18 m one-direction limit. Paragraph 2.7 additionally requires each initial one-direction section to meet its separate limit. Its controlling length is not scheduled. Also, a building primarily for disabled people would have 9 m/18 m limits rather than 18 m/45 m; that operational classification is not established.",
+          "evidence": "A18-1 (161): longest annotated travel distance 137 ft / 41.75 m and multiple final exits. Approved Document B Volume 2 paragraph 2.7 and Table 2.1: purpose group 5 'elsewhere' limits 18 m one-direction and 45 m alternative-direction; primarily-disabled-person premises have 9 m and 18 m limits."
+        },
+        {
+          "check": "C5",
+          "element": "Second Floor",
+          "verdict": "fail",
+          "deciding": "The longest annotated travel distance, 46.65 m, exceeds even the most permissive applicable purpose-group-5 limit of 45 m. A one-direction route, seating-in-rows classification, or primarily-disabled-person classification would impose a shorter limit and would not change the failure.",
+          "evidence": "A18-2 (162): 153 ft / 46.65 m travel-distance annotation to the enclosed stair. Approved Document B Volume 2 paragraph 2.7 and Table 2.1: maximum purpose-group-5 alternative-direction limit = 45 m."
+        },
+        {
+          "check": "C6",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The IFC's 1000 mm width is below the 1100 mm Table 3.1 minimum applicable to an assembly-area stair outside the under-100 m² exception. The drawings show a wider arrangement. Resolve the effective unobstructed width, area and number served, and whether a smaller-stair category is available. Width must also be at least that of the exits giving access and must not reduce towards the final exit.",
+          "evidence": "IfcStair #65707 PSet_Revit_Dimensions.Width = 1.000 m; A11-1 (122) shows the wider 2685 mm overall two-flight arrangement. A18-2 (162) does not assign a population to this stair. ADB paragraph 3.10 and Table 3.1: 1100 mm for the applicable assembly category up to 220 people; the residual category is limited to 50 people and has an 800 mm minimum, potentially increased to 1000 mm for accessibility."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "IFC width 1000 mm fails the 1100 mm assembly-stair minimum, whereas a drawing-based effective width of at least 1100 mm could satisfy it for up to 220 people. The number actually served, any relevant small-area exception, and the effective width after finishes and handrails are unresolved. The 147-person annotation is capacity, not demand.",
+          "evidence": "IfcStair #87374 Width = 1.000 m. A11-3 (124) gives 1210 mm half-stair dimensions. A18-2 (162) states stairwell exit capacity = 147 people. ADB paragraph 3.10 and Table 3.1 govern the minimum, incoming-exit width and absence of narrowing."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "IFC width 1000 mm is below the applicable normal 1100 mm assembly-stair minimum. The drawings potentially provide sufficient width, but their effective clear width and actual population served are not reconciled. A qualifying smaller stair serving at most 50 people could have a lower minimum; a population above 220 requires further sizing.",
+          "evidence": "IfcStair #96096 Width = 1.000 m. A11-2 (123) shows 1210 mm half-stair dimensions. A18-2 (162) gives exit capacity = 147 people, not assigned occupant load. ADB paragraph 3.10 and Table 3.1 apply."
+        }
+      ],
+      "doors_not_certain": [
+        {
+          "guid": "0mxk1RW8H5mvX1dNnpRqy_",
+          "verdict": "uncertain",
+          "reason": "Door 1E15A: IfcDoor #104264 OverallWidth = 1830 mm with two 915 mm leaves; A5-2 (80) schedules PR 760, meaning two 760 mm leaves. A 760 mm leaf cannot provide the required 32 in clear width, whereas the modeled 915 mm leaves can. Resolve the source conflict; combined pair width is not sufficient evidence for an independently usable leaf."
+        },
+        {
+          "guid": "1qc5HjZvrCsga38tqxQ3VC",
+          "verdict": "uncertain",
+          "reason": "Door 1C11: IfcDoor #213477 OverallWidth = 1730 mm; its modeled leaves are 865 mm wide and 51 mm thick. Subtracting thickness alone leaves 814 mm, not a verified face-to-stop clearance at 90°. The hinge/meeting-stile arrangement determines whether the 32 in requirement is satisfied. A5-1 (79) instead schedules PR 915 with 45 mm thickness, which has substantially more clearance."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tWA",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A09tp1: IfcDoor #232299 OverallWidth = 865 mm and PSet_Revit_Type_Dimensions.Thickness = 25 mm, potentially allowing approximately 840 mm before other deductions. A13-2 (133) depicts the corresponding upper, non-accessible cubicle with a materially narrower door, approximately 750 mm when scaled against the adjacent 1475 mm dimension. That drawing configuration cannot provide 32 in clear width. Resolve model versus drawing."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tut",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C24tp2: IfcDoor #232872 OverallWidth = 865 mm and leaf thickness = 25 mm. A13-2 (133) depicts the upper 920 mm-wide cubicle with a roughly 600–650 mm door, scaled against the 920 mm and 1525 mm dimensions. The drawing configuration fails 32 in clear width, whereas the modeled leaf can comply. The accessible-route assumption prevents excluding this ordinary cubicle door."
+        }
+      ],
+      "conflicts_found": [
+        "All three IfcStair objects have PSet_Revit_Dimensions.Width = 1000 mm. A11-1 through A11-3 (122–124) depict wider stairs: 1210 mm half-stair dimensions for stairs #2 and #3, and a 2685 mm two-flight arrangement for stair #1. The IFC physical flight widths also differ from their own width property: 1100 mm for stairs #1 and #3, and 1050 mm for stair #2.",
+        "All three IFC stairs have 26 risers divided into flights of 12 and 14 risers; A11-1 through A11-3 show 13 risers in each flight. The modeled intermediate landing elevation is consequently different from the drawings' 2285 mm intermediate level.",
+        "Stair common property sets give actual risers of 175.769 mm and treads of 280 mm; A11-1 through A11-3 specify 176 mm risers and 279 mm treads. The small numerical differences alone do not change compliance with the printed metric IBC limits.",
+        "The six IfcStairFlight.RiserHeight attributes contain 0.576670704624022 and TreadLength attributes approximately 0.918635170603675 in a metre-based IFC. Their common property sets and physical geometry instead give 0.1757692307694019 m and 0.280 m. The raw attributes numerically match the feet equivalents, indicating an apparent unit-export error; the drawings support the property-set/geometry interpretation.",
+        "The IFC intermediate landing slabs have approximately 1150 mm return depths; A11-1 through A11-3 show 1210 mm landing dimensions and different associated construction.",
+        "Door 1E15A is modeled as two 915 mm leaves, total 1830 mm, but A5-2 (80) schedules two 760 mm leaves.",
+        "Door 1C11 is modeled as two 865 mm leaves, total 1730 mm, but A5-1 (79) schedules two 915 mm leaves.",
+        "Door 1BC3 is modeled as a 1000 mm single leaf; A5-1 (79) schedules 1065 mm.",
+        "Door 1EC4 is modeled as a single 1220 mm leaf; A5-2 (80) schedules an unequal pair of 1220 mm and 305 mm leaves.",
+        "The modeled glazed entrance pair has 1800 mm overall width with approximately 900 mm leaves; the corresponding entrance pair on A5-1 (79) is scheduled PR 915. The model labels it 1CA1 rather than the drawing's 1AC1.",
+        "Doors 1DC5a and 1DC5b are modeled approximately 901.001 mm and 899.549 mm wide and 2325 mm high; A5-2 (80) schedules each at 915 mm wide and 2355 mm high.",
+        "The ordinary cubicle doors corresponding to 1A09tp1 and 2C24tp2 are represented as 865 mm leaves in the IFC but drawn materially narrower on A13-2 (133), below the ADA clear-width requirement.",
+        "The modeled flush-door families use 51 mm leaf thickness and generally 2134 mm height; A5-1 through A5-3 (79–81) generally schedule 45 mm thickness and 2135 mm height. A5-5 (83) additionally depicts door stops absent from the simplified IFC trim geometry."
+      ]
+    },
+    {
+      "verdicts": [
+        {
+          "check": "C1",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The governing stair width and assigned occupant load are unresolved. The IFC Width property is 1000 mm: sufficient for the 914 mm exception where fewer than 50 occupants are served, but insufficient for the ordinary 1118 mm minimum. The drawing depicts a wider stair. Capacity sizing under the section's reference to §1005 can also govern; no assigned occupant load is established.",
+          "evidence": "Clinic_A_20110906.ifc, IfcStair #65707, PSet_Revit_Dimensions.Width = 1.0 m. Its IfcStairFlight #65319 and #65525 geometry spans 1100 mm transversely. Stair 1 drawing A11-1, sheet 122, shows 2685 mm overall across the two equally divided flights, with separately detailed central and outside construction. A18-2, sheet 162, does not assign an occupant load to this stair."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "The IFC's 1000 mm Width property fails the ordinary 1118 mm minimum but can satisfy the 914 mm exception for fewer than 50 occupants. Drawing A11-3 instead shows 1210 mm flight dimensions. The assigned occupant load and reconciled finished width decide compliance; the drawing's 147-person exit capacity is not an assigned occupant load.",
+          "evidence": "IfcStair #87374, PSet_Revit_Dimensions.Width = 1.0 m; constituent IfcStairFlight #86989 and #87195 have 1100 mm transverse geometry. This is the northern stair, Stair 3, corresponding to A11-3, sheet 124, with 2420 mm divided into two 1210 mm flight dimensions. A18-2, sheet 162, labels this stairwell's exit capacity as 147 people."
+        },
+        {
+          "check": "C1",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The IFC's 1000 mm Width property fails the ordinary 1118 mm minimum but can satisfy the 914 mm exception for fewer than 50 occupants. Drawing A11-2 instead shows 1210 mm flight dimensions. The assigned occupant load and reconciled finished width decide compliance; exit capacity is not occupant load.",
+          "evidence": "IfcStair #96096, PSet_Revit_Dimensions.Width = 1.0 m; constituent IfcStairFlight #95710 and #95916 have 1050 mm transverse geometry. This is the southern stair, Stair 2, corresponding to A11-2, sheet 123, with two 1210 mm flight dimensions. A18-2, sheet 162, labels this stairwell's exit capacity as 147 people."
+        },
+        {
+          "check": "C2",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "pass",
+          "deciding": "",
+          "evidence": "IfcStair #65707, Pset_StairCommon.RiserHeight = 175.769230769 mm and TreadLength = 280 mm; PSet_Revit_Dimensions confirms those actual dimensions. A11-1, sheet 122, specifies 176 mm risers and 279 mm treads. Both sources satisfy §1011.5.2's published 102–178 mm riser range and 279 mm minimum tread depth."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "pass",
+          "deciding": "",
+          "evidence": "IfcStair #87374, Pset_StairCommon.RiserHeight = 175.769230769 mm and TreadLength = 280 mm; PSet_Revit_Dimensions confirms those actual dimensions. A11-3, sheet 124, specifies 176 mm risers and 279 mm treads. Both sources satisfy §1011.5.2's published 102–178 mm riser range and 279 mm minimum tread depth."
+        },
+        {
+          "check": "C2",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "pass",
+          "deciding": "",
+          "evidence": "IfcStair #96096, Pset_StairCommon.RiserHeight = 175.769230769 mm and TreadLength = 280 mm; PSet_Revit_Dimensions confirms those actual dimensions. A11-2, sheet 123, specifies 176 mm risers and 279 mm treads. Both sources satisfy §1011.5.2's published 102–178 mm riser range and 279 mm minimum tread depth."
+        },
+        {
+          "check": "C3",
+          "element": "First Floor",
+          "verdict": "pass",
+          "deciding": "",
+          "evidence": "A18-1, sheet 161, identifies BUSINESS occupancy, states BUILDING IS FULLY SPRINKLERED, and marks the longest travel distance as 137 ft / 41.75 m. This is below Table 1017.2's Group B sprinklered limit of 300 ft / 91.44 m, and even below its unsprinklered limit of 200 ft / 60.96 m. Ordinance 20250410-045 does not replace §1017.2."
+        },
+        {
+          "check": "C3",
+          "element": "Second Floor",
+          "verdict": "pass",
+          "deciding": "",
+          "evidence": "A18-2, sheet 162, identifies BUSINESS occupancy, states BUILDING IS FULLY SPRINKLERED, and marks the longest travel distance as 153 ft / 46.63 m. This is below Table 1017.2's Group B sprinklered limit of 300 ft / 91.44 m, and even below its unsprinklered limit of 200 ft / 60.96 m. Ordinance 20250410-045 does not replace §1017.2."
+        },
+        {
+          "check": "C4",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "Article 23(1), table row (三), applies because the immediately upper floor has more than 200 m² of habitable rooms. It requires stair and landing width at least 1200 mm, risers at most 200 mm, and treads at least 240 mm. The IFC's 1000 mm Width property and 1100 mm flight geometry fail width; the drawing depicts a wider arrangement that can meet 1200 mm. Reconciled statutory stair and landing widths, allowing the Article 23(3) handrail disregard, decide the result.",
+          "evidence": "IfcStair #65707: PSet_Revit_Dimensions.Width = 1000 mm; Pset_StairCommon.RiserHeight = 175.769 mm and TreadLength = 280 mm. IfcStairFlight #65319/#65525 span 1100 mm transversely; landing IfcSlab #65550 has a 1150 mm plan depth. A11-1, sheet 122, depicts 2685 mm across the equally divided flights and landing dimensions including 1210 and 1489 mm, with 176 mm risers and 279 mm treads. Upper-floor habitable-room evidence alone exceeds 200 m²: IfcSpace 2D18 = 84.803, 2C17 = 30.560, 2D20 = 30.712, 2D21 = 27.303, 2A01 = 26.331 and 2A14 = 32.838 m², from PSet_Revit_Dimensions.Area."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "Article 23(1), row (三), requires 1200 mm stair and landing width, not the 750 mm residual-category width. The IFC width is insufficient; A11-3 shows 1210 mm flight and landing dimensions. Whether the reconciled finished dimensions retain at least 1200 mm under Article 23(3)'s permitted handrail disregard decides compliance. Riser and tread dimensions pass in both sources.",
+          "evidence": "IfcStair #87374: PSet_Revit_Dimensions.Width = 1000 mm; Pset_StairCommon.RiserHeight = 175.769 mm, TreadLength = 280 mm. IfcStairFlight #86989/#87195 span 1100 mm transversely; landing #87220 has a 1150 mm plan depth. Stair 3 drawing A11-3, sheet 124, shows 2420 mm divided into two 1210 mm flight dimensions, a 1210 mm landing dimension, 176 mm risers and 279 mm treads. The immediately upper floor's habitable rooms exceed 200 m², established by the IfcSpace areas identified in the Stair 1 C4 evidence."
+        },
+        {
+          "check": "C4",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "Article 23(1), row (三), requires 1200 mm stair and landing width. The IFC width is insufficient; A11-2 shows 1210 mm flight and landing dimensions. Whether the reconciled finished dimensions retain at least 1200 mm under Article 23(3)'s permitted handrail disregard decides compliance. Riser and tread dimensions pass in both sources.",
+          "evidence": "IfcStair #96096: PSet_Revit_Dimensions.Width = 1000 mm; Pset_StairCommon.RiserHeight = 175.769 mm, TreadLength = 280 mm. IfcStairFlight #95710/#95916 span 1050 mm transversely; landing #95941 has a 1150 mm plan depth. Stair 2 drawing A11-2, sheet 123, shows two 1210 mm flight dimensions and landing dimensions including 1210, 1263, 1489 and 1542 mm, with 176 mm risers and 279 mm treads. The immediately upper floor's habitable rooms exceed 200 m², established by the IfcSpace areas identified in the Stair 1 C4 evidence."
+        },
+        {
+          "check": "C5",
+          "element": "First Floor",
+          "verdict": "uncertain",
+          "deciding": "The 41.75 m longest route is below the 45 m limit for purpose-group-5 'elsewhere' where alternative directions are available, but exceeds the 18 m alternative-direction limit for buildings primarily for disabled people and the 32 m limit for areas with seating in rows. Being an outpatient clinic does not establish which of these subcategories applies. The relevant use and escape-direction conditions must be resolved.",
+          "evidence": "A18-1, sheet 161, marks 137 ft / 41.75 m and shows multiple exits. Approved Document B Volume 2 paragraph 2.7 and Table 2.1: purpose group 5 limits are 9/18 m for buildings primarily for disabled people, 15/32 m for areas with seating in rows, and 18/45 m elsewhere, respectively for one direction/more than one direction."
+        },
+        {
+          "check": "C5",
+          "element": "Second Floor",
+          "verdict": "fail",
+          "deciding": "The longest marked route is 46.63 m, exceeding even the most permissive applicable purpose-group-5 alternative-direction limit of 45 m. The stricter subcategories and one-direction limits cannot change this failure.",
+          "evidence": "A18-2, sheet 162, marks 153 ft / 46.63 m. Approved Document B Volume 2 paragraph 2.7 and Table 2.1 permit no more than 45 m for purpose group 5."
+        },
+        {
+          "check": "C6",
+          "element": "3NhaIUfh12PAdrGa$S3z3M",
+          "verdict": "uncertain",
+          "deciding": "The reconciled stair width and the number of people likely to use it in a fire are unresolved. Table 3.1 permits 1000 mm for up to 150 people within its applicable main categories, requires 1100 mm for 151–220, and refers larger populations to capacity calculations. Its residual category allows 800 mm for no more than 50 people. The model's 1000 mm value can therefore pass or fail; the wider drawing changes the capacity. The input does not establish the required allocation and all paragraph 3.10 width-continuity conditions.",
+          "evidence": "IfcStair #65707, PSet_Revit_Dimensions.Width = 1000 mm; flight geometry is 1100 mm transversely. A11-1, sheet 122, depicts a wider stair, 2685 mm overall across the two flights. A18-2, sheet 162, supplies no occupant allocation to Stair 1. The floor-to-floor rise is 4570 mm, so paragraph 3.10(d)'s rule for stairs taller than 30 m is not controlling."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqIz",
+          "verdict": "uncertain",
+          "deciding": "The 147-person label is an exit-capacity statement, not proof that 147 people are likely to use the stair. A 1000 mm stair can satisfy Table 3.1 for up to 150 people, while 151–220 requires 1100 mm and larger populations require capacity calculations. The drawing's 1210 mm dimensions and the IFC's 1000 mm Width property give different capacities. The occupant allocation and finished continuous escape width decide compliance.",
+          "evidence": "IfcStair #87374, PSet_Revit_Dimensions.Width = 1000 mm; flight geometry spans 1100 mm. A11-3, sheet 124, shows 1210 mm flight dimensions. A18-2, sheet 162, says STAIR WELL EXIT CAPACITY = 147 PEOPLE. A5-3, sheet 81, schedules upper-floor stair door 2CS3 at 915 mm nominal width. Rise is 4570 mm."
+        },
+        {
+          "check": "C6",
+          "element": "0mxk1RW8H5mvX1dNnpRqBK",
+          "verdict": "uncertain",
+          "deciding": "The assigned fire-evacuation population is not fixed by the 147-person exit-capacity label. A 1000 mm stair can satisfy Table 3.1 for up to 150 people, whereas 151–220 requires 1100 mm and greater populations require capacity calculations. The drawing's 1210 mm dimensions conflict with the IFC's 1000 mm Width property. The occupant allocation and finished continuous escape width decide compliance.",
+          "evidence": "IfcStair #96096, PSet_Revit_Dimensions.Width = 1000 mm; flight geometry spans 1050 mm. A11-2, sheet 123, shows 1210 mm flight dimensions. A18-2, sheet 162, says STAIR WELL EXIT CAPACITY = 147 PEOPLE. A5-2, sheet 80, schedules upper-floor stair door 2BS2 at 915 mm nominal width. Rise is 4570 mm."
+        }
+      ],
+      "doors_not_certain": [
+        {
+          "guid": "1qc5HjZvrCsga38tqxQ3VC",
+          "verdict": "uncertain",
+          "reason": "Door 1C11: IFC IfcDoor #213477 OverallWidth = 1730 mm; its two modeled leaves are each 865 mm wide and 51 mm thick, leaving approximately 814 mm for one open leaf before any additional stop/astragal deduction. This is marginal against 32 in (815 mm as published), so the face-to-stop dimension must be established rather than treating the pair's overall width as clear width. A5-1, sheet 79, instead schedules PR 915 mm leaves, 45 mm thick, which provide substantially greater clearance. Reconcile the leaf sizes and establish whether at least one active leaf supplies the required clear opening."
+        },
+        {
+          "guid": "35QeWibpT4DfyH3NIf2nOv",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C08tp1: IFC OverallWidth = 865 mm and PSet_Revit_Type_Dimensions.Thickness = 25 mm, giving 840 mm before stop/hinge deductions. A13-2 and A13-3, sheets 133–134, do not dimension its face-to-stop clear opening. A remaining opening at least 815 mm passes; a deduction exceeding the approximately 25 mm metric margin fails. Nominal width alone does not establish the required opening."
+        },
+        {
+          "guid": "0ClPCUC7jCQRnj1dhupHk0",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C07tp1: IFC OverallWidth = 865 mm and leaf thickness = 25 mm, giving 840 mm before stop/hinge deductions. A13-2/A13-3, sheets 133–134, do not establish a dimensioned face-to-stop clear width. The deciding value is whether the final 90-degree opening is at least 815 mm or below it."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tWA",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A09tp1: IFC OverallWidth = 865 mm and leaf thickness = 25 mm. The nominal post-leaf allowance is 840 mm, but A13-2/A13-3, sheets 133–134, do not dimension the stop/hinge deduction or final 90-degree clear opening. At least 815 mm passes; less than 815 mm fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tjC",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A09tp2: IFC OverallWidth = 865 mm and leaf thickness = 25 mm. The nominal post-leaf allowance is 840 mm, but A13-2/A13-3, sheets 133–134, do not establish the final face-to-stop opening. At least 815 mm passes; less than 815 mm fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tpH",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 1A12tp1: IFC OverallWidth = 865 mm and leaf thickness = 25 mm. The nominal post-leaf allowance is 840 mm, but A13-2/A13-3, sheets 133–134, do not establish the final face-to-stop opening. At least 815 mm passes; less than 815 mm fails."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tsf",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C23tp1: IFC OverallWidth = 865 mm and leaf thickness = 25 mm. A13-2/A13-3, sheets 133–134, depict the partition but do not dimension its final face-to-stop opening. The modeled nominal allowance is 840 mm before stop/hinge deductions; compliance depends on retaining at least 815 mm."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tw0",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C24tp1: IFC OverallWidth = 865 mm and leaf thickness = 25 mm. A13-2/A13-3, sheets 133–134, do not provide a dimensioned 90-degree face-to-stop opening, and the compartment arrangements must be reconciled with the model. The deciding width is at least 815 mm versus less than 815 mm; 840 mm is only the nominal allowance before stop/hinge deductions."
+        },
+        {
+          "guid": "3qpE7fVkr8dRZ2wfCc6tut",
+          "verdict": "uncertain",
+          "reason": "Toilet-partition door 2C24tp2: IFC OverallWidth = 865 mm and leaf thickness = 25 mm. A13-2/A13-3, sheets 133–134, do not provide a dimensioned 90-degree face-to-stop opening, and the compartment arrangements must be reconciled with the model. The deciding width is at least 815 mm versus less than 815 mm; 840 mm is only the nominal allowance before stop/hinge deductions."
+        }
+      ],
+      "conflicts_found": [
+        "All three IfcStair elements have PSet_Revit_Dimensions.Width = 1000 mm, whereas A11-1, sheet 122, depicts Stair 1 within a 2685 mm equally divided overall arrangement, and A11-2/A11-3, sheets 123–124, dimension the Stair 2/3 flights at 1210 mm. These are not interchangeable measurements and require reconciliation of the finished statutory width.",
+        "Within the IFC itself, the 1000 mm stair Width properties disagree with the transverse flight geometry: 1100 mm for 3NhaIUfh12PAdrGa$S3z3M and 0mxk1RW8H5mvX1dNnpRqIz, and 1050 mm for 0mxk1RW8H5mvX1dNnpRqBK.",
+        "The IFC decomposes each stair into flights with 12 and 14 risers and 11 and 13 treads. A11-1 through A11-3, sheets 122–124, show 13 risers and 12 treads in each flight. Consequently the intermediate landing is at a different level even though both sources have 26 total risers and a 4570 mm floor-to-floor rise.",
+        "The IFC specifies 280 mm treads; A11-1 through A11-3 specify 279 mm treads. IFC actual riser height is 175.769230769 mm, while the drawings annotate 176 mm, the latter being a rounded dimension.",
+        "Door 1C11, GUID 1qc5HjZvrCsga38tqxQ3VC, is a 1730 mm equal-leaf pair in the IFC, with two 865 mm leaves; A5-1, sheet 79, schedules PR 915 mm leaves.",
+        "The IFC flush-door families use 51 mm leaf thickness, whereas the corresponding door schedules A5-1 through A5-3, sheets 79–81, generally specify 45 mm. Their modeled nominal height is 2134 mm versus 2135 mm in the schedules.",
+        "The modeled main-entry glass pair, represented twice by GUIDs 0otfaO0qPDAhynjJ6DnLXx and 3o5ntlA212uQCF0q6eQsZI, has 1800 mm overall width and mark 1CA1; the corresponding main-entry schedule row on A5-1, sheet 79, is 1AC1 with PR 915 mm leaves.",
+        "The IFC toilet-partition family is 1500 mm high, whereas A13-3, sheet 134, annotates 1830 mm partition-door height above a 200 mm bottom clearance. This height disagreement does not itself determine the requested clear-width check."
+      ]
+    }
+  ],
+  "notes": []
+}

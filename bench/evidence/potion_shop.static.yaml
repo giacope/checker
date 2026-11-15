@@ -1,0 +1,367 @@
+subject:
+  kind: system
+  id: potion_shop
+sources:
+- id: static
+  kind: static_analysis
+  describes: potion_shop
+  adapter: adapters.code_elixir
+  adapter_version: 0.1.0
+  commit: d5a2db0a3a14ff548362d199ff656c35b29b4c5b
+  files_analysed: 55
+  unparsed: []
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: lib/carafe/accounts/user.ex:66
+  - value: true
+    source: static
+    at: lib/carafe/accounts/user.ex:129
+  - value: true
+    source: static
+    at: lib/carafe_web/router.ex:88
+  password_min_length:
+  - value: 12
+    source: static
+    at: lib/carafe/accounts/user.ex:51
+  password_max_length:
+  - value: 72
+    source: static
+    at: lib/carafe/accounts/user.ex:51
+  - value: 72
+    source: static
+    at: lib/carafe/accounts/user.ex:65
+  password_composition_rules:
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:51
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:65
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:66
+  password_blocklist_check:
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:51
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:65
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:66
+  password_periodic_change:
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:66
+  login_rate_limited:
+  - value: false
+    source: static
+    at: lib/carafe_web/router.ex:88
+  processes_personal_data:
+  - value: true
+    source: static
+    at: lib/carafe/accounts/user.ex:6
+  account_erasure:
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:5
+  account_data_export:
+  - value: false
+    source: static
+    at: lib/carafe/accounts/user.ex:5
+  csrf_protection:
+  - value: false
+    source: static
+    at: lib/carafe_web/router.ex:39
+  tls_enforced:
+  - value: false
+    source: static
+    at: config/prod.exs:12
+  - value: false
+    source: static
+    at: config/runtime.exs:54
+  hsts:
+  - value: false
+    source: static
+    at: config/prod.exs:12
+  - value: false
+    source: static
+    at: config/runtime.exs:54
+  content_security_policy:
+  - value: false
+    source: static
+    at: lib/carafe_web/router.ex:12
+  - value: false
+    source: static
+    at: lib/carafe_web/router.ex:21
+  debug_in_production:
+  - value: false
+    source: static
+    at: config/prod.exs:12
+  - value: false
+    source: static
+    at: config/runtime.exs:54
+  log_redacts_credentials:
+  - value: false
+    source: static
+    at: mix.lock:34
+elements:
+- type: PasswordStore
+  id: PasswordStore@lib/carafe/accounts/user.ex:66
+  at: lib/carafe/accounts/user.ex:66
+  facts:
+    algorithm:
+    - value: bcrypt
+      source: static
+      at: lib/carafe/accounts/user.ex:66
+    salted:
+    - value: true
+      source: static
+      at: lib/carafe/accounts/user.ex:66
+- type: PasswordStore
+  id: PasswordStore@lib/carafe/accounts/user.ex:129
+  at: lib/carafe/accounts/user.ex:129
+  facts:
+    algorithm:
+    - value: bcrypt
+      source: static
+      at: lib/carafe/accounts/user.ex:129
+    salted:
+    - value: true
+      source: static
+      at: lib/carafe/accounts/user.ex:129
+- type: Query
+  id: Query@lib/carafe/accounts.ex:26
+  at: lib/carafe/accounts.ex:26
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/carafe/accounts.ex:26
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe/accounts.ex:26
+- type: Query
+  id: Query@lib/carafe/accounts.ex:43
+  at: lib/carafe/accounts.ex:43
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/carafe/accounts.ex:43
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe/accounts.ex:43
+- type: Query
+  id: Query@lib/carafe/accounts.ex:61
+  at: lib/carafe/accounts.ex:61
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/carafe/accounts.ex:61
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe/accounts.ex:61
+- type: Query
+  id: Query@lib/carafe/potions.ex:9
+  at: lib/carafe/potions.ex:9
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/carafe/potions.ex:9
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe/potions.ex:9
+- type: Query
+  id: Query@lib/carafe/potions.ex:20
+  at: lib/carafe/potions.ex:20
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: lib/carafe/potions.ex:20
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe/potions.ex:20
+- type: Query
+  id: Query@lib/carafe/potions.ex:35
+  at: lib/carafe/potions.ex:35
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/carafe/potions.ex:35
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe/potions.ex:35
+- type: Query
+  id: Query@lib/carafe/potions.ex:48
+  at: lib/carafe/potions.ex:48
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: lib/carafe/potions.ex:48
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe/potions.ex:48
+- type: Cookie
+  id: Cookie@lib/carafe_web/controllers/user_auth.ex:40
+  at: lib/carafe_web/controllers/user_auth.ex:40
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: lib/carafe_web/controllers/user_auth.ex:40
+    secure:
+    - value: false
+      source: static
+      at: lib/carafe_web/controllers/user_auth.ex:40
+    http_only:
+    - value: true
+      source: static
+      at: lib/carafe_web/controllers/user_auth.ex:40
+    same_site:
+    - value: lax
+      source: static
+      at: lib/carafe_web/controllers/user_auth.ex:40
+- type: Cookie
+  id: Cookie@lib/carafe_web/endpoint.ex:7
+  at: lib/carafe_web/endpoint.ex:7
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: lib/carafe_web/endpoint.ex:7
+    secure:
+    - value: false
+      source: static
+      at: lib/carafe_web/endpoint.ex:7
+    http_only:
+    - value: true
+      source: static
+      at: lib/carafe_web/endpoint.ex:7
+    same_site:
+    - value: unset
+      source: static
+      at: lib/carafe_web/endpoint.ex:7
+- type: Secret
+  id: Secret@config/dev.exs:11
+  at: config/dev.exs:11
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: config/dev.exs:11
+    test_or_example:
+    - value: true
+      source: static
+      at: config/dev.exs:11
+- type: Secret
+  id: Secret@config/dev.exs:31
+  at: config/dev.exs:31
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: config/dev.exs:31
+    test_or_example:
+    - value: true
+      source: static
+      at: config/dev.exs:31
+- type: Secret
+  id: Secret@priv/repo/seeds.exs:17
+  at: priv/repo/seeds.exs:17
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: priv/repo/seeds.exs:17
+    test_or_example:
+    - value: true
+      source: static
+      at: priv/repo/seeds.exs:17
+- type: HtmlOutput
+  id: HtmlOutput@lib/carafe_web/templates/potion/show.html.heex:19
+  at: lib/carafe_web/templates/potion/show.html.heex:19
+  facts:
+    untrusted_input:
+    - value: true
+      source: static
+      at: lib/carafe_web/templates/potion/show.html.heex:19
+    sanitized:
+    - value: false
+      source: static
+      at: lib/carafe_web/templates/potion/show.html.heex:19
+- type: MassAssignment
+  id: MassAssignment@lib/carafe/accounts/user.ex:34
+  at: lib/carafe/accounts/user.ex:34
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/carafe/accounts/user.ex:34
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/carafe/accounts/user.ex:34
+- type: MassAssignment
+  id: MassAssignment@lib/carafe/accounts/user.ex:80
+  at: lib/carafe/accounts/user.ex:80
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/carafe/accounts/user.ex:80
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/carafe/accounts/user.ex:80
+- type: MassAssignment
+  id: MassAssignment@lib/carafe/accounts/user.ex:102
+  at: lib/carafe/accounts/user.ex:102
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/carafe/accounts/user.ex:102
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/carafe/accounts/user.ex:102
+- type: MassAssignment
+  id: MassAssignment@lib/carafe/accounts/user.ex:109
+  at: lib/carafe/accounts/user.ex:109
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/carafe/accounts/user.ex:109
+    privileged_assignable:
+    - value: false
+      source: static
+      at: lib/carafe/accounts/user.ex:109
+- type: MassAssignment
+  id: MassAssignment@lib/carafe/reviews/schema.ex:19
+  at: lib/carafe/reviews/schema.ex:19
+  facts:
+    allowlist:
+    - value: true
+      source: static
+      at: lib/carafe/reviews/schema.ex:19
+    privileged_assignable:
+    - value: true
+      source: static
+      at: lib/carafe/reviews/schema.ex:19

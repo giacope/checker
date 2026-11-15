@@ -1,0 +1,100 @@
+# Consistency benchmark, Austin. Each question is asked of models answering
+# directly (with web access to the official sources) and of the kernel.
+# `ref` says how the kernel computes the reference answer from a pack.
+jurisdiction: City of Austin, Texas (2024 IBC as amended by Ordinance No. 20250410-045, effective 2025-07-10)
+pack: packs/austin-2024
+preamble: >
+  You are answering building-code questions for a project in the City of Austin, Texas,
+  permitted today (November 2026). Use the building code currently adopted by the City of
+  Austin, including the city's local amendments. Answer each question with the single value
+  the code requires, in the unit requested.
+questions:
+  - id: A1
+    ask: What is the maximum floor area allowance per occupant for standing space (assembly without fixed seats)? Give square feet per occupant.
+    unit: sqft
+    ref: {term: occupant_load_factor, instance: {function: assembly-standing}}
+
+  - id: A2
+    ask: A bar has 1,000 square feet of net floor area used as standing space (assembly without fixed seats). What is its occupant load? Give a whole number of persons.
+    unit: persons
+    ref: {term: occupant_load, instance: {function: assembly-standing, net_floor_area: 1000 sqft}}
+
+  - id: A3
+    ask: An office floor has 2,100 square feet of gross floor area used as business areas. What is its occupant load? Give a whole number of persons.
+    unit: persons
+    ref: {term: occupant_load, instance: {function: business, gross_floor_area: 2100 sqft}}
+
+  - id: A4
+    ask: A restaurant dining room has 3,240 square feet of net floor area with tables and chairs (assembly without fixed seats, unconcentrated). What is its occupant load? Give a whole number of persons.
+    unit: persons
+    ref: {term: occupant_load, instance: {function: assembly-unconcentrated, net_floor_area: 3240 sqft}}
+
+  - id: A5
+    ask: A data center room (information technology equipment facility) has 3,000 square feet of gross floor area. What is its occupant load? Give a whole number of persons.
+    unit: persons
+    ref: {term: occupant_load, instance: {function: information-technology-equipment, gross_floor_area: 3000 sqft}}
+
+  - id: A6
+    ask: >
+      A Group B office building is sprinklered throughout with an NFPA 13 system and has no
+      emergency voice/alarm communication system. A corridor serves an occupant load of 300.
+      It is not in a health care facility, does not serve stretcher traffic, and is not only for
+      equipment access. What is the minimum required corridor width, considering both the
+      minimum width table and egress capacity? Give inches.
+    unit: in
+    ref:
+      term: required_corridor_width
+      building: {occupancy_group: B, sprinkler_system: nfpa13, emergency_voice_alarm: false, has_dwelling_units: false, care_less_than_24h: false}
+      instance: {occupant_load: 300, mep_access_only: false, serves_stretcher_traffic: false}
+
+  - id: A7
+    ask: >
+      A Group B office building is sprinklered throughout with an NFPA 13 system and has an
+      emergency voice/alarm communication system installed in accordance with the code. A
+      corridor serves an occupant load of 300. It is not in a health care facility, does not
+      serve stretcher traffic, and is not only for equipment access. What is the minimum required
+      corridor width, considering both the minimum width table and egress capacity? Give inches.
+    unit: in
+    ref:
+      term: required_corridor_width
+      building: {occupancy_group: B, sprinkler_system: nfpa13, emergency_voice_alarm: true, has_dwelling_units: false, care_less_than_24h: false}
+      instance: {occupant_load: 300, mep_access_only: false, serves_stretcher_traffic: false}
+
+  - id: A8
+    ask: >
+      A Group B office building, sprinklered throughout with NFPA 13, no emergency voice/alarm
+      system, no dwelling units, no medical care. A corridor serves an occupant load of 30 and is
+      not only for equipment access. What is the minimum required corridor width? Give inches.
+    unit: in
+    ref:
+      term: required_corridor_width
+      building: {occupancy_group: B, sprinkler_system: nfpa13, emergency_voice_alarm: false, has_dwelling_units: false, care_less_than_24h: false}
+      instance: {occupant_load: 30, mep_access_only: false, serves_stretcher_traffic: false}
+
+  - id: A9
+    ask: >
+      A one-storey Group B outpatient surgery center, sprinklered throughout with NFPA 13, no
+      emergency voice/alarm system, provides care on a less than 24-hour basis under general
+      anesthesia that renders patients incapable of self-preservation. A corridor in the
+      procedure suite serves stretcher traffic and an occupant load of 40. What is the minimum
+      required corridor width? Give inches.
+    unit: in
+    ref:
+      term: required_corridor_width
+      building: {occupancy_group: B, sprinkler_system: nfpa13, emergency_voice_alarm: false, has_dwelling_units: false, care_less_than_24h: true, care_renders_incapable: true}
+      instance: {occupant_load: 40, mep_access_only: false, serves_stretcher_traffic: true}
+
+  - id: A10
+    ask: What is the maximum exit access travel distance in a Group B building sprinklered throughout with an NFPA 13 system? Give feet.
+    unit: ft
+    ref: {term: max_exit_access_travel_distance, building: {occupancy_group: B, sprinkler_system: nfpa13}}
+
+  - id: A11
+    ask: What is the maximum exit access travel distance in a Group B building sprinklered throughout with an NFPA 13R system (and no NFPA 13 system)? Give feet.
+    unit: ft
+    ref: {term: max_exit_access_travel_distance, building: {occupancy_group: B, sprinkler_system: nfpa13r}}
+
+  - id: A12
+    ask: What is the maximum exit access travel distance in a Group M store sprinklered throughout with an NFPA 13 system? Give feet.
+    unit: ft
+    ref: {term: max_exit_access_travel_distance, building: {occupancy_group: M, sprinkler_system: nfpa13}}

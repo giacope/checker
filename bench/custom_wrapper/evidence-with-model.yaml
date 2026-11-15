@@ -1,0 +1,504 @@
+subject:
+  kind: system
+  id: fastapi-acme
+sources:
+- id: static
+  kind: static_analysis
+  describes: fastapi-acme
+  adapter: adapters.code_static
+  adapter_version: 0.1.0
+  commit: aabb90126964a164e02aff39e7c385bb0598236d
+  files_analysed: 120
+  unparsed: []
+  models:
+  - model: acme-platform@3.2
+    language: python
+    file: acme-platform.yaml
+    sha256: 4688e7416765452646c378c17dc31acb4849742d792d203ac6f7f791a5a63c5d
+    rules: 10
+    places: 10
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: backend/app/api/routes/login.py:28
+  - value: true
+    source: static
+    at: backend/app/api/routes/private.py:32
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:112
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:119
+  - value: true
+    source: static
+    at: backend/app/core/security.py:23
+    model: acme-platform@3.2
+  - value: true
+    source: static
+    at: backend/app/core/security.py:27
+    model: acme-platform@3.2
+  - value: true
+    source: static
+    at: backend/app/crud.py:15
+  - value: true
+    source: static
+    at: backend/app/crud.py:29
+  password_min_length:
+  - value: 15
+    source: static
+    at: backend/app/crud.py:13
+    model: acme-platform@3.2
+  - value: 15
+    source: static
+    at: backend/app/crud.py:28
+    model: acme-platform@3.2
+  - value: 15
+    source: static
+    at: backend/app/models.py:22
+  - value: 15
+    source: static
+    at: backend/app/models.py:27
+  password_max_length:
+  - value: 128
+    source: static
+    at: backend/app/models.py:22
+  - value: 128
+    source: static
+    at: backend/app/models.py:27
+  - value: 128
+    source: static
+    at: backend/app/models.py:37
+  - value: 128
+    source: static
+    at: backend/app/models.py:47
+  password_composition_rules:
+  - value: false
+    source: static
+    at: backend/app/crud.py:13
+    model: acme-platform@3.2
+  - value: false
+    source: static
+    at: backend/app/crud.py:28
+    model: acme-platform@3.2
+  - value: false
+    source: static
+    at: backend/app/models.py:22
+  - value: false
+    source: static
+    at: backend/app/models.py:27
+  password_blocklist_check:
+  - value: true
+    source: static
+    at: backend/app/crud.py:13
+    model: acme-platform@3.2
+  - value: true
+    source: static
+    at: backend/app/crud.py:28
+    model: acme-platform@3.2
+  login_rate_limited:
+  - value: true
+    source: static
+    at: backend/app/api/routes/login.py:27
+    model: acme-platform@3.2
+  processes_personal_data:
+  - value: true
+    source: static
+    at: backend/app/api/routes/private.py:17
+  - value: true
+    source: static
+    at: backend/app/api/routes/private.py:19
+  - value: true
+    source: static
+    at: backend/app/models.py:14
+  - value: true
+    source: static
+    at: backend/app/models.py:17
+  - value: true
+    source: static
+    at: backend/app/models.py:26
+  - value: true
+    source: static
+    at: backend/app/models.py:28
+  - value: true
+    source: static
+    at: backend/app/models.py:33
+  - value: true
+    source: static
+    at: backend/app/models.py:36
+  account_erasure:
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:143
+  - value: true
+    source: static
+    at: backend/app/api/routes/users.py:233
+elements:
+- type: PasswordStore
+  id: PasswordStore@backend/app/api/routes/private.py:32
+  at: backend/app/api/routes/private.py:32
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/api/routes/private.py:32
+    salted:
+    - value: true
+      source: static
+      at: backend/app/api/routes/private.py:32
+- type: PasswordStore
+  id: PasswordStore@backend/app/api/routes/users.py:112
+  at: backend/app/api/routes/users.py:112
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/api/routes/users.py:112
+    salted:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:112
+- type: PasswordStore
+  id: PasswordStore@backend/app/api/routes/users.py:119
+  at: backend/app/api/routes/users.py:119
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/api/routes/users.py:119
+    salted:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:119
+- type: PasswordStore
+  id: PasswordStore@backend/app/core/security.py:23
+  at: backend/app/core/security.py:23
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/core/security.py:23
+      model: acme-platform@3.2
+    salted:
+    - value: true
+      source: static
+      at: backend/app/core/security.py:23
+      model: acme-platform@3.2
+- type: PasswordStore
+  id: PasswordStore@backend/app/core/security.py:27
+  at: backend/app/core/security.py:27
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/core/security.py:27
+      model: acme-platform@3.2
+    salted:
+    - value: true
+      source: static
+      at: backend/app/core/security.py:27
+      model: acme-platform@3.2
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:15
+  at: backend/app/crud.py:15
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:15
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:15
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:29
+  at: backend/app/crud.py:29
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:29
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:29
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:53
+  at: backend/app/crud.py:53
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:53
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:53
+- type: PasswordStore
+  id: PasswordStore@backend/app/crud.py:55
+  at: backend/app/crud.py:55
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: backend/app/crud.py:55
+    salted:
+    - value: true
+      source: static
+      at: backend/app/crud.py:55
+- type: Query
+  id: Query@backend/app/api/routes/items.py:27
+  at: backend/app/api/routes/items.py:27
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:27
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:27
+- type: Query
+  id: Query@backend/app/api/routes/items.py:42
+  at: backend/app/api/routes/items.py:42
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:42
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:42
+- type: Query
+  id: Query@backend/app/api/routes/items.py:53
+  at: backend/app/api/routes/items.py:53
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:53
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:53
+- type: Query
+  id: Query@backend/app/api/routes/items.py:86
+  at: backend/app/api/routes/items.py:86
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:86
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:86
+- type: Query
+  id: Query@backend/app/api/routes/items.py:106
+  at: backend/app/api/routes/items.py:106
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/items.py:106
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/items.py:106
+- type: Query
+  id: Query@backend/app/api/routes/users.py:50
+  at: backend/app/api/routes/users.py:50
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:50
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:50
+- type: Query
+  id: Query@backend/app/api/routes/users.py:172
+  at: backend/app/api/routes/users.py:172
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:172
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:172
+- type: Query
+  id: Query@backend/app/api/routes/users.py:200
+  at: backend/app/api/routes/users.py:200
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:200
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:200
+- type: Query
+  id: Query@backend/app/api/routes/users.py:224
+  at: backend/app/api/routes/users.py:224
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:224
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:224
+- type: Query
+  id: Query@backend/app/api/routes/users.py:232
+  at: backend/app/api/routes/users.py:232
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: backend/app/api/routes/users.py:232
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:232
+- type: Query
+  id: Query@backend/app/crud.py:39
+  at: backend/app/crud.py:39
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: backend/app/crud.py:39
+      model: acme-platform@3.2
+    untrusted_input:
+    - value: true
+      source: static
+      at: backend/app/crud.py:39
+      model: acme-platform@3.2
+- type: Cookie
+  id: Cookie@frontend/src/components/ui/sidebar.tsx:96
+  at: frontend/src/components/ui/sidebar.tsx:96
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: frontend/src/components/ui/sidebar.tsx:96
+    http_only:
+    - value: false
+      source: static
+      at: frontend/src/components/ui/sidebar.tsx:96
+    same_site:
+    - value: unset
+      source: static
+      at: frontend/src/components/ui/sidebar.tsx:96
+- type: TokenVerification
+  id: TokenVerification@backend/app/api/deps.py:34
+  at: backend/app/api/deps.py:34
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: backend/app/api/deps.py:34
+      model: acme-platform@3.2
+    allows_none_alg:
+    - value: false
+      source: static
+      at: backend/app/api/deps.py:34
+      model: acme-platform@3.2
+- type: TokenVerification
+  id: TokenVerification@backend/app/utils.py:122
+  at: backend/app/utils.py:122
+  facts:
+    verifies_signature:
+    - value: false
+      source: static
+      at: backend/app/utils.py:122
+      model: acme-platform@3.2
+    allows_none_alg:
+    - value: true
+      source: static
+      at: backend/app/utils.py:122
+      model: acme-platform@3.2
+- type: Secret
+  id: Secret@.env:6
+  at: .env:6
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: .env:6
+- type: Secret
+  id: Secret@.env:8
+  at: .env:8
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: .env:8
+- type: Secret
+  id: Secret@.env:17
+  at: .env:17
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: .env:17
+- type: LogStatement
+  id: LogStatement@backend/app/api/routes/login.py:68
+  at: backend/app/api/routes/login.py:68
+  facts:
+    logs_credentials:
+    - value: true
+      source: static
+      at: backend/app/api/routes/login.py:68
+      model: acme-platform@3.2
+    logs_personal_data:
+    - value: true
+      source: static
+      at: backend/app/api/routes/login.py:68
+      model: acme-platform@3.2
+- type: Transfer
+  id: Transfer@backend/app/api/routes/users.py:161
+  at: backend/app/api/routes/users.py:161
+  facts:
+    recipient:
+    - value: Acme Analytics (hosted by Segment, Inc., United States)
+      source: static
+      at: backend/app/api/routes/users.py:161
+      model: acme-platform@3.2
+    personal_data:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:161
+      model: acme-platform@3.2
+    third_country:
+    - value: true
+      source: static
+      at: backend/app/api/routes/users.py:161
+      model: acme-platform@3.2
+- type: Transfer
+  id: Transfer@backend/app/main.py:19
+  at: backend/app/main.py:19
+  facts:
+    recipient:
+    - value: Sentry
+      source: static
+      at: backend/app/main.py:19
+- type: Transfer
+  id: Transfer@backend/app/utils.py:58
+  at: backend/app/utils.py:58
+  facts:
+    recipient:
+    - value: email (SMTP relay)
+      source: static
+      at: backend/app/utils.py:58
+    personal_data:
+    - value: true
+      source: static
+      at: backend/app/utils.py:58

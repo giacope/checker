@@ -1,0 +1,107 @@
+{
+  "bench": "bench/austin.yaml",
+  "runs": 10,
+  "distinct_outputs": 1,
+  "answers": {
+    "A1": {
+      "value": "7 sqft",
+      "open_facts": [],
+      "citations": [
+        "1004.5 Table 1004.5"
+      ]
+    },
+    "A2": {
+      "value": "143",
+      "open_facts": [],
+      "citations": [
+        "1004.5",
+        "1004.5 Table 1004.5"
+      ]
+    },
+    "A3": {
+      "value": "14",
+      "open_facts": [],
+      "citations": [
+        "1004.5",
+        "1004.5 Table 1004.5"
+      ]
+    },
+    "A4": {
+      "value": "216",
+      "open_facts": [],
+      "citations": [
+        "1004.5",
+        "1004.5 Table 1004.5"
+      ]
+    },
+    "A5": {
+      "value": "10",
+      "open_facts": [],
+      "citations": [
+        "1004.5",
+        "1004.5 Table 1004.5"
+      ]
+    },
+    "A6": {
+      "value": "60 in",
+      "open_facts": [],
+      "citations": [
+        "1005.3.2",
+        "1020.3",
+        "1020.3 Table 1020.3",
+        "202"
+      ]
+    },
+    "A7": {
+      "value": "45 in",
+      "open_facts": [],
+      "citations": [
+        "1005.3.2",
+        "1020.3",
+        "1020.3 Table 1020.3",
+        "202"
+      ]
+    },
+    "A8": {
+      "value": "36 in",
+      "open_facts": [],
+      "citations": [
+        "1005.3.2",
+        "1020.3",
+        "1020.3 Table 1020.3",
+        "202"
+      ]
+    },
+    "A9": {
+      "value": "72 in",
+      "open_facts": [],
+      "citations": [
+        "1005.3.2",
+        "1020.3",
+        "1020.3 Table 1020.3",
+        "202"
+      ]
+    },
+    "A10": {
+      "value": "300 ft",
+      "open_facts": [],
+      "citations": [
+        "1017.2 Table 1017.2"
+      ]
+    },
+    "A11": {
+      "value": "200 ft",
+      "open_facts": [],
+      "citations": [
+        "1017.2 Table 1017.2"
+      ]
+    },
+    "A12": {
+      "value": "250 ft",
+      "open_facts": [],
+      "citations": [
+        "1017.2 Table 1017.2"
+      ]
+    }
+  }
+}

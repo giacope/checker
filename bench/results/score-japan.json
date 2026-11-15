@@ -1,0 +1,551 @@
+{
+  "bench": "japan",
+  "reference": {
+    "J1": 1400.0,
+    "J2": 160.0,
+    "J3": 230.0,
+    "J4": 1200.0,
+    "J5": 750.0,
+    "J6": 900.0,
+    "J7": 1600.0,
+    "J8": 1200.0,
+    "J9": 50.0,
+    "J10": 60.0,
+    "J11": 40.0,
+    "J12": 50.0,
+    "J13": 1.0,
+    "J14": 0.0,
+    "J15": 4800.0
+  },
+  "models": {
+    "claude-opus-5-5": {
+      "runs": 10,
+      "accuracy": 1.0,
+      "all_runs_agree": 15,
+      "all_runs_correct": 15,
+      "majority_correct": 15,
+      "fully_correct_runs": 10,
+      "questions": {
+        "J1": {
+          "reference": 1400.0,
+          "answers": {
+            "1400.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.95
+        },
+        "J2": {
+          "reference": 160.0,
+          "answers": {
+            "160.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.95
+        },
+        "J3": {
+          "reference": 230.0,
+          "answers": {
+            "230.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.94
+        },
+        "J4": {
+          "reference": 1200.0,
+          "answers": {
+            "1200.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.92
+        },
+        "J5": {
+          "reference": 750.0,
+          "answers": {
+            "750.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.9
+        },
+        "J6": {
+          "reference": 900.0,
+          "answers": {
+            "900.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.84
+        },
+        "J7": {
+          "reference": 1600.0,
+          "answers": {
+            "1600.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.92
+        },
+        "J8": {
+          "reference": 1200.0,
+          "answers": {
+            "1200.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.92
+        },
+        "J9": {
+          "reference": 50.0,
+          "answers": {
+            "50.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.91
+        },
+        "J10": {
+          "reference": 60.0,
+          "answers": {
+            "60.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.9
+        },
+        "J11": {
+          "reference": 40.0,
+          "answers": {
+            "40.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.9
+        },
+        "J12": {
+          "reference": 50.0,
+          "answers": {
+            "50.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.87
+        },
+        "J13": {
+          "reference": 1.0,
+          "answers": {
+            "1.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.89
+        },
+        "J14": {
+          "reference": 0.0,
+          "answers": {
+            "0.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.88
+        },
+        "J15": {
+          "reference": 4800.0,
+          "answers": {
+            "4800.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.93
+        }
+      }
+    },
+    "gemini-4-carbon": {
+      "runs": 10,
+      "accuracy": 1.0,
+      "all_runs_agree": 15,
+      "all_runs_correct": 15,
+      "majority_correct": 15,
+      "fully_correct_runs": 10,
+      "questions": {
+        "J1": {
+          "reference": 1400.0,
+          "answers": {
+            "1400.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J2": {
+          "reference": 160.0,
+          "answers": {
+            "160.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J3": {
+          "reference": 230.0,
+          "answers": {
+            "230.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J4": {
+          "reference": 1200.0,
+          "answers": {
+            "1200.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J5": {
+          "reference": 750.0,
+          "answers": {
+            "750.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J6": {
+          "reference": 900.0,
+          "answers": {
+            "900.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J7": {
+          "reference": 1600.0,
+          "answers": {
+            "1600.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J8": {
+          "reference": 1200.0,
+          "answers": {
+            "1200.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J9": {
+          "reference": 50.0,
+          "answers": {
+            "50.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J10": {
+          "reference": 60.0,
+          "answers": {
+            "60.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J11": {
+          "reference": 40.0,
+          "answers": {
+            "40.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J12": {
+          "reference": 50.0,
+          "answers": {
+            "50.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J13": {
+          "reference": 1.0,
+          "answers": {
+            "1.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J14": {
+          "reference": 0.0,
+          "answers": {
+            "0.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        },
+        "J15": {
+          "reference": 4800.0,
+          "answers": {
+            "4800.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 1.0
+        }
+      }
+    },
+    "gpt-6-astra": {
+      "runs": 10,
+      "accuracy": 1.0,
+      "all_runs_agree": 15,
+      "all_runs_correct": 15,
+      "majority_correct": 15,
+      "fully_correct_runs": 10,
+      "questions": {
+        "J1": {
+          "reference": 1400.0,
+          "answers": {
+            "1400.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J2": {
+          "reference": 160.0,
+          "answers": {
+            "160.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J3": {
+          "reference": 230.0,
+          "answers": {
+            "230.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J4": {
+          "reference": 1200.0,
+          "answers": {
+            "1200.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J5": {
+          "reference": 750.0,
+          "answers": {
+            "750.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J6": {
+          "reference": 900.0,
+          "answers": {
+            "900.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J7": {
+          "reference": 1600.0,
+          "answers": {
+            "1600.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J8": {
+          "reference": 1200.0,
+          "answers": {
+            "1200.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J9": {
+          "reference": 50.0,
+          "answers": {
+            "50.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J10": {
+          "reference": 60.0,
+          "answers": {
+            "60.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J11": {
+          "reference": 40.0,
+          "answers": {
+            "40.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J12": {
+          "reference": 50.0,
+          "answers": {
+            "50.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J13": {
+          "reference": 1.0,
+          "answers": {
+            "1.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J14": {
+          "reference": 0.0,
+          "answers": {
+            "0.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        },
+        "J15": {
+          "reference": 4800.0,
+          "answers": {
+            "4800.0": 10
+          },
+          "correct": 10,
+          "runs": 10,
+          "distinct": 1,
+          "majority_correct": true,
+          "mean_confidence": 0.99
+        }
+      }
+    },
+    "kernel": {
+      "runs": 10,
+      "distinct_outputs": 1
+    }
+  }
+}

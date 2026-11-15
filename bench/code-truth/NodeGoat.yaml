@@ -1,0 +1,171 @@
+# Ground truth for the code benchmark (bench/code.yaml), repository NodeGoat.
+# Vocabulary: vocab/code.yaml. Locators are path:line relative to the repository root.
+repo: NodeGoat
+url: https://github.com/OWASP/NodeGoat
+sha: c5cb68a7084e4ae7dcc60e6a98768720a81841e8
+labelled: 2026-11-14
+scope: >
+  server.js, config/, app/routes, app/data, app/views (templates the app renders, including the
+  /tutorial pages), artifacts/db-reset.js (run on every deploy by docker-compose.yml:9 and
+  app.json:13), Dockerfile, docker-compose.yml, app.json. Excluded: test/, app/assets/vendor,
+  docs. Code that is commented out (the tutorial's "Fix for ..." blocks) is not live and is not
+  labelled as behaviour.
+standards:
+  asvs: OWASP ASVS 5.0.0 (tag v5.0.0_release, github.com/OWASP/ASVS 5.0/en)
+  nist: NIST SP 800-63B-4 final (pages.nist.gov/800-63-4/sp800-63b.html)
+  gdpr: Regulation (EU) 2016/679, Art. 17 and Art. 44 to 46
+
+system:
+  password_auth:
+    value: true
+    at: [app/routes/index.js:34, app/data/user-dao.js:57]
+    note: "POST /login checks userName and password against the users collection."
+  password_is_sole_factor:
+    value: true
+    at: [app/routes/session.js:53, app/routes/session.js:116]
+    note: "A matching password sets req.session.userId directly; there is no second factor anywhere."
+  password_min_length:
+    value: 1
+    at: [app/routes/session.js:144, app/routes/session.js:171]
+    note: "The live PASS_RE is /^.{1,20}$/. The error text says '8 to 18 characters' but the regex is what is enforced. The stronger regex at :148 is commented out."
+  password_max_length:
+    value: 20
+    at: [app/routes/session.js:144]
+    note: "The same regex caps signup passwords at 20 characters. Login itself has no cap. There is no password change path."
+  password_composition_rules:
+    value: false
+    at: [app/routes/session.js:144]
+    note: "The live regex checks length only. The composition regex (digit, lower and upper case) at :148 is inside a comment."
+  password_blocklist_check:
+    value: false
+    at: [app/routes/session.js:138]
+    note: "validateSignup does not compare the password with any list."
+  password_periodic_change:
+    value: false
+    at: [app/routes/index.js:30]
+    note: "There is no expiry and no password change route at all (routes/index.js:30-82)."
+  login_rate_limited:
+    value: false
+    at: [app/routes/index.js:34, app/routes/session.js:53, server.js:71]
+    note: "No throttling middleware, no failed-attempt counter, no lockout."
+  processes_personal_data:
+    value: true
+    at: [app/data/user-dao.js:20, app/data/profile-dao.js:42]
+    note: "Stores first and last name, email, SSN, date of birth, address, bank account and routing numbers."
+  account_erasure:
+    value: false
+    at: [app/routes/index.js:30]
+    note: "No route or DAO method deletes or anonymises a user. The only deletions are dropCollection calls in the admin reset script artifacts/db-reset.js:41, which wipe the whole database."
+
+elements:
+  # ---- PasswordStore
+  - {type: PasswordStore, at: "app/data/user-dao.js:25", facts: {algorithm: plaintext, salted: false}, note: "addUser stores the password from the request body as is; the bcrypt line at :29 is commented out."}
+  - {type: PasswordStore, at: "app/data/user-dao.js:61", facts: {algorithm: plaintext, salted: false}, note: "comparePassword is a plain === comparison with the stored value."}
+  - {type: PasswordStore, at: "artifacts/db-reset.js:18", facts: {algorithm: plaintext, salted: false}, note: "Seeds the admin, user1 and user2 accounts with plaintext passwords (:18, :27, :35) on every deploy; the bcrypt hashes are commented out."}
+
+  # ---- Query (only queries that request data can reach)
+  - {type: Query, at: "app/data/allocations-dao.js:78", facts: {construction: interpolated, untrusted_input: true}, note: "req.query.threshold (routes/allocations.js:20) is interpolated into a $where JavaScript expression and sent at :86. This is server-side JS / NoSQL injection."}
+  - {type: Query, at: "app/data/user-dao.js:91", facts: {construction: operator_object, untrusted_input: true}, note: "Login findOne({userName}). userName comes from req.body and bodyParser.json() is on (server.js:71), so an object such as {$ne: null} or {$regex: ...} reaches the filter unchecked."}
+  - {type: Query, at: "app/data/user-dao.js:104", facts: {construction: operator_object, untrusted_input: true}, note: "Signup findOne({userName}). USER_RE.test() coerces an object to the string '[object Object]', which passes /^.{1,20}$/, so an operator object reaches the filter."}
+  - {type: Query, at: "app/data/user-dao.js:45", facts: {construction: parameterized, untrusted_input: true}, note: "Inserts a user document built from body fields. The values are data, not filter."}
+  - {type: Query, at: "app/data/benefits-dao.js:24", facts: {construction: parameterized, untrusted_input: true}, note: "The filter uses parseInt(req.body.userId) and $set takes req.body.benefitStartDate as a value. No operator injection into the filter (broken access control is a separate issue)."}
+  - {type: Query, at: "app/data/profile-dao.js:78", facts: {construction: parameterized, untrusted_input: true}, note: "The filter is parseInt(session userId); body fields go only into $set values."}
+  - {type: Query, at: "app/data/contributions-dao.js:28", facts: {construction: parameterized, untrusted_input: true}, note: "Replacement document values come from eval(req.body.*) at routes/contributions.js:32-34. The eval is SSJS injection (ASVS 1.3.x) rather than query construction; the filter is the session userId."}
+  - {type: Query, at: "app/data/memos-dao.js:23", facts: {construction: parameterized, untrusted_input: true}, note: "Inserts req.body.memo as a document field."}
+
+  # ---- Cookie
+  - {type: Cookie, at: "server.js:78", facts: {is_session: true, secure: false, http_only: true, same_site: unset}, note: "express-session with no cookie option. The library defaults are HttpOnly on, Secure off, no SameSite, and the name 'connect.sid' has no __Host-/__Secure- prefix. The cookie:{httpOnly,secure} block at :95-99 is commented out. Served over plain HTTP (server.js:145)."}
+
+  # ---- TokenVerification: none (no JWT or other self-contained token; express-session ids are server-side reference tokens)
+
+  # ---- Secret
+  - {type: Secret, at: "config/env/all.js:8", facts: {kind: signing_key, test_or_example: false}, note: "cookieSecret signs the session cookie (server.js:82). No env override, so every deployment uses this literal."}
+  - {type: Secret, at: "config/env/all.js:9", facts: {kind: other, test_or_example: true}, note: "cryptoKey, a symmetric encryption key. Only the commented-out code at profile-dao.js:15-40 uses it, but it is loaded and logged (config/config.js:13)."}
+  - {type: Secret, at: "config/env/development.js:6", facts: {kind: api_key, test_or_example: true}, note: "OWASP ZAP API key, only for the security regression tests. NODE_ENV defaults to development, so it is loaded at run time."}
+  - {type: Secret, at: "config/env/test.js:6", facts: {kind: api_key, test_or_example: true}, note: "The same ZAP API key in the test environment config."}
+  - {type: Secret, at: "artifacts/cert/server.key:1", facts: {kind: private_key, test_or_example: true}, note: "Committed RSA private key. Only the commented-out HTTPS block (server.js:24-27) loads it, but Dockerfile COPY . puts it in the image (.dockerignore does not exclude artifacts/)."}
+  - {type: Secret, at: "artifacts/db-reset.js:18", facts: {kind: password, test_or_example: false}, note: "admin account password, seeded on every deploy (docker-compose.yml:9, app.json:13)."}
+  - {type: Secret, at: "artifacts/db-reset.js:27", facts: {kind: password, test_or_example: false}, note: "user1 password, seeded on every deploy."}
+  - {type: Secret, at: "artifacts/db-reset.js:35", facts: {kind: password, test_or_example: false}, note: "user2 password, seeded on every deploy."}
+
+  # ---- LogStatement (only those that can log credentials or personal data)
+  - {type: LogStatement, at: "config/config.js:13", facts: {logs_credentials: true, logs_personal_data: false}, note: "util.inspect of the whole merged config at startup. Logs cookieSecret, cryptoKey and zapApiKey, plus db = MONGODB_URI, which app.json:16 asks to be a full connection string and so often carries a database password."}
+  - {type: LogStatement, at: "artifacts/db-reset.js:99", facts: {logs_credentials: true, logs_personal_data: true}, note: "Logs every seed user with JSON.stringify, including plaintext passwords and names."}
+  - {type: LogStatement, at: "artifacts/db-reset.js:58", facts: {logs_credentials: true, logs_personal_data: true}, note: "parseResponse logs JSON.stringify(res). For users.insertMany (:110) the result includes the inserted documents with their passwords."}
+  - {type: LogStatement, at: "app/routes/session.js:64", facts: {logs_credentials: false, logs_personal_data: true}, note: "Logs the submitted userName on a failed login, unencoded (log injection, A1-3)."}
+
+  # ---- Transfer
+  - {type: Transfer, at: "app/views/tutorial/a1.html:79", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "The iframe to www.youtube.com makes the visitor's browser send its IP address and YouTube cookies to Google. /tutorial is served without login (routes/index.js:79)."}
+  - {type: Transfer, at: "app/views/tutorial/a1.html:98", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/views/tutorial/a3.html:157", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/views/tutorial/a4.html:32", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/views/tutorial/a5.html:86", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/views/tutorial/a7.html:30", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/views/tutorial/a8.html:42", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/views/tutorial/a10.html:31", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/views/tutorial/ssrf.html:23", facts: {recipient: "Google LLC (YouTube embed)", personal_data: true, third_country: true, adequacy_or_safeguards: null}, note: "YouTube iframe."}
+  - {type: Transfer, at: "app/routes/research.js:16", facts: {recipient: "client-chosen URL; default finance.yahoo.com (app/views/research.html:17)", personal_data: false, third_country: true, adequacy_or_safeguards: null}, note: "A server-side needle.get of req.query.url + symbol (SSRF). It sends only the stock symbol, with no cookies or user fields, so it is not a personal-data transfer."}
+
+verdicts:
+  C1:
+    verdict: fail
+    requirement: "ASVS 5.0 11.4.2 (L2): 'Verify that passwords are stored using an approved, computationally intensive, key derivation function (also known as a \"password hashing function\")'; approved list in Appendix C (argon2id, scrypt, bcrypt cost>=10, PBKDF2)."
+    failing: [app/data/user-dao.js:25, app/data/user-dao.js:61, artifacts/db-reset.js:18]
+  C2:
+    verdict: fail
+    requirement: "ASVS 5.0 1.2.4 (L1): 'Verify that data selection or database queries (e.g., SQL, HQL, NoSQL, Cypher) use parameterized queries, ORMs, entity frameworks, or are otherwise protected from SQL Injection and other database injection attacks.'"
+    failing: [app/data/allocations-dao.js:78, app/data/user-dao.js:91, app/data/user-dao.js:104]
+  C3:
+    verdict: fail
+    requirement: "ASVS 5.0 3.3.1 (L1): 'Verify that cookies have the 'Secure' attribute set, and if the '__Host-' prefix is not used for the cookie name, the '__Secure-' prefix must be used'; 3.3.2 (L2) SameSite 'set according to the purpose of the cookie'; 3.3.4 (L2) HttpOnly (met by the library default)."
+    failing: [server.js:78]
+  C4:
+    verdict: not_applicable
+    requirement: "ASVS 5.0 9.1.1 (L1): 'Verify that self-contained tokens are validated using their digital signature or MAC to protect against tampering before accepting the token's contents.'"
+    failing: []
+    note: "No JWT or other self-contained token. Sessions are express-session reference ids stored server-side."
+  C5:
+    verdict: fail
+    requirement: "ASVS 5.0 13.3.1 (L2): '... Secrets must not be included in application source code or included in build artifacts.'"
+    failing: [config/env/all.js:8, artifacts/db-reset.js:18, artifacts/db-reset.js:27, artifacts/db-reset.js:35, artifacts/cert/server.key:1]
+  C6:
+    verdict: fail
+    requirement: "ASVS 5.0 16.2.5 (L2): 'Verify that when logging sensitive data, the application enforces logging based on the data's protection level. For example, it may not be allowed to log certain data, such as credentials or payment details. Other data, such as session tokens, may only be logged by being hashed or masked'."
+    failing: [config/config.js:13, artifacts/db-reset.js:99, artifacts/db-reset.js:58]
+  C7:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'Verifiers and CSPs SHALL require passwords that are used as a single-factor authentication mechanism to be a minimum of 15 characters in length.'"
+    failing: [app/routes/session.js:144]
+    note: "The minimum is 1 and the password is the only factor. Even the commented-out fix (8) would fail."
+  C8:
+    verdict: pass
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'Verifiers and CSPs SHALL NOT impose other composition rules (e.g., requiring mixtures of different character types) for passwords.'"
+    failing: []
+    note: "The live regex (session.js:144) is length only. The 20-character maximum breaks the SHOULD to permit at least 64 characters, but that is not a composition rule."
+  C9:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'When processing a request to establish or change a password, verifiers SHALL compare the prospective secret against a blocklist that contains known commonly used, expected, or compromised passwords.'"
+    failing: [app/routes/session.js:138]
+  C10:
+    verdict: fail
+    requirement: "NIST SP 800-63B-4 sec. 3.1.1.2: 'Verifiers SHALL implement a rate-limiting mechanism that effectively limits the number of failed authentication attempts that can be made on the subscriber account, as described in Sec. 3.2.2.' (3.2.2: no more than 100 consecutive failures)."
+    failing: [app/routes/index.js:34, app/routes/session.js:53]
+  C11:
+    verdict: fail
+    requirement: "GDPR Art. 17(1): 'The data subject shall have the right to obtain from the controller the erasure of personal data concerning him or her without undue delay and the controller shall have the obligation to erase personal data without undue delay where one of the following grounds applies'."
+    failing: [app/routes/index.js:30, app/data/user-dao.js:17, app/data/profile-dao.js:42]
+    note: "The app processes extensive personal data (SSN, DOB, bank details) and has no code path that erases one user's data."
+  C12:
+    verdict: uncertain
+    requirement: "GDPR Art. 44: 'Any transfer of personal data ... to a third country ... shall take place only if ... the conditions laid down in this Chapter are complied with'; Art. 45(1) adequacy decision; Art. 46(1) 'only if the controller or processor has provided appropriate safeguards'."
+    failing: []
+    deciding: "The embedded YouTube iframes (app/views/tutorial/*.html) send visitors' IP addresses and cookies to Google LLC in the US. Whether that has a legal basis depends on facts outside the repository: Google LLC's certification under the EU-US Data Privacy Framework (adequacy decision of 10 July 2023) or SCCs, and how the deployment collects consent for the embeds."
+
+confidence_notes:
+  - "C11 fail vs uncertain: Art. 17 binds the controller, and an operator could erase a user by hand in MongoDB. I labelled fail because the application offers no erasure path (account_erasure false) while it holds sensitive personal data. A labeller who counts manual DB work as compliance would say uncertain."
+  - "C12: counting browser-side YouTube embeds as transfers by the application is a judgment (it follows the reasoning of LG München I, 3 O 17493/20, on Google Fonts). Without them, NodeGoat has no personal-data transfer and C12 would be not_applicable."
+  - "C2: the two userName operator-object findings depend on JSON bodies being accepted (bodyParser.json at server.js:71). The login form posts urlencoded with extended:false, which cannot carry objects, but an attacker can send JSON. The login bypass is limited because the password is then compared with ===, but the filter is still injectable (enumeration via $regex). The $where finding at allocations-dao.js:78 is unambiguous."
+  - "C3: the HttpOnly and SameSite values come from express-session defaults (cookie.httpOnly true, secure false, sameSite unset), not from code in the repository."
+  - "C5: artifacts/cert/server.key and cryptoKey are not used by live code. I counted the private key as failing because it ships in the image; cryptoKey is recorded but not failing."
+  - "C6: artifacts/db-reset.js is a setup script, not request-handling code, but deployment runs it (docker-compose.yml:9, app.json:13) and its output goes to the container log, so it is in scope."
+  - "Commented-out 'Fix for ...' code is ignored everywhere. Labels describe the live code."

@@ -1,0 +1,15 @@
+subject:
+  kind: system
+  id: juice-shop
+sources:
+- id: deps
+  kind: lockfile_osv
+  describes: juice-shop
+  adapter: adapters.deps
+  adapter_version: 0.1.0
+  commit: 266448aba68cd8ba5915f526a128da4fa7bc3f9f
+  lockfiles: []
+  osv_queried_at: null
+  offline: false
+facts: {}
+elements: []

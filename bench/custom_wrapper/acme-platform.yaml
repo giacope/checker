@@ -1,0 +1,41 @@
+# A customer's framework model for its in-house platform library, as the customer would write it.
+# acme_platform is a private package (installed from Acme's own index), so it is not in the repository the adapter
+# reads: without this file the adapter cannot tell what these calls do. Format: adapters/code_static/models.py.
+model: acme-platform
+version: "3.2"
+language: python
+description: Acme's platform library (crypto, database access, tokens, audit log, analytics, web guards).
+rules:
+  - call: acme_platform.crypto.hash_secret
+    password_hash: {algorithm: argon2, salted: true, password: 0}
+    note: argon2id via argon2-cffi, t=3, m=64 MiB, 16-byte random salt
+  - call: acme_platform.crypto.verify_secret
+    password_hash: {algorithm: argon2, salted: true, password: 0}
+
+  - call: acme_platform.db.run_sql
+    query: {text: [1, sql]}
+    note: sends the SQL text as given (no parameter binding); arg 0 is the session
+  - call: acme_platform.db.select_where
+    query: {construction: parameterized}
+
+  - call: acme_platform.tokens.verify
+    token_verification: {verifies_signature: true, allows_none_alg: false}
+    note: HS256 only, exp and nbf checked
+  - call: acme_platform.tokens.read_claims
+    token_verification: {verifies_signature: false, allows_none_alg: true}
+    note: parses the payload without checking the signature (for display and debugging)
+
+  - call: acme_platform.obs.audit
+    log: {}
+    note: writes every keyword argument to the audit log as is
+
+  - call: acme_platform.analytics.track
+    transfer: {recipient: "Acme Analytics (hosted by Segment, Inc., United States)", personal_data: infer, third_country: true}
+
+  - call: acme_platform.web.guard.protect_login
+    rate_limit: {scope: login}
+    note: per-account and per-IP counters in Redis; locks after the configured number of failures
+
+  - call: acme_platform.auth.password_policy.check
+    password_policy: {min_length: 15, blocklist: true, composition_rules: false}
+    note: rejects passwords in the HIBP Pwned Passwords range API and Acme's own list

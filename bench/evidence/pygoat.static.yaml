@@ -1,0 +1,1427 @@
+subject:
+  kind: system
+  id: pygoat
+sources:
+- id: static
+  kind: static_analysis
+  describes: pygoat
+  adapter: adapters.code_static
+  adapter_version: 0.1.0
+  commit: 2aa4cc14f251e4a780e94e200aed6b36a5b15c21
+  files_analysed: 260
+  unparsed: []
+facts:
+  password_auth:
+  - value: true
+    source: static
+    at: challenge/labs/bopla_lab/app.py:67
+  - value: true
+    source: static
+    at: challenge/labs/bopla_lab/app.py:73
+  - value: true
+    source: static
+    at: challenge/labs/security_headers_lab/app.py:71
+  - value: true
+    source: static
+    at: challenge/labs/security_headers_lab/app.py:78
+  - value: true
+    source: static
+    at: dockerized_labs/auth_failure_lab/app.py:82
+  - value: true
+    source: static
+    at: dockerized_labs/auth_failure_lab/app.py:150
+  - value: true
+    source: static
+    at: dockerized_labs/auth_failure_lab/app.py:213
+  - value: true
+    source: static
+    at: dockerized_labs/broken_access_lab/main.py:34
+  password_min_length:
+  - value: 0
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:76
+  - value: 8
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:70
+  - value: 8
+    source: static
+    at: pygoat/settings.py:119
+  password_max_length:
+  - value: 100000
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:76
+  - value: 100000
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/forms.py:10
+  - value: 100000
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:59
+  - value: 100000
+    source: static
+    at: introduction/forms.py:8
+  password_composition_rules:
+  - value: false
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:76
+  - value: true
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:76
+  - value: true
+    source: static
+    at: pygoat/settings.py:125
+  password_blocklist_check:
+  - value: false
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:76
+  - value: true
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:73
+  - value: true
+    source: static
+    at: pygoat/settings.py:122
+  password_periodic_change:
+  - value: false
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:76
+  - value: false
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/forms.py:10
+  - value: false
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:59
+  - value: false
+    source: static
+    at: introduction/forms.py:8
+  login_rate_limited:
+  - value: false
+    source: static
+    at: challenge/labs/bopla_lab/app.py:67
+  - value: false
+    source: static
+    at: challenge/labs/security_headers_lab/app.py:71
+  - value: false
+    source: static
+    at: dockerized_labs/broken_access_lab/main.py:34
+  - value: false
+    source: static
+    at: dockerized_labs/broken_auth_lab/app.py:47
+  - value: false
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:50
+  - value: false
+    source: static
+    at: dockerized_labs/insufficient_logging_lab/app.py:35
+  - value: false
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:23
+  - value: false
+    source: static
+    at: pygoat/urls.py:26
+  - value: true
+    source: static
+    at: dockerized_labs/auth_failure_lab/app.py:24
+  - value: true
+    source: static
+    at: dockerized_labs/auth_failure_lab/app.py:26
+  - value: true
+    source: static
+    at: pygoat/settings.py:49
+  processes_personal_data:
+  - value: true
+    source: static
+    at: dockerized_labs/auth_failure_lab/app.py:22
+  - value: true
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:19
+  - value: true
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/models.py:7
+  - value: true
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/models.py:8
+  - value: true
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/forms.py:6
+  - value: true
+    source: static
+    at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:59
+  - value: true
+    source: static
+    at: introduction/forms.py:9
+  account_erasure:
+  - value: false
+    source: static
+    at: dockerized_labs/insecure_design_lab/app.py:17
+elements:
+- type: PasswordStore
+  id: PasswordStore@challenge/labs/bopla_lab/app.py:73
+  at: challenge/labs/bopla_lab/app.py:73
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: challenge/labs/bopla_lab/app.py:73
+    salted:
+    - value: false
+      source: static
+      at: challenge/labs/bopla_lab/app.py:73
+- type: PasswordStore
+  id: PasswordStore@challenge/labs/security_headers_lab/app.py:78
+  at: challenge/labs/security_headers_lab/app.py:78
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:78
+    salted:
+    - value: false
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:78
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/auth_failure_lab/app.py:82
+  at: dockerized_labs/auth_failure_lab/app.py:82
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:82
+    salted:
+    - value: true
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:82
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/auth_failure_lab/app.py:150
+  at: dockerized_labs/auth_failure_lab/app.py:150
+  facts:
+    algorithm:
+    - value: argon2
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:150
+    salted:
+    - value: true
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:150
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/auth_failure_lab/app.py:213
+  at: dockerized_labs/auth_failure_lab/app.py:213
+  facts:
+    algorithm:
+    - value: sha256
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:213
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:213
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/broken_access_lab/main.py:46
+  at: dockerized_labs/broken_access_lab/main.py:46
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: dockerized_labs/broken_access_lab/main.py:46
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_access_lab/main.py:46
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/broken_auth_lab/app.py:53
+  at: dockerized_labs/broken_auth_lab/app.py:53
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:53
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:53
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/crypto_failure_lab/app.py:25
+  at: dockerized_labs/crypto_failure_lab/app.py:25
+  facts:
+    algorithm:
+    - value: sha1
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:25
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:25
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/crypto_failure_lab/app.py:38
+  at: dockerized_labs/crypto_failure_lab/app.py:38
+  facts:
+    algorithm:
+    - value: md5
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:38
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:38
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/crypto_failure_lab/app.py:51
+  at: dockerized_labs/crypto_failure_lab/app.py:51
+  facts:
+    algorithm:
+    - value: sha1
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:51
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:51
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/insecure_design_lab/app.py:56
+  at: dockerized_labs/insecure_design_lab/app.py:56
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:56
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:56
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/insecure_design_lab/app.py:76
+  at: dockerized_labs/insecure_design_lab/app.py:76
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:76
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:76
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/insufficient_logging_lab/app.py:40
+  at: dockerized_labs/insufficient_logging_lab/app.py:40
+  facts:
+    algorithm:
+    - value: plaintext
+      source: static
+      at: dockerized_labs/insufficient_logging_lab/app.py:40
+    salted:
+    - value: false
+      source: static
+      at: dockerized_labs/insufficient_logging_lab/app.py:40
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/sensitive_data_exposure/dataexposure/forms.py:10
+  at: dockerized_labs/sensitive_data_exposure/dataexposure/forms.py:10
+  facts:
+    algorithm:
+    - value: pbkdf2
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/forms.py:10
+    salted:
+    - value: true
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/forms.py:10
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/sensitive_data_exposure/dataexposure/views.py:29
+  at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:29
+  facts:
+    algorithm:
+    - value: pbkdf2
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:29
+    salted:
+    - value: true
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:29
+- type: PasswordStore
+  id: PasswordStore@dockerized_labs/sensitive_data_exposure/dataexposure/views.py:59
+  at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:59
+  facts:
+    algorithm:
+    - value: pbkdf2
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:59
+    salted:
+    - value: true
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:59
+- type: PasswordStore
+  id: PasswordStore@introduction/forms.py:8
+  at: introduction/forms.py:8
+  facts:
+    algorithm:
+    - value: pbkdf2
+      source: static
+      at: introduction/forms.py:8
+    salted:
+    - value: true
+      source: static
+      at: introduction/forms.py:8
+- type: Query
+  id: Query@challenge/views.py:52
+  at: challenge/views.py:52
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:52
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:52
+- type: Query
+  id: Query@challenge/views.py:57
+  at: challenge/views.py:57
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:57
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:57
+- type: Query
+  id: Query@challenge/views.py:69
+  at: challenge/views.py:69
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:69
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:69
+- type: Query
+  id: Query@challenge/views.py:80
+  at: challenge/views.py:80
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:80
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:80
+- type: Query
+  id: Query@challenge/views.py:134
+  at: challenge/views.py:134
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:134
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:134
+- type: Query
+  id: Query@challenge/views.py:135
+  at: challenge/views.py:135
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:135
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:135
+- type: Query
+  id: Query@challenge/views.py:159
+  at: challenge/views.py:159
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:159
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:159
+- type: Query
+  id: Query@challenge/views.py:174
+  at: challenge/views.py:174
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:174
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:174
+- type: Query
+  id: Query@challenge/views.py:217
+  at: challenge/views.py:217
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:217
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:217
+- type: Query
+  id: Query@challenge/views.py:582
+  at: challenge/views.py:582
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:582
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:582
+- type: Query
+  id: Query@challenge/views.py:585
+  at: challenge/views.py:585
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:585
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:585
+- type: Query
+  id: Query@challenge/views.py:610
+  at: challenge/views.py:610
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:610
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:610
+- type: Query
+  id: Query@challenge/views.py:635
+  at: challenge/views.py:635
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:635
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:635
+- type: Query
+  id: Query@challenge/views.py:667
+  at: challenge/views.py:667
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: challenge/views.py:667
+    untrusted_input:
+    - value: true
+      source: static
+      at: challenge/views.py:667
+- type: Query
+  id: Query@dockerized_labs/sensitive_data_exposure/dataexposure/views.py:63
+  at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:63
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:63
+    untrusted_input:
+    - value: true
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:63
+- type: Query
+  id: Query@dockerized_labs/sql_injection_lab/app.py:16
+  at: dockerized_labs/sql_injection_lab/app.py:16
+  facts:
+    construction:
+    - value: parameterized
+      source: static
+      at: dockerized_labs/sql_injection_lab/app.py:16
+    untrusted_input:
+    - value: false
+      source: static
+      at: dockerized_labs/sql_injection_lab/app.py:16
+- type: Query
+  id: Query@dockerized_labs/sql_injection_lab/app.py:25
+  at: dockerized_labs/sql_injection_lab/app.py:25
+  facts:
+    construction:
+    - value: parameterized
+      source: static
+      at: dockerized_labs/sql_injection_lab/app.py:25
+    untrusted_input:
+    - value: false
+      source: static
+      at: dockerized_labs/sql_injection_lab/app.py:25
+- type: Query
+  id: Query@dockerized_labs/sql_injection_lab/app.py:57
+  at: dockerized_labs/sql_injection_lab/app.py:57
+  facts:
+    construction:
+    - value: interpolated
+      source: static
+      at: dockerized_labs/sql_injection_lab/app.py:57
+    untrusted_input:
+    - value: true
+      source: static
+      at: dockerized_labs/sql_injection_lab/app.py:57
+- type: Query
+  id: Query@scoring/services.py:18
+  at: scoring/services.py:18
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: scoring/services.py:18
+    untrusted_input:
+    - value: true
+      source: static
+      at: scoring/services.py:18
+- type: Query
+  id: Query@scoring/services.py:35
+  at: scoring/services.py:35
+  facts:
+    construction:
+    - value: orm
+      source: static
+      at: scoring/services.py:35
+    untrusted_input:
+    - value: true
+      source: static
+      at: scoring/services.py:35
+- type: Cookie
+  id: Cookie@challenge/labs/business_logic_lab/app.py:4
+  at: challenge/labs/business_logic_lab/app.py:4
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: challenge/labs/business_logic_lab/app.py:4
+    secure:
+    - value: false
+      source: static
+      at: challenge/labs/business_logic_lab/app.py:4
+    http_only:
+    - value: true
+      source: static
+      at: challenge/labs/business_logic_lab/app.py:4
+    same_site:
+    - value: unset
+      source: static
+      at: challenge/labs/business_logic_lab/app.py:4
+- type: Cookie
+  id: Cookie@challenge/labs/security_headers_lab/app.py:14
+  at: challenge/labs/security_headers_lab/app.py:14
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:14
+    secure:
+    - value: false
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:14
+    http_only:
+    - value: true
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:14
+    same_site:
+    - value: unset
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:14
+- type: Cookie
+  id: Cookie@dockerized_labs/auth_failure_lab/app.py:105
+  at: dockerized_labs/auth_failure_lab/app.py:105
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:105
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:105
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:105
+- type: Cookie
+  id: Cookie@dockerized_labs/auth_failure_lab/app.py:112
+  at: dockerized_labs/auth_failure_lab/app.py:112
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:112
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:112
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:112
+- type: Cookie
+  id: Cookie@dockerized_labs/auth_failure_lab/app.py:208
+  at: dockerized_labs/auth_failure_lab/app.py:208
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:208
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:208
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:208
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:208
+- type: Cookie
+  id: Cookie@dockerized_labs/auth_failure_lab/app.py:227
+  at: dockerized_labs/auth_failure_lab/app.py:227
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:227
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:227
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:227
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:227
+- type: Cookie
+  id: Cookie@dockerized_labs/broken_access_lab/main.py:60
+  at: dockerized_labs/broken_access_lab/main.py:60
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_access_lab/main.py:60
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_access_lab/main.py:60
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/broken_access_lab/main.py:60
+- type: Cookie
+  id: Cookie@dockerized_labs/broken_auth_lab/app.py:64
+  at: dockerized_labs/broken_auth_lab/app.py:64
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:64
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:64
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:64
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:64
+- type: Cookie
+  id: Cookie@dockerized_labs/broken_auth_lab/app.py:66
+  at: dockerized_labs/broken_auth_lab/app.py:66
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:66
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:66
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:66
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:66
+- type: Cookie
+  id: Cookie@dockerized_labs/crypto_failure_lab/app.py:101
+  at: dockerized_labs/crypto_failure_lab/app.py:101
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:101
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:101
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:101
+- type: Cookie
+  id: Cookie@dockerized_labs/insecure_design_lab/app.py:7
+  at: dockerized_labs/insecure_design_lab/app.py:7
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:7
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:7
+    http_only:
+    - value: true
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:7
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:7
+- type: Cookie
+  id: Cookie@dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:29
+  at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:29
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:29
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:29
+    http_only:
+    - value: true
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:29
+    same_site:
+    - value: lax
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:29
+- type: Cookie
+  id: Cookie@dockerized_labs/software_integrity_lab/app.py:40
+  at: dockerized_labs/software_integrity_lab/app.py:40
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: dockerized_labs/software_integrity_lab/app.py:40
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/software_integrity_lab/app.py:40
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/software_integrity_lab/app.py:40
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/software_integrity_lab/app.py:40
+- type: Cookie
+  id: Cookie@dockerized_labs/template_injection_lab/app.py:80
+  at: dockerized_labs/template_injection_lab/app.py:80
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/template_injection_lab/app.py:80
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/template_injection_lab/app.py:80
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/template_injection_lab/app.py:80
+- type: Cookie
+  id: Cookie@dockerized_labs/xss_lab/app.py:86
+  at: dockerized_labs/xss_lab/app.py:86
+  facts:
+    secure:
+    - value: false
+      source: static
+      at: dockerized_labs/xss_lab/app.py:86
+    http_only:
+    - value: false
+      source: static
+      at: dockerized_labs/xss_lab/app.py:86
+    same_site:
+    - value: unset
+      source: static
+      at: dockerized_labs/xss_lab/app.py:86
+- type: Cookie
+  id: Cookie@pygoat/settings.py:57
+  at: pygoat/settings.py:57
+  facts:
+    is_session:
+    - value: true
+      source: static
+      at: pygoat/settings.py:57
+    secure:
+    - value: false
+      source: static
+      at: pygoat/settings.py:57
+    http_only:
+    - value: true
+      source: static
+      at: pygoat/settings.py:57
+    same_site:
+    - value: lax
+      source: static
+      at: pygoat/settings.py:57
+- type: TokenVerification
+  id: TokenVerification@dockerized_labs/sec_misconfig/app.py:117
+  at: dockerized_labs/sec_misconfig/app.py:117
+  facts:
+    verifies_signature:
+    - value: true
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:117
+    allows_none_alg:
+    - value: false
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:117
+- type: Secret
+  id: Secret@challenge/labs/bopla_lab/app.py:14
+  at: challenge/labs/bopla_lab/app.py:14
+  facts:
+    kind:
+    - value: other
+      source: static
+      at: challenge/labs/bopla_lab/app.py:14
+- type: Secret
+  id: Secret@challenge/labs/bopla_lab/app.py:23
+  at: challenge/labs/bopla_lab/app.py:23
+  facts:
+    kind:
+    - value: other
+      source: static
+      at: challenge/labs/bopla_lab/app.py:23
+- type: Secret
+  id: Secret@challenge/labs/bopla_lab/app.py:32
+  at: challenge/labs/bopla_lab/app.py:32
+  facts:
+    kind:
+    - value: other
+      source: static
+      at: challenge/labs/bopla_lab/app.py:32
+- type: Secret
+  id: Secret@challenge/labs/bopla_lab/app.py:41
+  at: challenge/labs/bopla_lab/app.py:41
+  facts:
+    kind:
+    - value: other
+      source: static
+      at: challenge/labs/bopla_lab/app.py:41
+- type: Secret
+  id: Secret@challenge/labs/bopla_lab/app.py:48
+  at: challenge/labs/bopla_lab/app.py:48
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: challenge/labs/bopla_lab/app.py:48
+- type: Secret
+  id: Secret@challenge/labs/bopla_lab/app.py:49
+  at: challenge/labs/bopla_lab/app.py:49
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: challenge/labs/bopla_lab/app.py:49
+- type: Secret
+  id: Secret@challenge/labs/bopla_lab/app.py:50
+  at: challenge/labs/bopla_lab/app.py:50
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: challenge/labs/bopla_lab/app.py:50
+- type: Secret
+  id: Secret@challenge/labs/business_logic_lab/app.py:5
+  at: challenge/labs/business_logic_lab/app.py:5
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: challenge/labs/business_logic_lab/app.py:5
+- type: Secret
+  id: Secret@challenge/labs/security_headers_lab/app.py:15
+  at: challenge/labs/security_headers_lab/app.py:15
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:15
+- type: Secret
+  id: Secret@challenge/labs/security_headers_lab/app.py:20
+  at: challenge/labs/security_headers_lab/app.py:20
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:20
+- type: Secret
+  id: Secret@challenge/labs/security_headers_lab/app.py:27
+  at: challenge/labs/security_headers_lab/app.py:27
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: challenge/labs/security_headers_lab/app.py:27
+- type: Secret
+  id: Secret@dockerized_labs/auth_failure_lab/app.py:12
+  at: dockerized_labs/auth_failure_lab/app.py:12
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:12
+- type: Secret
+  id: Secret@dockerized_labs/auth_failure_lab/app.py:44
+  at: dockerized_labs/auth_failure_lab/app.py:44
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:44
+- type: Secret
+  id: Secret@dockerized_labs/auth_failure_lab/app.py:53
+  at: dockerized_labs/auth_failure_lab/app.py:53
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:53
+- type: Secret
+  id: Secret@dockerized_labs/auth_failure_lab/app.py:59
+  at: dockerized_labs/auth_failure_lab/app.py:59
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:59
+- type: Secret
+  id: Secret@dockerized_labs/auth_failure_lab/app.py:65
+  at: dockerized_labs/auth_failure_lab/app.py:65
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:65
+- type: Secret
+  id: Secret@dockerized_labs/auth_failure_lab/app.py:71
+  at: dockerized_labs/auth_failure_lab/app.py:71
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/auth_failure_lab/app.py:71
+- type: Secret
+  id: Secret@dockerized_labs/broken_auth_lab/app.py:16
+  at: dockerized_labs/broken_auth_lab/app.py:16
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:16
+- type: Secret
+  id: Secret@dockerized_labs/broken_auth_lab/app.py:21
+  at: dockerized_labs/broken_auth_lab/app.py:21
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:21
+- type: Secret
+  id: Secret@dockerized_labs/broken_auth_lab/app.py:26
+  at: dockerized_labs/broken_auth_lab/app.py:26
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/broken_auth_lab/app.py:26
+- type: Secret
+  id: Secret@dockerized_labs/command_injection_lab/app.py:6
+  at: dockerized_labs/command_injection_lab/app.py:6
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/command_injection_lab/app.py:6
+- type: Secret
+  id: Secret@dockerized_labs/crypto_failure_lab/app.py:7
+  at: dockerized_labs/crypto_failure_lab/app.py:7
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/crypto_failure_lab/app.py:7
+- type: Secret
+  id: Secret@dockerized_labs/dependency_attack_lab/app.py:7
+  at: dockerized_labs/dependency_attack_lab/app.py:7
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/dependency_attack_lab/app.py:7
+- type: Secret
+  id: Secret@dockerized_labs/dependency_attack_lab/app.py:11
+  at: dockerized_labs/dependency_attack_lab/app.py:11
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/dependency_attack_lab/app.py:11
+- type: Secret
+  id: Secret@dockerized_labs/dependency_attack_lab/app.py:12
+  at: dockerized_labs/dependency_attack_lab/app.py:12
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/dependency_attack_lab/app.py:12
+- type: Secret
+  id: Secret@dockerized_labs/dependency_attack_lab/app.py:13
+  at: dockerized_labs/dependency_attack_lab/app.py:13
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/dependency_attack_lab/app.py:13
+- type: Secret
+  id: Secret@dockerized_labs/insecure_design_lab/app.py:8
+  at: dockerized_labs/insecure_design_lab/app.py:8
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/insecure_design_lab/app.py:8
+- type: Secret
+  id: Secret@dockerized_labs/insufficient_logging_lab/app.py:7
+  at: dockerized_labs/insufficient_logging_lab/app.py:7
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/insufficient_logging_lab/app.py:7
+- type: Secret
+  id: Secret@dockerized_labs/insufficient_logging_lab/app.py:15
+  at: dockerized_labs/insufficient_logging_lab/app.py:15
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/insufficient_logging_lab/app.py:15
+- type: Secret
+  id: Secret@dockerized_labs/open_source_library_attack_lab/app.py:5
+  at: dockerized_labs/open_source_library_attack_lab/app.py:5
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/open_source_library_attack_lab/app.py:5
+- type: Secret
+  id: Secret@dockerized_labs/package_injection_lab/app.py:7
+  at: dockerized_labs/package_injection_lab/app.py:7
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/package_injection_lab/app.py:7
+- type: Secret
+  id: Secret@dockerized_labs/package_injection_lab/app.py:11
+  at: dockerized_labs/package_injection_lab/app.py:11
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/package_injection_lab/app.py:11
+- type: Secret
+  id: Secret@dockerized_labs/package_injection_lab/app.py:12
+  at: dockerized_labs/package_injection_lab/app.py:12
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/package_injection_lab/app.py:12
+- type: Secret
+  id: Secret@dockerized_labs/package_injection_lab/app.py:13
+  at: dockerized_labs/package_injection_lab/app.py:13
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/package_injection_lab/app.py:13
+- type: Secret
+  id: Secret@dockerized_labs/package_injection_lab/app.py:14
+  at: dockerized_labs/package_injection_lab/app.py:14
+  facts:
+    kind:
+    - value: other
+      source: static
+      at: dockerized_labs/package_injection_lab/app.py:14
+- type: Secret
+  id: Secret@dockerized_labs/sde/app.py:6
+  at: dockerized_labs/sde/app.py:6
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sde/app.py:6
+- type: Secret
+  id: Secret@dockerized_labs/sde/app.py:9
+  at: dockerized_labs/sde/app.py:9
+  facts:
+    kind:
+    - value: connection_string
+      source: static
+      at: dockerized_labs/sde/app.py:9
+- type: Secret
+  id: Secret@dockerized_labs/sde/app.py:11
+  at: dockerized_labs/sde/app.py:11
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/sde/app.py:11
+- type: Secret
+  id: Secret@dockerized_labs/sde/app.py:12
+  at: dockerized_labs/sde/app.py:12
+  facts:
+    kind:
+    - value: private_key
+      source: static
+      at: dockerized_labs/sde/app.py:12
+- type: Secret
+  id: Secret@dockerized_labs/sde/app.py:13
+  at: dockerized_labs/sde/app.py:13
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/sde/app.py:13
+- type: Secret
+  id: Secret@dockerized_labs/sde/app.py:15
+  at: dockerized_labs/sde/app.py:15
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/sde/app.py:15
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:12
+  at: dockerized_labs/sec_misconfig/app.py:12
+  facts:
+    kind:
+    - value: connection_string
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:12
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:13
+  at: dockerized_labs/sec_misconfig/app.py:13
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:13
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:14
+  at: dockerized_labs/sec_misconfig/app.py:14
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:14
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:55
+  at: dockerized_labs/sec_misconfig/app.py:55
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:55
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:56
+  at: dockerized_labs/sec_misconfig/app.py:56
+  facts:
+    kind:
+    - value: connection_string
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:56
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:57
+  at: dockerized_labs/sec_misconfig/app.py:57
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:57
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:58
+  at: dockerized_labs/sec_misconfig/app.py:58
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:58
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:59
+  at: dockerized_labs/sec_misconfig/app.py:59
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:59
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:60
+  at: dockerized_labs/sec_misconfig/app.py:60
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:60
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:63
+  at: dockerized_labs/sec_misconfig/app.py:63
+  facts:
+    kind:
+    - value: password
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:63
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:75
+  at: dockerized_labs/sec_misconfig/app.py:75
+  facts:
+    kind:
+    - value: other
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:75
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:76
+  at: dockerized_labs/sec_misconfig/app.py:76
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:76
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:77
+  at: dockerized_labs/sec_misconfig/app.py:77
+  facts:
+    kind:
+    - value: api_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:77
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:98
+  at: dockerized_labs/sec_misconfig/app.py:98
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:98
+- type: Secret
+  id: Secret@dockerized_labs/sec_misconfig/app.py:115
+  at: dockerized_labs/sec_misconfig/app.py:115
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sec_misconfig/app.py:115
+- type: Secret
+  id: Secret@dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:8
+  at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:8
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/sensitive_data_lab/settings.py:8
+- type: Secret
+  id: Secret@dockerized_labs/software_integrity_lab/app.py:9
+  at: dockerized_labs/software_integrity_lab/app.py:9
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/software_integrity_lab/app.py:9
+- type: Secret
+  id: Secret@dockerized_labs/sql_injection_lab/app.py:7
+  at: dockerized_labs/sql_injection_lab/app.py:7
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/sql_injection_lab/app.py:7
+- type: Secret
+  id: Secret@dockerized_labs/ssrf_lab/app.py:6
+  at: dockerized_labs/ssrf_lab/app.py:6
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/ssrf_lab/app.py:6
+- type: Secret
+  id: Secret@dockerized_labs/xxe_lab/app.py:8
+  at: dockerized_labs/xxe_lab/app.py:8
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: dockerized_labs/xxe_lab/app.py:8
+- type: Secret
+  id: Secret@pygoat/settings.py:23
+  at: pygoat/settings.py:23
+  facts:
+    kind:
+    - value: signing_key
+      source: static
+      at: pygoat/settings.py:23
+- type: LogStatement
+  id: LogStatement@dockerized_labs/insufficient_logging_lab/app.py:45
+  at: dockerized_labs/insufficient_logging_lab/app.py:45
+  facts:
+    logs_credentials:
+    - value: false
+      source: static
+      at: dockerized_labs/insufficient_logging_lab/app.py:45
+    logs_personal_data:
+    - value: true
+      source: static
+      at: dockerized_labs/insufficient_logging_lab/app.py:45
+- type: LogStatement
+  id: LogStatement@dockerized_labs/sensitive_data_exposure/dataexposure/views.py:89
+  at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:89
+  facts:
+    logs_credentials:
+    - value: false
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:89
+    logs_personal_data:
+    - value: true
+      source: static
+      at: dockerized_labs/sensitive_data_exposure/dataexposure/views.py:89

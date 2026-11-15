@@ -641,3 +641,14 @@ def test_customer_model(tmp_path):
     e = next(e for e in doc["elements"] if e["type"] == "PasswordStore")
     assert e["facts"]["algorithm"][0] == {"value": "argon2", "source": "static", "at": "app/models/user.rb:3", "model": "acme@1"}
     assert doc["sources"][0]["models"][0]["places"] >= 1
+
+
+def test_bench_evidence_is_valid():
+    """The evidence written for the two public Rails repositories comes from this adapter and loads."""
+    root = Path(__file__).resolve().parents[1]
+    for name in ("railsgoat", "lobsters"):
+        p = root / "bench" / "evidence" / f"{name}.static.yaml"
+        doc = yaml.safe_load(p.read_text())
+        assert doc["sources"][0]["adapter"] == "adapters.code_ruby"
+        assert doc["elements"] and doc["facts"]
+        load_evidence(doc)

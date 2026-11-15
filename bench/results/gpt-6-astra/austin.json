@@ -1,0 +1,1198 @@
+{
+  "model": "gpt-6-astra",
+  "runs": [
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, definition of Ambulatory Care Facility",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 1
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, Ambulatory Care Facility",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.97
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, definition of Ambulatory Care Facility",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 1
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, Ambulatory Care Facility definition",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended 2024 IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, Ambulatory Care Facility",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.97
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended IBC Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2 Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, definition of Ambulatory Care Facility",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.97
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended 2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, Ambulatory Care Facility definition",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 1
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, Ambulatory Care Facility definition",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 1
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2, Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, Ambulatory Care Facility definition",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 0.99
+      }
+    ],
+    [
+      {
+        "id": "A1",
+        "answer": 7,
+        "unit": "sqft",
+        "citations": [
+          "Austin City Code §25-12-3, amended 2024 IBC Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A2",
+        "answer": 143,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A3",
+        "answer": 14,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A4",
+        "answer": 216,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A5",
+        "answer": 10,
+        "unit": "persons",
+        "citations": [
+          "2024 IBC §1004.5",
+          "Austin City Code §25-12-3, amended Table 1004.5"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A6",
+        "answer": 60,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A7",
+        "answer": 45,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2 Exception 1",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A8",
+        "answer": 36,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A9",
+        "answer": 72,
+        "unit": "in",
+        "citations": [
+          "2024 IBC §202, Ambulatory Care Facility",
+          "2024 IBC §1005.3.2",
+          "2024 IBC §1020.3 and Table 1020.3"
+        ],
+        "confidence": 0.99
+      },
+      {
+        "id": "A10",
+        "answer": 300,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote c"
+        ],
+        "confidence": 1
+      },
+      {
+        "id": "A11",
+        "answer": 200,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, Group B and footnote c"
+        ],
+        "confidence": 0.98
+      },
+      {
+        "id": "A12",
+        "answer": 250,
+        "unit": "ft",
+        "citations": [
+          "2024 IBC §1017.2 and Table 1017.2, footnote b"
+        ],
+        "confidence": 1
+      }
+    ]
+  ],
+  "notes": [
+    "Ten async Task calls were issued consecutively with overlapping execution; some earlier runs finished before all ten had been launched."
+  ]
+}

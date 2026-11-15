@@ -1,0 +1,10879 @@
+{
+ "kernel-static": {
+  "agree": 30,
+  "of": 48,
+  "stable_pairs": 48,
+  "pairs": 48,
+  "locator_precision": 0.5873015873015873,
+  "locator_recall": 0.6724137931034483,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       14,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       5,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       2,
+       1
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       8,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "not_applicable",
+      "truth": "uncertain",
+      "agree": false
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       11,
+       8
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       9,
+       5
+      ]
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "not_applicable",
+      "truth": "uncertain",
+      "agree": false
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "uncertain",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "not_applicable",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel-oracle": {
+  "agree": 47,
+  "of": 48,
+  "stable_pairs": 48,
+  "pairs": 48,
+  "locator_precision": 0.8991596638655462,
+  "locator_recall": 0.9487179487179487,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       10,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       10,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       20,
+       20,
+       20
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       12,
+       12
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       8,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       15,
+       25,
+       17
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "direct gpt-6-astra": {
+  "agree": 132,
+  "of": 144,
+  "stable_pairs": 48,
+  "pairs": 48,
+  "locator_precision": 0.5868167202572347,
+  "locator_recall": 0.8746438746438746,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       28,
+       79,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       13,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       27,
+       83,
+       13
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       8,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       25,
+       77,
+       11
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       11,
+       8
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       20,
+       24,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       10
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       21,
+       35,
+       17
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       2,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       14,
+       8
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       20,
+       24,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       4,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       5,
+       4
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       5,
+       4
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel+ gpt-6-astra": {
+  "agree": 127,
+  "of": 144,
+  "stable_pairs": 47,
+  "pairs": 48,
+  "locator_precision": 0.5030425963488844,
+  "locator_recall": 0.750733137829912,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       43,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       41,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       8,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       8,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       40,
+       11
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       9,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       13,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       13,
+       17,
+       15
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       18,
+       8
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       15,
+       6
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       14,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       4,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       5,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel+pref gpt-6-astra": {
+  "agree": 127,
+  "of": 144,
+  "stable_pairs": 47,
+  "pairs": 48,
+  "locator_precision": 0.4891518737672584,
+  "locator_recall": 0.750733137829912,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       43,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       41,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       8,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       8,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       17,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       40,
+       11
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       11,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       10,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       10,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       13,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       13,
+       17,
+       15
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       18,
+       8
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       15,
+       6
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       14,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       4,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       5,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel+reader-first gpt-6-astra": {
+  "agree": 136,
+  "of": 144,
+  "stable_pairs": 47,
+  "pairs": 48,
+  "locator_precision": 0.503006012024048,
+  "locator_recall": 0.7595307917888563,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       43,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       41,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       8,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       8,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       40,
+       11
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       9,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       13,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       13,
+       17,
+       15
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       18,
+       8
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       15,
+       6
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       16,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       14,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       4,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       5,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel-model-only gpt-6-astra": {
+  "agree": 136,
+  "of": 144,
+  "stable_pairs": 47,
+  "pairs": 48,
+  "locator_precision": 0.5122448979591837,
+  "locator_recall": 0.7595307917888563,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       43,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       15,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       41,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       8,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       8,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       40,
+       11
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       9,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       7,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       13,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       13,
+       17,
+       15
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       15,
+       8
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       15,
+       6
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       15,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       14,
+       6
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       4,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       5,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "direct claude-opus-5-5": {
+  "agree": 140,
+  "of": 144,
+  "stable_pairs": 45,
+  "pairs": 48,
+  "locator_precision": 0.7648809523809523,
+  "locator_recall": 0.7333333333333333,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       7,
+       7
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       5,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       7,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       12,
+       10
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       7,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       10,
+       10,
+       10
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       3,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       8,
+       5
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "not_applicable",
+      "truth": "uncertain",
+      "agree": false
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       7,
+       5
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       11,
+       7
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       2,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       10,
+       11,
+       10
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       15,
+       29,
+       15
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       11,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       11,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       15,
+       29,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       12,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       10,
+       10,
+       10
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       16,
+       32,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       6,
+       4
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel+ claude-opus-5-5": {
+  "agree": 125,
+  "of": 144,
+  "stable_pairs": 44,
+  "pairs": 48,
+  "locator_precision": 0.6439024390243903,
+  "locator_recall": 0.8,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       13,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       11,
+       9
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       13,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       6
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       13,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       13,
+       9
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       34,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "pass",
+      "truth": "uncertain",
+      "agree": false
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       12,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       5,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       18,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       14,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       23,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       14,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       15,
+       27,
+       17
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       14,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       13,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       28,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "uncertain",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "uncertain",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "uncertain",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel+pref claude-opus-5-5": {
+  "agree": 125,
+  "of": 144,
+  "stable_pairs": 44,
+  "pairs": 48,
+  "locator_precision": 0.6285714285714286,
+  "locator_recall": 0.8,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       14,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       12,
+       9
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       14,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       7,
+       6
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       14,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       14,
+       9
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       34,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       8,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "pass",
+      "truth": "uncertain",
+      "agree": false
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       12,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       5,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       9,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       18,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       14,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       23,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       14,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       15,
+       27,
+       17
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       14,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       13,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       28,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C9": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "uncertain",
+      "truth": "fail",
+      "agree": false
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "pass",
+      "agree": false
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "uncertain",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "uncertain",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel+reader-first claude-opus-5-5": {
+  "agree": 134,
+  "of": 144,
+  "stable_pairs": 44,
+  "pairs": 48,
+  "locator_precision": 0.642512077294686,
+  "locator_recall": 0.8057971014492754,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       13,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       11,
+       9
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       14,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       6,
+       6
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       14,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       13,
+       9
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       34,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       4,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "pass",
+      "truth": "uncertain",
+      "agree": false
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       12,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       5,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       4,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       7,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       18,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       14,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       23,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       14,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       16,
+       10
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       15,
+       27,
+       17
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       14,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       13,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       28,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "uncertain",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "uncertain",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ },
+ "kernel-model-only claude-opus-5-5": {
+  "agree": 136,
+  "of": 144,
+  "stable_pairs": 44,
+  "pairs": 48,
+  "locator_precision": 0.71875,
+  "locator_recall": 0.7681159420289855,
+  "per_repo": {
+   "juice-shop": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       7,
+       7
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       5,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       10,
+       8
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       6,
+       6
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       6,
+       7,
+       6
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       6
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       9,
+       9
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       9,
+       10,
+       9
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       6,
+       2
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       12,
+       9
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       34,
+       12
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "NodeGoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "pass",
+      "truth": "uncertain",
+      "agree": false
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       9,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       5,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C4": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       2,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "pygoat": [
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       7,
+       11,
+       7
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       9,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       12,
+       23,
+       14
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       13,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       10,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       5,
+       5,
+       5
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       15,
+       27,
+       17
+      ]
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       11,
+       12,
+       11
+      ]
+     },
+     "C2": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C3": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       8,
+       8,
+       9
+      ]
+     },
+     "C4": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       4,
+       4,
+       4
+      ]
+     },
+     "C5": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       14,
+       28,
+       16
+      ]
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       1,
+       1,
+       1
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ],
+   "full-stack-fastapi-template": [
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       2,
+       3,
+       2
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "pass",
+      "truth": "not_applicable",
+      "agree": false
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "pass",
+      "truth": "fail",
+      "agree": false
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    },
+    {
+     "C1": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C2": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C3": {
+      "verdict": "not_applicable",
+      "truth": "not_applicable",
+      "agree": true
+     },
+     "C4": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C5": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C6": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true,
+      "locators": [
+       3,
+       3,
+       3
+      ]
+     },
+     "C7": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C8": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C9": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C10": {
+      "verdict": "fail",
+      "truth": "fail",
+      "agree": true
+     },
+     "C11": {
+      "verdict": "pass",
+      "truth": "pass",
+      "agree": true
+     },
+     "C12": {
+      "verdict": "uncertain",
+      "truth": "uncertain",
+      "agree": true
+     }
+    }
+   ]
+  }
+ }
+}

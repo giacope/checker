@@ -1,0 +1,352 @@
+{
+  "reference": {
+    "C1 3NhaIUfh12PAdrGa$S3z3M": "uncertain",
+    "C1 0mxk1RW8H5mvX1dNnpRqIz": "uncertain",
+    "C1 0mxk1RW8H5mvX1dNnpRqBK": "uncertain",
+    "C2 3NhaIUfh12PAdrGa$S3z3M": "uncertain",
+    "C2 0mxk1RW8H5mvX1dNnpRqIz": "uncertain",
+    "C2 0mxk1RW8H5mvX1dNnpRqBK": "uncertain",
+    "C3 First Floor": "pass",
+    "C3 Second Floor": "pass",
+    "C4 3NhaIUfh12PAdrGa$S3z3M": "uncertain",
+    "C4 0mxk1RW8H5mvX1dNnpRqIz": "uncertain",
+    "C4 0mxk1RW8H5mvX1dNnpRqBK": "uncertain",
+    "C5 First Floor": "uncertain",
+    "C5 Second Floor": "fail",
+    "C6 3NhaIUfh12PAdrGa$S3z3M": "uncertain",
+    "C6 0mxk1RW8H5mvX1dNnpRqIz": "uncertain",
+    "C6 0mxk1RW8H5mvX1dNnpRqBK": "uncertain"
+  },
+  "reference_doors": {
+    "35QeWibpT4DfyH3NIf2nOv": "uncertain",
+    "1qc5HjZvrCsga38tqxQ3VC": "uncertain",
+    "0ClPCUC7jCQRnj1dhupHk0": "uncertain",
+    "3qpE7fVkr8dRZ2wfCc6tWA": "uncertain",
+    "3qpE7fVkr8dRZ2wfCc6tjC": "uncertain",
+    "3qpE7fVkr8dRZ2wfCc6tpH": "uncertain",
+    "3qpE7fVkr8dRZ2wfCc6tsf": "uncertain",
+    "3qpE7fVkr8dRZ2wfCc6tw0": "uncertain",
+    "3qpE7fVkr8dRZ2wfCc6tut": "uncertain"
+  },
+  "models": {
+    "gpt-6-astra": {
+      "runs": [
+        {
+          "run": 1,
+          "agree": 16,
+          "items": 16,
+          "doors_listed": 10,
+          "doors_overlap": 9,
+          "doors_jaccard": 0.9,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 2,
+          "agree": 16,
+          "items": 16,
+          "doors_listed": 10,
+          "doors_overlap": 9,
+          "doors_jaccard": 0.9,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 3,
+          "agree": 16,
+          "items": 16,
+          "doors_listed": 2,
+          "doors_overlap": 1,
+          "doors_jaccard": 0.1,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 4,
+          "agree": 16,
+          "items": 16,
+          "doors_listed": 4,
+          "doors_overlap": 3,
+          "doors_jaccard": 0.3,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 5,
+          "agree": 13,
+          "items": 16,
+          "doors_listed": 9,
+          "doors_overlap": 9,
+          "doors_jaccard": 1.0,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        }
+      ],
+      "items_stable_across_runs": "13/16",
+      "per_item": {
+        "C1 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C1 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C1 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C2 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 4,
+            "pass": 1
+          }
+        },
+        "C2 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 4,
+            "pass": 1
+          }
+        },
+        "C2 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 4,
+            "pass": 1
+          }
+        },
+        "C3 First Floor": {
+          "kernel": "pass",
+          "model": {
+            "pass": 5
+          }
+        },
+        "C3 Second Floor": {
+          "kernel": "pass",
+          "model": {
+            "pass": 5
+          }
+        },
+        "C4 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C4 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C4 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C5 First Floor": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C5 Second Floor": {
+          "kernel": "fail",
+          "model": {
+            "fail": 5
+          }
+        },
+        "C6 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C6 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C6 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        }
+      }
+    },
+    "claude-opus-5-5": {
+      "runs": [
+        {
+          "run": 1,
+          "agree": 9,
+          "items": 16,
+          "doors_listed": 16,
+          "doors_overlap": 9,
+          "doors_jaccard": 0.56,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 2,
+          "agree": 13,
+          "items": 16,
+          "doors_listed": 10,
+          "doors_overlap": 9,
+          "doors_jaccard": 0.9,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 3,
+          "agree": 12,
+          "items": 16,
+          "doors_listed": 10,
+          "doors_overlap": 9,
+          "doors_jaccard": 0.9,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 4,
+          "agree": 12,
+          "items": 16,
+          "doors_listed": 10,
+          "doors_overlap": 9,
+          "doors_jaccard": 0.9,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        },
+        {
+          "run": 5,
+          "agree": 12,
+          "items": 16,
+          "doors_listed": 10,
+          "doors_overlap": 9,
+          "doors_jaccard": 0.9,
+          "found_width_conflict": true,
+          "found_tread_conflict": true
+        }
+      ],
+      "items_stable_across_runs": "6/16",
+      "per_item": {
+        "C1 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 4,
+            "fail": 1
+          }
+        },
+        "C1 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C1 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C2 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 4,
+            "pass": 1
+          }
+        },
+        "C2 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 4,
+            "pass": 1
+          }
+        },
+        "C2 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 4,
+            "pass": 1
+          }
+        },
+        "C3 First Floor": {
+          "kernel": "pass",
+          "model": {
+            "pass": 5
+          }
+        },
+        "C3 Second Floor": {
+          "kernel": "pass",
+          "model": {
+            "pass": 5
+          }
+        },
+        "C4 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "fail": 4,
+            "uncertain": 1
+          }
+        },
+        "C4 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "fail": 3,
+            "uncertain": 2
+          }
+        },
+        "C4 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "fail": 3,
+            "uncertain": 2
+          }
+        },
+        "C5 First Floor": {
+          "kernel": "uncertain",
+          "model": {
+            "pass": 5
+          }
+        },
+        "C5 Second Floor": {
+          "kernel": "fail",
+          "model": {
+            "uncertain": 1,
+            "fail": 4
+          }
+        },
+        "C6 3NhaIUfh12PAdrGa$S3z3M": {
+          "kernel": "uncertain",
+          "model": {
+            "uncertain": 5
+          }
+        },
+        "C6 0mxk1RW8H5mvX1dNnpRqIz": {
+          "kernel": "uncertain",
+          "model": {
+            "fail": 1,
+            "uncertain": 4
+          }
+        },
+        "C6 0mxk1RW8H5mvX1dNnpRqBK": {
+          "kernel": "uncertain",
+          "model": {
+            "fail": 1,
+            "uncertain": 4
+          }
+        }
+      }
+    }
+  }
+}
