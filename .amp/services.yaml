@@ -1,0 +1,17 @@
+services:
+  compliance-app:
+    # Code repositories at /, building drawings and models at /buildings.
+    command: uv run uvicorn app.main:app --host 127.0.0.1 --port "$PORT"
+    port: 8765
+    health: /
+    env:
+      # Build the example building projects from app/seeds.yaml in the background on start (downloads are
+      # verified by sha256 and cached; a fresh orb OCRs the clinic sheets once, a few minutes).
+      NORMIR_SEED: "1"
+    portal:
+      url: /
+      title: Compliance check
+      description: Code repositories (OWASP, GDPR) at /, building drawings and models at /buildings.
+    portals:
+      - url: /buildings
+        title: Building drawings
