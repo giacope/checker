@@ -1,0 +1,29 @@
+# Built-in framework model for JavaScript and TypeScript: library calls whose meaning is fixed by the library.
+# Format: adapters/code_static/models.py. Knowledge that has to read the call's arguments or the installed version
+# (crypto.createHash chains, jsonwebtoken and express-jwt algorithm handling, express-session cookie options,
+# SaaS SDK method sets) stays in jsast.py.
+model: builtin-javascript
+language: javascript
+rules:
+  # ---- password hashing: bcrypt, bcryptjs, @node-rs/bcrypt, ...
+  - call: ["*bcrypt*.**.hash", "*bcrypt*.**.hashSync", "*bcrypt*.**.compare", "*bcrypt*.**.compareSync"]
+    imported: true
+    password_hash: {algorithm: bcrypt, salted: true, password: 0}
+  - call: [bcrypt.**.hash, bcrypt.**.hashSync, bcrypt.**.compare, bcrypt.**.compareSync]
+    password_hash: {algorithm: bcrypt, salted: true, password: 0}
+  - call: "*argon2*.**.hash"
+    imported: true
+    password_hash: {algorithm: argon2, salted: true, password: 0}
+  - call: "*argon2*.**.verify"
+    imported: true
+    password_hash: {algorithm: argon2, salted: true, password: 1}
+
+  # ---- values request data cannot control
+  - call: [parseInt, parseInt.**, parseFloat, parseFloat.**, Number, Number.**, Boolean, Boolean.**, isNaN, isNaN.**, Math.**]
+    sanitizer: {}
+
+  # ---- rate limiting middleware
+  - call: [express-rate-limit.**, express-slow-down.**, express-brute.**, rate-limiter-flexible.**, express-limiter.**,
+           koa-ratelimit.**, "@fastify/rate-limit.**", fastify-rate-limit.**]
+    imported: true
+    rate_limit: {}
