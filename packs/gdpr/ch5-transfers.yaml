@@ -1,0 +1,67 @@
+# Chapter V: Transfers of personal data to third countries or international
+# organisations, Art. 44 (general principle), 45(1) (adequacy decision), 46(1)
+# (appropriate safeguards). © European Union (quotes).
+norms:
+  - name: chapter5_transfer_basis
+    title: A transfer of personal data to a recipient in a third country rests on an adequacy decision or appropriate safeguards
+    guidance: >
+      List each third party that receives personal data and where it processes it,
+      and before sending data outside the EEA put an adequacy decision or standard
+      contractual clauses (with a transfer impact assessment) in place.
+    modality: obligation
+    status: draft
+    for: {t: Transfer}
+    cite:
+      section: Art. 44
+      url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_44
+      quote: >
+        Any transfer of personal data which are undergoing processing or are intended
+        for processing after transfer to a third country or to an international
+        organisation shall take place only if, subject to the other provisions of
+        this Regulation, the conditions laid down in this Chapter are complied with
+        by the controller and processor …
+      also:
+        - section: Art. 45(1)
+          url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_45
+          quote: >
+            A transfer of personal data to a third country or an international
+            organisation may take place where the Commission has decided that the
+            third country, a territory or one or more specified sectors within that
+            third country, or the international organisation in question ensures an
+            adequate level of protection.
+        - section: Art. 46(1)
+          url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_46
+          quote: >
+            In the absence of a decision pursuant to Article 45(3), a controller or
+            processor may transfer personal data to a third country or an
+            international organisation only if the controller or processor has
+            provided appropriate safeguards, and on condition that enforceable data
+            subject rights and effective legal remedies for data subjects are
+            available.
+    interpretation:
+      by: pack
+      note: >
+        (1) Chapter V applies only when personal data is transferred and the recipient
+        is in a third country, read as outside the EEA (see Transfer.third_country);
+        transfers within the EEA need no Chapter V basis. (2) Of the bases in
+        Chapter V, the norm credits Art. 45 and Art. 46 (including binding corporate
+        rules under Art. 47, which are an Art. 46(2)(b) safeguard), folded into the one
+        contract fact Transfer.adequacy_or_safeguards that the vocabulary provides; the
+        Art. 46(1) condition on enforceable rights and remedies is read as part of that
+        fact. (3) The derogations in Art. 49 are not encoded: a transfer that fails here
+        may still be lawful under Art. 49(1) (explicit consent, necessity for a
+        contract, …), which is why Art. 49 is in defers_to. (4) The fact is given: when
+        nobody has stated it, the verdict stays unknown and names it; code alone never
+        fails a transfer for lack of safeguards. (5) Transfers to international
+        organisations are not separated from transfers to third countries, because the
+        vocabulary does not distinguish them.
+    defers_to:
+      - "Art. 49 derogations for specific situations"
+      - "Art. 44 onward transfers from the third country"
+      - "Art. 47 binding corporate rules (conditions for approval)"
+      - "Art. 48 transfers or disclosures not authorised by Union law"
+    require:
+      any:
+        - not: {fact: t.personal_data}
+        - not: {fact: t.third_country}
+        - {fact: t.adequacy_or_safeguards}

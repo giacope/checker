@@ -1,0 +1,104 @@
+# Facts the GDPR rules read. Names, types, kinds, and values are those of
+# vocab/code.yaml, the contract with the code adapters; labels say what the fact
+# means for this Regulation. One fact is this pack's own (marked "pack-specific").
+#   given    stated by the controller (contracts, consent records): code cannot show it
+#   measured computed from the code by deterministic analysis
+#   judged   a classification a person or a calibrated model makes
+predicates:
+  # ---------------------------------------------------------------- system
+  - name: system.processes_personal_data
+    label: the system stores data about identifiable people (names, emails, addresses, ...)
+    type: bool
+    kind: measured
+    refers_to: ["Art. 4(1)", "Art. 4(2)"]
+    note: >
+      From vocab/code.yaml. Read as "the system processes personal data" in the
+      sense of Art. 4(1) ("any information relating to an identified or identifiable
+      natural person") and Art. 4(2).
+
+  - name: system.account_erasure
+    label: there is a code path that deletes or irreversibly anonymises a user's personal data on request
+    type: bool
+    kind: measured
+    refers_to: ["Art. 17(1)", "Recital 26"]
+    note: >
+      From vocab/code.yaml. Irreversible anonymisation counts as erasure: anonymous
+      data is no longer personal data (Recital 26).
+
+  - name: system.account_data_export
+    label: there is a code path that gives users their personal data in a structured, machine-readable format (a download or export)
+    type: bool
+    kind: measured
+    refers_to: ["Art. 20(1)"]
+    note: >
+      From vocab/code.yaml. Read as the controller's technical ability to give a
+      data subject the data concerning them "in a structured, commonly used and
+      machine-readable format" (Art. 20(1)).
+
+  - name: system.tls_enforced
+    label: the application refuses or redirects plain-HTTP requests in production (Rails config.force_ssl, Plug.SSL / force_ssl, an HTTPS-only proxy config in the repository)
+    type: bool
+    kind: measured
+    refers_to: ["Art. 32(1)(a)", "Art. 32(2)"]
+    note: >
+      From vocab/code.yaml. Read as personal data travelling between users and
+      the system only encrypted (TLS).
+
+  # ----------------------------------------------------------- PasswordStore
+  - name: PasswordStore.algorithm
+    label: the function applied to the password
+    type: enum
+    kind: measured
+    values: [plaintext, reversible, md5, sha1, sha256, sha512, bcrypt, scrypt, argon2, pbkdf2, other]
+    refers_to: ["Art. 32(1)"]
+
+  - name: PasswordStore.salted
+    label: a per-password random salt is used
+    type: bool
+    kind: measured
+    refers_to: ["Art. 32(1)"]
+
+  - name: PasswordStore.other_function_is_password_hash
+    label: the 'other' function is a salted, deliberately slow password hashing function (for example yescrypt or balloon hashing)
+    type: bool
+    kind: judged
+    refers_to: ["Art. 32(1)"]
+    note: >
+      Pack-specific; not in vocab/code.yaml. Read only when PasswordStore.algorithm
+      is 'other', so that an unlisted function is left open rather than failed.
+
+  # ------------------------------------------------------------ LogStatement
+  - name: LogStatement.logs_credentials
+    label: a password, token, or session identifier can be written to the log
+    type: bool
+    kind: measured
+    refers_to: ["Art. 5(1)(f)", "Art. 32(1)(b)"]
+
+  # ---------------------------------------------------------------- Transfer
+  - name: Transfer.personal_data
+    label: personal data is part of what is sent
+    type: bool
+    kind: measured
+    refers_to: ["Art. 4(1)"]
+
+  - name: Transfer.third_country
+    label: the recipient processes the data outside the EEA
+    type: bool
+    kind: judged
+    refers_to: ["Art. 44", "EEA Joint Committee Decision No 154/2018"]
+    note: >
+      From vocab/code.yaml. The Regulation does not define "third country"; it is
+      read as a country outside the EU and the EEA EFTA States (Iceland,
+      Liechtenstein, Norway), to which the GDPR applies through the EEA Agreement.
+
+  - name: Transfer.adequacy_or_safeguards
+    label: an adequacy decision covers the recipient, or appropriate safeguards (SCCs, BCRs) are in place; a contract fact, not visible in code
+    type: bool
+    kind: given
+    refers_to: ["Art. 45(3)", "Art. 46(2)", "Art. 46(3)", "Art. 47"]
+    note: >
+      From vocab/code.yaml. True when a Commission decision under Art. 45(3) (or one
+      kept in force by Art. 45(9)) covers the recipient's country, territory, sector,
+      or certification (for example the EU-US Data Privacy Framework), or when the
+      transfer is covered by safeguards under Art. 46(2) or (3) together with
+      enforceable data subject rights and effective legal remedies (Art. 46(1)).

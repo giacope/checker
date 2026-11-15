@@ -1,0 +1,120 @@
+# 第4章 個人情報取扱事業者等の義務等 第2節 個人情報取扱事業者及び個人関連情報取扱事業者の義務:
+# 第23条 安全管理措置, 第28条 外国にある第三者への提供の制限. Text from e-Gov 法令API v2,
+# as of 2026-11-14 (revision 415AC0000000057_20261102_508AC0000000062).
+norms:
+  # ------------------------------------------------------------- 第23条
+  - name: appi23_password_hashing
+    title: 安全管理措置 — パスワードの保存（解釈：ソルト付きの低速なパスワードハッシュ）
+    modality: obligation
+    status: draft
+    for: {p: PasswordStore}
+    cite:
+      section: 第23条
+      url: https://laws.e-gov.go.jp/law/415AC0000000057/20261102_508AC0000000062#Mp-Ch_4-Se_2-At_23-Pr_1
+      quote: 個人情報取扱事業者は、その取り扱う個人データの漏えい、滅失又は毀損の防止その他の個人データの安全管理のために必要かつ適切な措置を講じなければならない。
+    interpretation:
+      by: pack
+      kind: reading of an open-textured term
+      note: >
+        第23条 requires 「必要かつ適切な措置」 and names no technique. This norm reads it,
+        for a stored user password, as: the password is transformed with a
+        per-password random salt by a function designed to be slow for password
+        hashing (bcrypt, scrypt, Argon2, PBKDF2). Plaintext, reversible encryption,
+        fast general-purpose hashes (MD5, SHA-1, SHA-256, SHA-512) and unsalted
+        functions fail. A password stored with the user's account is 個人データ (it is
+        part of the record in the 個人情報データベース等 that identifies the user), and
+        it is the key that 10-6(2) of the 通則編 guideline relies on to keep others out
+        of the system. The 個人情報保護委員会's guideline does not say how passwords are
+        to be stored, so the specific reading is this pack's: it is not an
+        interpretation the Commission has published.
+      authority:
+        - source: 個人情報保護委員会「個人情報の保護に関する法律についてのガイドライン（通則編）」（令和8年6月一部改正）10（別添）講ずべき安全管理措置の内容, 10-6 技術的安全管理措置
+          url: https://www.ppc.go.jp/personalinfo/legal/guidelines_tsusoku/#a10-6
+          says: >
+            Requires (講じなければならない措置) access control, 「アクセス者の識別と認証」,
+            protection against unauthorised access from outside, and 「情報システムの使用に
+            伴う漏えい等の防止」, whose 手法の例示 include 「情報システムの設計時に安全性を
+            確保し、継続的に見直す」. It does not mention hashing, salts, or how
+            passwords are stored. Supports only that technical measures against
+            leakage are required, not the specific reading. The Commission announced on
+            2026-10-07 a revision of the 手法の例示 planned for April 2027.
+        - source: IPA「安全なウェブサイトの作り方」改訂第7版, 第2章（ウェブサイトにおけるパスワードの取扱いに関する対策）
+          url: https://www.ipa.go.jp/security/vuln/websecurity/about.html
+          says: >
+            Recommends storing passwords as salted hashes (ソルト付きハッシュ値) with
+            stretching. IPA is not a supervisory authority under the Act; cited as the
+            Japanese technical source for "state of practice".
+      settled: no — the pack's reading of 「必要かつ適切な措置」; the Commission's guideline does not address password storage
+    defers_to:
+      - "通則編 10-1〜10-5, 10-7 その他の安全管理措置（基本方針、規律の整備、組織的・人的・物理的安全管理措置、外的環境の把握）"
+      - "第26条 漏えい等の報告等"
+    require:
+      all:
+        - any:
+            - in: [{fact: p.algorithm}, [bcrypt, scrypt, argon2, pbkdf2]]
+            - all:
+                - eq: [{fact: p.algorithm}, other]
+                - {fact: p.other_function_is_password_hash}
+        - {fact: p.salted}
+
+  # ------------------------------------------------------------- 第28条
+  - name: appi28_foreign_transfer
+    title: 外国にある第三者への個人データの提供には、指定外国・基準適合体制・本人の事前同意のいずれかが必要
+    modality: obligation
+    status: draft
+    for: {t: Transfer}
+    cite:
+      section: 第28条第1項
+      url: https://laws.e-gov.go.jp/law/415AC0000000057/20261102_508AC0000000062#Mp-Ch_4-Se_2-At_28-Pr_1
+      quote: >
+        個人情報取扱事業者は、外国（本邦の域外にある国又は地域をいう。以下この条及び第三十一条第一項第二号において同じ。）
+        （個人の権利利益を保護する上で我が国と同等の水準にあると認められる個人情報の保護に関する制度を有している外国として
+        個人情報保護委員会規則で定めるものを除く。以下この条及び同号において同じ。）にある第三者（個人データの取扱いについて
+        この節の規定により個人情報取扱事業者が講ずべきこととされている措置に相当する措置（第三項において「相当措置」という。）
+        を継続的に講ずるために必要なものとして個人情報保護委員会規則で定める基準に適合する体制を整備している者を除く。
+        以下この項及び次項並びに同号において同じ。）に個人データを提供する場合には、前条第一項各号に掲げる場合を除くほか、
+        あらかじめ外国にある第三者への提供を認める旨の本人の同意を得なければならない。この場合においては、同条の規定は、適用しない。
+      also:
+        - section: 規則第15条第1項
+          url: https://laws.e-gov.go.jp/law/428M60020000003/20260614_508M60020000002#Mp-At_15-Pr_1
+          quote: 法第二十八条第一項の規定による個人情報の保護に関する制度を有している外国として個人情報保護委員会規則で定めるものは、次の各号のいずれにも該当する外国として個人情報保護委員会が定めるものとする。
+        - section: 平成31年個人情報保護委員会告示第1号 2項
+          url: https://www.ppc.go.jp/files/pdf/h31kokuji1_rev2023April18.pdf
+          quote: 規則第十五条第一項各号のいずれにも該当する外国として個人情報保護委員会が定めるものは、次のとおりとする。一　次に掲げる欧州経済領域協定に規定された国（中略）二　英国
+        - section: 規則第16条
+          url: https://laws.e-gov.go.jp/law/428M60020000003/20260614_508M60020000002#Mp-At_16-Pr_1
+          quote: 法第二十八条第一項の個人情報保護委員会規則で定める基準は、次の各号のいずれかに該当することとする。一　個人情報取扱事業者と個人データの提供を受ける者との間で、当該提供を受ける者における当該個人データの取扱いについて、適切かつ合理的な方法により、法第四章第二節の規定の趣旨に沿った措置の実施が確保されていること。二　個人データの提供を受ける者が、個人情報の取扱いに係る国際的な枠組みに基づく認定を受けていること。
+    interpretation:
+      by: pack
+      note: >
+        第28条第1項 applies only to a provision of 個人データ to a 第三者 in a 外国, and
+        both terms are defined with exclusions: a 外国 designated under 規則第15条 (the
+        EEA states and 英国, 告示 2項) is not a 外国 for this article, and a recipient
+        with a 基準適合体制 under 規則第16条 is not a 第三者 for it (外国にある第三者への
+        提供編 2). Where the article applies, only the principal's prior consent to
+        provision to a third party in a foreign country, or one of the cases in
+        第27条第1項各号, makes the provision lawful. The norm therefore holds when the
+        data is not 個人データ, the recipient is in Japan or a designated country, the
+        recipient has a 基準適合体制, or the principal consented in advance. Choices:
+        (1) A Transfer element (data leaving the system for a third party) is read as a
+        提供 to a 第三者; a foreign cloud service that by contract and access control does
+        not itself handle the data is not a 提供 (個人情報保護委員会 Q&A Q7-53, Q12-3);
+        the vocabulary does not distinguish such services, so the adapter should not
+        report them as Transfers. Entrustment (委託) to a
+        foreign processor is still a 提供 under 第28条, because the article excludes
+        第27条, including its 第5項. (2) A recipient in an EEA state or the UK is read as
+        subject to the GDPR or UK GDPR, which is the condition 告示 3項1号 attaches. (3)
+        The cases in 第27条第1項各号 (法令に基づく場合 etc.) are not encoded. (4)
+        Consent and 基準適合体制 are given facts; when they are needed and unstated the
+        verdict stays unknown and names them.
+    defers_to:
+      - "第27条第1項各号 本人の同意を要しない場合"
+      - "第27条 国内の第三者及び指定外国にある第三者への提供"
+      - "第28条第2項 同意取得時の情報提供（規則第17条）"
+      - "第28条第3項 基準適合体制を整備した者に提供した場合の措置（規則第18条）"
+    require:
+      any:
+        - not: {fact: t.personal_data}
+        - in: [{fact: t.appi_recipient_location}, [japan, eea, uk]]
+        - {fact: t.appi_equivalent_measures_system}
+        - {fact: t.appi_principal_consent}

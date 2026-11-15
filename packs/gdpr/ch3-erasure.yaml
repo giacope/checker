@@ -1,0 +1,44 @@
+# Chapter III, Section 3: Art. 17 Right to erasure ('right to be forgotten').
+# Text: consolidated version 02016R0679-20160504 (see package.yaml). © European Union.
+norms:
+  - name: art17_erasure_path
+    title: A system that processes personal data can erase a data subject's personal data on request
+    guidance: >
+      Provide a code path (an admin action or a self-service request) that deletes a
+      user's personal data, or irreversibly anonymises it, across the database,
+      files, and caches, and record that the request was carried out.
+    modality: obligation
+    status: draft
+    cite:
+      section: Art. 17(1)
+      url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_17
+      quote: >
+        The data subject shall have the right to obtain from the controller the
+        erasure of personal data concerning him or her without undue delay and the
+        controller shall have the obligation to erase personal data without undue
+        delay where one of the following grounds applies: …
+    interpretation:
+      by: pack
+      note: >
+        Art. 17 is a right of the data subject with a matching duty of the controller
+        to erase, triggered only on the grounds in 17(1)(a)-(f) and displaced to the
+        extent that one of the exceptions in 17(3) applies (freedom of expression,
+        legal obligation or public task, public health, archiving and research, legal
+        claims). The duty to respond to a request falls under Art. 12(3). Code cannot
+        show whether a ground or an exception applies to a given request; what it can
+        show is whether the controller is able to erase at all. This norm encodes that
+        technical precondition: a system that processes personal data has a code path
+        that erases, or irreversibly anonymises (Recital 26), a data subject's
+        personal data on request. A pass does not show that requests are honoured; a
+        fail shows that the controller cannot meet the duty in any case where it
+        arises, unless erasure is done outside the system (by hand in the database),
+        which this norm does not credit.
+    defers_to:
+      - "Art. 17(3) exceptions to the right to erasure"
+      - "Art. 12(3) time limit for acting on a request"
+      - "Art. 17(2) informing other controllers"
+      - "Art. 19 notifying recipients"
+    require:
+      any:
+        - not: {fact: system.processes_personal_data}
+        - {fact: system.account_erasure}

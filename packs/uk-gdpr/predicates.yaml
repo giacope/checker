@@ -1,0 +1,53 @@
+# Facts whose meaning UK law changes. The two vocabulary facts keep their names,
+# types, and kinds (vocab/code.yaml), but replace the gdpr predicates (see
+# `patches` in package.yaml) because the UK GDPR defines them differently. One fact
+# is this pack's own (marked "pack-specific").
+predicates:
+  - name: Transfer.third_country
+    label: the recipient processes the data outside the United Kingdom
+    type: bool
+    kind: judged
+    status: draft
+    refers_to: ["Art. 4(27)"]
+    note: >
+      From vocab/code.yaml ("outside the EEA (or the UK, for UK GDPR)"). UK GDPR
+      Art. 4(27): "'third country' means a country or territory outside the United
+      Kingdom". A recipient in an EEA state is in a third country under this pack;
+      transfers to it are approved by regulations (Transfer.approved_by_uk_regulations).
+
+  - name: Transfer.approved_by_uk_regulations
+    label: the transfer is approved by regulations under Art. 45A UK GDPR (the recipient's country, territory, sector, or organisation is on the UK approved list)
+    type: bool
+    kind: judged
+    status: draft
+    refers_to: ["Art. 45A", "Art. 45C(4)", "DPA 2018 Sch. 21 paras 4 and 5", "DUAA 2025 Sch. 9 para. 26"]
+    note: >
+      Pack-specific; not in vocab/code.yaml, which folds UK approval into
+      adequacy_or_safeguards. A classification against the list the Secretary of
+      State publishes under Art. 45C(4). It is true for recipients in an EEA state,
+      Gibraltar, or a country covered by an EU adequacy decision in force before IP
+      completion day (DPA 2018 Sch. 21 para. 5(1)), and for transfers covered by
+      regulations made under former s. 17A DPA 2018 (treated as made under
+      Art. 45A by DUAA 2025 Sch. 9 para. 26), such as the Data Protection (Adequacy)
+      (United States of America) Regulations 2023 (S.I. 2023/1028), which approve
+      transfers only to US organisations in the UK Extension to the EU-US Data
+      Privacy Framework.
+
+  - name: Transfer.adequacy_or_safeguards
+    label: the transfer is approved by regulations under Art. 45A, or is made subject to appropriate safeguards under Art. 46(1A) (for example the IDTA or the UK Addendum to the EU SCCs); a contract fact, not visible in code
+    type: bool
+    kind: given
+    status: draft
+    refers_to: ["Art. 44A(2)(a)", "Art. 44A(2)(b)", "Art. 46(1A)", "Art. 46(6)", "Art. 46(7)", "DPA 2018 s. 119A", "DUAA 2025 Sch. 9 para. 27"]
+    note: >
+      From vocab/code.yaml, read under UK law. Under Art. 46(1A)(a) a transfer is
+      "made subject to appropriate safeguards" only if (i) safeguards are provided as
+      described in Art. 46(2) or (3) (binding corporate rules, standard data
+      protection clauses specified by the Secretary of State or issued by the
+      Commissioner under s. 119A DPA 2018 — the International Data Transfer
+      Agreement and the International Data Transfer Addendum —, approved codes or
+      certification with binding commitments, or authorised contractual clauses),
+      and (ii) the controller or processor, acting reasonably and proportionately,
+      considers that the data protection test in Art. 46(6) is met. Both limbs are
+      part of this one given fact. Arrangements entered into before 5.2.2026 that met
+      the former Art. 46(1) also count (DUAA 2025 Sch. 9 para. 27).

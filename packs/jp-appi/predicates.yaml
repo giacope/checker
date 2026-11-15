@@ -1,0 +1,75 @@
+# Facts the APPI rules read. Facts named in vocab/code.yaml keep its names, types,
+# kinds, and values; labels say what the fact means under this Act. Facts marked
+# "pack-specific" are this pack's own: the vocabulary has no element attribute for
+# them.
+#   given    stated by the business operator (contracts, consent records): code cannot show it
+#   measured computed from the code by deterministic analysis
+#   judged   a classification a person or a calibrated model makes
+predicates:
+  # ----------------------------------------------------------- PasswordStore
+  - name: PasswordStore.algorithm
+    label: the function applied to the password
+    type: enum
+    kind: measured
+    values: [plaintext, reversible, md5, sha1, sha256, sha512, bcrypt, scrypt, argon2, pbkdf2, other]
+    refers_to: ["法第23条"]
+
+  - name: PasswordStore.salted
+    label: a per-password random salt is used
+    type: bool
+    kind: measured
+    refers_to: ["法第23条"]
+
+  - name: PasswordStore.other_function_is_password_hash
+    label: the 'other' function is a salted, deliberately slow password hashing function (for example yescrypt or balloon hashing)
+    type: bool
+    kind: judged
+    refers_to: ["法第23条"]
+    note: >
+      Pack-specific. Read only when PasswordStore.algorithm is 'other', so that an
+      unlisted function is left open rather than failed.
+
+  # ---------------------------------------------------------------- Transfer
+  - name: Transfer.personal_data
+    label: personal data is part of what is sent
+    type: bool
+    kind: measured
+    refers_to: ["法第2条第1項", "法第16条第1項", "法第16条第3項"]
+    note: >
+      From vocab/code.yaml. Read as 個人データ (法第16条第3項): personal information
+      that the system holds in a searchable, structured store (個人情報データベース等,
+      法第16条第1項), which is what an application's user database is.
+
+  - name: Transfer.appi_recipient_location
+    label: where the recipient (the third party, as a legal person) is located, for 法第28条
+    type: enum
+    kind: judged
+    values: [japan, eea, uk, other]
+    refers_to: ["法第28条第1項", "規則第15条第1項", "平成31年個人情報保護委員会告示第1号"]
+    note: >
+      Pack-specific; vocab/code.yaml's Transfer.third_country is relative to the EEA
+      and cannot be used. japan = 本邦の域内; eea = one of the 30 states listed in 告示
+      2項1号 (the EU member states, Iceland, Liechtenstein, Norway); uk = 英国 (告示
+      2項2号); other = any other 外国（本邦の域外にある国又は地域）. What counts is where
+      the third party is located, not where a server is (外国にある第三者への提供編 2-2;
+      Q&A Q12-4: a foreign operator of a server in Japan that handles the data is in a
+      外国, unless it handles the data in Japan as part of its own 個人情報データベース等
+      used for business in Japan, which this pack records as japan).
+
+  - name: Transfer.appi_equivalent_measures_system
+    label: the recipient has a system (体制) meeting 規則第16条 for taking measures equivalent to those of 第4章第2節 continuously (by contract or internal rules with the operator, or certification under an international framework such as APEC CBPR)
+    type: bool
+    kind: given
+    refers_to: ["法第28条第1項", "規則第16条"]
+    note: Pack-specific. A contract or certification fact, not visible in code.
+
+  - name: Transfer.appi_principal_consent
+    label: the principal (本人) consented in advance to the provision of their personal data to a third party in a foreign country
+    type: bool
+    kind: given
+    refers_to: ["法第28条第1項", "法第28条第2項", "規則第17条"]
+    note: >
+      Pack-specific. A consent record, not visible in code; the vocabulary has no
+      consent fact. Consent counts only if it was given before the provision and is
+      consent to provision to a third party in a foreign country specifically, not
+      general consent to third-party provision.

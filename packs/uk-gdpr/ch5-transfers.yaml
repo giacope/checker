@@ -1,0 +1,76 @@
+# Chapter V of the UK GDPR as substituted by the Data (Use and Access) Act 2025
+# (version valid from 2026-09-30, in force on 2026-11-14). Replaces the gdpr norm of
+# the same name (see `patches` in package.yaml). Crown copyright, OGL v3.0.
+norms:
+  - name: chapter5_transfer_basis
+    title: A transfer of personal data to a recipient outside the UK is approved by regulations or made subject to appropriate safeguards
+    guidance: >
+      List each third party that receives personal data and where it processes it,
+      and before sending data outside the UK rely on UK approval regulations or on
+      the IDTA or UK Addendum with a documented data protection test.
+    modality: obligation
+    status: draft
+    for: {t: Transfer}
+    cite:
+      section: Art. 44A
+      url: https://www.legislation.gov.uk/eur/2016/679/article/44A/2026-11-14
+      quote: >
+        1 A controller or processor may transfer personal data to a third country or
+        an international organisation only if— a the condition in paragraph 2 is met,
+        and b the transfer is carried out in compliance with the other provisions of
+        this Regulation. 2 The condition is met if the transfer— a is approved by
+        regulations under Article 45A that are in force at the time of the transfer,
+        b is made subject to appropriate safeguards (see Article 46), or c is made in
+        reliance on a derogation for specific situations (see Article 49).
+      also:
+        - section: Art. 45A(1)
+          url: https://www.legislation.gov.uk/eur/2016/679/article/45A/2026-11-14
+          quote: >
+            For the purposes of Article 44A, the Secretary of State may by regulations
+            approve transfers of personal data to— a a third country, or b an
+            international organisation.
+        - section: Art. 46(1A)
+          url: https://www.legislation.gov.uk/eur/2016/679/article/46/2026-11-14
+          quote: >
+            A transfer of personal data to a third country or an international
+            organisation by a controller or processor is made subject to appropriate
+            safeguards only— a in a case in which— i safeguards are provided in
+            connection with the transfer as described in paragraph 2 or 3 or
+            regulations made under Article 47A(4), and ii the controller or processor,
+            acting reasonably and proportionately, considers that the data protection
+            test is met in relation to the transfer or that type of transfer (see
+            paragraph 6) …
+        - section: Art. 4(27)
+          url: https://www.legislation.gov.uk/eur/2016/679/article/4/2026-11-14
+          quote: "‘third country’ means a country or territory outside the United Kingdom;"
+        - section: DPA 2018 Sch. 21 para. 5(1)
+          url: https://www.legislation.gov.uk/ukpga/2018/12/schedule/21/paragraph/5/2026-11-14
+          quote: "The following are specified for the purposes of paragraph 4(1)— a an EEA state; b Gibraltar; …"
+    interpretation:
+      by: pack
+      note: >
+        (1) Under the UK GDPR a third country is any country outside the UK, so a
+        recipient in the EU or EEA is in a third country; its transfers are lawful
+        because DPA 2018 Sch. 21 paras 4 and 5 treat transfers to EEA states as
+        approved by regulations under Art. 45A. (2) Art. 44A(2)(a) is encoded as
+        Transfer.approved_by_uk_regulations, a judged lookup of the published list;
+        Art. 44A(2)(b) as Transfer.adequacy_or_safeguards, the vocabulary's contract
+        fact, which under this pack includes the controller's reasonable and
+        proportionate view that the data protection test is met (Art. 46(1A)(a)(ii)).
+        Either one is enough. (3) The derogations in Art. 44A(2)(c) and 49 are not
+        encoded; a transfer that fails here may still rest on one of them. (4) When
+        neither fact is stated, the verdict stays unknown and names both; it does not
+        fail. (5) Restrictions by regulations under Art. 49A, which could bar a transfer
+        relying on safeguards or derogations (Art. 44A(3)), are not encoded, and
+        this pack has not checked whether any such regulations are in force.
+    defers_to:
+      - "Art. 49 derogations for specific situations"
+      - "Art. 44A(3) and Art. 49A restrictions in the public interest"
+      - "Art. 46(1A)(b) public-body instruments"
+      - "Art. 47 binding corporate rules"
+    require:
+      any:
+        - not: {fact: t.personal_data}
+        - not: {fact: t.third_country}
+        - {fact: t.approved_by_uk_regulations}
+        - {fact: t.adequacy_or_safeguards}

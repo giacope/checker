@@ -1,0 +1,206 @@
+# V6 Authentication (V6.2 Password Security, V6.3 General Authentication
+# Security) and V11.4.2 password storage. Requirement IDs and levels from the
+# 5.0.0 release requirement list; titles are this pack's own paraphrases.
+#
+# v0 has only obligations, so scoping is written into each norm as "not in
+# scope, or meets the requirement". The V6.2 requirements are about passwords,
+# so each reads "the system does not use password authentication, or ...".
+
+norms:
+  # ------------------------------------------------------ V6.2 passwords
+  - name: V6.2.1
+    title: Passwords users set are at least 8 characters long (15 strongly recommended)
+    guidance: >
+      Reject new or changed passwords shorter than 8 characters in the server-side
+      validator (15 or more is recommended), counting Unicode characters rather than
+      bytes.
+    modality: obligation
+    level: 1
+    cite:
+      section: ASVS 5.0 V6.2.1
+      ref: v5.0.0-6.2.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x15-V6-Authentication.md#v62-password-security
+    interpretation:
+      by: pack
+      note: >
+        The 8-character minimum is the requirement; the 15-character
+        recommendation is not an obligation and is not checked. "At least 8
+        characters" is read as the enforced minimum length being 8 or more.
+    status: draft
+    require:
+      any:
+        - not: {fact: system.password_auth}
+        - ge: [{fact: system.password_min_length}, 8]
+
+  - name: V6.2.4
+    title: New and changed passwords are checked against at least the top 3000 common passwords
+    guidance: >
+      Check new and changed passwords against a list of at least the 3000 most
+      common passwords that fit the length policy, and reject matches with a clear
+      message.
+    modality: obligation
+    level: 1
+    cite:
+      section: ASVS 5.0 V6.2.4
+      ref: v5.0.0-6.2.4
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x15-V6-Authentication.md#v62-password-security
+    interpretation:
+      by: pack
+      note: >
+        Read as the existence of the check (system.password_blocklist_check).
+        The size of the list (at least 3000 entries matching the password
+        policy) is not in the vocabulary and is not checked.
+    status: draft
+    require:
+      any:
+        - not: {fact: system.password_auth}
+        - {fact: system.password_blocklist_check}
+
+  - name: V6.2.5
+    title: Passwords of any composition are accepted; no character-class rules
+    guidance: >
+      Remove rules that demand digits, upper-case letters, or symbols in passwords;
+      enforce a minimum length and a blocklist check instead.
+    modality: obligation
+    level: 1
+    cite:
+      section: ASVS 5.0 V6.2.5
+      ref: v5.0.0-6.2.5
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x15-V6-Authentication.md#v62-password-security
+    status: draft
+    require:
+      any:
+        - not: {fact: system.password_auth}
+        - not: {fact: system.password_composition_rules}
+
+  - name: V6.2.9
+    title: Passwords of at least 64 characters are permitted
+    guidance: >
+      Accept passwords of at least 64 characters; where the hash truncates input
+      (bcrypt at 72 bytes), pre-hash or set the limit accordingly, and never
+      truncate silently.
+    modality: obligation
+    level: 2
+    cite:
+      section: ASVS 5.0 V6.2.9
+      ref: v5.0.0-6.2.9
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x15-V6-Authentication.md#v62-password-security
+    interpretation:
+      by: pack
+      note: Read as the maximum accepted length being 64 characters or more.
+    status: draft
+    require:
+      any:
+        - not: {fact: system.password_auth}
+        - ge: [{fact: system.password_max_length}, 64]
+
+  - name: V6.2.10
+    title: Passwords stay valid until compromised or changed by the user; no periodic rotation
+    guidance: >
+      Remove scheduled password expiry; require a change only when there is evidence
+      that the password has been compromised.
+    modality: obligation
+    level: 2
+    cite:
+      section: ASVS 5.0 V6.2.10
+      ref: v5.0.0-6.2.10
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x15-V6-Authentication.md#v62-password-security
+    status: draft
+    require:
+      any:
+        - not: {fact: system.password_auth}
+        - not: {fact: system.password_periodic_change}
+
+  - name: V6.2.12
+    title: New and changed passwords are checked against a set of breached passwords
+    guidance: >
+      Check new and changed passwords against a breached-password corpus, for
+      example the k-anonymity range API of Have I Been Pwned or a downloaded breach
+      list.
+    modality: obligation
+    level: 2
+    cite:
+      section: ASVS 5.0 V6.2.12
+      ref: v5.0.0-6.2.12
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x15-V6-Authentication.md#v62-password-security
+    interpretation:
+      by: pack
+      note: >
+        The vocabulary's blocklist fact covers "common or compromised"
+        passwords, so it cannot tell a breached-password check from a list of
+        common passwords. No check at all fails; a check passes once the list is
+        judged to contain breached passwords (pack-specific
+        system.password_blocklist_includes_breached), and is unknown until then.
+    status: draft
+    require:
+      any:
+        - not: {fact: system.password_auth}
+        - all:
+            - {fact: system.password_blocklist_check}
+            - {fact: system.password_blocklist_includes_breached}
+
+  # -------------------------------------------- V6.3 general authentication
+  - name: V6.3.1
+    title: Controls against credential stuffing and password brute force are implemented
+    guidance: >
+      Limit failed login attempts per account and per client (rate limiting with
+      backoff or temporary lockout), and apply the same limits to password reset and
+      other credential endpoints.
+    modality: obligation
+    level: 1
+    cite:
+      section: ASVS 5.0 V6.3.1
+      ref: v5.0.0-6.3.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x15-V6-Authentication.md#v63-general-authentication-security
+    interpretation:
+      by: pack
+      note: >
+        The requirement asks for controls "according to the application's
+        security documentation" (V6.1.1: rate limiting, anti-automation,
+        adaptive response). The pack reads it as: where users log in with a
+        password, failed login attempts are limited per account or per client.
+        Whether the controls match the documentation, and other controls such
+        as adaptive response, are not checked.
+    defers_to: ["V6.1.1 (documented anti-automation controls)"]
+    status: draft
+    require:
+      any:
+        - not: {fact: system.password_auth}
+        - {fact: system.login_rate_limited}
+
+  # ------------------------------------------------- V11.4 password storage
+  - name: V11.4.2
+    title: Passwords are stored with an approved password hashing (key derivation) function
+    guidance: >
+      Hash passwords with argon2id, scrypt, bcrypt, or PBKDF2-HMAC-SHA-256/512
+      through a maintained library with the parameters Appendix C requires, and
+      rehash legacy hashes at the next login.
+    modality: obligation
+    level: 2
+    for: {p: PasswordStore}
+    cite:
+      section: ASVS 5.0 V11.4.2
+      ref: v5.0.0-11.4.2
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x20-V11-Cryptography.md#v114-hashing-and-hash-based-functions
+    interpretation:
+      by: pack
+      note: >
+        "Approved" is read from Appendix C, "Hash Functions for Password
+        Storage": argon2id, scrypt, bcrypt and PBKDF2-HMAC-SHA-512/-256 are
+        approved (A), PBKDF2-HMAC-SHA-1 is legacy (L). The vocabulary does not
+        separate argon2id from argon2i/argon2d or PBKDF2's underlying hash, so
+        argon2 and pbkdf2 are accepted as a whole. Plain or salted general hash
+        functions (md5, sha1, sha256, sha512), reversible encryption, and
+        plaintext are not password hashing functions and fail. For 'other', a
+        reviewer judges the function. The parameter settings the requirement
+        also asks for (Appendix C "Required Parameters") are not in the
+        vocabulary, so a pass here says the function is approved, not that its
+        cost is high enough.
+    defers_to: ["V11.4.2 parameter settings (Appendix C required parameters)"]
+    status: draft
+    require:
+      any:
+        - in: [{fact: p.algorithm}, [bcrypt, scrypt, argon2, pbkdf2]]
+        - all:
+            - eq: [{fact: p.algorithm}, other]
+            - {fact: p.other_is_approved_kdf}

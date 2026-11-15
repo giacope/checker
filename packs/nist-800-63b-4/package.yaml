@@ -1,0 +1,48 @@
+package: nist-800-63b-4
+version: 0.1.0
+title: "NIST SP 800-63B-4, Digital Identity Guidelines: Authentication and Authenticator Management (password verifiers)"
+publisher: National Institute of Standards and Technology
+subject: system
+# A work of the U.S. Government (17 U.S.C. 105): not subject to copyright in the
+# United States, so the text may be quoted.
+text_policy: public
+source:
+  document: NIST Special Publication 800-63B-4
+  doi: https://doi.org/10.6028/NIST.SP.800-63B-4
+  pdf: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-63B-4.pdf
+  pdf_sha256: d9ab89576b5ae2cfb3ba37781110788dea27a85a5079496dbfc1a79834670afd
+  html: https://pages.nist.gov/800-63-4/sp800-63b.html
+  status: final
+  published: 2025-07-31
+  date_note: >
+    The PDF title page reads "July 2025" and CSRC lists the final as
+    07/31/25 (https://csrc.nist.gov/pubs/sp/800/63/b/4/final); the HTML
+    edition on pages.nist.gov was last built 2025-08-26. The quoted text was
+    checked to read the same in the PDF (pp. 14-16, 30) and the HTML.
+  supersedes: SP 800-63B (2017, updated 2020-03-02)
+  retrieved: 2026-11-14
+cite_source: >
+  cite.url links the HTML edition with the element id NIST renders for the
+  section: #passwordver for Sec. 3.1.1.2 Password Verifiers,
+  #password-authenticators for 3.1.1.1, #throttle for 3.2.2 Rate Limiting
+  (Throttling). Each id was checked to exist on the page (read 2026-11-14).
+  The section numbers are the ones the page and the PDF print.
+scope: >
+  The SHALL statements of Sec. 3.1.1.2 Password Verifiers that facts in
+  vocab/code.yaml can decide: minimum length, no other composition rules, no
+  periodic change, blocklist comparison, rate limiting of failed attempts, and
+  salted hashing with a password hashing scheme. The requirements apply to
+  "centrally verified passwords that are used as independent authentication
+  factors" (Sec. 3.1.1), read here as system.password_auth. Every element is a
+  draft until a reviewer approves it.
+
+not_formalized:
+  - "3.1.1.2 \"Verifiers and CSPs SHOULD permit a maximum password length of at least 64 characters\": a SHOULD, not a SHALL; v0 has only obligations"
+  - "3.1.1.2 cost factor \"SHOULD be as high as practical\"; approved scheme from SP 800-132 SHOULD be used"
+  - "3.1.1.2 Unicode code points counted as single characters; printing ASCII and space SHOULD be accepted"
+  - "3.1.1.2 forced change on evidence of compromise"
+  - "3.1.1.2 no hints accessible to unauthenticated claimants; no KBA prompts; password requested and verified in full"
+  - "3.1.1.2 reason for rejection and guidance on choosing a strong password; password managers and autofill allowed"
+  - "3.1.1.2 approved encryption and an authenticated protected channel when requesting passwords"
+  - "3.1.1.2 both the salt and the hash stored for each password; optional keyed hashing with a separately stored secret key"
+  - "3.2.2 consecutive failed attempts limited to no more than 100 by disabling the authenticator (no attempt count in the vocabulary)"

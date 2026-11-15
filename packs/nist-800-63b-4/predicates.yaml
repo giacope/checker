@@ -1,0 +1,59 @@
+# Facts the rules read. Every `<Type>.<attr>` below except the ones marked
+# "pack-specific" is declared exactly as in vocab/code.yaml (same type, kind,
+# values), so the code adapter's evidence feeds this pack without mapping.
+predicates:
+  # ---------------------------------------------------------------- system
+  - name: system.password_auth
+    label: users authenticate with a password the system verifies
+    type: bool
+    kind: measured
+    refers_to: ["3.1.1"]
+  - name: system.password_is_sole_factor
+    label: a password alone is enough to log in (no second factor is required)
+    type: bool
+    kind: judged
+    refers_to: ["3.1.1.2"]
+  - name: system.password_min_length
+    label: minimum password length enforced at registration or password change, in characters (0 if none)
+    type: number
+    kind: measured
+  - name: system.password_composition_rules
+    label: the system requires character classes (digits, upper case, symbols) in passwords
+    type: bool
+    kind: measured
+  - name: system.password_blocklist_check
+    label: new passwords are checked against a list of common or compromised passwords
+    type: bool
+    kind: measured
+  - name: system.password_periodic_change
+    label: the system forces users to change passwords after a fixed period
+    type: bool
+    kind: measured
+  - name: system.login_rate_limited
+    label: failed login attempts are limited per account or per client
+    type: bool
+    kind: measured
+    refers_to: ["3.2.2"]
+
+  # --------------------------------------------------------- PasswordStore
+  - name: PasswordStore.algorithm
+    label: the function applied to the password
+    type: enum
+    kind: measured
+    values: [plaintext, reversible, md5, sha1, sha256, sha512, bcrypt, scrypt, argon2, pbkdf2, other]
+  - name: PasswordStore.salted
+    label: a per-password random salt is used
+    type: bool
+    kind: measured
+  - name: PasswordStore.other_is_password_hashing_scheme
+    label: "(pack-specific) the function, where the vocabulary classes it as 'other', is a password hashing scheme taking a password, a salt, and a cost factor"
+    type: bool
+    kind: judged
+    refers_to: ["3.1.1.2"]
+    note: Read only when PasswordStore.algorithm is other.
+  - name: PasswordStore.salt_length_bits
+    label: "(pack-specific) the length of the per-password salt, in bits"
+    type: number
+    kind: measured
+    refers_to: ["3.1.1.2"]
+    note: Read only by the salt-length norm, and not for bcrypt, whose salt is fixed at 128 bits by the algorithm.

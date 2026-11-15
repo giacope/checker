@@ -1,0 +1,84 @@
+package: jp-appi
+version: 0.1.0
+title: 個人情報の保護に関する法律（個人情報取扱事業者の義務：安全管理措置・外国にある第三者への提供）— rules for checking software
+publisher: e-Gov 法令検索（デジタル庁）
+jurisdiction: Japan (national law)
+# Facts about the software system as a whole are written system.<attr> (vocab/code.yaml).
+subject: system
+# 著作権法第13条: 法令（憲法・法律・政令・省令・告示・条例等）は著作権の目的とならない。
+# The statutory text, the 個人情報保護委員会規則, and the 告示 may therefore be quoted.
+# The 個人情報保護委員会 guidelines are cited by link and paraphrased.
+text_policy: public
+scope: >
+  個人情報の保護に関する法律 (APPI) 第4章第2節, the duties of a 個人情報取扱事業者
+  that facts a code adapter can extract (vocab/code.yaml) bear on: 第23条 安全管理措置,
+  read for password storage, and 第28条 外国にある第三者への提供の制限, with the
+  外国 designated under 施行規則第15条 and the 基準適合体制 under 施行規則第16条. The
+  2022 restructuring (令和2年改正法・令和3年改正法) renumbered the duties: 安全管理措置
+  is 第23条 (formerly 第20条) and 外国にある第三者への提供 is 第28条 (formerly 第24条);
+  both numbers were checked against the text in force on the as-of date. Every element
+  is a draft until a reviewer qualified in Japanese data protection law approves it.
+  This is national law, not an adopted model code, so the package has no `adoption`
+  block.
+
+# Source: e-Gov 法令API v2, law_data endpoint with point-in-time retrieval (asof),
+# response_format=xml. The revision IDs are those the API returned for that date.
+# Element cite.url links pin the same revision on e-Gov 法令検索:
+#   https://laws.e-gov.go.jp/law/<law_id>/<revision date>_<amendment law id>#<anchor>
+# Anchors are the element ids e-Gov renders, e.g. Mp-Ch_4-Se_2-At_28-Pr_1
+# (本則 第4章 第2節 第28条 第1項) and Mp-At_16-Pr_1 (規則 第16条 第1項). Both
+# anchors were found in the rendered pages on 2026-11-14.
+source:
+  api: https://laws.e-gov.go.jp/api/2/law_data/{law_id}?asof=2026-11-14&response_format=xml
+  as_of: 2026-11-14
+  retrieved: 2026-11-14
+  laws:
+    - law_id: 415AC0000000057
+      law_num: 平成十五年法律第五十七号
+      title: 個人情報の保護に関する法律
+      law_revision_id: 415AC0000000057_20261102_508AC0000000062
+      amendment_law: 防災庁設置法の施行に伴う関係法律の整備等に関する法律（令和八年法律第六十二号）
+      amendment_promulgated: 2026-07-17
+      amendment_enforced: 2026-11-02
+      url: https://laws.e-gov.go.jp/law/415AC0000000057/20261102_508AC0000000062
+      note: >
+        The API also lists five later revisions not in force on the as-of date
+        (enforcement 2027-01-17, 2027-04-01, 2027-04-16, 2028-07-16, 2028-12-23;
+        among them 個人情報の保護に関する法律等の一部を改正する法律（令和八年法律第五十六号）).
+        The point-in-time texts for 2027-01-17, 2027-04-16, 2028-07-16 and
+        2028-12-23 were compared: 第23条 is unchanged in all of them, and the only
+        change to 第28条 is from 2028-07-16, where the definition of 外国 in 第1項
+        applies "以下同じ" instead of "以下この条及び第三十一条第一項第二号において同じ".
+    - law_id: 428M60020000003
+      law_num: 平成二十八年個人情報保護委員会規則第三号
+      title: 個人情報の保護に関する法律施行規則
+      law_revision_id: 428M60020000003_20260614_508M60020000002
+      amendment_law: 個人情報の保護に関する法律施行規則の一部を改正する規則（令和八年個人情報保護委員会規則第二号）
+      amendment_promulgated: 2026-06-11
+      amendment_enforced: 2026-06-14
+      url: https://laws.e-gov.go.jp/law/428M60020000003/20260614_508M60020000002
+  notices:
+    - title: 個人の権利利益を保護する上で我が国と同等の水準にあると認められる個人情報の保護に関する制度を有している外国等（平成三十一年個人情報保護委員会告示第一号）
+      last_amended: 2023-04-18
+      url: https://www.ppc.go.jp/files/pdf/h31kokuji1_rev2023April18.pdf
+      note: >
+        Designates under 規則第15条第1項 the EEA states listed in 告示 2項1号 (the 27
+        EU member states, Iceland, Liechtenstein and Norway) and 英国 (2項2号), on the
+        condition (3項1号) that the recipient is subject to the GDPR or the UK GDPR.
+        Not on e-Gov; read from the 個人情報保護委員会 site.
+  guidelines:
+    - title: 個人情報の保護に関する法律についてのガイドライン（通則編）（平成28年11月、令和8年6月一部改正）
+      url: https://www.ppc.go.jp/personalinfo/legal/guidelines_tsusoku/
+    - title: 個人情報の保護に関する法律についてのガイドライン（外国にある第三者への提供編）（平成28年11月、令和7年12月一部改正）
+      url: https://www.ppc.go.jp/personalinfo/legal/guidelines_offshore/
+
+not_formalized:
+  - "第17条〜第21条 利用目的の特定・制限、適正な取得、取得に際しての利用目的の通知等"
+  - "第22条 データ内容の正確性の確保等（利用する必要がなくなったときの消去：努力義務）"
+  - "第24条 従業者の監督、第25条 委託先の監督"
+  - "第26条 漏えい等の報告等"
+  - "第27条 第三者提供の制限（国内の第三者及び指定外国にある第三者への提供）"
+  - "第28条2項 同意取得時の情報提供（規則第17条）、第28条3項 基準適合体制を整備した者に提供した場合の措置（規則第18条）"
+  - "第29条・第30条 第三者提供に係る記録の作成・確認"
+  - "第35条 利用停止等（消去を含む）の請求：GDPR Art. 17 に当たる一般的な消去権はなく、第35条1項・5項の要件を満たす請求に限られる（benchmark C11 is not answered by this pack）"
+  - "第23条 for LogStatement (logs_credentials, logs_personal_data)"

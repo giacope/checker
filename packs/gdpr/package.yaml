@@ -1,0 +1,77 @@
+package: gdpr
+version: 0.1.0
+title: General Data Protection Regulation (Regulation (EU) 2016/679) — rules for checking software
+publisher: Publications Office of the European Union (EUR-Lex)
+jurisdiction: European Union and EEA (incorporated into the EEA Agreement by EEA Joint Committee Decision No 154/2018)
+# Facts about the software system as a whole are written system.<attr>
+# (vocab/code.yaml). Overlays such as uk-gdpr inherit this subject.
+subject: system
+scope: >
+  The provisions of the GDPR that facts a code adapter can extract (vocab/code.yaml)
+  bear on: the erasure path behind the right to erasure (Art. 17), the export path
+  behind the right to data portability (Art. 20(1)), the legal basis for transfers
+  of personal data to third countries (Art. 44, 45, 46), and three readings of
+  security of processing (Art. 32(1), with Art. 5(1)(f) and 32(2)) for password
+  storage, credentials written to logs, and encryption in transit. A pass means the code shows no breach
+  of the encoded precondition; it is not a finding that the controller complies with
+  the Regulation. Every element is a draft until a data protection lawyer reviews it.
+  This is the model regulation, not an adopting law, so the package has no
+  `adoption` block.
+
+# EUR-Lex legal notice (https://eur-lex.europa.eu/content/legal-notice/legal-notice.html,
+# read 2026-11-14): "© European Union, 1998-2026. The Commission's document reuse
+# policy is based on Decision 2011/833/EU. Unless otherwise specified, you can re-use
+# the legal documents published in EUR-Lex for commercial or non-commercial purposes."
+# Consolidated texts are licensed under CC BY 4.0 (acknowledge the source, indicate
+# changes). Quotes below are short, verbatim, and shortened only where marked "…".
+text_policy: public
+licence:
+  notice: © European Union, 1998-2026
+  reuse: Commission Decision 2011/833/EU of 12 December 2011 on the reuse of Commission documents (OJ L 330, 14.12.2011, p. 39); consolidated texts under CC BY 4.0
+  reuse_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  decision_url: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011D0833
+  acknowledgement: "Source: EUR-Lex, https://eur-lex.europa.eu, © European Union. Quotes are verbatim; omissions are marked with an ellipsis."
+
+source:
+  act: Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 (OJ L 119, 4.5.2016, p. 1)
+  celex: 32016R0679
+  oj_url: https://eur-lex.europa.eu/eli/reg/2016/679/oj
+  consolidated: 02016R0679-20160504
+  consolidated_version: "02016R0679 — EN — 04.05.2016 — 000.002 (includes Corrigendum, OJ L 127, 23.5.2018, p. 2)"
+  url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504
+  retrieved: 2026-11-14
+  as_of: 2026-11-14
+  note: >
+    The Cellar SPARQL endpoint lists 02016R0679-20160504 as the only consolidated
+    version: the Regulation has not been amended. The Digital Omnibus proposal
+    (COM(2025) 837, procedure 2025/0360(COD)) that would amend it was still under
+    negotiation on 2026-11-14 (Council mandate 21.10.2026; no Parliament position).
+    On 2026-11-14 EUR-Lex answered every request with a bot challenge and then
+    "EUR-Lex is temporarily not fully available", so the text was read from the
+    Publications Office's Cellar copy of the same consolidated version
+    (http://publications.europa.eu/resource/celex/02016R0679-20160504, resolved to
+    cellar 5f2552c2-cc45-11e6-ad7c-01aa75ed71a1.0022.03/DOC_1, XHTML). That file
+    carries the element ids EUR-Lex uses for its HTML rendering (art_1 … art_99), so
+    cite.url links are EUR-Lex consolidated-text URLs with an #art_<n> anchor. The
+    anchor ids were verified in the Cellar XHTML, not on the EUR-Lex page.
+    The consolidated text "is meant purely as a documentation tool and has no legal
+    effect"; the authentic text is the Official Journal (oj_url).
+    The Art. 20 and Art. 32(1)(a), 32(2) quotes were added on 2026-11-15 from the
+    same Cellar resource (version line "02016R0679 — EN — 04.05.2016 — 000.002"),
+    whose ids art_20 and art_32 were checked; every quote in the pack was then
+    compared with that file's text.
+
+not_formalized:
+  - "Art. 5(1)(c) data minimisation, for LogStatement.logs_personal_data: whether a log line holding personal data is excessive depends on the purpose of the log, which code does not show"
+  - "Art. 6 lawfulness of processing; Art. 7 conditions for consent"
+  - "Art. 12(3) time limits for responding to a request (one month, extendable)"
+  - "Art. 15, 16, 18, 21 other data subject rights (access, rectification, restriction, objection)"
+  - "Art. 20(1)(a), (b), 20(2) to (4): legal basis, automated means, direct transmission, exclusions (art20_data_export encodes only the export path)"
+  - "Art. 17(2) informing other controllers of an erasure request"
+  - "Art. 19 notifying recipients of erasure"
+  - "Art. 25 data protection by design and by default"
+  - "Art. 28 processors (a Transfer to a processor still needs a contract under Art. 28(3))"
+  - "Art. 32(1)(a)-(d) and 32(2) other than password storage, credentials in logs, and encryption in transit to users"
+  - "Art. 33, 34 personal data breach notification"
+  - "Art. 47 binding corporate rules; Art. 48; Art. 49 derogations"
+  - "Transfers to international organisations (Art. 44 to 46); onward transfers"

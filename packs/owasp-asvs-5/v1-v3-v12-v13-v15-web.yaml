@@ -1,0 +1,352 @@
+# V1.2.1 output encoding, V1.2.5 OS command injection, V1.5.2 safe
+# deserialization, V3.4.1 HSTS, V3.4.3 CSP, V3.5.1 request forgery, V12.2.1
+# HTTPS to external-facing services, V13.4.2 debug modes, V15.2.1 component
+# remediation time frames, V15.3.3 mass assignment, and a system-level reading
+# of V16.2.5 (request parameter filtering). Requirement IDs and levels from the
+# 5.0.0 release chapter files (5.0/en/*.md at v5.0.0_release, read 2026-11-15);
+# titles, interpretations, and guidance are this pack's own words.
+#
+# Element norms range over a vocabulary type, so a repository with no element of
+# that type produces no row for them (not a fail). Within a type, an element is
+# out of scope, or passes, when no untrusted data reaches it.
+
+norms:
+  # ---------------------------------------------------- V1 encoding, injection
+  - name: V1.2.1
+    title: Values written into HTML without the template engine's escaping are not user-controlled, or are sanitized first
+    guidance: >
+      Let the template engine escape output and remove raw/html_safe/|safe/
+      dangerouslySetInnerHTML on user-supplied values; where HTML must be
+      rendered, pass it through a maintained sanitizer (DOMPurify, nh3 or bleach,
+      Rails sanitize, HtmlSanitizeEx) first.
+    modality: obligation
+    level: 1
+    for: {h: HtmlOutput}
+    cite:
+      section: ASVS 5.0 V1.2.1
+      ref: v5.0.0-1.2.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x10-V1-Encoding-and-Sanitization.md#v12-injection-prevention
+    interpretation:
+      by: pack
+      note: >
+        V1.2.1 asks for output encoding suited to each context. The vocabulary
+        records the places where HTML encoding is switched off (HtmlOutput), not
+        the places where the engine encodes automatically, so the pack reads the
+        requirement for those places: a value written unescaped fails when
+        user-supplied data can reach it and it is not sanitized. A sanitized value
+        is credited, following V1.3.1, which accepts a well-known HTML sanitizer
+        for untrusted HTML. Encoding in other contexts (attributes, URLs, CSS,
+        JavaScript, HTTP header fields, XML) and whether the sanitizer is
+        configured well are not in the vocabulary.
+    defers_to: ["V1.2.1 encoding for attribute, CSS, URL, JavaScript, and header contexts", "V1.3.1 sanitizer choice and configuration"]
+    status: draft
+    require:
+      any:
+        - not: {fact: h.untrusted_input}
+        - {fact: h.sanitized}
+
+  - name: V1.2.5
+    title: Operating-system commands are not built as shell command lines from request data
+    guidance: >
+      Run programs with an argument list and no shell (subprocess.run([...]),
+      execFile/spawn without shell, System.cmd/3, Open3 with separate
+      arguments), validate arguments against an allowlist, and never build a
+      shell command line from request data.
+    modality: obligation
+    level: 1
+    for: {x: CommandExecution}
+    cite:
+      section: ASVS 5.0 V1.2.5
+      ref: v5.0.0-1.2.5
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x10-V1-Encoding-and-Sanitization.md#v12-injection-prevention
+    interpretation:
+      by: pack
+      note: >
+        "Parameterized OS queries" is read as construction argv (program and
+        arguments passed separately, no shell). A constant command line, or any
+        command no request data reaches, is not injectable and passes. A shell
+        command line concatenated or interpolated from request data fails: the
+        requirement's other remedy, contextual command-line encoding (shlex.quote,
+        Shellwords.escape), is not in the vocabulary and is not credited. Argument
+        injection through an argv call (a value starting with "-", or argv that
+        runs "sh -c") is not distinguished.
+    defers_to: ["V1.2.5 contextual command-line encoding", "argument injection through argv calls"]
+    status: draft
+    require:
+      any:
+        - not: {fact: x.untrusted_input}
+        - in: [{fact: x.construction}, [argv, constant]]
+
+  - name: V1.5.2
+    title: Untrusted data is not deserialized with a format that can create arbitrary types
+    guidance: >
+      Use data-only formats (JSON) or the safe loader (yaml.safe_load,
+      YAML.safe_load, :erlang.binary_to_term(bin, [:safe]), an explicit class
+      allowlist) for anything a client or another party can supply; never call
+      pickle, Marshal.load, or node-serialize on such input.
+    modality: obligation
+    level: 2
+    for: {d: Deserialization}
+    cite:
+      section: ASVS 5.0 V1.5.2
+      ref: v5.0.0-1.5.2
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x10-V1-Encoding-and-Sanitization.md#v15-safe-deserialization
+    interpretation:
+      by: pack
+      note: >
+        Every Deserialization element uses a format that can instantiate
+        arbitrary types. The call passes when it restricts the types it creates
+        (safe_mode: a safe loader or an allowlist of types) or when no data from a
+        request, a cookie, or another party reaches it. An unrestricted call on
+        such data fails; this covers the second sentence of the requirement too,
+        since the mechanisms the vocabulary lists are the ones documented as
+        insecure for untrusted input. Whether an allowlist is narrow enough is not
+        checked.
+    status: draft
+    require:
+      any:
+        - not: {fact: d.untrusted_input}
+        - {fact: d.safe_mode}
+
+  # ----------------------------------------- V3.4 browser security headers
+  - name: V3.4.1
+    title: Responses carry Strict-Transport-Security with a max-age of at least one year
+    guidance: >
+      Send Strict-Transport-Security: max-age=31536000 (or more) on every HTTPS
+      response, adding includeSubDomains for level 2, from the framework's HSTS
+      setting or the TLS-terminating proxy configuration kept in the repository.
+    modality: obligation
+    level: 1
+    cite:
+      section: ASVS 5.0 V3.4.1
+      ref: v5.0.0-3.4.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x12-V3-Web-Frontend-Security.md#v34-browser-security-mechanism-headers
+    interpretation:
+      by: pack
+      note: >
+        "At least 1 year" is read as a max-age of 31536000 seconds (365 days) or
+        more; a leap year's 31622400 is not demanded. system.hsts is read as the
+        header being on all responses. The level 2 clause that the policy applies
+        to all subdomains (includeSubDomains) is not in the vocabulary, so a pass
+        here is a level 1 pass only. A header added by infrastructure outside the
+        repository (a CDN or load balancer) is not seen and reads as absent until
+        a profile states it.
+    defers_to: ["V3.4.1 L2 includeSubDomains"]
+    status: draft
+    require:
+      all:
+        - {fact: system.hsts}
+        - ge: [{fact: system.hsts_max_age}, 31536000]
+
+  - name: V3.4.3
+    title: HTML responses carry an enforced Content-Security-Policy header
+    guidance: >
+      Send a Content-Security-Policy header (not report-only) with at least
+      object-src 'none' and base-uri 'none' and a script allowlist or nonces or
+      hashes, and avoid 'unsafe-inline' and 'unsafe-eval' in script-src.
+    modality: obligation
+    level: 2
+    cite:
+      section: ASVS 5.0 V3.4.3
+      ref: v5.0.0-3.4.3
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x12-V3-Web-Frontend-Security.md#v34-browser-security-mechanism-headers
+    interpretation:
+      by: pack
+      note: >
+        Only the presence of an enforced policy is checked (report-only does not
+        count, per the vocabulary). The minimum the requirement sets for the
+        policy's content (a global policy with object-src 'none' and base-uri
+        'none', and an allowlist or nonces or hashes) and the level 3 per-response
+        nonce or hash policy are not in the vocabulary, so a pass means a policy
+        exists, not that it is strong enough. The requirement's "HTTP responses"
+        is read as the HTML responses the vocabulary describes.
+    defers_to: ["V3.4.3 minimum directives: object-src 'none', base-uri 'none', allowlist or nonces/hashes", "V3.4.3 L3 per-response nonces or hashes"]
+    status: draft
+    require: {fact: system.content_security_policy}
+
+  # --------------------------------------------- V3.5 origin separation
+  - name: V3.5.1
+    title: Cookie-authenticated state-changing requests are checked to come from the application
+    guidance: >
+      Enable the framework's CSRF protection (anti-forgery tokens on every
+      state-changing form and request) or check Origin / Sec-Fetch-Site on
+      cookie-authenticated requests, and do not exempt state-changing routes.
+    modality: obligation
+    level: 1
+    cite:
+      section: ASVS 5.0 V3.5.1
+      ref: v5.0.0-3.5.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x12-V3-Web-Frontend-Security.md#v35-browser-origin-separation
+    interpretation:
+      by: pack
+      note: >
+        Read as system.csrf_protection: anti-forgery tokens, or a check of
+        Origin / Sec-Fetch headers, on state-changing requests that cookies
+        authenticate; an application no cookie authenticates is not exposed and
+        the fact is true for it. The requirement applies where the application
+        does not rely on the CORS preflight mechanism; an application that does
+        (sensitive functionality reachable only with non-safelisted headers or
+        content types) is the subject of V3.5.2, and the vocabulary does not tell
+        the two apart, so such an application fails here until a reviewer states
+        the fact. SameSite cookies alone are not credited, as the requirement does
+        not name them.
+    defers_to: ["V3.5.2 reliance on CORS preflight", "V3.5.3 safe HTTP methods for sensitive functionality"]
+    status: draft
+    require: {fact: system.csrf_protection}
+
+  # ------------------------------------------------------ V12.2 HTTPS
+  - name: V12.2.1
+    title: Plain-HTTP requests are refused or redirected to HTTPS in production
+    guidance: >
+      Refuse or redirect plain HTTP in production (Rails config.force_ssl,
+      Plug.SSL or force_ssl, Django SECURE_SSL_REDIRECT, an HTTPS-only proxy
+      configuration) and use https URLs for every client-facing endpoint and
+      callback.
+    modality: obligation
+    level: 1
+    cite:
+      section: ASVS 5.0 V12.2.1
+      ref: v5.0.0-12.2.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x21-V12-Secure-Communication.md#v122-https-communication-with-external-facing-services
+    interpretation:
+      by: pack
+      note: >
+        "Does not fall back to insecure or unencrypted communications" is read as
+        system.tls_enforced: the application refuses or redirects plain-HTTP
+        requests in production. A redirect is accepted, although the first request
+        travels in clear; HSTS (V3.4.1) closes that gap. TLS terminated by
+        infrastructure outside the repository is not seen and reads as not
+        enforced until a profile states it. Protocol versions, cipher suites, and
+        certificates (V12.1, V12.2.2) are not checked.
+    defers_to: ["V12.1.1 TLS versions", "V12.2.2 publicly trusted certificates"]
+    status: draft
+    require: {fact: system.tls_enforced}
+
+  # ------------------------------------------- V13.4 information leakage
+  - name: V13.4.2
+    title: Debug modes are off in the production configuration
+    guidance: >
+      Turn off debug mode, detailed error pages, debug toolbars, and code
+      reloading in the production configuration, and read the setting from the
+      environment with a default of off.
+    modality: obligation
+    level: 2
+    cite:
+      section: ASVS 5.0 V13.4.2
+      ref: v5.0.0-13.4.2
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x22-V13-Configuration.md#v134-unintended-information-leakage
+    interpretation:
+      by: pack
+      note: >
+        Read as system.debug_in_production being false: the application's
+        production configuration enables no debug features. The requirement covers
+        "all components"; other components of the deployment (database consoles,
+        proxies, the platform) are not in the repository's evidence.
+    defers_to: ["V13.4.2 debug modes of components outside the application"]
+    status: draft
+    require:
+      not: {fact: system.debug_in_production}
+
+  # --------------------------------------------------- V15.2 dependencies
+  - name: V15.2.1
+    title: Locked third-party components have no known advisory left unremediated beyond the documented time frames
+    guidance: >
+      Upgrade packages with published advisories to a fixed version, high and
+      critical first, regenerate the lock file, and run a dependency audit in CI
+      against remediation time frames written down in the security documentation.
+    modality: obligation
+    level: 1
+    for: {d: Dependency}
+    cite:
+      section: ASVS 5.0 V15.2.1
+      ref: v5.0.0-15.2.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x24-V15-Secure-Coding-and-Architecture.md#v152-security-architecture-and-dependencies
+    interpretation:
+      by: pack
+      note: >
+        The time frames V15.2.1 measures against are the application's own
+        (V15.1.1: risk-based remediation time frames), and neither they nor the
+        advisories' publication and fix dates are in the vocabulary. The pack
+        therefore decides only the cases the evidence settles whatever the
+        documented frames are, and leaves the rest open. (1) A locked version no
+        published advisory affects passes: there is nothing to remediate. (2) A
+        version with an advisory of high or critical severity, where a released
+        version fixes every advisory that affects it, fails: the fix exists and
+        the risk is at the top of any risk-based scale, so the pack treats
+        keeping the vulnerable version as breaching the frames. This is the
+        pack's stricter reading: a fix released within the last days of a
+        generous frame would not yet breach it, and the evidence cannot show the
+        fix's age. (3) Every other vulnerable version (low or moderate severity,
+        unknown severity, or an advisory without a fix) is unknown and names the
+        pack-specific fact Dependency.within_remediation_time_frame, which the
+        organisation's documentation settles. Development-only packages are
+        checked like the rest: the vocabulary does not mark them (the dependency
+        adapter records dev: true outside the facts). With the adapter's offline
+        inventory, vulnerable is open and every row is unknown.
+    defers_to: ["V15.1.1 documented remediation time frames", "V15.1.2 SBOM and trusted repositories", "V15.2.4 dependency confusion"]
+    status: draft
+    require:
+      any:
+        - not: {fact: d.vulnerable}
+        - all:
+            - not:
+                all:
+                  - {fact: d.fix_available}
+                  - in: [{fact: d.max_severity}, [high, critical]]
+            - {fact: d.within_remediation_time_frame}
+
+  # --------------------------------------------------- V15.3 defensive coding
+  - name: V15.3.3
+    title: Request parameters are bound to models only through an explicit list of fields
+    guidance: >
+      Bind request data only to an explicit list of fields per action (Rails
+      permit(...), Ecto cast/3 with a field list, a DTO or schema), and never
+      pass the whole request body to create or update.
+    modality: obligation
+    level: 2
+    for: {m: MassAssignment}
+    cite:
+      section: ASVS 5.0 V15.3.3
+      ref: v5.0.0-15.3.3
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x24-V15-Secure-Coding-and-Architecture.md#v153-defensive-coding
+    interpretation:
+      by: pack
+      note: >
+        The countermeasure the requirement names is limiting the allowed fields
+        per controller and action, read as MassAssignment.allowlist. A bulk
+        assignment without an allowlist fails whether or not a privileged field
+        is among the model's attributes, since any field not meant for the action
+        can then be set. With an allowlist the norm passes even when it lists a
+        privileged field (MassAssignment.privileged_assignable, not read here):
+        the field is then intended for the action, and whether this consumer may
+        set it is field-level authorization (V8.2.3).
+    defers_to: ["V8.2.3 field-level access (BOPLA)"]
+    status: draft
+    require: {fact: m.allowlist}
+
+  # ---------------------------------------------------------- V16.2 logging
+  - name: V16.2.5 request parameter filtering
+    title: The framework's request logging masks password, token, and secret parameters
+    guidance: >
+      Configure the framework's parameter filter (Rails filter_parameters,
+      Phoenix :filter_parameters, a logging filter or formatter) to mask
+      password, token, secret, and API key fields in request logs.
+    modality: obligation
+    level: 2
+    cite:
+      section: ASVS 5.0 V16.2.5
+      ref: v5.0.0-16.2.5
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x25-V16-Security-Logging-and-Error-Handling.md#v162-general-logging
+    interpretation:
+      by: pack
+      note: >
+        A system-level companion to the V16.2.5 norm on log statements: the
+        requirement's examples (credentials not logged, session tokens only hashed
+        or masked) applied to the request parameters the framework itself logs.
+        Read as system.log_redacts_credentials. An application whose framework
+        logs no request parameters at all may read as false here; a reviewer
+        states the fact for it. Other sensitive data and the documented protection
+        levels are deferred, as for V16.2.5.
+    defers_to: ["V14.1.2 (documented protection levels)", "V16.2.5 other sensitive data"]
+    status: draft
+    require: {fact: system.log_redacts_credentials}

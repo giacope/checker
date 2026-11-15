@@ -1,0 +1,162 @@
+# Chapter IV, Section 2: Art. 32 Security of processing, read with the principle
+# of integrity and confidentiality in Art. 5(1)(f). All three norms are
+# interpretations: "appropriate" is open-textured, and the pack commits to one
+# reading of it for two element types and one system fact the code vocabulary
+# describes. © European Union (quotes).
+norms:
+  - name: art32_password_hashing
+    title: "Security of processing — password storage (interpretation: salted, slow password hash)"
+    guidance: >
+      Hash stored passwords with bcrypt, scrypt, Argon2, or PBKDF2 and a per-
+      password random salt through a maintained library, and migrate MD5 or SHA
+      hashes at the next login.
+    modality: obligation
+    status: draft
+    for: {p: PasswordStore}
+    cite:
+      section: Art. 32(1)
+      url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_32
+      quote: >
+        Taking into account the state of the art, the costs of implementation and the
+        nature, scope, context and purposes of processing as well as the risk of
+        varying likelihood and severity for the rights and freedoms of natural
+        persons, the controller and the processor shall implement appropriate
+        technical and organisational measures to ensure a level of security
+        appropriate to the risk …
+    interpretation:
+      by: pack
+      kind: reading of an open-textured term
+      note: >
+        Art. 32(1) does not name any technique for passwords. This norm reads
+        "appropriate ... taking into account the state of the art" for a stored user
+        password as: the password is transformed with a per-password random salt by a
+        function designed to be slow for password hashing (bcrypt, scrypt, Argon2,
+        PBKDF2). Plaintext and reversible encryption fail; so do fast general-purpose
+        hashes (MD5, SHA-1, SHA-256, SHA-512) even when salted, and any function
+        without a salt. A password tied to a user account is personal data, so the
+        norm applies to every PasswordStore without asking whether the system
+        processes other personal data.
+      authority:
+        - source: EDPB Guidelines 01/2021 on Examples regarding Personal Data Breach Notification, v2.0, adopted 14.12.2021, para. 62 and para. 70
+          url: https://www.edpb.europa.eu/system/files/documents/2022-01/edpb_guidelines_012021_pdbnotification_adopted_en.pdf
+          says: >
+            Para. 62 speaks of passwords "stored using a salted hash with an
+            algorithm conforming to the state-of-the-art"; para. 70 lists among
+            advisable measures that "Cryptographic hashing and salting for secret
+            information (passwords) is always preferred over encryption of passwords".
+            Supports: salted, not reversible. Silent on slow versus fast hashes.
+        - source: EDPB, One-Stop-Shop thematic case digest "Security of Processing and Data Breach Notification" (2024)
+          url: https://www.edpb.europa.eu/system/files/2024-01/one_stop_shop_case_digest_security_data_breach_en.pdf
+          says: >
+            Lead supervisory authorities found MD5 for stored passwords "obsolete" and
+            not state of the art under Art. 32, found SHA-1 weak and unsafe, ordered
+            "bcrypt, scrypt or PBKDF2" in place of MD5 with salt, and accepted
+            PBKDF2-SHA256 with salt. One decision cited there (EDPBI:FR:OSS:D:2021:279)
+            accepted a SHA-256 based system, so the exclusion of salted fast hashes is
+            this pack's stricter reading, not settled supervisory practice.
+      settled: no — the slow-hash requirement is the pack's reading of "state of the art"
+    defers_to:
+      - "Art. 32(1)(a) pseudonymisation and encryption (other personal data)"
+      - "Art. 32(2) risk assessment; Art. 32(3) codes of conduct and certification"
+    require:
+      all:
+        - any:
+            - in: [{fact: p.algorithm}, [bcrypt, scrypt, argon2, pbkdf2]]
+            - all:
+                - eq: [{fact: p.algorithm}, other]
+                - {fact: p.other_function_is_password_hash}
+        - {fact: p.salted}
+
+  - name: art32_no_credentials_in_logs
+    title: "Security of processing — credentials kept out of logs (interpretation)"
+    guidance: >
+      Keep passwords, tokens, and session identifiers out of log calls, and add a
+      redaction filter to the logger and to the framework's request logging.
+    modality: obligation
+    status: draft
+    for: {l: LogStatement}
+    cite:
+      section: Art. 32(1)(b)
+      url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_32
+      quote: "(b) the ability to ensure the ongoing confidentiality, integrity, availability and resilience of processing systems and services;"
+      also:
+        - section: Art. 5(1)(f)
+          url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_5
+          quote: >
+            processed in a manner that ensures appropriate security of the personal
+            data, including protection against unauthorised or unlawful processing …
+            using appropriate technical or organisational measures ('integrity and
+            confidentiality').
+    interpretation:
+      by: pack
+      kind: reading of an open-textured term
+      note: >
+        A password, token, or session identifier is personal data of the account
+        holder and a key to the rest of the account's personal data. Writing it to a
+        log stores it in clear text where everyone with access to the logs, and every
+        log pipeline, can read and replay it. The pack reads Art. 5(1)(f) and
+        Art. 32(1)(b) as excluding that in every case: no risk assessment under
+        Art. 32(2) makes clear-text credentials in logs appropriate. The reading
+        follows the supervisory finding that storing passwords in plain text, there in
+        scripts, breached Art. 32 (EDPBI:UK:OSS:D:2020:147 in the EDPB case digest
+        cited by art32_password_hashing). LogStatement.logs_personal_data is not read:
+        whether personal data in a log is excessive (Art. 5(1)(c)) depends on the
+        purpose of the log, so it stays in not_formalized.
+      authority:
+        - source: EDPB, One-Stop-Shop thematic case digest "Security of Processing and Data Breach Notification" (2024)
+          url: https://www.edpb.europa.eu/system/files/2024-01/one_stop_shop_case_digest_security_data_breach_en.pdf
+      settled: no — extension by the pack from stored passwords to logged credentials
+    defers_to:
+      - "Art. 32(2) assessment of the appropriate level of security"
+    require:
+      not: {fact: l.logs_credentials}
+
+  - name: art32_transport_encryption
+    title: "Security of processing — personal data encrypted in transit (interpretation: HTTPS enforced)"
+    guidance: >
+      Serve the application only over HTTPS: redirect or refuse plain HTTP in
+      production and send HSTS, so personal data between users and the system is
+      always encrypted in transit.
+    modality: obligation
+    status: draft
+    cite:
+      section: Art. 32(1)(a)
+      url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_32
+      quote: "(a) the pseudonymisation and encryption of personal data;"
+      also:
+        - section: Art. 32(1)(b)
+          url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_32
+          quote: "(b) the ability to ensure the ongoing confidentiality, integrity, availability and resilience of processing systems and services;"
+        - section: Art. 32(2)
+          url: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504#art_32
+          quote: >
+            In assessing the appropriate level of security account shall be taken
+            in particular of the risks that are presented by processing, in
+            particular from accidental or unlawful destruction, loss, alteration,
+            unauthorised disclosure of, or access to personal data transmitted,
+            stored or otherwise processed.
+    interpretation:
+      by: pack
+      kind: reading of an open-textured term
+      note: >
+        Art. 32(1) lists encryption of personal data among the measures to
+        consider "as appropriate", and Art. 32(2) names unauthorised disclosure of
+        personal data "transmitted" as a risk to weigh. The pack reads them as
+        requiring, for a system that processes personal data, that its traffic
+        with users is encrypted: plain-HTTP requests are refused or redirected to
+        HTTPS in production (system.tls_enforced). Sending personal data in clear
+        over public networks is taken as never appropriate given the state of the
+        art, whatever the risk assessment under Art. 32(2) finds. The reading
+        covers only the client-facing channel; encryption at rest, connections to
+        databases and third parties, and TLS configuration are not checked. TLS
+        terminated by infrastructure outside the repository reads as not enforced
+        until the controller states it. No supervisory decision or EDPB text was
+        checked for this reading.
+      settled: no — encryption in transit as a requirement in every case is the pack's reading of "appropriate"
+    defers_to:
+      - "Art. 32(1)(a) encryption at rest and pseudonymisation"
+      - "Art. 32(2) assessment of the appropriate level of security"
+    require:
+      any:
+        - not: {fact: system.processes_personal_data}
+        - {fact: system.tls_enforced}

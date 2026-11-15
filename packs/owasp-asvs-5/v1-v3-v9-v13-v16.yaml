@@ -1,0 +1,234 @@
+# V1.2.4 database injection, V3.3 cookie setup, V9.1 token source and
+# integrity, V13.3.1 secrets in source code, V16.2.5 sensitive data in logs.
+# Requirement IDs and levels from the 5.0.0 release requirement list; titles
+# are this pack's own paraphrases.
+#
+# Each norm ranges over a vocabulary element type and is checked on every
+# element of that type. Where the vocabulary has a judged fact that takes an
+# element out of the requirement's scope (a cookie that carries no session, a
+# secret that is only a test fixture), the norm reads "out of scope, or ...".
+
+norms:
+  # ------------------------------------------------------------- V1 injection
+  - name: V1.2.4
+    title: Database queries are parameterized, go through an ORM, or are otherwise protected from injection
+    guidance: >
+      Use parameterized queries or the ORM's bound parameters; never build SQL or
+      NoSQL queries from request data by concatenation or interpolation, and reject
+      request values that are objects where a scalar is expected (NoSQL operator
+      injection).
+    modality: obligation
+    level: 1
+    for: {q: Query}
+    cite:
+      section: ASVS 5.0 V1.2.4
+      ref: v5.0.0-1.2.4
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x10-V1-Encoding-and-Sanitization.md#v12-injection-prevention
+    interpretation:
+      by: pack
+      note: >
+        A query passes when it is parameterized or built through an ORM, or when
+        no request data can reach its text or filter (a concatenated constant is
+        not injectable, so it counts as "otherwise protected"). Concatenation,
+        interpolation, and NoSQL filter objects built from request data
+        (operator_object, the NoSQL operator-injection pattern) fail when
+        untrusted input reaches them; escaping or allow-list validation before
+        concatenation is not in the vocabulary and is not credited.
+    status: draft
+    require:
+      any:
+        - not: {fact: q.untrusted_input}
+        - in: [{fact: q.construction}, [parameterized, orm]]
+
+  # ---------------------------------------------------------- V3.3 cookies
+  - name: V3.3.1
+    title: Session cookies have the Secure attribute
+    guidance: >
+      Set the Secure attribute on session and authentication cookies (the session
+      middleware's secure-cookie option in production), so they are never sent over
+      plain HTTP.
+    modality: obligation
+    level: 1
+    for: {c: Cookie}
+    cite:
+      section: ASVS 5.0 V3.3.1
+      ref: v5.0.0-3.3.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x12-V3-Web-Frontend-Security.md#v33-cookie-setup
+    interpretation:
+      by: pack
+      note: >
+        V3.3 introduces its requirements as being for "sensitive cookies". The
+        only sensitivity fact in the vocabulary is Cookie.is_session, so the
+        pack applies V3.3.1 to cookies carrying a session or authentication
+        token and exempts the rest. This under-approximates: another sensitive
+        cookie (a CSRF token, a remember-me flag) is not checked. The clause on
+        the '__Secure-' / '__Host-' name prefix needs the cookie name, which the
+        vocabulary lacks, so it is deferred.
+    defers_to: ["V3.3.1 '__Secure-' or '__Host-' name prefix", "V3.3.3 '__Host-' prefix"]
+    status: draft
+    require:
+      any:
+        - not: {fact: c.is_session}
+        - {fact: c.secure}
+
+  - name: V3.3.2
+    title: Session cookies set SameSite to a value that fits their purpose
+    guidance: >
+      Set SameSite=Lax or Strict on session cookies explicitly; use SameSite=None,
+      always with Secure, only for a cookie that must travel on cross-site requests.
+    modality: obligation
+    level: 2
+    for: {c: Cookie}
+    cite:
+      section: ASVS 5.0 V3.3.2
+      ref: v5.0.0-3.3.2
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x12-V3-Web-Frontend-Security.md#v33-cookie-setup
+    interpretation:
+      by: pack
+      note: >
+        Scoped to session cookies as for V3.3.1. "Set according to the purpose"
+        is read as: the attribute is set (unset fails, since relying on a
+        browser default is not setting it), Strict or Lax passes, and None
+        passes only where the cookie's purpose requires cross-site use, a
+        judgement (pack-specific Cookie.cross_site_by_design). The pack does not
+        choose between Strict and Lax.
+    status: draft
+    require:
+      any:
+        - not: {fact: c.is_session}
+        - in: [{fact: c.same_site}, [strict, lax]]
+        - all:
+            - eq: [{fact: c.same_site}, none]
+            - {fact: c.cross_site_by_design}
+
+  - name: V3.3.4
+    title: Cookies whose value scripts must not read, such as session tokens, are HttpOnly
+    guidance: >
+      Set HttpOnly on session and authentication cookies so page scripts cannot read
+      them, and deliver session tokens only in Set-Cookie, not in response bodies.
+    modality: obligation
+    level: 2
+    for: {c: Cookie}
+    cite:
+      section: ASVS 5.0 V3.3.4
+      ref: v5.0.0-3.3.4
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x12-V3-Web-Frontend-Security.md#v33-cookie-setup
+    interpretation:
+      by: pack
+      note: >
+        The requirement covers cookies "not meant to be accessible to
+        client-side scripts", naming session tokens as the example. The pack
+        treats every session cookie as such and exempts other cookies, since
+        whether a script is meant to read them is not in the vocabulary. The
+        second clause (the token reaches the client only through Set-Cookie) is
+        deferred.
+    defers_to: ["V3.3.4 session token transferred only via Set-Cookie"]
+    status: draft
+    require:
+      any:
+        - not: {fact: c.is_session}
+        - {fact: c.http_only}
+
+  # -------------------------------------------------------- V9.1 tokens
+  - name: V9.1.1
+    title: Self-contained tokens are checked by signature or MAC before their contents are accepted
+    guidance: >
+      Verify every token's signature or MAC with the library's verify function and a
+      trusted key before reading any claim; never use decode-without-verify on
+      tokens that come from clients.
+    modality: obligation
+    level: 1
+    for: {t: TokenVerification}
+    cite:
+      section: ASVS 5.0 V9.1.1
+      ref: v5.0.0-9.1.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x18-V9-Self-contained-Tokens.md#v91-token-source-and-integrity
+    interpretation:
+      by: pack
+      note: >
+        Every TokenVerification element (a JWT or similar bearer token being
+        decoded or verified) is read as handling a self-contained token. A
+        reference token looked up on the server is not a TokenVerification in
+        the vocabulary.
+    status: draft
+    require: {fact: t.verifies_signature}
+
+  - name: V9.1.2
+    title: Only allow-listed algorithms are accepted for self-contained tokens, never 'none'
+    guidance: >
+      Pass an explicit list of the algorithms you issue (for example only RS256, or
+      only HS256) to the verify call; reject 'none' and never let the token header
+      choose the algorithm or key type.
+    modality: obligation
+    level: 1
+    for: {t: TokenVerification}
+    cite:
+      section: ASVS 5.0 V9.1.2
+      ref: v5.0.0-9.1.2
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x18-V9-Self-contained-Tokens.md#v91-token-source-and-integrity
+    interpretation:
+      by: pack
+      note: >
+        The vocabulary records the failure modes the allow-list exists to stop:
+        unsigned tokens (alg none) or algorithm confusion are accepted. The pack
+        reads the requirement as neither being possible; whether an explicit
+        allow-list exists, and whether it mixes symmetric and asymmetric
+        algorithms, is not checked.
+    status: draft
+    require:
+      not: {fact: t.allows_none_alg}
+
+  # -------------------------------------------------- V13.3 secret management
+  - name: V13.3.1
+    title: Secrets are not included in application source code
+    guidance: >
+      Move secrets out of the repository into environment variables or a secrets
+      manager, rotate every secret that was ever committed, and keep only
+      placeholders in example configuration.
+    modality: obligation
+    level: 2
+    for: {s: Secret}
+    cite:
+      section: ASVS 5.0 V13.3.1
+      ref: v5.0.0-13.3.1
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x22-V13-Configuration.md#v133-secret-management
+    interpretation:
+      by: pack
+      note: >
+        Only the clause "secrets must not be included in application source
+        code" is checked. A literal judged to be only a test fixture, an
+        example, or a placeholder never used in a deployment is not a backend
+        secret and is exempt. The secrets-management solution the first clause
+        asks for, and the L3 hardware-backed store, are not in the vocabulary.
+    defers_to: ["V13.3.1 secrets management solution (key vault; L3 hardware-backed)"]
+    status: draft
+    require: {fact: s.test_or_example}
+
+  # --------------------------------------------------------- V16.2 logging
+  - name: V16.2.5
+    title: Credentials and session tokens are not written to logs in clear
+    guidance: >
+      Never pass passwords, tokens, or session identifiers to log calls; log a user
+      id or a hashed or truncated token instead, and add a redaction filter to the
+      logger for fields with these names.
+    modality: obligation
+    level: 2
+    for: {l: LogStatement}
+    cite:
+      section: ASVS 5.0 V16.2.5
+      ref: v5.0.0-16.2.5
+      url: https://github.com/OWASP/ASVS/blob/v5.0.0_release/5.0/en/0x25-V16-Security-Logging-and-Error-Handling.md#v162-general-logging
+    interpretation:
+      by: pack
+      note: >
+        The requirement makes logging depend on each data item's documented
+        protection level and gives as examples that credentials may not be
+        logged and session tokens only hashed or masked. The pack applies those
+        examples as the rule: a log statement fails when a password, token, or
+        session identifier can reach the log. A token written only hashed or
+        masked is not "logged" in the sense of LogStatement.logs_credentials.
+        Other sensitive data and the documented protection levels are deferred.
+    defers_to: ["V14.1.2 (documented protection levels)", "V16.2.5 other sensitive data"]
+    status: draft
+    require:
+      not: {fact: l.logs_credentials}

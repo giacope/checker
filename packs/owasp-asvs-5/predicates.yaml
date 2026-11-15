@@ -1,0 +1,204 @@
+# Facts the rules read. Every `<Type>.<attr>` below except the ones marked
+# "pack-specific" is declared exactly as in vocab/code.yaml (same type, kind,
+# values), so the code adapter's evidence feeds this pack without mapping.
+# Pack-specific predicates are facts the vocabulary does not have yet; each is
+# only read on the branch where it can change the result.
+predicates:
+  # ---------------------------------------------------------------- system
+  - name: system.password_auth
+    label: users authenticate with a password the system verifies
+    type: bool
+    kind: measured
+  - name: system.password_min_length
+    label: minimum password length enforced at registration or password change, in characters (0 if none)
+    type: number
+    kind: measured
+  - name: system.password_max_length
+    label: maximum password length accepted, in characters (100000 if no limit is enforced)
+    type: number
+    kind: measured
+  - name: system.password_composition_rules
+    label: the system requires character classes (digits, upper case, symbols) in passwords
+    type: bool
+    kind: measured
+  - name: system.password_blocklist_check
+    label: new passwords are checked against a list of common or compromised passwords
+    type: bool
+    kind: measured
+  - name: system.password_periodic_change
+    label: the system forces users to change passwords after a fixed period
+    type: bool
+    kind: measured
+  - name: system.login_rate_limited
+    label: failed login attempts are limited per account or per client
+    type: bool
+    kind: measured
+  - name: system.password_blocklist_includes_breached
+    label: "(pack-specific) the list new passwords are checked against contains passwords from breaches (a breach corpus or a breached-password service), not only a list of common passwords"
+    type: bool
+    kind: judged
+    refers_to: ["V6.2.12"]
+    note: Read only by V6.2.12, and only when system.password_blocklist_check is true.
+
+  # --------------------------------------------------------- PasswordStore
+  - name: PasswordStore.algorithm
+    label: the function applied to the password
+    type: enum
+    kind: measured
+    values: [plaintext, reversible, md5, sha1, sha256, sha512, bcrypt, scrypt, argon2, pbkdf2, other]
+  - name: PasswordStore.other_is_approved_kdf
+    label: "(pack-specific) the function, where the vocabulary classes it as 'other', is one ASVS 5.0 Appendix C approves for password storage"
+    type: bool
+    kind: judged
+    refers_to: ["V11.4.2", "Appendix C"]
+    note: Read only when PasswordStore.algorithm is other.
+
+  # ----------------------------------------------------------------- Query
+  - name: Query.construction
+    label: how untrusted values reach the query (operator_object is a NoSQL filter object built from request data)
+    type: enum
+    kind: measured
+    values: [parameterized, orm, concatenated, interpolated, operator_object]
+  - name: Query.untrusted_input
+    label: data from a request (body, query, params, headers, cookies) can reach the query text or filter
+    type: bool
+    kind: measured
+
+  # ---------------------------------------------------------------- Cookie
+  - name: Cookie.is_session
+    label: the cookie carries a session or authentication token
+    type: bool
+    kind: judged
+  - name: Cookie.secure
+    label: the Secure attribute is set
+    type: bool
+    kind: measured
+  - name: Cookie.http_only
+    label: the HttpOnly attribute is set
+    type: bool
+    kind: measured
+  - name: Cookie.same_site
+    label: the SameSite attribute
+    type: enum
+    kind: measured
+    values: [strict, lax, none, unset]
+  - name: Cookie.cross_site_by_design
+    label: "(pack-specific) the cookie's purpose requires it to be sent on cross-site requests (for example a cross-site sign-in or an embedded context), so SameSite=None suits it"
+    type: bool
+    kind: judged
+    refers_to: ["V3.3.2"]
+    note: Read only by V3.3.2, and only when Cookie.same_site is none.
+
+  # ---------------------------------------------------------------- Secret
+  - name: Secret.test_or_example
+    label: the literal is only a test fixture, an example, or a placeholder never used in a deployment
+    type: bool
+    kind: judged
+
+  # ----------------------------------------------------- TokenVerification
+  - name: TokenVerification.verifies_signature
+    label: the signature is verified before claims are trusted
+    type: bool
+    kind: measured
+  - name: TokenVerification.allows_none_alg
+    label: unsigned tokens (alg none) or algorithm confusion are accepted
+    type: bool
+    kind: measured
+
+  # ---------------------------------------------------------- LogStatement
+  - name: LogStatement.logs_credentials
+    label: a password, token, or session identifier can be written to the log
+    type: bool
+    kind: measured
+
+  # ------------------------------------------------- system: web and config
+  - name: system.csrf_protection
+    label: state-changing requests that rely on cookies are checked to come from the application (anti-CSRF token or Origin/Sec-Fetch checks); true when no cookie authenticates requests
+    type: bool
+    kind: measured
+  - name: system.tls_enforced
+    label: the application refuses or redirects plain-HTTP requests in production (Rails config.force_ssl, Plug.SSL / force_ssl, an HTTPS-only proxy config in the repository)
+    type: bool
+    kind: measured
+  - name: system.hsts
+    label: responses carry a Strict-Transport-Security header
+    type: bool
+    kind: measured
+  - name: system.hsts_max_age
+    label: the HSTS max-age, in seconds
+    type: number
+    kind: measured
+  - name: system.content_security_policy
+    label: HTML responses carry a Content-Security-Policy header (report-only does not count)
+    type: bool
+    kind: measured
+  - name: system.debug_in_production
+    label: the production configuration enables debug features (detailed error pages, debug toolbars, code reloading, DEBUG=True)
+    type: bool
+    kind: measured
+  - name: system.log_redacts_credentials
+    label: the framework's request logging filters password, token, and secret parameters (Rails filter_parameters, Phoenix filter_parameters, a logging filter)
+    type: bool
+    kind: measured
+
+  # ------------------------------------------------------------ HtmlOutput
+  - name: HtmlOutput.sanitized
+    label: the value passes through an HTML sanitizer (Rails sanitize, HtmlSanitizeEx, DOMPurify, bleach) before it is written
+    type: bool
+    kind: measured
+  - name: HtmlOutput.untrusted_input
+    label: data a user supplied (a request, or stored user content) can reach the value
+    type: bool
+    kind: measured
+
+  # ------------------------------------------------------ CommandExecution
+  - name: CommandExecution.construction
+    label: "argv: program and arguments passed separately, no shell; constant: a fixed command line; concatenated/interpolated: a shell command line built from values"
+    type: enum
+    kind: measured
+    values: [argv, constant, concatenated, interpolated]
+  - name: CommandExecution.untrusted_input
+    label: data from a request can reach the command or its arguments
+    type: bool
+    kind: measured
+
+  # ------------------------------------------------------- Deserialization
+  - name: Deserialization.safe_mode
+    label: the call restricts the types it creates (YAML.safe_load, binary_to_term with [:safe], yaml.safe_load, an allowlist)
+    type: bool
+    kind: measured
+  - name: Deserialization.untrusted_input
+    label: data from a request, a cookie, or another party can reach the input
+    type: bool
+    kind: measured
+
+  # -------------------------------------------------------- MassAssignment
+  - name: MassAssignment.allowlist
+    label: only explicitly listed fields are assigned (Rails permit(...) with a field list, Ecto cast/3 with a field list, a schema/DTO)
+    type: bool
+    kind: measured
+
+  # ------------------------------------------------------------ Dependency
+  - name: Dependency.vulnerable
+    label: a published advisory (OSV, GitHub Security Advisories) affects this version
+    type: bool
+    kind: measured
+  - name: Dependency.fix_available
+    label: a released version fixes every advisory that affects this version
+    type: bool
+    kind: measured
+  - name: Dependency.max_severity
+    label: the highest severity among the advisories
+    type: enum
+    kind: measured
+    values: [none, low, moderate, high, critical, unknown]
+  - name: Dependency.within_remediation_time_frame
+    label: "(pack-specific) the update and remediation time frames the application's documentation sets (V15.1.1) have not yet run out for the advisories that affect this version, or the documentation accepts the risk"
+    type: bool
+    kind: given
+    refers_to: ["V15.1.1", "V15.2.1"]
+    note: >
+      Read only by V15.2.1, and only for a vulnerable version that is not the
+      "fixed high or critical advisory" case the pack fails outright. A fact from
+      the organisation's documentation and the advisories' dates, which the
+      vocabulary does not carry.
