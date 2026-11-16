@@ -67,6 +67,17 @@ def test_elements_with_marks_as_ids_do_not_merge_as_code_lines():
     assert sorted(e.id for e in ev.elements) == ["door:101", "door:102"]
 
 
+
+def test_two_queries_a_line_apart_stay_two_and_a_reader_joins_the_nearest():
+    # one document's elements are distinct however close; another document's element is the nearest one's
+    q = lambda i, line, c: {"type": "Query", "id": f"q{i}", "at": f"app.py:{line}", "facts": {"construction": c}}  # noqa: E731
+    static = {"sources": [{"id": "static"}], "elements": [q(1, 8, "parameterized"), q(2, 9, "concatenated")]}
+    reader = {"sources": [{"id": "llm:m"}], "elements": [q(7, 9, "concatenated"), q(8, 30, "concatenated")]}
+    ev = load_evidence(static, reader)
+    got = {e.id: (sorted(e.sources), sorted({o["value"] for o in e.facts["construction"].observations})) for e in ev.elements}
+    assert got == {"q1": (["static"], ["parameterized"]), "q2": (["llm:m", "static"], ["concatenated"]),
+                   "q8": (["llm:m"], ["concatenated"])}
+
 def _pack(tmp_path):
     """A small pack: 13 independent flags, a length with a limit, a table whose row is open, a table with a symbol."""
     preds = [f"x{i}" for i in range(13)] + ["b0", "b1", "b2"]

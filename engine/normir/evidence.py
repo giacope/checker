@@ -109,20 +109,25 @@ def _facts(raw: dict | None, default_source: str) -> dict[str, Fact]:
     return out
 
 
-def _same(a: Element, b: Element) -> bool:
+def _distance(a: Element, b: Element) -> int | None:
+    """How far apart two elements of one type are: 0 for the same id, else the fewest lines between two of their
+    code locators in one file, when that is within LINE_TOLERANCE; None when they are not the same element."""
     if a.type != b.type:
-        return False
+        return None
     if a.id == b.id:
-        return True
+        return 0
     # Only locators an adapter wrote: an element without `at` takes its id as locator, and ids such as
     # "door:101" and "door:102" are not code locations a line apart.
+    best = None
     for x in a.at if a.at != [a.id] else []:
         mx = CODE_LOCATOR.match(x)
         for y in b.at if b.at != [b.id] else []:
             my = CODE_LOCATOR.match(y)
-            if mx and my and mx["path"] == my["path"] and abs(int(mx["line"]) - int(my["line"])) <= LINE_TOLERANCE:
-                return True
-    return False
+            if mx and my and mx["path"] == my["path"]:
+                d = abs(int(mx["line"]) - int(my["line"]))
+                if d <= LINE_TOLERANCE and (best is None or d < best):
+                    best = d
+    return best
 
 
 def load_evidence(*docs: str | Path | dict) -> Evidence:
@@ -131,7 +136,8 @@ def load_evidence(*docs: str | Path | dict) -> Evidence:
     facts: dict[str, Fact] = {}
     elements: list[Element] = []
     sources: list[dict] = []
-    for doc in docs:
+    origin: dict[int, set[int]] = {}   # id(element) -> the documents it came from
+    for n, doc in enumerate(docs):
         d = doc if isinstance(doc, dict) else yaml.safe_load(Path(doc).read_text())
         src = [s["id"] for s in d.get("sources", [])] or ["unnamed"]
         sources += d.get("sources", [])
@@ -141,10 +147,17 @@ def load_evidence(*docs: str | Path | dict) -> Evidence:
         for e in d.get("elements", []):
             at = e.get("at", [e["id"]])
             new = Element(e["type"], str(e["id"]), at if isinstance(at, list) else [at], _facts(e.get("facts"), src[0]), set(src))
-            match = next((x for x in elements if _same(x, new)), None)
-            if match is None:
+            # The same id is the same element. Nearby lines are only how two documents describe one element (a
+            # reader's query at line 9, the static analyser's at line 8); within one document two elements are two,
+            # however close, and an element joins the nearest match.
+            near = [(dist, i) for i, x in enumerate(elements)
+                    if (dist := _distance(x, new)) is not None and (dist == 0 or n not in origin[id(x)])]
+            if not near:
                 elements.append(new)
+                origin[id(new)] = {n}
                 continue
+            match = elements[min(near)[1]]
+            origin[id(match)].add(n)
             match.at += [a for a in new.at if a not in match.at]
             match.sources |= new.sources
             for name, f in new.facts.items():
