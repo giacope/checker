@@ -451,3 +451,34 @@ def test_render_layout_and_region(tmp_path):
     assert whole[:8] == b"\x89PNG\r\n\x1a\n" and crop[:8] == b"\x89PNG\r\n\x1a\n" and whole != crop
     with pytest.raises(KeyError):
         dxf.render(p, "NoSuchLayout")
+
+
+def test_entities_written_without_subclass_markers_are_read(tmp_path, no_annotations):
+    """Some exporters omit LWPOLYLINE's subclass markers, which ezdxf and its recover reader both refuse."""
+    import re as _re
+    doc = _doc()
+    _door_block(doc, "DOOR", 900)
+    doc.modelspace().add_blockref("DOOR", (0, 0))
+    doc.modelspace().add_lwpolyline([(0, 0), (5000, 0), (5000, 4000), (0, 4000)], close=True, dxfattribs={"layer": "A-WALL"})
+    p = _save(doc, tmp_path)
+    text = p.read_text()
+    head, sep, rest = text.partition("\nLWPOLYLINE\n")
+    body, nxt, tail = _re.split(r"(\n  0\n)", rest, maxsplit=1)
+    body = _re.sub(r"(^|\n)100\n[^\n]+", "", body)              # strip both subclass markers from the polyline
+    p.write_text(head + sep + body.lstrip("\n") + nxt + tail)
+    import ezdxf as _ezdxf
+    with pytest.raises(_ezdxf.DXFStructureError):
+        _ezdxf.readfile(str(p))
+    out = _run(p, tmp_path)
+    assert not out["sources"][0].get("skipped") or not any("not readable" in s for s in out["sources"][0]["skipped"])
+    assert [_vals(d, "leaf_width") for d in _els(out, "Door")] == [["900 mm"]]
+
+
+def test_an_unreadable_drawing_is_in_the_projects_notes(tmp_path, no_annotations):
+    from app.buildings import process
+    files = tmp_path / "files"
+    files.mkdir()
+    _save(_doc(), files, "good.dxf")
+    (files / "broken.dxf").write_bytes(b"AutoCAD Binary DXF\r\n\x1a\x00" + bytes(range(256)) * 4)
+    notes = process(files, "p")["notes"]
+    assert [n for n in notes if n.startswith("broken.dxf: not readable as DXF")], notes

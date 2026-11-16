@@ -160,6 +160,13 @@ def process(files_dir: Path, name: str, progress=lambda m: None, requirements: l
             docs.append(doc)
         except Exception as e:  # noqa: BLE001
             notes.append(f"{label} could not be read: {type(e).__name__}: {e}")
+    # what the readers say about the files themselves (an unreadable file, a schema read as its successor, a model
+    # with no storeys) is the user's to know, not only the report's "read but not used" list
+    for d in docs:
+        for src in d.get("sources") or []:
+            notes += [str(n) for n in src.get("notes") or []]
+            notes += [str(x if isinstance(x, str) else f"{x.get('at')}: {x.get('reason')}") for x in src.get("skipped") or []
+                      if "not readable" in str(x)]
     if not docs:
         raise ProjectError("None of the uploaded files could be read. " + " ".join(notes))
     found = {e.get("type") for d in docs for e in d.get("elements") or []}   # see app.scan: fallbacks only where none was found

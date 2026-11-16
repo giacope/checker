@@ -22,14 +22,49 @@ from PIL import Image, ImageChops, ImageDraw
 BBox = tuple[float, float, float, float]
 
 
+# Entities some exporters write without their subclass markers (group code 100), which ezdxf requires for them.
+SUBCLASS = {"LWPOLYLINE": "AcDbPolyline"}
+COMMON_CODES = {6, 8, 48, 60, 62, 67, 92, 160, 284, 310, 347, 370, 390, 410, 420, 430, 440}
+
+
 def read(path: Path):
-    """The ezdxf document, falling back to the recover reader for damaged files."""
+    """The ezdxf document. A damaged file goes to ezdxf's recover reader; a file neither reads (binary DXF, or
+    entities written without their subclass markers) is re-read tag by tag, with the missing markers added."""
     try:
         return ezdxf.readfile(str(path))
     except ezdxf.DXFStructureError:
         from ezdxf import recover
-        doc, _ = recover.readfile(str(path))
-        return doc
+        try:
+            doc, _ = recover.readfile(str(path))
+            return doc
+        except ezdxf.DXFStructureError:
+            return _repaired(Path(path).read_bytes())
+
+
+def _repaired(data: bytes):
+    import io
+
+    from ezdxf.lldxf.tagger import ascii_tags_loader, binary_tags_loader
+    from ezdxf.lldxf.types import DXFTag
+    if data.startswith(b"AutoCAD Binary DXF"):
+        tags = list(binary_tags_loader(data))
+    else:
+        tags = list(ascii_tags_loader(io.StringIO(data.decode("utf-8", "replace"))))
+    out, i = [], 0
+    while i < len(tags):
+        t = tags[i]
+        j = i + 1
+        while j < len(tags) and tags[j].code != 0:
+            j += 1
+        body = tags[i + 1:j]
+        if t.code == 0 and t.value in SUBCLASS and not any(x.code == 100 for x in body):
+            head = [x for x in body if x.code in (5, 102, 330)]
+            common = [x for x in body if x.code in COMMON_CODES]
+            rest = [x for x in body if x.code not in COMMON_CODES and x.code not in (5, 102, 330)]
+            body = head + [DXFTag(100, "AcDbEntity")] + common + [DXFTag(100, SUBCLASS[t.value])] + rest
+        out += [t] + body
+        i = j
+    return ezdxf.read(io.StringIO("".join(t.dxfstr() for t in out)))
 
 
 def layout_of(doc, name: str):

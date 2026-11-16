@@ -199,6 +199,27 @@ def _ids(kind: str, marks: dict) -> dict:
 
 # ----------------------------------------------------------------- the adapter
 
+# Schemas ifcopenshell has no definition for, read with the released schema that superseded them.
+SUCCESSOR = {"IFC4X1": "IFC4X3_ADD2", "IFC4X2": "IFC4X3_ADD2", "IFC4X3": "IFC4X3_ADD2", "IFC4X3_RC1": "IFC4X3_ADD2",
+             "IFC4X3_RC2": "IFC4X3_ADD2", "IFC4X3_RC3": "IFC4X3_ADD2", "IFC4X3_RC4": "IFC4X3_ADD2", "IFC4X3_ADD1": "IFC4X3_ADD2"}
+
+
+def _open(path: Path, notes: list[str]):
+    """The model; one in a draft or superseded schema is read as its successor, with a note saying so."""
+    try:
+        return ifcopenshell.open(str(path))
+    except Exception as e:  # noqa: BLE001 - ifcopenshell raises a SchemaError of its own module
+        head = path.read_bytes()[:20_000]
+        m = re.search(rb"FILE_SCHEMA\s*\(\s*\(\s*'([A-Za-z0-9_]+)'", head)
+        schema = m[1].decode().upper() if m else None
+        if "schema" not in str(e).lower() or schema not in SUCCESSOR:
+            raise
+        data = path.read_bytes()
+        f = ifcopenshell.file.from_string(data.replace(m[0], m[0].replace(m[1], SUCCESSOR[schema].encode()), 1).decode("utf-8", "replace"))
+        notes.append(f"{path.name}: schema {schema} is not supported; read as {SUCCESSOR[schema]}, which superseded it")
+        return f
+
+
 def analyse(path: str | Path, describes: str | None = None, progress=lambda msg: None) -> dict:
     """Read an IFC model into one evidence document."""
     t_all = time.time()
@@ -206,11 +227,16 @@ def analyse(path: str | Path, describes: str | None = None, progress=lambda msg:
     path = Path(path)
     t = time.time()
     progress(f"Opening {path.name}")
-    f = ifcopenshell.open(str(path))
+    notes: list[str] = []
+    f = _open(path, notes)
     m = Model(f)
     timings["open"] = round(time.time() - t, 2)
     skipped: list[str] = []
-    notes: list[str] = []
+    if not f.by_type("IfcBuildingStorey"):
+        facilities = sorted({e.is_a() for e in f.by_type("IfcSpatialStructureElement")} - {"IfcSite", "IfcBuilding"}) \
+            if f.schema != "IFC2X3" else []
+        notes.append(f"{path.name}: no building storeys" + (f" (it models {', '.join(facilities)})" if facilities else "")
+                     + "; its storeys, spaces, doors, stairs and travel distances could not be read")
 
     # ---------------------------------------------------- storeys
     storeys = sorted(f.by_type("IfcBuildingStorey"), key=lambda s: (s.Elevation if s.Elevation is not None else m.z(s) / m.length))

@@ -235,3 +235,22 @@ def test_travel_distance_through_a_door_to_the_exit(tmp_path):
     assert values(storey, "exits") == [1]
     assert values(ta, "exits") == [1] and values(tb, "exits") == [1]
     assert b.GlobalId  # B is reached through its own exterior door
+
+
+def test_a_draft_schema_is_read_as_its_successor_and_a_model_without_storeys_says_so(tmp_path):
+    import ifcopenshell
+    f = api.run("project.create_file", version="IFC4X3_ADD2")
+    project = api.run("root.create_entity", f, ifc_class="IfcProject", name="Bridge")
+    api.run("unit.assign_unit", f, units=[api.run("unit.add_si_unit", f, unit_type="LENGTHUNIT")])
+    site, bridge = (api.run("root.create_entity", f, ifc_class=c, name=c) for c in ("IfcSite", "IfcBridge"))
+    api.run("aggregate.assign_object", f, relating_object=project, products=[site])
+    api.run("aggregate.assign_object", f, relating_object=site, products=[bridge])
+    p = tmp_path / "bridge.ifc"
+    f.write(str(p))
+    p.write_text(p.read_text().replace("'IFC4X3_ADD2'", "'IFC4X2'", 1))
+    with pytest.raises(Exception, match="(?i)schema"):
+        ifcopenshell.open(str(p))
+    doc = analyse(p)
+    notes = doc["sources"][0]["notes"]
+    assert notes[0] == "bridge.ifc: schema IFC4X2 is not supported; read as IFC4X3_ADD2, which superseded it"
+    assert "no building storeys (it models IfcBridge)" in notes[1] and doc["elements"] == []
