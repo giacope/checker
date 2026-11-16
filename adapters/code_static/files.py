@@ -13,6 +13,11 @@ Exclusion rules (generic, by path segment or file name; nothing names a particul
 - minified or bundled files (*.min.js, *.bundle.js, lines over 3000 characters), type declarations (*.d.ts), lock files.
 Files named or placed as examples, samples, or fixtures (outside test directories) are read only for Secret
 literals, which are then marked test_or_example.
+
+`discover(root, scope)` decides how much: "static" (the default) gives the files a static adapter reads; "app" adds
+every other text file of the application (other languages, infrastructure code, Dockerfiles, dependency manifests,
+scripts) as kind "source", for readers that read any language; "all" also keeps tests and documentation (kind
+"source" or "doc", with `support` set), for judging requirements about tests or documentation.
 """
 
 from __future__ import annotations
@@ -37,6 +42,22 @@ CONFIG_EXT = {".yml", ".yaml", ".json", ".ini", ".cfg", ".conf", ".toml", ".prop
 TEMPLATE_EXT = {".html", ".htm", ".pug", ".jade", ".hbs", ".handlebars", ".ejs", ".njk", ".jinja", ".jinja2", ".j2", ".twig",
                 ".erb", ".haml", ".slim", ".heex", ".eex", ".leex", ".sface"}
 KEY_EXT = {".pem", ".key"}
+# Text files no static adapter reads, by extension and by name: kept as kind "source" in scope "app".
+SOURCE_EXT = {
+    ".go", ".java", ".kt", ".kts", ".scala", ".groovy", ".gradle", ".cs", ".fs", ".vb", ".php", ".swift", ".m", ".mm",
+    ".c", ".h", ".cc", ".cpp", ".cxx", ".hpp", ".hh", ".rs", ".dart", ".lua", ".pl", ".pm", ".r", ".jl", ".clj", ".cljs",
+    ".erl", ".hrl", ".hs", ".ml", ".nim", ".zig", ".sol", ".vue", ".svelte", ".astro", ".sql", ".graphql", ".gql",
+    ".proto", ".sh", ".bash", ".zsh", ".ps1", ".psm1", ".bat", ".cmd", ".tf", ".tfvars", ".hcl", ".bicep", ".nix",
+    ".xml", ".plist", ".csproj", ".config", ".xaml", ".cshtml", ".razor", ".jsp", ".aspx", ".mustache",
+    ".rego", ".cue", ".dockerfile", ".mk", ".cmake", ".nginx", ".service",
+}
+SOURCE_NAMES = {"dockerfile", "containerfile", "makefile", "gemfile", "rakefile", "procfile", "jenkinsfile", "vagrantfile",
+                "brewfile", "podfile", "cartfile", "justfile", "caddyfile", "package.json", "requirements.txt", "go.mod",
+                "cargo.toml", "pom.xml", "build.gradle", "composer.json", "mix.exs", "pyproject.toml", "setup.py"}
+DOC_EXT = {".md", ".markdown", ".rst", ".adoc", ".txt"}
+SUPPORT_DIRS = {"test", "tests", "__tests__", "spec", "specs", "e2e", "cypress", "playwright", "testing",
+                "docs", "doc", "documentation"}
+SCOPES = ("static", "app", "all")
 LOCK_FILES = {"package-lock.json", "yarn.lock", "pnpm-lock.yaml", "uv.lock", "poetry.lock", "pipfile.lock", "composer.lock",
               "npm-shrinkwrap.json", "bun.lockb", "cargo.lock", "gemfile.lock"}
 TEST_FILE = re.compile(r"(^test_.*\.py$|_test\.py$|^tests?\.py$|^conftest\.py$|\.(spec|test|cy|e2e)\.[cm]?[jt]sx?$|^test\.[a-z]+$|"
@@ -54,13 +75,14 @@ class SourceFile:
     kind: str         # py | js | ts | tsx | config | template | key
     example: bool     # example, sample, or fixture: only Secret literals are read, marked test_or_example
     client: bool      # front-end code (runs in the browser)
+    support: bool = False   # a test or documentation file (scope "all" only): not the running application
 
 
-def _skip_dir(path: Path, rel_parts: tuple[str, ...], name: str) -> bool:
+def _skip_dir(path: Path, rel_parts: tuple[str, ...], name: str, scope: str = "static") -> bool:
     low = name.lower()
     if name.startswith("."):
         return True
-    if low in SKIP_DIRS:
+    if low in SKIP_DIRS and not (scope == "all" and low in SUPPORT_DIRS):
         return True
     if (path / name / "pyvenv.cfg").exists():
         return True  # a virtual environment under any name
@@ -69,12 +91,15 @@ def _skip_dir(path: Path, rel_parts: tuple[str, ...], name: str) -> bool:
     return False
 
 
-def discover(root: Path) -> list[SourceFile]:
+def discover(root: Path, scope: str = "static") -> list[SourceFile]:
+    if scope not in SCOPES:
+        raise ValueError(f"scope is one of {SCOPES}")
     out: list[SourceFile] = []
     for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
         rel_dir = Path(dirpath).relative_to(root)
         parts = rel_dir.parts
-        dirnames[:] = sorted(d for d in dirnames if not _skip_dir(Path(dirpath), parts, d) and not os.path.islink(os.path.join(dirpath, d)))
+        dirnames[:] = sorted(d for d in dirnames if not _skip_dir(Path(dirpath), parts, d, scope) and not os.path.islink(os.path.join(dirpath, d)))
+        support = scope == "all" and bool({x.lower() for x in parts} & SUPPORT_DIRS)
         for fn in sorted(filenames):
             p = Path(dirpath) / fn
             if p.is_symlink() or not p.is_file():
@@ -83,12 +108,16 @@ def discover(root: Path) -> list[SourceFile]:
             ext = p.suffix.lower()
             if low in LOCK_FILES or low.endswith((".min.js", ".bundle.js", ".d.ts", ".map")) or re.search(r"\.gen\.[jt]sx?$", low):
                 continue
-            if TEST_FILE.search(fn) and ext in CODE_EXT:
+            is_test = bool(TEST_FILE.search(fn)) and ext in CODE_EXT
+            if is_test and scope != "all":
                 continue
+            wider = scope != "static"
             if low.startswith(".env") or low.endswith(".env"):
                 kind = "config"
             elif ext in CODE_EXT:
                 kind = CODE_EXT[ext]
+            elif wider and (low in SOURCE_NAMES or low.startswith(("dockerfile", "containerfile"))):
+                kind = "source"
             elif ext in CONFIG_EXT:
                 if low in {"package.json", "tsconfig.json", "jsconfig.json"} or low.startswith(("tsconfig", ".eslintrc", ".prettierrc")):
                     continue
@@ -97,6 +126,10 @@ def discover(root: Path) -> list[SourceFile]:
                 kind = "template"
             elif ext in KEY_EXT:
                 kind = "key"
+            elif scope == "all" and ext in DOC_EXT:
+                kind = "doc"
+            elif wider and ext in SOURCE_EXT:
+                kind = "source"
             else:
                 continue
             try:
@@ -110,7 +143,9 @@ def discover(root: Path) -> list[SourceFile]:
             name_rule = EXAMPLE_FILE if kind == "config" else EXAMPLE_CODE_FILE
             example = bool(set(lowparts) & EXAMPLE_DIRS) or bool(name_rule.search(stem)) or (TEST_FILE.search(fn) is not None)
             client = kind not in {"rb", "ex"} and (bool(set(lowparts) & CLIENT_DIRS) or ext in {".tsx", ".jsx"})  # Ruby and Elixir run on the server
-            out.append(SourceFile(rel, p, kind, example, client))
+            if scope == "all" and (support or is_test or kind == "doc"):
+                example = False   # a test's fixtures are part of what it shows
+            out.append(SourceFile(rel, p, kind, example, client, support=scope == "all" and (support or is_test or kind == "doc")))
     return out
 
 

@@ -243,7 +243,7 @@ def _numbered(text: str, lines: range | None = None) -> str:
 def select(root: Path) -> tuple[list[tuple[str, str]], dict]:
     """[(path, numbered text)] to send, best first, within MAX_CHARS; and a record of what was left out."""
     scored = []
-    for f in discover(root):
+    for f in discover(root, "app"):   # any language: the reader is not limited to what a static adapter parses
         if f.example or f.kind == "key":
             continue
         text = read_text(f)

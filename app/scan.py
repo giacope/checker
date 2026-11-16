@@ -60,7 +60,9 @@ STATIC_ADAPTERS = [
 LANG_EXT = {".py": "Python", ".js": "JavaScript", ".mjs": "JavaScript", ".cjs": "JavaScript", ".jsx": "JavaScript", ".ts": "TypeScript",
             ".tsx": "TypeScript", ".rb": "Ruby", ".rake": "Ruby", ".erb": "Ruby (ERB)", ".ex": "Elixir", ".exs": "Elixir",
             ".heex": "Elixir (HEEx)", ".go": "Go", ".php": "PHP", ".java": "Java", ".kt": "Kotlin", ".cs": "C#", ".rs": "Rust",
-            ".scala": "Scala", ".swift": "Swift", ".c": "C", ".cpp": "C++", ".clj": "Clojure", ".erl": "Erlang"}
+            ".scala": "Scala", ".swift": "Swift", ".c": "C", ".cpp": "C++", ".clj": "Clojure", ".erl": "Erlang",
+            ".tf": "Terraform", ".hcl": "HCL", ".sh": "Shell", ".dart": "Dart", ".vue": "Vue", ".svelte": "Svelte", ".sql": "SQL",
+            ".m": "Objective-C", ".fs": "F#", ".lua": "Lua", ".pl": "Perl", ".hs": "Haskell", ".groovy": "Groovy", ".sol": "Solidity"}
 
 
 class ScanError(RuntimeError):
@@ -130,6 +132,14 @@ def collect(root: Path, name: str, models: list[Path] = (), use_reader: bool = T
     from adapters.code_static.files import discover
     kinds = Counter(f.kind for f in discover(root))
     docs, notes = [], []
+    # languages no static adapter reads: only the model reader and the assessor read them
+    others = Counter(LANG_EXT.get(f.abs.suffix.lower()) for f in discover(root, "app") if f.kind == "source" and not f.example)
+    others.pop(None, None)
+    have_model = use_reader and _adapter("adapters.code_llm") is not None and _adapter("adapters.code_llm").provider_from_env() is not None
+    if others:
+        langs = ", ".join(f"{k} ({n} file{'s' if n != 1 else ''})" for k, n in others.most_common())
+        notes.append(f"{langs}: no static analyser; " + ("read by the model reader and the assessor only." if have_model else
+                                                          "not read, since no model is configured."))
     for module, wants, label in STATIC_ADAPTERS:
         if not (set(kinds) & wants):
             continue

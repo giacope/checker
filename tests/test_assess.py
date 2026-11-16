@@ -26,7 +26,8 @@ APP = {
     "app/models/noise.rb": "# http http http http http http http http\n",   # one term, very dense
     "app/models/both.rb": "x = 1\n" * 300 + "http.get(url, timeout: 5)\n",  # two terms, sparse
     "config/settings.example.yml": "http: timeout\n",                          # an example: never shown
-    "tests/test_client.rb": "http.get(url, timeout: 1)\n",                     # a test: never shown
+    "tests/test_client.rb": "http.get(url, timeout: 1)\n",                     # a test: shown after the application
+    "node_modules/x/index.js": "http.get(url)\n",                              # a dependency: never shown
 }
 
 
@@ -84,7 +85,8 @@ def test_search_ranks_by_distinct_terms_then_entry_files_then_density(corpus, tm
     # among one-term files the entry file comes first; examples and tests are never shown
     assert heads[0] == "app/models/both.rb"
     assert heads.index("config/environments/production.rb") < heads.index("app/models/noise.rb")
-    assert not any("example" in h or h.startswith("tests/") for h in heads)
+    assert not any("example" in h for h in heads)
+    assert heads[-1] == "tests/test_client.rb"           # tests are read, after the application
     assert found == corpus.search(["http", "timeout", "force_ssl"], 100_000)   # deterministic
     assert corpus.search(["HTTP.GET"], 100_000)[0][0].startswith("app/")       # case-insensitive
     assert corpus.search([], 100_000) == [] and corpus.search(["zzz-not-there"], 100_000) == []
@@ -122,7 +124,7 @@ def test_verify_accepts_real_lines_and_rejects_the_rest(corpus):
     assert corpus.excerpt(f"{f}:2") == "  before_action :authenticate_user!"
     assert corpus.excerpt(f"{f}:3-4").split("\n") == ["  def update", "    Order.find(params[:id]).update(order_params)"]
     for bad in (f"{f}:0", f"{f}:99", f"{f}:2-99", f"{f}:4-2", f"{f}", "app/controllers/ghost.rb:1",
-                "tests/test_client.rb:1",                     # on disk, but not in the corpus
+                "node_modules/x/index.js:1",                  # on disk, but not in the corpus
                 "config/settings.example.yml:1",             # an example
                 "app/services/big_client.rb:1-31",           # a span too long to be a citation
                 "../etc/passwd:1", ""):
@@ -317,3 +319,21 @@ def test_absence_needs_every_match_shown(tmp_path, monkeypatch):
     src = doc["sources"][0]
     assert src["dropped"] == {"absence claimed but not every match was shown": 1}
     assert "not every excerpt" in src["unsettled"]["req_log"]
+
+
+def test_every_language_infrastructure_code_tests_and_docs_are_read(tmp_path, monkeypatch):
+    """No static adapter reads Go, Terraform or a Dockerfile; the assessor reads them all. Tests and documentation are
+    read too, after the application and within a quarter of the budget."""
+    files = {"main.go": 'db.Query("SELECT * FROM users WHERE name = \'" + r.URL.Query().Get("name") + "\'")\n',
+             "infra/main.tf": 'resource "aws_s3_bucket" "logs" { acl = "public-read" }\n',
+             "Dockerfile": "FROM python:3.12\nUSER root\n",
+             "docs/SECURITY.md": "Report vulnerabilities to the security team.\n",
+             "tests/login_test.go": "func TestLogin(t *testing.T) {}\n"}
+    c = CodeCorpus(write(tmp_path / "r", files), "r")
+    assert c.verify("main.go:1") == "main.go:1" and c.verify("infra/main.tf:1") == "infra/main.tf:1"
+    heads = [h for h, _ in c.search(["query", "aws_s3_bucket", "user root", "vulnerabilit", "testlogin"], 100_000)]
+    assert heads[:3] and set(heads[:3]) == {"main.go", "infra/main.tf", "Dockerfile"}
+    assert set(heads[3:]) == {"docs/SECURITY.md", "tests/login_test.go"}
+    monkeypatch.setattr(assess_mod, "SUPPORT_SHARE", 0.0)
+    c = CodeCorpus(tmp_path / "r", "r")
+    assert "docs/SECURITY.md" not in [h for h, _ in c.search(["vulnerabilit"], 100_000)]

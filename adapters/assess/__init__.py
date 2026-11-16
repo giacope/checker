@@ -75,11 +75,13 @@ class Corpus(Protocol):
 SMALL_FILE = 6_000             # a smaller file is shown whole
 WINDOW = 40                    # a larger one in 40-line windows around the lines that match
 MAX_SPAN = 30                  # a cited range longer than this is not a citation
+SUPPORT_SHARE = 0.25           # tests and documentation fill at most this share of a search's budget
 
 
 class CodeCorpus:
-    """A checked-out repository: the files `discover` keeps (tests, vendored code, build output excluded), minus
-    examples, keys, and binary files. Locators are `path:line` (1-based) or `path:first-last`.
+    """A checked-out repository: every text file `discover` keeps in scope "all" (any language, infrastructure code,
+    manifests, tests and documentation; vendored code and build output excluded), minus examples, keys, and binary
+    files. Tests and documentation fill at most SUPPORT_SHARE of a search. Locators are `path:line` (1-based) or `path:first-last`.
 
     Large files are cut into fixed 40-line windows (lines 1-40, 41-80, ...); a window is shown when a term matches in
     it, with its neighbour when the match is within 10 lines of the edge. Fixed windows give the same header and
@@ -89,19 +91,22 @@ class CodeCorpus:
                     "for a window of a longer file; every line carries its 1-based line number in the left margin. Cite "
                     "`path:line` (the path as in the header, without a line range) or `path:first-last` for a short span. "
                     "Judge the application as deployed: production configuration overrides development and test "
-                    "settings; framework defaults count only for the version in use (say so in the note).")
+                    "settings; framework defaults count only for the version in use (say so in the note). Files under "
+                    "test or documentation directories, and test files, are not the running application: cite them "
+                    "only for requirements about tests or documentation.")
 
     def __init__(self, root: Path, name: str | None = None):
         self.root = Path(root).resolve()
         self.name = name or self.root.name
         self.revision = git_commit(self.root)
         self._files: dict[str, tuple[str, list[str], list[str]]] | None = None
+        self._support: set[str] = set()   # tests and documentation
 
     def _index(self) -> dict[str, tuple[str, list[str], list[str]]]:
         """rel -> (text, rows, lowercased rows), read once."""
         if self._files is None:
             files = {}
-            for f in discover(self.root):
+            for f in discover(self.root, "all"):
                 if f.example or f.kind == "key":
                     continue
                 text = read_text(f)
@@ -109,6 +114,8 @@ class CodeCorpus:
                     continue
                 rows = text.split("\n")
                 files[f.rel] = (text, rows, [r.lower() for r in rows])
+                if f.support:
+                    self._support.add(f.rel)
             self._files = files
         return self._files
 
@@ -127,14 +134,18 @@ class CodeCorpus:
             density = sum(counts) / (1 + len(text) / 1000)
             ranked.append((-distinct, 0 if ALWAYS.search(rel) else 1, -density, rel, hit_rows))
         ranked.sort(key=lambda r: r[:4])
-        out, used = [], 0
+        out, used, support = [], 0, 0
         for _, _, _, rel, hit_rows in ranked:
             for header, body in self._excerpts(rel, hit_rows):
                 size = len(header) + len(body)
+                if rel in self._support and support + size > budget * SUPPORT_SHARE:
+                    continue   # tests and documentation never crowd out the application itself
                 if used + size <= budget:
                     out.append((header, body))
                     used += size
-        return out
+                    support += size if rel in self._support else 0
+        # the application first, then its tests and documentation, each in rank order
+        return sorted(out, key=lambda x: x[0].rsplit(":", 1)[0] in self._support or x[0] in self._support)
 
     def paths(self) -> list[str]:
         """The files the corpus reads, relative to the root."""
