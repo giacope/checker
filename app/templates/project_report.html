@@ -41,8 +41,8 @@
       <div class="small">Requirement: {% if e.url %}<a href="{{ e.url }}" target="_blank" rel="noopener">{{ e.section }}</a>{% else %}{{ e.section }}{% endif %}</div>
       {% if e.quote %}<blockquote class="small">{{ e.quote }}</blockquote>{% endif %}
       {% if e.assessment %}{% set m = e.assessment %}
-      <div class="finding {{ 'pass' if m.value else 'fail' }}">
-        <div class="small"><b>Model assessment:</b> {{ "met" if m.value else "not met" }}{% if m.basis == "absence" %} (not found in the sheets searched){% endif %} <span class="muted">({{ m.source }})</span> — {{ m.note }}</div>
+      <div class="finding {{ {'met': 'pass', 'not_met': 'fail'}.get(m.value, 'not_applicable') }}">
+        <div class="small"><b>Model assessment:</b> {{ ANSWER.get(m.value, m.value) }}{% if m.basis == "absence" %} (not found in the sheets searched){% endif %} <span class="muted">({{ m.source }})</span> — {{ m.note }}</div>
         {% for a in m.at %}<div class="small" style="margin-top:6px">{{ where(a) }}
           {% if a.element %}<div class="muted">{{ TYPE.get(a.element.type, a.element.type) }} <span class="kv">{{ a.element.id }}</span>{% for k, v in a.element.facts.items() %} · {{ k }} {{ v }}{% endfor %}</div>{% endif %}
           {% if a.img %}<div><a href="{{ a.img }}" target="_blank" rel="noopener"><img class="crop" loading="lazy" src="{{ a.img }}" alt="{{ a.label }}"></a></div>{% endif %}</div>{% endfor %}

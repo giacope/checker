@@ -24,6 +24,8 @@ from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 
+from adapters.regulation import ANSWER_LABELS
+
 from . import buildings
 from . import regulations as regs
 from . import report as report_mod
@@ -51,6 +53,7 @@ async def lifespan(_app):
 
 app = FastAPI(title="Compliance check", lifespan=lifespan)
 templates = Jinja2Templates(directory=HERE / "templates")
+templates.env.globals["ANSWER"] = ANSWER_LABELS
 templates.env.filters["short"] = lambda s, n=12: (s or "")[:n]
 
 

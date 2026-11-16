@@ -251,7 +251,7 @@ def test_building_regulation_is_assessed_against_the_drawings_and_model(client, 
 
     html = client.get(f"/projects/{pid}").text
     assert f'href="/regulations/{rid}#c2"' in html and f'href="/regulations/{rid}">review its checks' in html
-    assert "Model assessment" in html and f'src="/projects/{pid}/crop?at=plans%2FA11-1.pdf%23page%3D1%26bbox%3D100%2C200%2C260%2C212"' in html
+    assert "<b>Model assessment:</b> Yes, met" in html and f'src="/projects/{pid}/crop?at=plans%2FA11-1.pdf%23page%3D1%26bbox%3D100%2C200%2C260%2C212"' in html
     md = client.get(f"/projects/{pid}/report.md").text
     assert f"/regulations/{rid}#c2" in md and "Model assessment (llm:test-model): Yes, met." in md
     # while it runs, the progress page names the regulation
