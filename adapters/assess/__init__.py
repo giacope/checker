@@ -205,12 +205,14 @@ Basis "evidence" citing what shows it (the building's use, the feature's replace
 feature the requirement governs appears nowhere in the excerpts searched for it. Not for a requirement the artifact \
 simply fails to meet.
 - null: the excerpts do not settle it (it depends on runtime behaviour, hosting, infrastructure, process, or \
-text not shown, or the evidence is mixed). Prefer null to a guess.
+text not shown, or the evidence is mixed). Prefer null to a guess. With null, give "search_more": up to 6 literal strings (file, \
+function, class, setting, header, note or schedule names) whose occurrences in the artifact would settle it, if any \
+would; you get one more look with what they find.
 - "at": up to {max_locators} locators of the specific lines, only lines shown in the excerpts.
 - "note": the reason in one or two sentences (under 300 characters).
 
 Reply with only JSON:
-{{"answers": [{{"attr": "...", "value": "met", "at": ["..."], "basis": "evidence", "note": "..."}}]}}"""
+{{"answers": [{{"attr": "...", "value": "met", "at": ["..."], "basis": "evidence", "note": "...", "search_more": []}}]}}"""
 
 GENERIC_NOTES = "Cite text by the locators shown in the excerpt headers."
 
@@ -222,6 +224,16 @@ def _clean_terms(terms) -> list[str]:
 
 def _size(header: str, text: str) -> int:
     return len(header) + len(text)
+
+
+def _trim(excerpts: list[tuple[str, str]], budget: int) -> list[tuple[str, str]]:
+    out, used = [], 0
+    for h, t in excerpts:
+        if used + _size(h, t) > budget:
+            break
+        out.append((h, t))
+        used += _size(h, t)
+    return out
 
 
 def group(order: list[str], found: dict[str, list[tuple[str, str]]], per_call: int | None = None,
@@ -287,16 +299,7 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
     started = time.time()
 
     found = {a: corpus.search(r["search"], REQUIREMENT_CHARS) for a, r in reqs.items()}
-    groups = group(list(reqs), found)
-    calls, not_sent, total = [], [], 0
-    for members in groups:
-        excerpts = list({h: (h, t) for a in members for h, t in found[a]}.values())
-        size = sum(_size(h, t) for h, t in excerpts)
-        if total + size > MAX_CHARS:
-            not_sent += members
-            continue
-        total += size
-        calls.append((members, excerpts))
+    not_sent, total = [], 0
 
     notes = getattr(corpus, "prompt_notes", "") or GENERIC_NOTES
     dropped: dict[str, int] = {}
@@ -304,7 +307,10 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
     count = lambda d, why: d.__setitem__(why, d.get(why, 0) + 1)  # noqa: E731
     facts: dict[str, list[dict]] = {}
     unsettled: dict[str, str] = {}   # attr -> the model's reason for null, for the question the user is asked
+    more: dict[str, list[str]] = {}  # attr -> what the model would need to see to settle a null
     failed, errors = [], []
+    ncalls = 0
+    second = {"asked": 0, "answered": 0}
 
     def prompt(members, excerpts):
         token = secrets.token_hex(8)
@@ -347,30 +353,65 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
                 tmp.replace(hit)
             return reply["answers"], body
 
-        with cf.ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
-            futures = {pool.submit(call, job): job for job in calls}
-            for n, fut in enumerate(cf.as_completed(futures), 1):
-                members = futures[fut][0]
-                progress(f"assess: call {n} of {len(calls)}")
-                try:
-                    answers, shown = fut.result()
-                except ReaderError as e:
-                    errors.append(str(e))
-                    failed += members
+        asked = list(reqs)
+        for rnd in (1, 2):
+            calls = []
+            for members in group(asked, found):
+                excerpts = list({h: (h, t) for a in members for h, t in found[a]}.values())
+                size = sum(_size(h, t) for h, t in excerpts)
+                if total + size > MAX_CHARS:
+                    not_sent += members
                     continue
-                seen: set[str] = set()
-                for ans in answers:
-                    obs = _settle(ans, members, seen, reqs, found, corpus, shown, dropped, rejected, count, unsettled)
-                    if obs:
-                        facts[ans["attr"]] = [{**o, "source": source} for o in obs]
-    if calls and len(errors) == len(calls):
-        raise ReaderError(f"every model call failed ({len(calls)}): {errors[0]}")
+                total += size
+                calls.append((members, excerpts))
+            ncalls += len(calls)
+            with cf.ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+                futures = {pool.submit(call, job): job for job in calls}
+                for n, fut in enumerate(cf.as_completed(futures), 1):
+                    members = futures[fut][0]
+                    progress(f"assess: call {n} of {len(calls)}" + (" (second look)" if rnd == 2 else ""))
+                    try:
+                        answers, shown = fut.result()
+                    except ReaderError as e:
+                        errors.append(str(e))
+                        failed.extend(members)
+                        continue
+                    seen: set[str] = set()
+                    for ans in answers:
+                        if isinstance(ans, dict) and ans.get("attr") in members and ans.get("attr") not in seen \
+                                and ans.get("value") is None and rnd == 1:
+                            more[ans["attr"]] = _clean_terms(ans.get("search_more"))[:6]
+                        obs = _settle(ans, members, seen, reqs, found, corpus, shown, dropped, rejected, count, unsettled)
+                        if obs:
+                            facts[ans["attr"]] = [{**o, "source": source} for o in obs]
+                            unsettled.pop(ans["attr"], None)
+                            second["answered"] += rnd == 2
+            if rnd == 2:
+                break
+            # A second look for what the model left open and said what would settle: search for that, show it.
+            asked = []
+            for a in reqs:  # in the requirements' order, not the order replies arrived: the same batches every run
+                terms = more.get(a)
+                if a in facts or not terms:
+                    continue
+                have = {h for h, _ in found[a]}
+                new = [(h, t) for h, t in corpus.search(terms, REQUIREMENT_CHARS) if h not in have]
+                if not new:
+                    continue
+                found[a] = _trim(new + found[a], REQUIREMENT_CHARS * 3 // 2)
+                reqs[a]["search"] = list(dict.fromkeys(reqs[a]["search"] + terms))
+                asked.append(a)
+            second["asked"] = len(asked)
+            if not asked:
+                break
+    if ncalls and len(errors) == ncalls:
+        raise ReaderError(f"every model call failed ({ncalls}): {errors[0]}")
 
     src = {"id": source, "kind": "model_assessment", "describes": corpus.name, "adapter": "adapters.assess",
            "adapter_version": VERSION, "provider": pname, "model": model,
            **({"revision": corpus.revision} if getattr(corpus, "revision", None) else {}),
            "requirements": len(reqs), "answered": len(facts), "open": len(reqs) - len(facts),
-           "calls": len(calls), "cached_calls": len(cached), "failed_calls": len(errors), "dropped": dropped, "rejected_locators": rejected,
+           "calls": ncalls, "second_look": second, "cached_calls": len(cached), "failed_calls": len(errors), "dropped": dropped, "rejected_locators": rejected,
            "unsettled": {a: unsettled[a] for a in reqs if a in unsettled}, "chars_sent": sum(sent_sizes), "excerpt_chars": total, "seconds": round(time.time() - started, 1)}
     if failed:
         src["failed"] = sorted(failed)

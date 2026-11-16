@@ -58,7 +58,8 @@ def fake(answers, fail_if=None, barrier=None):
         asked = re.search(r"Answer these requirements: (.*)$", user).group(1).split(", ")
         if fail_if and any(a in fail_if for a in asked):
             return httpx.Response(401, json={"error": "denied"})
-        reply = {"answers": [x for a in asked for x in ([answers[a]] if not isinstance(answers.get(a), list) else answers[a]) if a in answers]}
+        given = {a: answers[a](user) if callable(answers[a]) else answers[a] for a in asked if a in answers}
+        reply = {"answers": [x for a, v in given.items() for x in (v if isinstance(v, list) else [v])]}
         return httpx.Response(200, json={"content": [{"type": "text", "text": "```json\n" + json.dumps(reply) + "\n```"}]})
     return httpx.MockTransport(handler), sent
 
@@ -268,3 +269,29 @@ def test_cached_answers_repeat_for_the_same_excerpts_and_a_changed_excerpt_is_re
     assert len(sent2) == 1 and changed["sources"][0]["cached_calls"] == 0
     assert [o["at"] for o in changed["facts"]["req_ssl"]] == ["config/environments/production.rb:3"]
 
+
+def test_an_open_answer_gets_a_second_look_at_what_the_model_asked_for(corpus):
+    def answers(user):
+        if "force_ssl" in user:  # the second look shows production.rb, which the first search missed
+            return {"attr": "req_tls", "value": "met", "basis": "evidence", "at": ["config/environments/production.rb:2"], "note": "force_ssl"}
+        return {"attr": "req_tls", "value": None, "note": "TLS is set elsewhere", "search_more": ["force_ssl", "zzz-nowhere"]}
+    transport, sent = fake({"req_tls": lambda u: answers(u), "req_auth": {"attr": "req_auth", "value": None, "note": "x"}})
+    doc = assess([req("req_tls", "before_action"), req("req_auth", "before_action")], corpus, provider=PROVIDER, transport=transport)
+    assert len(sent) == 2 and "Answer these requirements: req_tls" in sent[1][1]     # only the one with search_more is asked again
+    assert doc["facts"]["req_tls"][0]["at"] == "config/environments/production.rb:2"
+    src = doc["sources"][0]
+    assert src["second_look"] == {"asked": 1, "answered": 1} and src["calls"] == 2
+    assert src["unsettled"] == {"req_auth": "x"}
+
+
+def test_second_look_batches_do_not_depend_on_the_order_replies_arrive(corpus, monkeypatch):
+    def open_(a):
+        return {"attr": a, "value": None, "note": "x", "search_more": ["force_ssl"]}
+    reqs = [req(f"req_{i}", "before_action") for i in range(10)]
+    prompts = []
+    for order in (lambda fs: list(fs), lambda fs: list(fs)[::-1]):
+        monkeypatch.setattr(assess_mod.cf, "as_completed", order)
+        transport, sent = fake({r["attr"]: open_(r["attr"]) for r in reqs})
+        assess(reqs, corpus, provider=PROVIDER, transport=transport, workers=1)
+        prompts.append(sorted(re.sub(r"[0-9a-f]{16}", "", u) for _, u in sent))
+    assert len(prompts[0]) == 4 and prompts[0] == prompts[1]   # 10 open, 8 per call, asked twice
