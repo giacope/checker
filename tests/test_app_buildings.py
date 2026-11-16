@@ -203,7 +203,7 @@ def readers(monkeypatch):
     def complete(pname, model, key, system, user, client):
         calls.append(user)
         asked = re.search(r"Answer these requirements: (.*)$", user).group(1).split(", ")
-        return json.dumps({"answers": [{"attr": a, "value": True, "basis": "evidence", "note": "A11-1 notes handrails on both sides.",
+        return json.dumps({"answers": [{"attr": a, "value": "met", "basis": "evidence", "note": "A11-1 notes handrails on both sides.",
                                         "at": ["S1:L2", "ifc:2abc", "S1:L40", "ifc:GHOST"]} for a in asked]})
     monkeypatch.setattr(assess_mod, "complete", complete)
     provider = ("anthropic", "test-model", "k")
@@ -235,7 +235,7 @@ def test_building_regulation_is_assessed_against_the_drawings_and_model(client, 
     hand = entries["k2-1"]
     assert hand["verdict"] == "pass" and hand["url"] == f"/regulations/{rid}#c2" and hand["section"] == "1.34"
     m = hand["assessment"]
-    assert m["value"] is True and m["note"] == "A11-1 notes handrails on both sides." and m["source"] == "llm:test-model"
+    assert m["value"] == "met" and m["note"] == "A11-1 notes handrails on both sides." and m["source"] == "llm:test-model"
     line = "plans/A11-1.pdf#page=1&bbox=100,200,260,212"
     assert [a["at"] for a in m["at"]] == [line, "ifc:2abc"]              # the invented line and GlobalId are dropped
     assert m["at"][0]["label"] == "A11-1 · plans/A11-1.pdf p1" and m["at"][0]["img"].startswith(f"/projects/{pid}/crop?at=")
@@ -253,7 +253,7 @@ def test_building_regulation_is_assessed_against_the_drawings_and_model(client, 
     assert f'href="/regulations/{rid}#c2"' in html and f'href="/regulations/{rid}">review its checks' in html
     assert "Model assessment" in html and f'src="/projects/{pid}/crop?at=plans%2FA11-1.pdf%23page%3D1%26bbox%3D100%2C200%2C260%2C212"' in html
     md = client.get(f"/projects/{pid}/report.md").text
-    assert f"/regulations/{rid}#c2" in md and "Model assessment (llm:test-model): met." in md
+    assert f"/regulations/{rid}#c2" in md and "Model assessment (llm:test-model): Yes, met." in md
     # while it runs, the progress page names the regulation
     main._status(main.PROJECTS / pid, state="running")
     assert "ADK stairs" in client.get(f"/projects/{pid}").text

@@ -32,7 +32,7 @@ import httpx
 import yaml
 
 from adapters.code_llm import ReaderError, complete, parse_json, provider_from_env, vocab_text
-from normir.evaluate import Evaluator, Residual
+from normir.evaluate import NOT_APPLICABLE, Evaluator, Residual
 from normir.model import load, validate
 from normir.quantity import Quantity
 
@@ -51,6 +51,39 @@ VAR = re.compile(r"^[a-z][a-z0-9_]{0,19}$")
 ARTIFACT = {"code": ("the software system's source code and configuration", "code, configuration files, or dependency manifests"),
             "bim": ("the building's drawings and model (plans, sections, schedules, sheet notes, IFC properties)",
                     "drawing notes, schedules, sheet titles, or model property names")}
+
+
+# The answer to an assessed or attested check, and to a computed per-element check when no element was found.
+ANSWERS = ["met", "not_met", "not_applicable"]
+ANSWER_LABELS = {"met": "Yes, met", "not_met": "No, not met", "not_applicable": "Doesn't apply"}
+PACK_FORMAT = 2   # 1: assessed and attested facts were true/false, with no way to answer "doesn't apply"
+
+
+def answer(v: Any) -> Any:
+    """An answer as an ANSWERS value: true/false from before PACK_FORMAT 2 read as met/not met."""
+    return {True: "met", False: "not_met"}.get(v, v) if isinstance(v, bool) else v
+
+
+def upgrade(doc: dict) -> dict:
+    """An evidence document stored before PACK_FORMAT 2, with its true/false answers to customer checks as met/not met."""
+    facts = {k: [{**o, "value": answer(o.get("value"))} if k.startswith("req_") else o for o in obs] if isinstance(obs, list) else obs
+             for k, obs in (doc.get("facts") or {}).items()}
+    return {**doc, "facts": facts}
+
+
+def requirements(reg: dict) -> list[dict]:
+    """What a reviewer (adapters.assess) is asked about this regulation: each enabled assessed check, and each computed
+    check over elements with `for_type`, to be asked only when no element of that type is found."""
+    clauses = {c["id"]: c for c in reg.get("clauses") or []}
+    out = []
+    for k in reg.get("checks") or []:
+        fallback = k["kind"] == "computed" and k.get("for")
+        if k.get("enabled") and (k["kind"] == "assessed" or fallback):
+            out.append({"attr": fact_attr(reg["id"], k["id"]), "summary": k["summary"],
+                        "clause": clauses.get(k["clause"], {}).get("text", "")[:3000],
+                        "search": k.get("search") or re.findall(r"[A-Za-z_]{4,}", k["summary"])[:8],
+                        **({"for_type": k["for"]["type"]} if fallback else {})})
+    return out
 
 
 def fact_attr(reg_id: str, check_id: str) -> str:
@@ -306,20 +339,22 @@ Facts. The subject is `{subject}`; facts about it are written {{"fact": "{subjec
 
 Expressions ("require", JSON):
 - {{"fact": "{subject}.<attr>"}} reads a subject fact. With "for": {{"var": "x", "type": "<Type>"}} the check is \
-evaluated on each element of that type the evidence lists (and does not apply when there is none), and \
-{{"fact": "x.<attr>"}} reads the element's attribute.
+evaluated on each element of that type the evidence lists, and {{"fact": "x.<attr>"}} reads the element's attribute. \
+When no element of the type is found, a reviewer judges the requirement from the artifact instead, by the "search" terms.
 - Literals: true, false, numbers, enum values exactly as listed, quantities as strings ("44 in", "1.2 m", "30 m2").
 - {{"all": [e, ...]}}, {{"any": [e, ...]}}, {{"not": e}}; {{"eq": [a, b]}}, and likewise "ne", "lt", "le", "gt", \
 "ge"; {{"in": [{{"fact": ...}}, ["value", ...]]}}.
 - A bool fact is itself a condition. "require" is what must hold for the requirement to be met. A condition that \
-only makes it apply is written {{"any": [{{"not": condition}}, requirement]}}. A prohibition of a kind of element \
+only makes the requirement apply goes in "applies" (same language, same "for"): where it is false the check is not \
+applicable, which is reported as such and is not a pass. Leave "applies" null when the requirement always applies. \
+A prohibition of a kind of element \
 ("do not do X" where X is an element type) is "for" that type with "require": false: every such element fails.
 - Examples: {examples}
 - Nothing else: no terms, tables, arithmetic, or facts not listed.
 
 Reply with only JSON:
 {{"clauses": [{{"clause": "c1", "checks": [{{"summary": "...", "kind": "computed|assessed|attested", "why": "...", \
-"for": null, "require": null, "search": ["..."], "question": null}}]}}]}}"""
+"for": null, "applies": null, "require": null, "search": ["..."], "question": null}}]}}]}}"""
 
 STOP = set("a an and any are as at be by can for from has have in into is it its may must not of on or shall should "
            "that the their there these this to use used when where which with within without all each every only "
@@ -517,6 +552,13 @@ def _verify_computed(chk: dict, clause: dict, vocab: dict) -> str | None:
     if errors:
         return errors[0]
     chk["require"] = expr
+    if chk.get("applies") is not None:
+        applies, errors = _check_expr(chk["applies"], scope, vocab)
+        if errors:
+            return f"applies: {errors[0]}"
+        chk["applies"] = applies
+        if not any("fact" in n for n in _walk(applies)):
+            return "applies reads no fact"
     prohibition = bool(f) and expr is False   # no element of the type may exist: each one found fails
     reads = [n["fact"].split(".", 1)[0] for n in _walk(expr) if "fact" in n]
     if not reads and not prohibition:
@@ -534,7 +576,7 @@ def _verify_computed(chk: dict, clause: dict, vocab: dict) -> str | None:
                 return "the expression does not depend on any fact"
             facts = {k: _sample(v) for k, v in attrs[subject].items()}
             inst = {k: _sample(v) for k, v in attrs[f["type"]].items()} if f else None
-            if not isinstance(Evaluator(rs, facts).norm(chk["id"], inst), bool):
+            if not isinstance(Evaluator(rs, facts).norm(chk["id"], inst), bool) and Evaluator(rs, facts).norm(chk["id"], inst) != NOT_APPLICABLE:
                 return "the expression does not evaluate to true or false"
     except Exception as e:  # anything the engine rejects is a reason to demote, never a crash
         return f"the engine rejected it: {type(e).__name__}: {e}"[:300]
@@ -577,10 +619,12 @@ def _check(raw: Any, clause: dict, n: int, vocab: dict, stats: dict) -> dict | N
             f = {"var": var, "type": f}
         chk["for"] = {"var": f.get("var"), "type": f.get("type")} if isinstance(f, dict) else f
         chk["require"] = raw.get("require")
+        if raw.get("applies") is not None:
+            chk["applies"] = raw.get("applies")
         problem = _verify_computed(chk, clause, vocab)
         if problem:
             stats["demoted"] += 1
-            chk = {k: v for k, v in chk.items() if k not in ("for", "require")}
+            chk = {k: v for k, v in chk.items() if k not in ("for", "require", "applies")}
             chk.update(kind="assessed", demoted=problem)
     return chk
 
@@ -681,20 +725,28 @@ def build_pack(reg: dict, vocab: dict, out: Path) -> Path:
         if len(quote) > QUOTE_CHARS:
             quote = quote[:QUOTE_CHARS].rstrip() + " …"
         norm: dict = {"name": chk["id"], "title": chk["summary"], "modality": "obligation", "status": "draft"}
+        answered = None   # the subject fact holding a reviewer's or the customer's answer
+        if kind in ("assessed", "attested") or (kind == "computed" and chk.get("for")):
+            answered = f"{subject}.{fact_attr(reg['id'], chk['id'])}"
+            preds[answered] = {"name": answered, "label": chk.get("question") or chk["summary"] if kind == "attested" else chk["summary"],
+                               "type": "enum", "values": list(ANSWERS), "value_labels": dict(ANSWER_LABELS),
+                               "kind": "given" if kind == "attested" else "judged"}
         if kind in ("assessed", "attested"):
-            name = f"{subject}.{fact_attr(reg['id'], chk['id'])}"
-            preds[name] = {"name": name, "label": chk["summary"] if kind == "assessed" else chk.get("question") or chk["summary"],
-                           "type": "bool", "kind": "judged" if kind == "assessed" else "given"}
-            require = {"fact": name}
+            norm["applies"] = {"ne": [{"fact": answered}, "not_applicable"]}
+            require = {"eq": [{"fact": answered}, "met"]}
         elif kind == "computed":
             f = chk.get("for")
             if "require" not in chk or (f and not (isinstance(f, dict) and f.get("var") and f.get("type"))):
                 raise RegulationError(f"check {chk['id']} is computed but has no valid 'require' and 'for'; make it assessed or attested")
             if f:
                 norm["for"] = {f["var"]: f["type"]}
+                # no element of the type found: an extraction miss must not read as "doesn't apply", so a reviewer judges it
+                norm["when_none"] = {"applies": {"ne": [{"fact": answered}, "not_applicable"]}, "require": {"eq": [{"fact": answered}, "met"]}}
             require = chk["require"]
+            if chk.get("applies") is not None:
+                norm["applies"] = chk["applies"]
             scope = {f["var"]: f["type"]} if f else {}
-            for node in _walk(require):
+            for node in _walk([require, chk.get("applies")]):
                 if isinstance(node.get("fact"), str):
                     root, _, attr = node["fact"].partition(".")
                     typ = subject if root == subject else scope.get(root)
@@ -717,7 +769,8 @@ def build_pack(reg: dict, vocab: dict, out: Path) -> Path:
         norms.append(norm)
     files = list(dict.fromkeys(c["file"] for c in reg.get("clauses", [])))
     _dump(out / "package.yaml", {"package": f"reg-{reg['id']}", "version": "1", "title": reg.get("name") or reg["id"],
-                                 "subject": subject, "text_policy": "public", "source": {"kind": "customer", "files": files}})
+                                 "subject": subject, "text_policy": "public", "format": PACK_FORMAT,
+                                 "source": {"kind": "customer", "files": files}})
     _dump(out / "predicates.yaml", {"predicates": list(preds.values())})
     _dump(out / "norms.yaml", {"norms": norms})
     return out

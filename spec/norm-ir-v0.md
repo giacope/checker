@@ -110,6 +110,8 @@ v0 has only obligations. Prohibitions, permissions, and exceptions as separate d
 
 A pack compiled from a customer's own regulation, such as an internal secure-coding standard or a building policy ([`adapters/regulation`](../adapters/regulation)), cites a document that has no public URL. Its elements cite it with `cite.at`, the file and line range the clause occupies (`policy.pdf#L120-L131`), and may give as `cite.url` a path in the app that shows the clause (`/regulations/r3f9a0b12c4#c12`) instead of an `https` URL. Such packs are `text_policy: public` and quote the clause, since the text is the customer's. Their norms are written by a model and say so with `interpretation.by: model` (hand-written packs use `by: pack`), with the model's reason in `interpretation.note`; they stay `draft` until a person reviews them.
 
+An assessed or attested check reads one subject fact, the reviewer's or the customer's answer, an enum of `met`, `not_met` and `not_applicable` (`applies: {ne: [answer, not_applicable]}`, `require: {eq: [answer, met]}`), so "doesn't apply" is an answer rather than a pass. A computed check over elements gets the same answer fact as its `when_none`: when no element of its type was extracted, a model judges the requirement from the artifact instead, and only then. Packs record this as `format: 2`; the app rebuilds older packs and reads stored true/false answers as met / not met.
+
 ## Expressions
 
 | Form | Meaning |

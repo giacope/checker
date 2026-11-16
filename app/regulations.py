@@ -241,21 +241,22 @@ def rule_text(check: dict, voc: dict) -> str | None:
 
 
 def pack_dir(rid: str) -> Path:
-    return reg_dir(rid) / "pack"
+    """The regulation's pack, rebuilt first when it was built in an older format (adapters.regulation.PACK_FORMAT)."""
+    from adapters.regulation import PACK_FORMAT
+
+    out = reg_dir(rid) / "pack"
+    try:
+        meta = yaml.safe_load((out / "package.yaml").read_text())
+    except (OSError, yaml.YAMLError):
+        meta = None
+    if not isinstance(meta, dict) or meta.get("format") != PACK_FORMAT:
+        with LOCK:
+            out = rebuild(rid)
+    return out
 
 
 def assessed(rids: list[str]) -> list[dict]:
-    """The enabled assessed checks of these regulations, as adapters.assess requirements."""
-    if not rids:
-        return []
-    from adapters.regulation import fact_attr
+    """What the model assessor is asked for these regulations (adapters.regulation.requirements)."""
+    from adapters.regulation import requirements
 
-    out = []
-    for rid in rids:
-        reg = load_reg(rid) or {}
-        clauses = {c["id"]: c for c in reg.get("clauses") or []}
-        for k in reg.get("checks") or []:
-            if k.get("enabled") and k["kind"] == "assessed":
-                out.append({"attr": fact_attr(rid, k["id"]), "summary": k["summary"],
-                            "clause": clauses.get(k["clause"], {}).get("text", "")[:3000], "search": k.get("search") or []})
-    return out
+    return [r for rid in rids for r in requirements({**(load_reg(rid) or {}), "id": rid})]

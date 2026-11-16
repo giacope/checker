@@ -29,6 +29,7 @@ from pathlib import Path
 import yaml
 
 from adapters.code_static import git_commit
+from adapters.regulation import answer, upgrade
 from normir import load
 from normir.evidence import load_evidence, prefer_sources, rank_by_kind, run
 
@@ -161,6 +162,9 @@ def collect(root: Path, name: str, models: list[Path] = (), use_reader: bool = T
         notes.append("No model reader is configured (ANTHROPIC_API_KEY or OPENAI_API_KEY on the server, or a `codex login`). "
                      "Judged facts such as whether a secret is a test fixture stay open, and languages without a "
                      "static adapter are not read.")
+    # a computed check over elements is judged by the model only when no element of its type was found
+    found = {e.get("type") for d in docs for e in d.get("elements") or []}
+    requirements = [r for r in requirements if r.get("for_type") not in found or not r.get("for_type")]
     if requirements:
         if llm is not None and llm.provider_from_env() is not None:
             from adapters.assess import CodeCorpus, assess
@@ -249,7 +253,7 @@ def scan(url: str, workdir: Path, branch: str | None = None, models: list[Path] 
 
 def evaluate(docs: list[dict], standards: list[str], asvs_level: int = 2, answers: dict | None = None) -> dict:
     """Run each selected pack. `answers` is the user's profile: {"subject": {attr: value}, "elements": {id: {attr: value}}}."""
-    ev = prefer_sources(load_evidence(*docs), SOURCES, narrow=True)
+    ev = prefer_sources(load_evidence(*(upgrade(d) for d in docs)), SOURCES, narrow=True)
     answers = answers or {}
     out = {}
     for sid in standards:
@@ -263,7 +267,8 @@ def evaluate(docs: list[dict], standards: list[str], asvs_level: int = 2, answer
         else:
             pack_dir, label = STANDARDS[sid]
             rs = load(ROOT / "packs" / pack_dir)
-        profile = {**(answers.get("subject") or {}), "elements": answers.get("elements") or {}}
+        profile = {**{k: answer(v) if k.startswith("req_") else v for k, v in (answers.get("subject") or {}).items()},
+                   "elements": answers.get("elements") or {}}
         if sid == "asvs":
             profile["norms"] = [n for (k, n), el in rs.elements.items() if k == "norm" and int(el.data.get("level", 1)) <= asvs_level]
         out[sid] = {"pack": pack_dir, "label": label, "short": label if sid.startswith("reg:") else None, "rs": rs, "norms": profile.get("norms"), "rows": run(rs, ev, profile)}

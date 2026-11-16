@@ -52,7 +52,7 @@ def _verdict(rows: list[dict]) -> str:
     if not rows:
         return "not_applicable"
     seen = {r["verdict"] for r in rows}
-    return next((v for v in ("fail", "uncertain", "unknown") if v in seen), "pass")
+    return next((v for v in ("fail", "uncertain", "unknown", "pass") if v in seen), "not_applicable")
 
 
 def _question_key(element: str, attr: str) -> str:
@@ -157,6 +157,7 @@ def sections(evaluation: dict, locate, coverage=lambda sid, names: None, by_type
                         "key": key, "element": target, "attr": attr, "type": r.get("type") if not subject_level else None,
                         "scope": "subject" if subject_level else ("type" if typed else "element"), "elements": [],
                         "label": pred.get("label", attr), "value_type": pred.get("type", "bool"), "values": pred.get("values"),
+                        "value_labels": pred.get("value_labels") or {},
                         "at": [a["at"] for a in f["at"]] if not subject_level else [],
                         "candidates": [d["value"] for d in f["deciding"].get(fact, [])] if fact in f["deciding"] else [],
                         "decides": [], "answer": None})
@@ -168,7 +169,16 @@ def sections(evaluation: dict, locate, coverage=lambda sid, names: None, by_type
                     if not subject_level and r["element"] not in q["elements"]:
                         q["elements"].append(r["element"])
             counts = Counter(r["verdict"] for r in nrows)
+            # what a reviewer's answer to a customer check rests on: cited text, or nothing found where it searched
+            answered = [o for n in walk([el.get("require"), el.get("when_none")]) if "fact" in n
+                        and n["fact"].rpartition(".")[2].startswith("req_")
+                        for o in (ev.facts[n["fact"].rpartition(".")[2]].observations if n["fact"].rpartition(".")[2] in ev.facts else [])]
+            rests_on = ("absence" if answered and all(o.get("basis") == "absence" for o in answered)
+                        else "evidence" if answered else None)
             entries.append({
+                "rests_on": rests_on,
+                "na_reason": [{"note": str(o.get("note") or "")[:300], "source": o.get("source"),
+                               "at": [locate(o["at"])] if o.get("at") else []} for o in answered][:3] if verdict == "not_applicable" else [],
                 "norm": name, "title": el.get("title", name), "section": cite.get("section") or name, "url": cite.get("url"),
                 "quote": (cite.get("quote") or el.get("quote") or "").strip() or None, "level": el.get("level"),
                 "interpretation": (interp.get("note") or "").strip() if isinstance(interp, dict) else str(interp),
@@ -277,7 +287,8 @@ def markdown(rep: dict) -> str:
             if e["verdict"] == "not_applicable":
                 continue
             lvl = f" (L{e['level']})" if e.get("level") else ""
-            out += [f"### {VERDICT_LABEL[e['verdict']]}: {e['section']}{lvl} {e['title']}", ""]
+            tag = " (nothing found in the code searched)" if e.get("rests_on") == "absence" and e["verdict"] == "fail" else ""
+            out += [f"### {VERDICT_LABEL[e['verdict']]}{tag}: {e['section']}{lvl} {e['title']}", ""]
             if e.get("url"):
                 out.append(f"Source: {e['url']}")
             if e.get("quote"):
@@ -305,8 +316,14 @@ def markdown(rep: dict) -> str:
                 out += ["", f"What to do: {e['guidance']}"]
             out.append("")
         na = [e for e in s["entries"] if e["verdict"] == "not_applicable"]
-        if na:
-            out += ["Not applicable (nothing in the code is subject to them): " + ", ".join(e["section"] for e in na), ""]
+        for e in (e for e in na if e.get("na_reason")):
+            w = e["na_reason"][0]
+            out.append(f"- Judged not to apply: {e['section']} {e['title'].rstrip('.')}. {w['note']} ({w['source']}"
+                       + (", nothing found in the code searched" if e.get("rests_on") == "absence" else "")
+                       + "".join(f"; {a['at']}" for a in w["at"]) + ")")
+        plain = [e for e in na if not e.get("na_reason")]
+        if plain:
+            out += ["", "Not applicable (nothing in the code is subject to them): " + ", ".join(e["section"] for e in plain), ""]
         if s.get("coverage"):
             c = s["coverage"]
             out += [f"Coverage: {c['checked']} of the {c['total']} ASVS 5.0 requirements at level {c['level']} are checked automatically; "

@@ -11,7 +11,7 @@ import pytest
 import yaml
 
 import adapters.regulation as regulation
-from adapters.regulation import (Document, Line, RegulationError, build_pack, clauses, compile_checks, fact_attr,
+from adapters.regulation import (Document, Line, RegulationError, build_pack, clauses, compile_checks, fact_attr, upgrade,
                                  read)
 from normir.evidence import load_evidence, run
 from normir.model import load, validate
@@ -414,17 +414,21 @@ def test_built_pack_validates_and_the_engine_decides_each_kind(tmp_path):
     assert out == tmp_path / "pack" and sorted(p.name for p in out.iterdir()) == ["norms.yaml", "package.yaml", "predicates.yaml"]
     meta = yaml.safe_load((out / "package.yaml").read_text())
     assert meta == {"package": "reg-r3f9a0b12c4", "version": "1", "title": "Acme Secure Coding Standard", "subject": "system",
-                    "text_policy": "public", "source": {"kind": "customer", "files": ["std.md"]}}
+                    "text_policy": "public", "format": 2, "source": {"kind": "customer", "files": ["std.md"]}}
     rs = load(out)
     assert validate(rs)[0] == []
     assert fact_attr("r3f9a0b12c4", "k1-1") == "req_r3f9a0b12c4_k1_1"
     preds = {n: el.data for (k, n), el in rs.elements.items() if k == "predicate"}
     assert preds["system.req_r3f9a0b12c4_k1_1"] == {"name": "system.req_r3f9a0b12c4_k1_1", "label": "Error pages hide stack traces.",
-                                                     "type": "bool", "kind": "judged"}
+                                                     "type": "enum", "values": ["met", "not_met", "not_applicable"],
+                                                     "value_labels": {"met": "Yes, met", "not_met": "No, not met", "not_applicable": "Doesn't apply"},
+                                                     "kind": "judged"}
     assert preds["system.req_r3f9a0b12c4_k2_1"]["kind"] == "given"
     assert preds["system.req_r3f9a0b12c4_k2_1"]["label"] == "Were all staff trained this year?"
     assert preds["Query.construction"]["values"] == CODE["types"]["Query"]["attrs"]["construction"]["values"]
+    # a computed check over elements also gets an answer fact: what a reviewer judges when no element is found
     assert sorted(preds) == sorted(["system.req_r3f9a0b12c4_k1_1", "system.req_r3f9a0b12c4_k2_1", "system.req_r3f9a0b12c4_k6_1",
+                                    "system.req_r3f9a0b12c4_k3_1", "system.req_r3f9a0b12c4_k3_2",
                                     "Query.construction", "Query.untrusted_input", "system.tls_enforced"])
     norms = {n: el.data for (k, n), el in rs.elements.items() if k == "norm"}
     assert "k5-1" not in norms
@@ -439,8 +443,8 @@ def test_built_pack_validates_and_the_engine_decides_each_kind(tmp_path):
 
     ev = load_evidence({
         "subject": {"kind": "system", "id": "demo"}, "sources": [{"id": "llm:test"}],
-        "facts": {fact_attr(reg["id"], "k1-1"): [{"value": True, "at": "app/errors.py:3"}],
-                  fact_attr(reg["id"], "k2-1"): [{"value": False}]},
+        "facts": {fact_attr(reg["id"], "k1-1"): [{"value": "met", "at": "app/errors.py:3"}],
+                  fact_attr(reg["id"], "k2-1"): [{"value": "not_met"}]},
         "elements": [
             {"type": "Query", "id": "q1", "at": "app/db.py:3", "facts": {"construction": [{"value": "interpolated"}], "untrusted_input": [{"value": True}]}},
             {"type": "Query", "id": "q2", "at": "app/db.py:40", "facts": {"construction": [{"value": "parameterized"}], "untrusted_input": [{"value": True}]}},
@@ -450,8 +454,21 @@ def test_built_pack_validates_and_the_engine_decides_each_kind(tmp_path):
         ("k1-1", "demo"): "pass", ("k2-1", "demo"): "fail", ("k4-1", "demo"): "unknown", ("k6-1", "demo"): "unknown",
         ("k3-1", "q1"): "fail", ("k3-1", "q2"): "pass", ("k3-2", "q1"): "fail", ("k3-2", "q2"): "pass"}
     # the user's answer to an attested question arrives as a profile fact
-    answered = {r["norm"]: r["verdict"] for r in run(rs, ev, {"system": {fact_attr(reg["id"], "k2-1"): True}})}
+    answered = {r["norm"]: r["verdict"] for r in run(rs, ev, {"system": {fact_attr(reg["id"], "k2-1"): "met"}})}
     assert answered["k2-1"] == "pass"
+    # "doesn't apply" is its own verdict, for an assessed and an attested check alike
+    na = {r["norm"]: r["verdict"] for r in run(rs, ev, {"system": {fact_attr(reg["id"], "k1-1"): "not_applicable",
+                                                                  fact_attr(reg["id"], "k2-1"): "not_applicable"}})}
+    assert na["k1-1"] == na["k2-1"] == "not_applicable"
+    # no Query found: the check is not silently not applicable; it rests on the reviewer's answer, open until given
+    none = load_evidence({"subject": {"kind": "system", "id": "demo"}, "sources": [{"id": "llm:test"}],
+                          "facts": {fact_attr(reg["id"], "k3-1"): [{"value": "not_met", "basis": "absence"}]}})
+    rows = {r["norm"]: r for r in run(rs, none)}
+    assert (rows["k3-1"]["verdict"], rows["k3-1"]["none_found"]) == ("fail", "Query")
+    assert rows["k3-2"]["verdict"] == "unknown" and rows["k3-2"]["open"] == ["system.req_r3f9a0b12c4_k3_2"]
+    # an answer stored before "doesn't apply" existed (true/false) reads as met / not met
+    old = upgrade({"facts": {fact_attr(reg["id"], "k1-1"): [{"value": False, "basis": "absence"}], "tls_enforced": [{"value": True}]}})
+    assert old["facts"] == {fact_attr(reg["id"], "k1-1"): [{"value": "not_met", "basis": "absence"}], "tls_enforced": [{"value": True}]}
 
 
 def test_checks_from_two_regulations_never_share_a_fact(tmp_path):

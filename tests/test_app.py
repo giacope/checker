@@ -139,6 +139,10 @@ def compiler(monkeypatch):
          "question": "Does the service have a named security owner?"}], {"clauses": 3})
     m.build_pack = lambda reg, vocab, out: shutil.copytree(Path(__file__).parents[1] / "packs" / "gdpr", out, dirs_exist_ok=True)
     m.fact_attr = lambda rid, cid: f"req_{rid}_{cid.replace('.', '_')}"
+    m.PACK_FORMAT = 2  # the copied pack declares none, so app.regulations rebuilds it before each use
+    m.requirements = lambda reg: [{"attr": m.fact_attr(reg["id"], k["id"]), "summary": k["summary"], "search": k.get("search"),
+                                   "clause": next(c["text"] for c in reg["clauses"] if c["id"] == k["clause"])}
+                                  for k in reg["checks"] if k.get("enabled") and k["kind"] == "assessed"]
     import adapters
     monkeypatch.setitem(sys.modules, "adapters.regulation", m)
     monkeypatch.setattr(adapters, "regulation", m, raising=False)
@@ -210,3 +214,33 @@ def test_model_citations_with_line_ranges_get_code_and_links(tmp_path):
     repo = {"url": "https://github.com/a/b", "commit": "c" * 40}
     assert link(repo, "a.rb:5-7") == "https://github.com/a/b/blob/" + "c" * 40 + "/a.rb#L5-L7"
     assert link(repo, "a.rb:5").endswith("/a.rb#L5")
+
+
+def test_report_separates_doesnt_apply_and_nothing_found(tmp_path, monkeypatch):
+    """A compiled regulation through the app's own evaluate and report: an answer that the check doesn't apply is its
+    own verdict with its reason, and a failure resting on nothing found is labelled as such."""
+    import app.regulations as regs
+    from adapters.regulation import build_pack, fact_attr
+    from app import report
+    from app.scan import evaluate
+    rid = "rtestna0001"
+    clauses = [{"id": f"c{i}", "ref": f"{i}.1", "file": "std.md", "at": f"std.md#L{i}-L{i}", "text": t}
+               for i, t in enumerate(["Uploads are scanned for malware.", "Logins are rate limited.", "Errors hide traces."], 1)]
+    checks = [{"id": f"k{i}-1", "clause": f"c{i}", "kind": "assessed", "enabled": True, "summary": c["text"], "why": "", "search": ["x"]}
+              for i, c in enumerate(clauses, 1)]
+    reg = {"id": rid, "name": "Acme", "domain": "code", "clauses": clauses, "checks": checks}
+    monkeypatch.setattr(regs, "ready", lambda r, domain: {"name": "Acme"})
+    monkeypatch.setattr(regs, "pack_dir", lambda r: build_pack(reg, regs.vocab("code"), tmp_path / "pack"))
+    doc = {"subject": {"kind": "system", "id": "shop"}, "sources": [{"id": "llm:m", "kind": "model_assessment"}], "facts": {
+        fact_attr(rid, "k1-1"): [{"value": "not_applicable", "basis": "absence", "note": "nothing is uploaded", "source": "llm:m"}],
+        fact_attr(rid, "k2-1"): [{"value": "not_met", "basis": "absence", "note": "searched 4 excerpts: no throttle", "source": "llm:m"}],
+        fact_attr(rid, "k3-1"): [{"value": "met", "basis": "evidence", "at": "app/errors.rb:3", "note": "generic page", "source": "llm:m"}]}}
+    scan_data = {"repo": {"url": "https://github.com/a/shop", "owner": "a", "name": "shop", "commit": "c" * 40}, "docs": [doc]}
+    rep = report.build(scan_data, evaluate([doc], [f"reg:{rid}"]))
+    e = {x["norm"]: x for x in rep["standards"][0]["entries"]}
+    assert (e["k1-1"]["verdict"], e["k2-1"]["verdict"], e["k3-1"]["verdict"]) == ("not_applicable", "fail", "pass")
+    assert e["k1-1"]["na_reason"][0]["note"] == "nothing is uploaded" and e["k2-1"]["rests_on"] == "absence"
+    assert e["k3-1"]["rests_on"] == "evidence" and rep["totals"] == {"not_applicable": 1, "fail": 1, "pass": 1}
+    md = report.markdown(rep)
+    assert "### Fails (nothing found in the code searched): 2.1" in md
+    assert "Judged not to apply: 1.1 Uploads are scanned for malware. nothing is uploaded (llm:m, nothing found in the code searched)" in md

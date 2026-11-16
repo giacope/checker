@@ -25,6 +25,8 @@ from pathlib import Path
 from urllib.parse import quote
 
 from normir import Quantity, load
+from adapters.regulation import ANSWER_LABELS, upgrade
+from normir.evaluate import facts_in
 from normir.evidence import conflicts, load_evidence, run
 
 from . import report as report_mod
@@ -160,6 +162,8 @@ def process(files_dir: Path, name: str, progress=lambda m: None, requirements: l
             notes.append(f"{label} could not be read: {type(e).__name__}: {e}")
     if not docs:
         raise ProjectError("None of the uploaded files could be read. " + " ".join(notes))
+    found = {e.get("type") for d in docs for e in d.get("elements") or []}   # see app.scan: fallbacks only where none was found
+    requirements = [r for r in requirements if r.get("for_type") not in found or not r.get("for_type")]
     if requirements:
         llm = _adapter("adapters.code_llm")
         if llm is not None and llm.provider_from_env() is not None:
@@ -188,7 +192,7 @@ def profile_of(answers: dict) -> dict:
 
 
 def evaluate(docs: list[dict], codes: list[str], answers: dict | None = None) -> dict:
-    ev = load_evidence(*docs)
+    ev = load_evidence(*(upgrade(d) for d in docs))
     profile = profile_of(answers or {})
     out = {}
     for cid in codes:
@@ -217,8 +221,12 @@ def assessments(evaluation: dict, loc, by_at: dict) -> dict[tuple[str, str], dic
             continue
         rs = res["rs"]
         for (kind, name), el in rs.elements.items():
-            fact = (el.data.get("require") or {}).get("fact") if kind == "norm" and isinstance(el.data.get("require"), dict) else None
-            if not fact or not rs.has("predicate", fact) or rs.get("predicate", fact).data.get("kind") != "judged":
+            if kind != "norm":
+                continue
+            # the judged answer the norm reads: an assessed check's, or a computed check's when no element was found
+            fact = next((f for f in facts_in([el.data.get("require"), el.data.get("when_none")])
+                         if f.startswith(rs.subject + ".req_") and rs.get("predicate", f).data.get("kind") == "judged"), None)
+            if not fact:
                 continue
             f = ev.facts.get(fact.rpartition(".")[2])
             obs = [o for o in (f.observations if f else []) if str(o.get("source", "")).startswith("llm:")]
@@ -424,12 +432,13 @@ def markdown(rep: dict, base_url: str = "") -> str:
         for e in s["entries"]:
             if e["verdict"] == "not_applicable":
                 continue
-            head = f"### {report_mod.VERDICT_LABEL[e['verdict']]}: {e['section']} {e['title']}"
+            tag = " (nothing found in the drawings searched)" if e.get("rests_on") == "absence" and e["verdict"] == "fail" else ""
+            head = f"### {report_mod.VERDICT_LABEL[e['verdict']]}{tag}: {e['section']} {e['title']}"
             out += [head, "", f"Requirement: [{e['section']}]({base_url if e['url'].startswith('/') else ''}{e['url']})" if e.get("url") else f"Requirement: {e['section']}", ""]
             if e.get("assessment"):
                 m = e["assessment"]
                 where = "; ".join(f"[{a['label']}]({base_url}{a['img']})" if a.get("img") else a["label"] for a in m["at"])
-                out += [f"- Model assessment ({m['source']}): {'met' if m['value'] else 'not met'}. {m['note']}" + (f" Cites: {where}" if where else ""), ""]
+                out += [f"- Model assessment ({m['source']}): {ANSWER_LABELS.get(m['value'], m['value'])}. {m['note']}" + (f" Cites: {where}" if where else ""), ""]
             for f in e["findings"][:40]:
                 if e.get("assessment") and not f["type"]:
                     continue

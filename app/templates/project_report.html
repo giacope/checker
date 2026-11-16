@@ -35,7 +35,7 @@
   <p class="small muted">{% if s.id.startswith("reg:") %}Your regulation, compiled from {{ s.title }}: <a href="/regulations/{{ s.id[4:] }}">review its checks</a>{% else %}{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% endif %}{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (copyright){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
   {% for e in s.entries if e.verdict != "not_applicable" %}
   <details class="req" {% if e.verdict in ("fail", "uncertain", "unknown") %}open{% endif %}>
-    <summary>{{ pill(e.verdict) }} <span class="sec">{{ e.section }}</span> <span>{{ e.title }}</span>
+    <summary>{{ pill(e.verdict) }}{% if e.rests_on == "absence" and e.verdict == "fail" %} <span class="pill v-unknown" title="The model found nothing in the drawings it searched that meets this; no sheet shows the failure.">nothing found</span>{% endif %} <span class="sec">{{ e.section }}</span> <span>{{ e.title }}</span>
       <span class="muted small" style="margin-left:auto; white-space:nowrap">{% if e.checked %}{{ e.counts.fail or 0 }} of {{ e.checked }} fail{% endif %}</span></summary>
     <div class="body">
       <div class="small">Requirement: {% if e.url %}<a href="{{ e.url }}" target="_blank" rel="noopener">{{ e.section }}</a>{% else %}{{ e.section }}{% endif %}</div>
@@ -70,7 +70,9 @@
   </details>
   {% endfor %}
   {% set na = s.entries | selectattr("verdict", "equalto", "not_applicable") | list %}
-  {% if na %}<p class="small muted">Not applicable — nothing read from the drawings is subject to them: {% for e in na %}{{ e.section }}{% if not loop.last %}, {% endif %}{% endfor %}.</p>{% endif %}
+  {% set judged_na = na | selectattr("na_reason") | list %}{% set plain_na = na | rejectattr("na_reason") | list %}
+  {% if judged_na %}<p class="small"><b>Judged not to apply</b>:</p><ul class="small">{% for e in judged_na %}<li><span class="sec">{{ e.section }}</span> {{ e.title }}{% for w in e.na_reason[:1] %} — {{ w.note }} <span class="muted">({{ w.source }}{% if e.rests_on == "absence" %}, nothing found in the drawings searched{% endif %}{% for a in w.at %}; {{ where(a) }}{% endfor %})</span>{% endfor %}</li>{% endfor %}</ul>{% endif %}
+  {% if plain_na %}<p class="small muted">Not applicable — nothing read from the drawings is subject to them: {% for e in plain_na %}{{ e.section }}{% if not loop.last %}, {% endif %}{% endfor %}.</p>{% endif %}
   {% if s.not_formalized %}<details class="small"><summary class="muted">Provisions this pack does not check ({{ s.not_formalized | length }})</summary><ul>{% for x in s.not_formalized %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
 </div>
 {% endfor %}
@@ -87,7 +89,7 @@
       <div>{% if q.value_type == "bool" %}
           <select name="{{ q.key }}"><option value="">—</option><option value="true">Yes</option><option value="false">No</option></select>
         {% elif q.value_type == "enum" %}
-          <select name="{{ q.key }}"><option value="">—</option>{% for v in q["values"] %}<option {% if v == q.suggested %}selected{% endif %}>{{ v }}</option>{% endfor %}</select>
+          <select name="{{ q.key }}"><option value="">—</option>{% for v in q["values"] %}<option value="{{ v }}" {% if v == q.suggested %}selected{% endif %}>{{ q.value_labels.get(v, v) }}</option>{% endfor %}</select>
         {% else %}<input type="text" name="{{ q.key }}" placeholder="{{ q.value_type }}{% if q.value_type == 'length' %}, e.g. 44 in or 1120 mm{% elif q.value_type == 'area' %}, e.g. 500 m2{% endif %}">{% endif %}</div>
     </div>
     {% endfor %}
