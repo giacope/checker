@@ -135,6 +135,8 @@ def compiler(monkeypatch):
         {"id": "c1", "ref": "1", "title": "Purpose", "text": "This standard applies to all services.", "requirement": False},
         {"id": "c2", "ref": "2.1", "text": "Passwords must be hashed with a slow, salted hash.", "requirement": True},
         {"id": "c3", "ref": "2.2", "text": "Each service must have a named security owner.", "requirement": True}]
+    m.uncovered = lambda docs, cl: [{"file": "acme.md", "lines": [7, 8], "at": "acme.md#L7-L8",
+                                     "text": "Annex B\nKeys are rotated every 90 days."}]
     m.compile_checks = lambda cl, vocab, progress=None, **kw: ([
         {"id": "2.1", "clause": "c2", "kind": "assessed", "enabled": True, "summary": "Passwords are stored with a slow salted hash.",
          "search": ["password", "hash"]},
@@ -170,6 +172,7 @@ def test_customer_regulation_upload_review_and_scan(client, compiler):
     page = client.get(f"/regulations/{rid}").text
     assert 'id="c2"' in page and "Passwords must be hashed with a slow, salted hash." in page
     assert 'name="kind::2.1"' in page and "Does the service have a named security owner?" in page
+    assert "2 lines are in no clause." in page and "acme.md lines 7–8" in page and "Keys are rotated every 90 days." in page
     # the index offers it for scans; scanning with it hands the assessed check to the model assessor
     assert f'value="reg:{rid}"' in client.get("/").text
     r = client.post("/scans", data={"url": "https://github.com/acme/shop", "standards": [f"reg:{rid}"]}, follow_redirects=False)

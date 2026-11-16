@@ -310,6 +310,25 @@ def clauses(docs: list[Document], provider=None, transport=None, progress: Calla
     return out
 
 
+def uncovered(docs: list[Document], found: list[dict]) -> list[dict]:
+    """Runs of lines in no clause: what the splitter left out (titles and contents, or a requirement it missed),
+    shown to the reviewer instead of vanishing."""
+    covered = {(c["file"], n) for c in found for n in range(c["lines"][0], c["lines"][1] + 1)}
+    out: list[dict] = []
+    for d in docs:
+        run: list[Line] = []
+        for ln in [*d.lines, None]:
+            if ln is not None and (d.file, ln.no) not in covered:
+                run.append(ln)
+                continue
+            if any(x.text.strip() for x in run):
+                s, e = run[0].no, run[-1].no
+                out.append({"file": d.file, "lines": [s, e], "at": f"{d.file}#L{s}-L{e}",
+                            "text": "\n".join(x.text for x in run[:12])})
+            run = []
+    return out
+
+
 # ---------------------------------------------------------------- checks
 
 COMPILE = """You turn clauses of a customer's own regulation (an internal standard, policy, or rule set) into checks \

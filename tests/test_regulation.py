@@ -11,7 +11,7 @@ import pytest
 import yaml
 
 import adapters.regulation as regulation
-from adapters.regulation import (Document, Line, RegulationError, build_pack, clauses, compile_checks, fact_attr, upgrade,
+from adapters.regulation import (Document, Line, RegulationError, build_pack, clauses, compile_checks, fact_attr, uncovered, upgrade,
                                  read)
 from normir.evidence import load_evidence, run
 from normir.model import load, validate
@@ -272,6 +272,9 @@ def test_clause_ranges_are_verified_and_text_comes_from_the_document(tmp_path):
     assert out[3]["at"] == "std.md#L5-L6" and out[3]["pages"] is None and out[3]["title"] == "Password length"
     assert out[5]["pages"] == [1, 2] and out[5]["text"].endswith("(continued) and log it.")
     assert "dropped 7" in seen[-1]
+    # what no clause covers is listed, not lost: here a requirement the splitter missed
+    assert [(g["at"], g["text"]) for g in uncovered([md, pdf], out)] == [
+        ("std.md#L7-L8", "## 2 Transport\n2.1 All traffic uses TLS."), ("std.md#L10-L10", "Glossary: TLS means transport layer security.")]
     # the model is shown numbered lines and never asked for text
     assert any("     4| 1.1 Passwords must be hashed with bcrypt." in u for _, u in sent)
     assert any("[page 2]" in u for _, u in sent)

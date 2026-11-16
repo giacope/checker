@@ -167,6 +167,7 @@ def regulation_compiler(monkeypatch):
          "requirement": True, "at": "adk.md#L3-L3"},
         {"id": "c4", "file": "adk.md", "ref": "1.2", "title": "Rise", "text": "The rise of a step is at most 180 mm.",
          "requirement": True, "at": "adk.md#L4-L4"}])
+    monkeypatch.setattr(R, "uncovered", lambda docs, cl: [])
     monkeypatch.setattr(R, "compile_checks", lambda cl, vocab, progress=None, **kw: ([
         {"id": "k2-1", "clause": "c2", "kind": "assessed", "enabled": True, "summary": "Stairs have handrails on both sides.",
          "search": ["handrail", "stair"]},

@@ -130,13 +130,16 @@ def compile_regulation(rid: str) -> None:
         docs = [R.read(d / "files" / f, f) for f in req["files"]]
         progress(f"Splitting {sum(len(x.lines) for x in docs)} lines into clauses")
         cl = R.clauses(docs, progress=progress)
+        gaps = R.uncovered(docs, cl)
+        if gaps:
+            progress(f"{sum(g['lines'][1] - g['lines'][0] + 1 for g in gaps)} lines are in no clause; they are listed for review")
         if not any(c["requirement"] for c in cl):
             raise R.RegulationError("No requirements were found in the documents.")
         progress(f"Turning {sum(c['requirement'] for c in cl)} requirements into checks")
         checks, stats = R.compile_checks(cl, vocab(req["domain"]), progress=progress)
         reg = {"id": rid, "name": req["name"], "domain": req["domain"], "files": [
                    {"file": x.file, "sha256": x.sha256, "kind": x.kind, "pages": x.pages, "lines": len(x.lines)} for x in docs],
-               "clauses": cl, "checks": checks, "stats": stats, "seconds": round(time.time() - t0, 1)}
+               "clauses": cl, "uncovered": gaps, "checks": checks, "stats": stats, "seconds": round(time.time() - t0, 1)}
         _write(d, "regulation.json", reg)
         rebuild(rid, reg)
         status(d, state="done", step="Done", seconds=reg["seconds"])

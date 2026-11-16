@@ -34,6 +34,10 @@
     </div>
     <p class="small muted">Compiled in {{ reg.seconds }} s. Each requirement is shown next to the checks made from it. Switch off a check that misreads the clause, or change its kind: <b>computed</b> runs a rule over extracted facts, <b>assessed</b> asks the model to judge it from the {{ "code" if req.domain == "code" else "drawings and models" }} and cite what it read, <b>attested</b> asks you.
     {% if req.domain == "code" %}<a href="/">Scan a repository</a> and tick this regulation to check against it.{% else %}<a href="/buildings">Check a building</a> and tick this regulation to check against it.{% endif %}</p>
+    {% if reg.uncovered %}{% set n = reg.uncovered | sum(attribute="lines.1") - reg.uncovered | sum(attribute="lines.0") + reg.uncovered | length %}
+    <details class="note"><summary><b>{{ n }} line{{ "s" if n != 1 }} {{ "are" if n != 1 else "is" }} in no clause.</b> The splitter left {{ "them" if n != 1 else "it" }} out, usually titles, contents and front matter. Check that no requirement is among {{ "them" if n != 1 else "it" }}.</summary>
+      {% for g in reg.uncovered %}<div class="small" style="margin-top:8px"><span class="muted">{{ g.file }} lines {{ g.lines[0] }}{% if g.lines[1] != g.lines[0] %}–{{ g.lines[1] }}{% endif %}</span><div style="white-space:pre-wrap">{{ g.text }}</div></div>{% endfor %}
+    </details>{% endif %}
   {% endif %}
 </div>
 {% if reg %}
