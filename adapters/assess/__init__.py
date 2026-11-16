@@ -65,6 +65,9 @@ class Corpus(Protocol):
     def excerpt(self, locator: str) -> str:
         """The text a locator cites (one line or a short span); "" for a locator that does not verify."""
 
+    def everything(self) -> list[tuple[str, str]]:
+        """Every excerpt of the corpus, each piece of text once, in the corpus's own order (for reading it all)."""
+
 
 # ---------------------------------------------------------------- code repositories
 
@@ -132,7 +135,12 @@ class CodeCorpus:
                     used += size
         return out
 
-    def _excerpts(self, rel: str, hit_rows: list[int]) -> list[tuple[str, str]]:
+    def everything(self) -> list[tuple[str, str]]:
+        files = self._index()
+        order = sorted(files, key=lambda rel: (0 if ALWAYS.search(rel) else 1, rel))
+        return [x for rel in order for x in self._excerpts(rel, range(len(files[rel][1])))]
+
+    def _excerpts(self, rel: str, hit_rows) -> list[tuple[str, str]]:
         text, rows, _ = self._index()[rel]
         if len(text) < SMALL_FILE:
             return [(rel, _numbered(text))]
@@ -452,21 +460,27 @@ def _settle(ans, members, seen, reqs, found, corpus, shown, dropped, rejected, c
     if basis != "evidence":
         count(dropped, "unknown basis")
         return []
-    at = ans.get("at") or []
-    ats = []
-    for raw in (at if isinstance(at, list) else [at])[:40]:
-        loc = corpus.verify(str(raw))
-        if loc is None:
-            count(rejected, "locator does not exist")
-            continue
-        lines = [ln.strip() for ln in corpus.excerpt(loc).split("\n") if ln.strip()]
-        if not lines:
-            count(rejected, "cited text is blank")
-        elif not all(ln in shown for ln in lines):
-            count(rejected, "cited text was not in the excerpts sent")
-        elif loc not in ats:
-            ats.append(loc)
+    ats = cited(corpus, ans.get("at"), shown, rejected)
     if not ats:
         count(dropped, "no verified locator")
         return []
     return [{"value": value, "at": a, "basis": "evidence", "note": note} for a in ats[:MAX_LOCATORS]]
+
+
+def cited(corpus: Corpus, at, shown: str, rejected: dict[str, int]) -> list[str]:
+    """The locators in `at` that name text in the corpus which was among the text `shown` to the model, normalised
+    and deduplicated; every other one is counted in `rejected` by reason."""
+    ats = []
+    for raw in (at if isinstance(at, list) else [at] if at else [])[:40]:
+        loc = corpus.verify(str(raw))
+        if loc is None:
+            rejected["locator does not exist"] = rejected.get("locator does not exist", 0) + 1
+            continue
+        lines = [ln.strip() for ln in corpus.excerpt(loc).split("\n") if ln.strip()]
+        why = ("cited text is blank" if not lines else
+               "cited text was not in the excerpts sent" if not all(ln in shown for ln in lines) else None)
+        if why:
+            rejected[why] = rejected.get(why, 0) + 1
+        elif loc not in ats:
+            ats.append(loc)
+    return ats

@@ -179,6 +179,9 @@ class BuildingCorpus:
                 used += size
         return out
 
+    def everything(self) -> list[tuple[str, str]]:
+        return [(h, t) for h, t, _ in self._blocks]
+
     def verify(self, locator: str) -> str | None:
         s = str(locator or "").strip().strip("`'\"").strip()
         m = SHORT.match(s)
