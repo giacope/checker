@@ -165,10 +165,13 @@ def process(files_dir: Path, name: str, progress=lambda m: None, requirements: l
         if llm is not None and llm.provider_from_env() is not None:
             from adapters.assess import assess
             from adapters.assess.building import BuildingCorpus
+
+            from .regulations import DATA
             progress(f"Assessing {len(requirements)} requirements of your regulations")
             try:
                 corpus = BuildingCorpus.from_project(files_dir, docs, sheets, name, progress=progress)
-                docs.append(assess(list(requirements), corpus, progress=progress, subject={"kind": "building", "id": name}))
+                docs.append(assess(list(requirements), corpus, progress=progress, subject={"kind": "building", "id": name},
+                                   cache=DATA / "assess-cache"))
             except Exception as e:  # noqa: BLE001 - the readers' evidence stands; those checks stay open
                 notes.append(f"Assessing your regulations' requirements failed: {e}. Those checks stay open.")
         else:

@@ -241,3 +241,19 @@ def test_the_engine_reads_assessed_facts(tmp_path, corpus):
     rows = {r["norm"]: r for r in run(rs, ev)}
     assert {n: r["verdict"] for n, r in rows.items()} == {"n_req_pass": "pass", "n_req_fail": "fail", "n_req_open": "unknown"}
     assert rows["n_req_pass"]["at"] == [f"{ctrl}:2"] and rows["n_req_open"]["open"] == ["system.req_open"]
+
+
+def test_cached_answers_repeat_for_the_same_excerpts_and_a_changed_excerpt_is_reassessed(tmp_path):
+    root = write(tmp_path / "repo", APP)
+    answer = {"req_ssl": {"attr": "req_ssl", "value": True, "basis": "evidence", "at": ["config/environments/production.rb:2"], "note": "force_ssl"}}
+    transport, sent = fake(answer)
+    first = assess([req("req_ssl", "force_ssl")], CodeCorpus(root, "shop"), provider=PROVIDER, transport=transport, cache=tmp_path / "cache")
+    again = assess([req("req_ssl", "force_ssl")], CodeCorpus(root, "shop"), provider=PROVIDER, transport=transport, cache=tmp_path / "cache")
+    assert len(sent) == 1 and again["facts"] == first["facts"] and again["sources"][0]["cached_calls"] == 1
+    # the excerpt changes (force_ssl moves down a line): the model is asked again, and its new citation is verified
+    (root / "config/environments/production.rb").write_text("Rails.application.configure do\n  # TLS\n  config.force_ssl = true\nend\n")
+    moved = {"req_ssl": {**answer["req_ssl"], "at": ["config/environments/production.rb:3"]}}
+    transport2, sent2 = fake(moved)
+    changed = assess([req("req_ssl", "force_ssl")], CodeCorpus(root, "shop"), provider=PROVIDER, transport=transport2, cache=tmp_path / "cache")
+    assert len(sent2) == 1 and changed["sources"][0]["cached_calls"] == 0
+    assert [o["at"] for o in changed["facts"]["req_ssl"]] == ["config/environments/production.rb:3"]

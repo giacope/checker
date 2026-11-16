@@ -164,9 +164,11 @@ def collect(root: Path, name: str, models: list[Path] = (), use_reader: bool = T
     if requirements:
         if llm is not None and llm.provider_from_env() is not None:
             from adapters.assess import CodeCorpus, assess
+
+            from .regulations import DATA
             progress(f"Assessing {len(requirements)} requirements of your regulations")
             try:
-                docs.append(assess(list(requirements), CodeCorpus(root, name), progress=progress))
+                docs.append(assess(list(requirements), CodeCorpus(root, name), progress=progress, cache=DATA / "assess-cache"))
             except Exception as e:  # noqa: BLE001
                 notes.append(f"Assessing your regulations' requirements failed: {e}. Those checks stay open.")
         else:

@@ -25,6 +25,7 @@ machine is the selected excerpts and the requirement text, sent to the configure
 from __future__ import annotations
 
 import concurrent.futures as cf
+import hashlib
 import json
 import re
 import secrets
@@ -255,9 +256,14 @@ def group(order: list[str], found: dict[str, list[tuple[str, str]]], per_call: i
 
 def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, str] | None = None,
            transport: httpx.BaseTransport | None = None, workers: int = 4, progress=lambda m: None,
-           subject: dict | None = None) -> dict:
+           subject: dict | None = None, cache: Path | None = None) -> dict:
     """An evidence document answering each requirement {attr, summary, clause, search} against `corpus`;
-    `provider` defaults to provider_from_env()."""
+    `provider` defaults to provider_from_env().
+
+    With `cache`, a directory, each call's answers are stored under a hash of everything the model was shown
+    (model, prompt, requirements, excerpts) and reused when exactly that is asked again: the same artifact
+    and regulation give the same answers, and an excerpt that changed is assessed afresh. Cited locators are
+    verified against the corpus on every run, cached or not."""
     reqs: dict[str, dict] = {}
     for r in requirements:
         attr = r.get("attr") if isinstance(r, dict) else None
@@ -303,13 +309,23 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
                 f"{json.dumps(payload, ensure_ascii=False, indent=1)}\n\nExcerpts:\n{body}\nEND UNTRUSTED DATA {token}\n\n"
                 f"Answer these requirements: {', '.join(members)}")
         system = SYSTEM.format(token=token, notes=notes, max_locators=MAX_LOCATORS)
-        return system, user, body
+        return system, user, body, token
 
     sent_sizes: list[int] = []   # prompt characters per call, failed calls included
+    cached: list[str] = []       # calls answered from the cache
     with httpx.Client(timeout=httpx.Timeout(600, connect=20), transport=transport) as client:
         def call(job):
             members, excerpts = job
-            system, user, body = prompt(members, excerpts)
+            system, user, body, token = prompt(members, excerpts)
+            # the per-call token is random; the key is everything else the model reads
+            digest = hashlib.sha256(json.dumps([VERSION, pname, model, system.replace(token, ""), user.replace(token, "")]).encode()).hexdigest()
+            hit = cache / f"{digest}.json" if cache is not None else None
+            if hit is not None and hit.is_file():
+                try:
+                    cached.append(digest)
+                    return json.loads(hit.read_text())["answers"], body
+                except (OSError, ValueError, KeyError):
+                    cached.pop()
             try:
                 reply = parse_json(complete(pname, model, key, system, user, client))
             except httpx.HTTPError as e:
@@ -318,6 +334,11 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
                 sent_sizes.append(len(system) + len(user))
             if not isinstance(reply.get("answers"), list):
                 raise ReaderError("reply has no answers list")
+            if hit is not None:
+                hit.parent.mkdir(parents=True, exist_ok=True)
+                tmp = hit.with_suffix(f".{secrets.token_hex(4)}.tmp")
+                tmp.write_text(json.dumps({"answers": reply["answers"]}, ensure_ascii=False))
+                tmp.replace(hit)
             return reply["answers"], body
 
         with cf.ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
@@ -343,7 +364,7 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
            "adapter_version": VERSION, "provider": pname, "model": model,
            **({"revision": corpus.revision} if getattr(corpus, "revision", None) else {}),
            "requirements": len(reqs), "answered": len(facts), "open": len(reqs) - len(facts),
-           "calls": len(calls), "failed_calls": len(errors), "dropped": dropped, "rejected_locators": rejected,
+           "calls": len(calls), "cached_calls": len(cached), "failed_calls": len(errors), "dropped": dropped, "rejected_locators": rejected,
            "unsettled": {a: unsettled[a] for a in reqs if a in unsettled}, "chars_sent": sum(sent_sizes), "excerpt_chars": total, "seconds": round(time.time() - started, 1)}
     if failed:
         src["failed"] = sorted(failed)
