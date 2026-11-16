@@ -47,6 +47,7 @@ MAX_PER_CALL = 8               # requirements per call
 CALL_CHARS = 100_000           # artifact text per call (about 25k tokens)
 REQUIREMENT_CHARS = 40_000     # artifact text retrieved per requirement
 MAX_CHARS = 2_000_000          # artifact text per run
+CLAUSE_CHARS = 3_000           # of a requirement's clause text; a longer clause is cut with a marker the model sees
 FIRST_ROUND_SHARE = 0.9        # of MAX_CHARS for the first round; the rest is for second looks
 MIN_REQUIREMENT_CHARS = 8_000  # the smallest per-requirement share the run budget is spread to
 MAX_LOCATORS = 8
@@ -319,7 +320,10 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
             raise ValueError(f"requirement needs an identifier attr, got {attr!r}")
         if attr in reqs:
             raise ValueError(f"requirement {attr} is given twice")
-        reqs[attr] = {"attr": attr, "summary": str(r.get("summary") or "")[:500], "clause": str(r.get("clause") or "")[:3000],
+        clause = str(r.get("clause") or "")
+        if len(clause) > CLAUSE_CHARS:
+            clause = clause[:CLAUSE_CHARS] + " … [cut: the clause continues]"
+        reqs[attr] = {"attr": attr, "summary": str(r.get("summary") or "")[:500], "clause": clause,
                       "search": _clean_terms(r.get("search"))}
     provider = provider or provider_from_env()
     if provider is None:

@@ -324,6 +324,14 @@ def test_a_short_run_budget_is_spread_over_every_requirement_not_spent_in_clause
     assert all(len(excerpt_part(u)) <= src["requirement_chars"] + 100 for _, u in sent)
 
 
+def test_a_long_clause_reaches_the_model_cut_with_a_marker(corpus, monkeypatch):
+    monkeypatch.setattr(assess_mod, "CLAUSE_CHARS", 40)
+    transport, sent = fake({})
+    assess([req("req_x", "before_action", clause="Every request is authenticated. " * 4)], corpus, PROVIDER, transport)
+    payload = json.loads(sent[0][1].split("Requirements:\n", 1)[1].split("\n\nExcerpts:", 1)[0])
+    assert payload[0]["clause"] == "Every request is authenticated. Every re … [cut: the clause continues]"
+
+
 def test_absence_needs_every_match_shown(tmp_path, monkeypatch):
     """When the search matched more than the budget let through, "not found" is not a finding: the fact stays open."""
     monkeypatch.setattr(assess_mod, "REQUIREMENT_CHARS", 300)

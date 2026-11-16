@@ -407,6 +407,14 @@ def test_each_vocabulary_brings_worked_examples_that_compile(vocab):
     assert vocab["compile"]["partial"] in sent[0][0]
 
 
+def test_a_long_clause_is_cut_with_a_marker_and_its_checks_say_so(monkeypatch):
+    monkeypatch.setattr(regulation, "MAX_CLAUSE_CHARS", 50)
+    t, sent = transport(lambda s, u: reply({"clauses": [{"clause": "c1", "checks": [
+        {"summary": "Passwords are hashed.", "kind": "assessed", "why": "x", "search": ["hash", "bcrypt", "argon2"]}]}]}))
+    checks, _ = compile_checks([clause(1, "Passwords are hashed with a slow hash. " * 5)], CODE, provider=PROVIDER, transport=t)
+    assert checks[0]["clause_cut"] == 50 and "[cut: the clause continues]" in sent[0][1]
+
+
 def test_checks_work_for_the_building_vocabulary(tmp_path):
     rules = [clause(1, "Stairs are at least 44 inches wide."), clause(2, "Stairs have at least 30 m2 of width."),
              clause(3, "Ramps are not permitted."), clause(4, "The building complies."),

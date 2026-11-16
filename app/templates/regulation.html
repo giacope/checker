@@ -68,6 +68,7 @@
         {% if k.kind == "attested" and k.question %}<div class="small muted">Asks: {{ k.question }}</div>{% endif %}
         {% if k.why %}<div class="small muted">Why {{ k.kind }}: {{ k.why }}</div>{% endif %}
         {% if k.demoted %}<div class="small muted">Not computed: {{ k.demoted }}</div>{% endif %}
+        {% if k.clause_cut %}<div class="small muted">Made from the clause's first {{ "{:,}".format(k.clause_cut) }} characters: check the rest of it.</div>{% endif %}
       </div>
       {% else %}{% if c.requirement %}<p class="small muted">No check was made from this requirement.</p>{% endif %}
       {% endfor %}

@@ -80,7 +80,7 @@ def requirements(reg: dict) -> list[dict]:
         fallback = k["kind"] == "computed" and k.get("for")
         if k.get("enabled") and (k["kind"] == "assessed" or fallback):
             out.append({"attr": fact_attr(reg["id"], k["id"]), "summary": k["summary"],
-                        "clause": clauses.get(k["clause"], {}).get("text", "")[:3000],
+                        "clause": clauses.get(k["clause"], {}).get("text", ""),   # adapters.assess cuts and says so
                         "search": k.get("search") or re.findall(r"[A-Za-z_]{4,}", k["summary"])[:8],
                         **({"for_type": k["for"]["type"]} if fallback else {})})
     return out
@@ -402,7 +402,7 @@ def _batches(reqs: list[dict]) -> list[list[dict]]:
 def _clause_prompt(batch: list[dict]) -> str:
     parts = []
     for c in batch:
-        text = c["text"] if len(c["text"]) <= MAX_CLAUSE_CHARS else c["text"][:MAX_CLAUSE_CHARS] + " …"
+        text = c["text"] if len(c["text"]) <= MAX_CLAUSE_CHARS else c["text"][:MAX_CLAUSE_CHARS] + " … [cut: the clause continues]"
         parts.append(f"=== {c['id']}" + (f" [{c['ref']}]" if c.get("ref") else "") + f" {c['title']} ({c['at']})\n{text}")
     return "\n\n".join(parts)
 
@@ -686,6 +686,8 @@ def compile_checks(clauses: list[dict], vocab: dict, provider=None, transport=No
                     for raw in item.get("checks") if isinstance(item.get("checks"), list) else []:
                         chk = _check(raw, sent[cid], len(out) + 1, vocab, stats)
                         if chk:
+                            if len(sent[cid]["text"]) > MAX_CLAUSE_CHARS:
+                                chk["clause_cut"] = MAX_CLAUSE_CHARS   # made from the clause's first characters only
                             out.append(chk)
                     by_clause[cid] = out
     finally:
