@@ -442,6 +442,25 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
                 continue
             check_expr(body, scope, where)
             errors += type_errors(rs, body, scope, where, boolean=kind == "norm")
+        if kind == "norm":
+            # applies: when the norm is about the subject or element at all; when_none: what it requires of the
+            # subject when no element of its `for` type was found (otherwise that is not applicable).
+            parts = [("applies", d["applies"], scope)] if "applies" in d else []
+            if "when_none" in d:
+                wn = d["when_none"]
+                if not scope:
+                    errors.append(f"{where}: 'when_none' needs 'for'")
+                elif not isinstance(wn, dict) or "require" not in wn or not set(wn) <= {"applies", "require"}:
+                    errors.append(f"{where}: 'when_none' takes 'require' and optionally 'applies'")
+                else:
+                    parts += [(f"when_none {k}", wn[k], {}) for k in ("applies", "require") if k in wn]
+            for field, expr, sc in parts:
+                shape = shape_errors(expr, f"{where} {field}")
+                if shape:
+                    errors += shape
+                    continue
+                check_expr(expr, sc, f"{where} {field}")
+                errors += type_errors(rs, expr, sc, f"{where} {field}", boolean=True)
         if kind == "table":
             key_pred = preds.get(d["key"])
             if key_pred is None or key_pred.data.get("type") != "enum":

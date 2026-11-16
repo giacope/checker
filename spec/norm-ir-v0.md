@@ -97,6 +97,13 @@ Obligations a design must meet, for model checks:
     ge: [{fact: c.clear_width}, {term: required_corridor_width, of: c}]
 ```
 
+A norm may say when it applies at all, and what it requires when nothing it ranges over was found:
+
+- `applies`: a condition over the same facts as `require`. Where it is false the norm is **not applicable** to that subject or element, a verdict of its own that is never counted as a pass. Where it is open, a requirement that holds everywhere still passes (met wherever it applies); otherwise the verdict stays unknown and names the facts that decide applicability. When sources disagree on it, a norm that fails where it applies is uncertain.
+- `when_none` (only with `for`): `{applies, require}` over subject facts, evaluated once for the subject when the evidence has no element of the `for` type. Without it, finding no element makes the norm not applicable; with it, "no log statements were found" is not mistaken for "nothing here is subject to the rule".
+
+A norm passes when every element passes or does not apply, and is not applicable when none applies.
+
 v0 has only obligations. Prohibitions, permissions, and exceptions as separate defeating norms come with the first chapter that needs them.
 
 ### Customer documents

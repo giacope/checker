@@ -22,6 +22,9 @@ OPS = {
     "gt": lambda a, b: a > b,
     "ge": lambda a, b: a >= b,
 }
+# What a norm evaluates to when its `applies` condition is false: the requirement is about something the subject
+# does not have or is not (a dwelling-only provision on a clinic, a security-question rule where there are none).
+NOT_APPLICABLE = "not_applicable"
 SYMBOLS = {"eq": "is", "ne": "is not", "lt": "<", "le": "≤", "gt": ">", "ge": "≥"}
 
 
@@ -99,9 +102,15 @@ class Evaluator:
         el = self.rs.get("term", name)
         return self._element(el, self._scope(el, instance), el.data["value"])
 
-    def norm(self, name: str, instance: dict | None = None) -> Any:
+    def norm(self, name: str, instance: dict | None = None, none: bool = False) -> Any:
+        """True, False, NOT_APPLICABLE, or a residual. With `none`, the norm's `when_none` ({applies, require} over
+        the subject): what it requires when no element of its `for` type was found."""
         el = self.rs.get("norm", name)
-        return self._element(el, self._scope(el, instance), el.data["require"])
+        spec = el.data["when_none"] if none else el.data
+        body = spec["require"]
+        if "applies" in spec:
+            body = {"applicable": [spec["applies"], body]}
+        return self._element(el, {} if none else self._scope(el, instance), body)
 
     # ------------------------------------------------------------ internals
 
@@ -152,6 +161,18 @@ class Evaluator:
         if "cases" in e:
             return self._cases(e["cases"], scope, el)
         (op, args), = e.items()
+        if op == "applicable":  # a norm's applies condition and requirement, as built by norm()
+            a = self.ev(args[0], scope, el)
+            if not isinstance(a, (bool, Residual)):
+                a = Residual(invalid(el, f"'applies' needs true/false, got {a!r}"))
+            if a is False:
+                return NOT_APPLICABLE
+            r = self.ev(args[1], scope, el)
+            if a is True:
+                return r
+            # Open applicability stays open even when the requirement holds: filling it in still changes the value
+            # (to not_applicable). evidence.check counts that residual as met, since every completion is.
+            return Residual({"applicable": [a.expr, lift(r)]})
         if op in ("all", "any"):
             stop = op == "any"  # value that decides the whole expression
             rest = []
@@ -249,6 +270,11 @@ class Evaluator:
 # -------------------------------------------------------------------- answers
 
 
+def met_if_applicable(expr: Any) -> bool:
+    """A residual open only on whether the norm applies, whose requirement holds: met wherever it applies."""
+    return isinstance(expr, dict) and "applicable" in expr and expr["applicable"][1] == {"value": True}
+
+
 def facts_in(expr: Any) -> list[str]:
     return sorted({n["fact"] for n in walk(expr) if "fact" in n})
 
@@ -295,6 +321,9 @@ def describe(expr: Any, rs: Ruleset) -> str:
             return f"the {x['column']} for {d(x['key'])} in Table {x['lookup'].lstrip('T')}"
         if "see" in x:
             return f"set by §{x['see']} ({x['row']})"
+        if "applicable" in x:
+            a, r = x["applicable"]
+            return f"if it applies ({d(a)}): {d(r)}"
         if "invalid" in x:
             return f"[cannot be evaluated: {x['invalid']}]"
         if "unlisted" in x:

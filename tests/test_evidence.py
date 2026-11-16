@@ -153,3 +153,47 @@ def test_static_decides_measured_facts_and_a_reader_only_narrows_among_its_value
     assert facts([False, True], [False]) == ["False"]  # static's sites disagree: the reader picks among them
     assert facts([8, 12], [10]) == ["12", "8"]  # a value static never saw does not narrow
     assert facts([], [True]) == ["True"]  # no static observation: the reader's stands
+
+
+def test_a_norm_that_does_not_apply_is_not_applicable_not_a_pass(tmp_path):
+    rs = _pack(tmp_path)
+    rs.elements[("norm", "flag")].data["applies"] = {"fact": "system.b0"}
+    assert validate(rs)[0] == []
+    v = lambda facts: _verdicts(rs, facts, ["flag"])["flag"]  # noqa: E731
+    assert v({"b0": False, "b2": False})["verdict"] == "not_applicable"
+    assert v({"b0": True, "b2": False})["verdict"] == "fail"
+    assert v({"b2": True})["verdict"] == "pass"  # met wherever it applies
+    open_ = v({"b2": False})
+    assert open_["verdict"] == "unknown" and open_["open"] == ["system.b0"]
+    # the sources disagree on whether it applies: fails where it does
+    both = [{"value": True, "source": "a"}, {"value": False, "source": "b"}]
+    assert v({"b0": both, "b2": False})["verdict"] == "uncertain"
+    assert summarize([{"norm": "n", "element": "a", "verdict": "not_applicable", "deciding": {}, "open": []},
+                      {"norm": "n", "element": "b", "verdict": "pass", "deciding": {}, "open": []}])["n"]["verdict"] == "pass"
+    assert summarize([{"norm": "n", "element": "a", "verdict": "not_applicable", "deciding": {}, "open": []}])["n"]["verdict"] == "not_applicable"
+
+
+def test_when_none_says_what_a_norm_requires_when_no_element_was_found(tmp_path):
+    (tmp_path / "pack").mkdir()
+    rs = _pack(tmp_path / "pack")
+    (tmp_path / "pack" / "predicates.yaml").write_text((tmp_path / "pack" / "predicates.yaml").read_text()
+                                                       + "  - name: Log.secret\n    label: logs a secret\n    type: bool\n")
+    (tmp_path / "pack" / "norms.yaml").write_text("""norms:
+  - name: no_secrets
+    title: no_secrets
+    modality: obligation
+    cite: {section: "L1", url: "https://example.org/l1"}
+    for: {l: Log}
+    require: {not: {fact: l.secret}}
+    when_none: {applies: {fact: system.b0}, require: {fact: system.b1}}
+""")
+    rs = load(tmp_path / "pack")
+    assert validate(rs)[0] == []
+    def verdict(facts, elements=()):
+        ev = load_evidence({"sources": [{"id": "a"}], "facts": facts, "elements": list(elements)})
+        return [(r["verdict"], r.get("none_found")) for r in run(rs, ev)]
+    assert verdict({"b0": True, "b1": False}) == [("fail", "Log")]
+    assert verdict({"b0": False}) == [("not_applicable", "Log")]
+    assert verdict({"b0": True, "b1": False}, [{"type": "Log", "id": "x.rb:3", "facts": {"secret": False}}]) == [("pass", None)]
+    rs.elements[("norm", "no_secrets")].data["when_none"] = {"applies": {"fact": "l.secret"}, "require": True}
+    assert any("unknown variable 'l'" in e for e in validate(rs)[0])

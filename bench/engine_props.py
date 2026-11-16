@@ -221,7 +221,9 @@ def brute(rs, name, subj: dict[str, list], inst: dict[str, list] | None) -> dict
         s = {k: v for k, v in zip(sk, combo) if v is not None}
         i = None if inst is None else {k: v for k, v in zip(ik, combo[len(sk):]) if v is not None}
         res = Evaluator(rs, s).norm(name, i)
-        if isinstance(res, Residual):
+        if isinstance(res, Residual) and res.expr.get("applicable", [None, None])[1] == {"value": True}:
+            key = "True"  # the spec: a norm whose requirement holds is met wherever it applies
+        elif isinstance(res, Residual):
             key = "error" if not facts_in(res.expr) and any("invalid" in n for n in walk(res.expr)) else "unknown"
         else:
             key = str(res)
@@ -229,7 +231,9 @@ def brute(rs, name, subj: dict[str, list], inst: dict[str, list] | None) -> dict
     if "error" in counts:  # never a verdict the evaluation could not show
         verdict = "uncertain" if {"True", "False"} <= set(counts) else "unknown"
     else:
-        verdict = "unknown" if "unknown" in counts else ("pass" if "True" in counts else "fail") if len(counts) == 1 else "uncertain"
+        seen = set(counts)
+        verdict = ("unknown" if "unknown" in seen else "not_applicable" if seen == {"not_applicable"}
+                   else "pass" if seen <= {"True", "not_applicable"} else "fail" if seen == {"False"} else "uncertain")
     return {"verdict": verdict, "outcomes": counts}
 
 
@@ -363,14 +367,23 @@ def ref(rs, e, s, i, var=None):
     raise ValueError(op)
 
 
-def meaning(rs, name, s, i):
-    """The engine's answer with every fact known, compared with the reference."""
-    try:
-        want = ref(rs, rs.get("norm", name).data["require"], s, i or {})
-    except (TypeError, ZeroDivisionError):  # the rule cannot be evaluated on these facts: the engine must not decide
-        want = UNDET
-    want = UNDET if isinstance(want, Choice) else want
-    got = Evaluator(rs, s).norm(name, i)
+def meaning(rs, name, s, i, none=False):
+    """The engine's answer with every fact known, compared with the reference. With `none`, the norm's when_none."""
+    data = rs.get("norm", name).data
+    if none:
+        data, i = data["when_none"], None
+
+    def spec(e):
+        try:
+            v = ref(rs, e, s, i or {})
+        except (TypeError, ZeroDivisionError):  # the rule cannot be evaluated on these facts: the engine must not decide
+            return UNDET
+        return UNDET if isinstance(v, Choice) else v
+    want = spec(data["require"])
+    if "applies" in data:  # not applicable when the condition is false; met regardless when the requirement holds
+        a = spec(data["applies"])
+        want = "not_applicable" if a is False else want if a is True else UNDET
+    got = Evaluator(rs, s).norm(name, i, none=none)
     if want == UNDET:
         return None if isinstance(got, Residual) else {"engine": got, "reference": "undetermined"}
     return None if got is want or got == want else {"engine": got, "reference": want}
@@ -402,6 +415,11 @@ def generated(cases: int, seed: int, report) -> int:
         door = r.random() < 0.5
         g = Gen(r, door)
         rule = {"require": g.boolean(r.randint(1, 4)), **({"for": {"d": "Door"}} if door else {})}
+        if r.random() < 0.3:  # an applicability condition
+            rule["applies"] = g.boolean(r.randint(0, 2))
+        if door and r.random() < 0.3:  # what the norm requires of the subject when no door was found
+            sub = Gen(r, False)
+            rule["when_none"] = {"require": sub.boolean(r.randint(0, 2)), **({"applies": sub.boolean(1)} if r.random() < 0.5 else {})}
         rs = ruleset({"N": rule})
         errors = [e for e in validate(rs)[0]]
         if errors:  # every generated rule is well formed: the validator must accept it
@@ -412,7 +430,7 @@ def generated(cases: int, seed: int, report) -> int:
         try:
             full = Evaluator(rs, s).norm("N", i)
             errored[0] += isinstance(full, Residual) and any("invalid" in x for x in walk(full.expr))
-            cx = meaning(rs, "N", s, i) or soundness(rs, "N", s, i, r)
+            cx = meaning(rs, "N", s, i) or soundness(rs, "N", s, i, r) or ("when_none" in rule and meaning(rs, "N", s, None, none=True)) or None
         except Exception as e:  # noqa: BLE001 - the validator accepted the rule, so a raise is the engine's bug
             cx = {"engine raised": repr(e)}
         if cx:

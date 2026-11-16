@@ -37,7 +37,7 @@ from typing import Any, Callable
 
 import yaml
 
-from .evaluate import Evaluator, Residual, facts_in
+from .evaluate import NOT_APPLICABLE, Evaluator, Residual, facts_in, met_if_applicable
 from .model import Ruleset, walk
 from .quantity import Quantity
 
@@ -217,11 +217,11 @@ class _Budget(Exception):
     pass
 
 
-def _evaluate(rs: Ruleset, norm: str, s: dict, i: dict | None) -> Any:
+def _evaluate(rs: Ruleset, norm: str, s: dict, i: dict | None, none: bool = False) -> Any:
     """One evaluation; a rule that cannot be evaluated on these values (a length compared with a symbol, a
     division by zero) is an error string, so one bad rule never stops the others."""
     try:
-        return Evaluator(rs, s).norm(norm, i)
+        return Evaluator(rs, s).norm(norm, i, none=none)
     except (TypeError, ValueError, ZeroDivisionError, KeyError, ArithmeticError) as e:
         return _Error(f"{type(e).__name__}: {e}")
 
@@ -231,7 +231,7 @@ class _Error:
     message: str
 
 
-def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, Fact] | None = None) -> dict:
+def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, Fact] | None = None, none: bool = False) -> dict:
     """Evaluate one norm over every combination of the values the evidence allows.
 
     Verdict: pass or fail when every combination gives it, uncertain when they differ, unknown when a fact the
@@ -248,7 +248,7 @@ def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, 
     varying += [("i", k, f) for k, f in (instance or {}).items() if len(f.values()) > 1]
     keyed = {(w, k): (f"{rs.subject}.{k}" if w == "s" else f"{inst_type}.{k}") for w, k, _ in varying}
     # Only enumerate facts the norm can read: evaluate with the varying facts left open.
-    probe = _evaluate(rs, norm, fixed_s, fixed_i if instance is not None else None)
+    probe = _evaluate(rs, norm, fixed_s, fixed_i if instance is not None else None, none)
     if isinstance(probe, Residual):
         needed = set(facts_in(probe.expr))
         varying = [v for v in varying if keyed[(v[0], v[1])] in needed]
@@ -265,6 +265,8 @@ def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, 
         if isinstance(r, _Error):
             errors.append(r.message)
             return "error"
+        if isinstance(r, Residual) and met_if_applicable(r.expr):
+            return "True"
         if isinstance(r, Residual):
             needs = facts_in(r.expr)
             bad = [n["invalid"] for n in walk(r.expr) if "invalid" in n]
@@ -280,7 +282,7 @@ def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, 
             s, i = dict(fixed_s), dict(fixed_i)
             for (where, k, _), v in zip(varying, combo):
                 (s if where == "s" else i)[k] = v
-            results.setdefault(outcome(_evaluate(rs, norm, s, i if instance is not None else None)), []).append(combo)
+            results.setdefault(outcome(_evaluate(rs, norm, s, i if instance is not None else None, none)), []).append(combo)
         counts = {k: len(v) for k, v in results.items()}
         if len(results) > 1:
             for j, (_, k, _) in enumerate(varying):
@@ -297,7 +299,7 @@ def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, 
             budget[0] -= 1
             if budget[0] < 0:
                 raise _Budget
-            r = _evaluate(rs, norm, s, i if instance is not None else None)
+            r = _evaluate(rs, norm, s, i if instance is not None else None, none)
             needed = set(facts_in(r.expr)) if isinstance(r, Residual) else set()
             j = next((n for n, (w, k, _) in enumerate(rest) if keyed[(w, k)] in needed), None)
             if j is None:  # decided, or open only on facts no source gave: the same for every value of the rest
@@ -321,10 +323,14 @@ def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, 
         verdict = "uncertain" if {"True", "False"} <= seen else "unknown"
     elif "unknown" in seen:
         verdict = "unknown"
-    elif len(seen) == 1:
-        verdict = "pass" if "True" in seen else "fail"
+    elif seen == {NOT_APPLICABLE}:
+        verdict = "not_applicable"
+    elif seen <= {"True", NOT_APPLICABLE}:
+        verdict = "pass"  # met wherever it applies
+    elif seen == {"False"}:
+        verdict = "fail"
     else:
-        verdict = "uncertain"
+        verdict = "uncertain"  # including fails if it applies and does not apply otherwise
     named = {k: f for _, k, f in varying}
     out = {
         "verdict": verdict,
@@ -382,6 +388,13 @@ def run(rs: Ruleset, ev: Evidence, profile: dict | None = None) -> list[dict]:
             rows.append({**base, "element": ev.subject.get("id", "subject"), "at": at, **check(rs, name, subject)})
             continue
         vmap = _vocab_map(rs, types[0])
+        if "when_none" in el.data and not any(e.type == types[0] for e in ev.elements):
+            # No element of the type was found: the norm's when_none says what that requires of the subject
+            # (a project with no stairs passes a stair rule; a codebase with no log statements must still show
+            # it logs security events). Without when_none the norm has no row and summarizes as not_applicable.
+            rows.append({**base, "element": ev.subject.get("id", "subject"), "at": [], "none_found": types[0],
+                         **check(rs, name, subject, none=True)})
+            continue
         for e in ev.elements:
             if e.type != types[0]:
                 continue
@@ -393,8 +406,8 @@ def run(rs: Ruleset, ev: Evidence, profile: dict | None = None) -> list[dict]:
 
 
 def summarize(rows: list[dict]) -> dict[str, dict]:
-    """One verdict per norm: fail if any element fails, then uncertain, then unknown;
-    pass if every element passes; not_applicable when no element is of the norm's type."""
+    """One verdict per norm: fail if any element fails, then uncertain, then unknown; pass if every element
+    passes or does not apply; not_applicable when none applies or no element is of the norm's type."""
     out: dict[str, dict] = {}
     for r in rows:
         s = out.setdefault(r["norm"], {"verdicts": {}, "failing": [], "uncertain": []})
@@ -405,7 +418,7 @@ def summarize(rows: list[dict]) -> dict[str, dict]:
             s["uncertain"].append({"element": r["element"], "at": r.get("at"), "deciding": list(r["deciding"]) or r["open"]})
     for s in out.values():
         v = s["verdicts"]
-        s["verdict"] = next((x for x in ("fail", "uncertain", "unknown") if x in v), "pass")
+        s["verdict"] = next((x for x in ("fail", "uncertain", "unknown", "pass") if x in v), "not_applicable")
     return out
 
 
