@@ -157,16 +157,37 @@ def _shape(text: str) -> str:
 
 
 def _running_heads(pages: list[list[str]]) -> set[str]:
-    """Page headers and footers: a line (digits ignored, so 'Page 3 of 9' matches) among the first or last two
-    lines of at least 60% of the pages, in a document of three pages or more."""
+    """Page headers and footers: a line among the first or last two lines of at least 60% of the pages, in a
+    document of three pages or more. Its numbers may differ between pages only as page numbers do: from one page
+    to a later one each rises by no more than the pages passed and never falls, unless a number before it changed
+    ('3-12' after '2-30'). A heading whose number jumps ('Article 7', 'Article 14' on consecutive pages) is text;
+    a line with no words is furniture."""
     if len(pages) < 3:
         return set()
-    counts: dict[str, int] = {}
-    for p in pages:
+    seen: dict[str, list[tuple[int, list[int]]]] = {}
+    for i, p in enumerate(pages):
         kept = [t for t in p if _clean(t)]
-        for s in {_shape(t) for t in kept[:2] + kept[-2:]}:
-            counts[s] = counts.get(s, 0) + 1
-    return {s for s, n in counts.items() if n >= max(3, 0.6 * len(pages)) and s}
+        for t in {t: None for t in kept[:2] + kept[-2:]}:
+            seen.setdefault(_shape(t), []).append((i, [int(n) for n in re.findall(r"\d+", _clean(t))]))
+    out = set()
+    for s, occ in seen.items():
+        if not s or len({i for i, _ in occ}) < max(3, 0.6 * len(pages)):
+            continue
+        # a line of numbers alone is page furniture however they run (a reader may double a glyph: '1111' for 11)
+        if not re.search(r"[^\W\d_#]", s) or all(_paged(a, b) for a, b in zip(occ, occ[1:])):
+            out.add(s)
+    return out
+
+
+def _paged(a: tuple[int, list[int]], b: tuple[int, list[int]]) -> bool:
+    """Whether the numbers of a line on page b[0] can follow those on page a[0] as page numbering does."""
+    gap = b[0] - a[0]
+    for x, y in zip(a[1], b[1]):
+        if not 0 <= y - x <= gap:
+            return False
+        if y != x:
+            return True   # later numbers may restart: a chapter-page number after a new chapter
+    return True
 
 
 # ---------------------------------------------------------------- DOCX

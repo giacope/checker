@@ -131,11 +131,14 @@ def test_read_pdf_keeps_pages_and_numbers_lines(tmp_path):
 def test_pdf_running_headers_and_footers_are_dropped(tmp_path):
     p = tmp_path / "std.pdf"
     body = [["Scope of the standard", "It covers services."], ["Passwords are hashed.", "Keys are rotated."], ["Logs omit tokens."]]
-    p.write_bytes(make_pdf([["ACME Standard", *rules, f"Page {i} of 3"] for i, rules in enumerate(body, 1)]))
+    # each page opens with an article of the same shape whose number is not the page's: that is text, kept
+    p.write_bytes(make_pdf([["ACME Standard", f"Article {7 * i} fire doors", *rules, f"Page {i} of 3"]
+                            for i, rules in enumerate(body, 1)]))
     doc = read(p, "std.pdf")
     assert [(ln.no, ln.page, ln.text) for ln in doc.lines] == [
-        (1, 1, "Scope of the standard"), (2, 1, "It covers services."), (3, 2, "Passwords are hashed."),
-        (4, 2, "Keys are rotated."), (5, 3, "Logs omit tokens.")]
+        (1, 1, "Article 7 fire doors"), (2, 1, "Scope of the standard"), (3, 1, "It covers services."),
+        (4, 2, "Article 14 fire doors"), (5, 2, "Passwords are hashed."), (6, 2, "Keys are rotated."),
+        (7, 3, "Article 21 fire doors"), (8, 3, "Logs omit tokens.")]
 
 
 def test_read_docx_paragraphs_numbering_and_cells(tmp_path):
