@@ -157,7 +157,7 @@ def _source_kind(source: str) -> str:
     return str(source).split(":", 1)[0].split("#", 1)[0]
 
 
-def prefer_sources(ev: Evidence, rank: Callable[[str, str], list[str]]) -> Evidence:
+def prefer_sources(ev: Evidence, rank: Callable[[str, str], list[str]], narrow: bool = False) -> Evidence:
     """Resolve facts the sources disagree on by precedence instead of pooling.
 
     `rank(type, attr)` lists source kinds best first (type is "subject" for subject facts), for example
@@ -166,14 +166,27 @@ def prefer_sources(ev: Evidence, rank: Callable[[str, str], list[str]]) -> Evide
     `conflicts` still reports them. Sources not in the list keep pooling with the winner. Pooling every source
     widens each value set and turns a wrong observation from any one source into an uncertain verdict; the code
     benchmark (bench/code_check.py) measured that, which is why precedence exists.
+
+    With `narrow`, where the best source's own observations disagree (one site measured true, another false),
+    the next-ranked source that holds some but not all of those values narrows the fact to them: it can choose
+    among what the best source saw, never add a value. The code benchmark measured that too.
     """
     def resolve(type_: str, attr: str, f: Fact) -> Fact:
         order = rank(type_, attr) or []
-        present = {_source_kind(o.get("source", "?")) for o in f.observations}
+        kind = lambda o: _source_kind(o.get("source", "?"))  # noqa: E731
+        present = {kind(o) for o in f.observations}
         best = next((k for k in order if k in present), None)
         if best is None:
             return Fact(list(f.observations), list(f.overridden))
-        keep = [o for o in f.observations if _source_kind(o.get("source", "?")) == best or _source_kind(o.get("source", "?")) not in order]
+        keep = [o for o in f.observations if kind(o) == best or kind(o) not in order]
+        if narrow:
+            seen = {_key(o["value"]) for o in f.observations if kind(o) == best}
+            for k in order[order.index(best) + 1:]:
+                theirs = {_key(o["value"]) for o in f.observations if kind(o) == k}
+                if len(seen) > 1 and theirs and theirs < seen:
+                    keep = [o for o in keep if kind(o) not in order or _key(o["value"]) in theirs] + \
+                           [o for o in f.observations if kind(o) == k]
+                    break
         drop = [o for o in f.observations if o not in keep]
         return Fact(keep, list(f.overridden) + drop)
 

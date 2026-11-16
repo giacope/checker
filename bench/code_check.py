@@ -6,6 +6,7 @@ uv run python bench/code_check.py bench/results/*/code.json
   kernel-oracle   the packs on the facts in the truth file: isolates pack error from extraction error
   kernel+<model>  the packs on static facts reconciled with one model run's reported facts (all values pooled)
   kernel+pref     the same, with source precedence: static wins on measured facts, the model on judged ones
+  kernel+narrow  kernel+pref, and where static sites disagree a model value among theirs narrows the fact
   kernel+reader-first  precedence to the model reader on every fact; static facts fill what the reader left out
   direct <model>  the model's own verdicts
 
@@ -57,10 +58,10 @@ def _norm_v(v) -> str:
     return {"unknown": "uncertain", "n/a": "not_applicable", "na": "not_applicable"}.get(v, v)
 
 
-def kernel(*docs, prefer=None) -> dict[str, dict]:
+def kernel(*docs, prefer=None, narrow=False) -> dict[str, dict]:
     ev = load_evidence(*docs)
     if prefer is not None:
-        ev = prefer_sources(ev, prefer)
+        ev = prefer_sources(ev, prefer, narrow=narrow)
     rows = {p: run(rs, ev) for p, rs in PACKS.items()}
     out = {}
     for c, (pack, norms) in CHECKS.items():
@@ -147,6 +148,7 @@ def main() -> None:
             static, mdoc = ROOT / "bench" / "evidence" / f"{r}.static.yaml", model_doc(r, reply, f"llm:{m}#{run_['run']}")
             results.setdefault(f"kernel+ {m}", {}).setdefault(r, []).append(score(kernel(static, mdoc), truths[r]))
             results.setdefault(f"kernel+pref {m}", {}).setdefault(r, []).append(score(kernel(static, mdoc, prefer=PREFER), truths[r]))
+            results.setdefault(f"kernel+narrow {m}", {}).setdefault(r, []).append(score(kernel(static, mdoc, prefer=PREFER, narrow=True), truths[r]))
             results.setdefault(f"kernel+reader-first {m}", {}).setdefault(r, []).append(score(kernel(static, mdoc, prefer=READER_FIRST), truths[r]))
             results.setdefault(f"kernel-model-only {m}", {}).setdefault(r, []).append(score(kernel(model_doc(r, reply, f"llm:{m}")), truths[r]))
 

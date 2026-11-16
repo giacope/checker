@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from normir import load, validate
-from normir.evidence import conflicts, load_evidence, run, summarize
+from normir.evidence import conflicts, load_evidence, prefer_sources, run, summarize
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -141,3 +141,15 @@ def test_a_rule_that_cannot_be_evaluated_is_unknown_with_its_error_and_others_st
     assert rows["flag"]["verdict"] == "pass"
     assert _verdicts(rs, {"q0": "700 mm", "b1": False}, ["symbol"])["symbol"]["verdict"] == "pass"
 
+
+def test_static_decides_measured_facts_and_a_reader_only_narrows_among_its_values():
+    rank = lambda type_, attr: ["static", "llm"]  # noqa: E731
+    def facts(static, llm):
+        ev = load_evidence({"sources": [{"id": "static"}, {"id": "llm:m"}],
+                            "facts": {"f": [{"value": v, "source": "static", "at": f"a.rb:{i}"} for i, v in enumerate(static, 1)]
+                                      + [{"value": v, "source": "llm:m"} for v in llm]}})
+        return sorted(map(str, prefer_sources(ev, rank, narrow=True).facts["f"].values()))
+    assert facts([False, False], [True]) == ["False"]  # static is definite: the reader is overridden
+    assert facts([False, True], [False]) == ["False"]  # static's sites disagree: the reader picks among them
+    assert facts([8, 12], [10]) == ["12", "8"]  # a value static never saw does not narrow
+    assert facts([], [True]) == ["True"]  # no static observation: the reader's stands

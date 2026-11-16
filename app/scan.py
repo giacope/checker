@@ -34,7 +34,10 @@ from normir.evidence import load_evidence, prefer_sources, rank_by_kind, run
 
 ROOT = Path(__file__).resolve().parents[1]
 VOCAB = yaml.safe_load((ROOT / "vocab" / "code.yaml").read_text())
-READER_FIRST = rank_by_kind(VOCAB, {k: ["llm", "static"] for k in ("measured", "judged", "given")})
+# Static analysis decides measured facts and a model reader judged ones; where static sites disagree, the reader
+# narrows among their values. Chosen by bench/code_check.py ("kernel+narrow"): it ties reader-first on wrong passes
+# there and avoids reader-first's wrong pass on RailsGoat, where the model said the log filter redacts credentials.
+SOURCES = rank_by_kind(VOCAB, {"measured": ["static", "llm"], "judged": ["llm", "static"], "given": ["llm", "static"]})
 GITHUB = re.compile(r"^https://github\.com/(?P<owner>[A-Za-z0-9][A-Za-z0-9-]{0,38})/(?P<repo>[A-Za-z0-9._-]{1,100}?)(?:\.git)?/?$")
 BRANCH = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._/-]{0,200}$")
 MAX_REPO_BYTES = 800_000_000
@@ -244,7 +247,7 @@ def scan(url: str, workdir: Path, branch: str | None = None, models: list[Path] 
 
 def evaluate(docs: list[dict], standards: list[str], asvs_level: int = 2, answers: dict | None = None) -> dict:
     """Run each selected pack. `answers` is the user's profile: {"subject": {attr: value}, "elements": {id: {attr: value}}}."""
-    ev = prefer_sources(load_evidence(*docs), READER_FIRST)
+    ev = prefer_sources(load_evidence(*docs), SOURCES, narrow=True)
     answers = answers or {}
     out = {}
     for sid in standards:

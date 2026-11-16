@@ -154,6 +154,8 @@ An **evidence document** (format in [`engine/normir/evidence.py`](../engine/norm
 
 Only facts the norm can still read are varied. Up to 4,096 combinations are enumerated, which also names the facts that flip the verdict; past that, `check` splits on one fact at a time and stops wherever the rule is already decided, which is exact and counts every combination (2^40 two-valued facts take milliseconds when the rule short-circuits). If that still exceeds 200,000 evaluations the verdict is unknown, or uncertain when both outcomes were seen, with the reason in `error`: a pass or fail is only ever given for combinations that were evaluated.
 
+Sources can be ranked instead of pooled: `prefer_sources(evidence, rank, narrow=True)` keeps the best-ranked source's observations of a fact and moves the rest to `overridden`, which `conflicts` still reports. With `narrow`, where the best source's own observations disagree, a lower-ranked source holding some of those values narrows the fact to them; it never adds a value. The code app ranks static analysis first on measured facts and the model reader first on judged ones, a choice measured on the labelled code benchmark (`bench/code_check.py`, `kernel+narrow`).
+
 ## Validation
 
 `normir validate <package>` checks the package and everything it extends:
