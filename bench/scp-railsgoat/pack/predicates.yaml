@@ -1,0 +1,1083 @@
+predicates:
+- name: system.req_rfe5181cd6e_k4_1
+  label: Whenever this work is reused or distributed, are its Creative Commons Attribution ShareAlike 3.0 license terms made
+    clear to recipients?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k9_1
+  label: When starting to use the guide, did the team assess both its secure software development lifecycle maturity and its
+    development staff's knowledge?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k9_2
+  label: Do developers have either the prior knowledge or sufficient guidance resources needed to implement the guide's coding
+    practices?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k9_3
+  label: Are other development team members assigned responsibility for validating the security of the entire system's design
+    and implementation?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k9_4
+  label: Do the team members responsible for security validation have adequate training, tools, and resources to validate
+    the entire system's design and implementation?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k12_1
+  label: Are roles and responsibilities clearly defined?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k13_1
+  label: Have development teams been provided with adequate software security training?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k14_1
+  label: Has a secure software development lifecycle been implemented?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k15_1
+  label: Have secure coding standards been established?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k16_1
+  label: Provide a reusable object library.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k17_1
+  label: Has the effectiveness of the system's security controls been verified?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k18_1
+  label: Where development is outsourced, have secure outsourced development practices been established?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k18_2
+  label: Where development is outsourced, do both the RFP and contract define security requirements and verification methodologies?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k29_1
+  label: Perform all required data validation on a trusted system.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k30_1
+  label: Identify all data sources and classify each as trusted or untrusted.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k30_2
+  label: Validate all data received from untrusted sources, including databases and file streams.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k31_1
+  label: Provide a centralized input validation routine for the application.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k32_1
+  label: Specify an appropriate character set, such as UTF-8, for every input source.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k33_1
+  label: Convert input to a common character set before validating it.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k34_1
+  label: Reject input whenever validation fails.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k35_1
+  label: Determine whether UTF-8 extended characters are supported and, if supported, validate input only after UTF-8 decoding
+    completes.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k36_1
+  label: Validate all client-provided data before processing, including parameters, URLs, headers, cookies, and automated
+    submissions from embedded code.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k37_1
+  label: Verify that request and response header values contain only ASCII characters.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k38_1
+  label: Validate data at redirect targets even when requests bypass validation performed before the redirect.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k39_1
+  label: Validate input against its expected data type.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k40_1
+  label: Validate input values against their permitted ranges.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k41_1
+  label: Validate input lengths against their permitted limits.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k42_1
+  label: Validate input against an allowlist of permitted characters wherever possible.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k43_1
+  label: Where potentially hazardous input characters are allowed, apply suitable additional controls throughout their use,
+    such as output encoding and secure task-specific APIs.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k44_1
+  label: Validate inputs for null bytes, newlines, and path traversal sequences, using separate checks where standard validation
+    is insufficient and canonicalization to address alternate encodings and obfuscation.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k46_1
+  label: Perform all encoding on a trusted system such as the server.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k47_1
+  label: Use a standard, tested routine for each type of outbound encoding.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k48_1
+  label: Encode all data originating outside the application's trust boundary for its specific output context before returning
+    it to clients.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k49_1
+  label: Encode every output character unless it is known to be safe for the intended interpreter.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k50_1
+  label: Apply context-appropriate sanitization or safe query binding to untrusted data used in SQL, XML, and LDAP queries.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k51_1
+  label: Sanitize untrusted data for its operating system command context before passing it to commands.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k53_1
+  label: Require authentication for every page and resource unless it is explicitly intended to be public.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k54_1
+  label: Enforce all authentication controls on a trusted system such as the server.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k55_1
+  label: Use standard, tested authentication services wherever possible.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k56_1
+  label: Centralize all authentication controls, including libraries that call external authentication services.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k57_1
+  label: Separate authentication logic from requested resources and redirect to and from the centralized authentication control.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k58_1
+  label: All authentication controls must deny authentication when processing fails or encounters an error.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k59_1
+  label: Administrative and account management functions must provide authentication security at least equivalent to the primary
+    authentication mechanism.
+  type: bool
+  kind: judged
+- name: PasswordStore.salted
+  type: bool
+  kind: measured
+  label: a per-password random salt is used
+- name: PasswordStore.algorithm
+  type: enum
+  kind: measured
+  values:
+  - plaintext
+  - reversible
+  - md5
+  - sha1
+  - sha256
+  - sha512
+  - bcrypt
+  - scrypt
+  - argon2
+  - pbkdf2
+  - other
+  label: the function applied to the password
+- name: system.req_rfe5181cd6e_k60_2
+  label: Password storage must use cryptographically strong one-way hashing with appropriate algorithm parameters.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k60_3
+  label: Password and key storage must be writable only by the application.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k61_1
+  label: Password hashing must execute on a trusted system such as the server.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k62_1
+  label: Authentication data must be validated only after all required authentication input has been supplied.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k63_1
+  label: Authentication failures must return identical displayed and underlying responses regardless of which authentication
+    input is incorrect.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k64_1
+  label: Connections to external systems involving sensitive information or functions must use authentication.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k65_1
+  label: External service authentication credentials must be encrypted and stored in a protected location on a trusted system,
+    outside source code.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k66_1
+  label: Authentication credentials must be transmitted only in HTTP POST requests.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k67_1
+  label: Non-temporary passwords must be transmitted through encrypted connections or as encrypted data.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k68_1
+  label: Enforced password complexity must satisfy applicable policy or regulation and withstand attacks typical of the deployed
+    environment.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k69_1
+  label: The application must enforce password length requirements established by applicable policy or regulation.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k70_1
+  label: Obscure password entry on the user's screen.
+  type: bool
+  kind: judged
+- name: system.login_rate_limited
+  type: bool
+  kind: measured
+  label: failed login attempts are limited per account or per client
+- name: system.req_rfe5181cd6e_k71_2
+  label: Disable accounts after an established number of invalid login attempts for a duration that discourages brute force
+    without enabling denial of service.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k72_1
+  label: Apply controls to password resets and changes at the same level as account creation and authentication.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k73_1
+  label: Use password reset questions that support sufficiently random answers.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k74_1
+  label: Send email-based password resets only to preregistered addresses using a temporary link or password.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k75_1
+  label: Give temporary passwords and links a short expiration time.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k76_1
+  label: Require users to change temporary passwords on their next use.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k77_1
+  label: Notify users whenever a password reset occurs.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k78_1
+  label: Prevent users from reusing previous passwords.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k79_1
+  label: Prevent password changes until the current password is at least one day old.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k80_1
+  label: Enforce password changes according to applicable policy or regulatory requirements.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k80_2
+  label: Make the time between required password resets administratively controlled.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k81_1
+  label: Disable remember-me functionality for password fields.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k82_1
+  label: Report the account's most recent successful or unsuccessful use to the user at their next successful login.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k83_1
+  label: Implement monitoring that identifies attempts to use the same password across multiple user accounts.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k84_1
+  label: Change vendor-supplied default passwords and user IDs or disable their associated accounts.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k85_1
+  label: Require users to reauthenticate before performing critical operations.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k86_1
+  label: Require multifactor authentication for highly sensitive or high value transactional accounts.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k87_1
+  label: If third-party authentication code is used, has it been carefully inspected to ensure it is not affected by malicious
+    code?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k89_1
+  label: Use server or framework session management controls and accept only session identifiers recognized by those controls.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k90_1
+  label: Create session identifiers only on trusted systems such as the server.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k91_1
+  label: Generate sufficiently random session identifiers using well-vetted algorithms.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k92_1
+  label: Set appropriately restricted domain and path values for cookies containing authenticated session identifiers.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k93_1
+  label: Ensure logout fully terminates the associated session or connection.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k94_1
+  label: Make logout functionality available from every page protected by authorization.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k95_1
+  label: Enforce the shortest session inactivity timeout compatible with risk and business needs, normally no more than several
+    hours.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k96_1
+  label: Disallow persistent logins.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k96_2
+  label: Enforce an absolute session lifetime that terminates sessions even while active and supports business requirements.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k96_3
+  label: Notify users sufficiently before periodic session termination to mitigate disruption.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k97_1
+  label: Invalidate any prelogin session and establish a new session after successful login.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k98_1
+  label: Generate a new session identifier on every reauthentication.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k99_1
+  label: Prevent concurrent logins using the same user ID.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k100_1
+  label: Expose session identifiers only through HTTP cookie headers, never through URLs, error messages, or logs.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k101_1
+  label: Configure access controls that protect server-side session data from unauthorized server users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k102_1
+  label: Periodically generate a new session identifier and deactivate the old identifier.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k103_1
+  label: Generate a new session identifier whenever a connection changes from HTTP to HTTPS.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k103_2
+  label: Consistently use HTTPS within the application as recommended.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k104_1
+  label: Require strong random per-session tokens or parameters in addition to standard session management for sensitive server-side
+    operations.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k105_1
+  label: Require strong random per-request tokens or parameters in addition to standard session management for highly sensitive
+    or critical operations.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k106_1
+  label: Set the Secure attribute on every cookie transmitted over TLS.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k107_1
+  label: Set HttpOnly on every cookie unless application scripts specifically need to read or set its value.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k109_1
+  label: Base authorization decisions only on trusted system objects.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k110_1
+  label: Use a single sitewide component for authorization checks, including calls to external authorization services.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k111_1
+  label: Ensure access controls deny access when authorization checks fail or encounter errors.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k112_1
+  label: Deny all access when the application cannot access its security configuration.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k113_1
+  label: Enforce authorization on every request, including requests from server-side scripts, includes, and rich clients.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k114_1
+  label: Segregate privileged logic from other application code.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k115_1
+  label: Restrict access to files and other resources, including externally controlled resources, to authorized users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k116_1
+  label: Allow access to protected URLs only to authorized users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k117_1
+  label: Allow execution of protected functions only by authorized users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k118_1
+  label: Allow access through direct object references only to users authorized for the referenced objects.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k119_1
+  label: Allow access to services only to authorized users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k120_1
+  label: Restrict application data access to authorized users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k121_1
+  label: Restrict access to user attributes, data attributes, and policy information used by access controls.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k122_1
+  label: Restrict access to security-relevant configuration information to authorized users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k123_1
+  label: Ensure server-side access control rules match their presentation-layer representations.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k124_1
+  label: Encrypt state data stored on the client.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k124_2
+  label: Verify the integrity of client-stored state on the server to detect tampering.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k125_1
+  label: Enforce application flows that comply with business rules.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k126_1
+  label: Limit transactions per user or device over time at a level above legitimate business needs and low enough to deter
+    automated attacks.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k127_1
+  label: Use the Referer header only as a supplemental authorization check and never as the sole authorization check.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k128_1
+  label: Periodically revalidate authorization during long authenticated sessions and require logout and reauthentication
+    when privileges change.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k129_1
+  label: Are account audits conducted to identify unused accounts?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k129_2
+  label: Enforce disabling of accounts identified as unused.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k130_1
+  label: Support disabling accounts when their authorization ceases.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k130_2
+  label: Support terminating sessions when their authorization ceases.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k131_1
+  label: Give service and integration accounts only the privileges needed for their functions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k132_1
+  label: Have you established an access control policy documenting application business rules, data types, authorization criteria
+    or processes, and access requirements for both data and system resources to support proper access provisioning and control?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k134_1
+  label: Implement all cryptographic functions that protect secrets from application users on a trusted system.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k135_1
+  label: Protect master secrets from unauthorized access.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k136_1
+  label: Ensure cryptographic modules fail without compromising security protections.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k137_1
+  label: Generate every random value intended to be unguessable using the cryptographic module's approved random number generator.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k138_1
+  label: Use cryptographic modules compliant with FIPS 140-2 or an equivalent standard.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k139_1
+  label: Have you established and do you use a policy and process for managing cryptographic keys?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k141_1
+  label: Exclude sensitive information, including system details, session identifiers, and account information, from error
+    responses.
+  type: bool
+  kind: judged
+- name: system.debug_in_production
+  type: bool
+  kind: measured
+  label: the production configuration enables debug features (detailed error pages
+- name: system.req_rfe5181cd6e_k142_2
+  label: Ensure error handlers do not display debugging information or stack traces.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k143_1
+  label: Return generic error messages.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k143_2
+  label: Use custom error pages.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k144_1
+  label: Handle application errors within the application without relying on server configuration.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k145_1
+  label: Properly release allocated memory when errors occur.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k146_1
+  label: Security control errors must deny access by default.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k147_1
+  label: All logging controls must run on trusted systems.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k148_1
+  label: Logging controls must support successful and failed outcomes for specified security events.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k149_1
+  label: Logs must contain the important data needed to understand each event.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k150_1
+  label: Untrusted data in log entries must not execute as code in the intended log viewing software.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k151_1
+  label: Access to logs must be restricted to authorized individuals.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k152_1
+  label: All logging operations must use a shared master routine.
+  type: bool
+  kind: judged
+- name: LogStatement.logs_credentials
+  type: bool
+  kind: measured
+  label: a password
+- name: system.req_rfe5181cd6e_k153_2
+  label: Logs must exclude other sensitive information, including session identifiers and unnecessary system details.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k154_1
+  label: The system must provide a mechanism for analyzing logs.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k155_1
+  label: All input validation failures must be logged.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k156_1
+  label: All authentication attempts, including failures, must be logged.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k157_1
+  label: All access control failures must be logged.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k158_1
+  label: Log all apparent tampering events, including unexpected changes to state data.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k159_1
+  label: Log all connection attempts using invalid or expired session tokens.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k160_1
+  label: Log all system exceptions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k161_1
+  label: Log all administrative functions, including changes to security configuration settings.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k162_1
+  label: Log all backend TLS connection failures.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k163_1
+  label: Log cryptographic module failures.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k164_1
+  label: Use cryptographic hashes to validate log entry integrity.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k166_1
+  label: Restrict each user's access to the functionality, data, and system information required for their tasks.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k167_1
+  label: Protect all server-side cached and temporary copies of sensitive data from unauthorized access.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k167_2
+  label: Purge temporary working files containing sensitive data as soon as they are no longer required.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k168_2
+  label: Protect highly sensitive stored information with cryptography using well-vetted algorithms.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k169_1
+  label: Prevent users from downloading server-side source code.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k170_1
+  label: Prevent client-side storage or embedding of passwords, connection strings, and other sensitive information in plaintext
+    or any cryptographically insecure form.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k171_1
+  label: Remove comments that reveal backend details or other sensitive information from user-accessible production code.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k172_1
+  label: Remove unnecessary application and system documentation from the deployed system.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k173_1
+  label: Exclude sensitive information from HTTP GET request parameters.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k174_1
+  label: Disable autocomplete on forms expected to contain sensitive information, including authentication forms.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k175_1
+  label: Disable client-side caching of pages containing sensitive information.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k176_1
+  label: Support removal of sensitive data when it is no longer required.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k177_1
+  label: Enforce appropriate access controls on sensitive server data, including cached data, temporary files, and data restricted
+    to specific system users.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k179_1
+  label: Encrypt all transmissions of sensitive information, using TLS for connections and appropriate encryption for other
+    transmission mechanisms.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k180_1
+  label: Configure TLS with unexpired certificates valid for the correct domain and include intermediate certificates when
+    required.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k181_1
+  label: Prevent failed TLS connections from falling back to insecure connections.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k182_1
+  label: Require TLS for all authenticated content and all other sensitive information.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k183_1
+  label: Use TLS for external system connections involving sensitive information or functions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k184_1
+  label: Use a single standard TLS implementation with appropriate security configuration.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k185_1
+  label: Explicitly specify character encodings for every connection.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k186_1
+  label: Ensure external links do not send sensitive parameters in the HTTP Referer header.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k188_1
+  label: Configure servers, frameworks, and system components to use the latest versions approved by the organisation.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k188_2
+  label: Are all deployed servers, frameworks, and system components running the latest versions approved by your organisation?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k189_1
+  label: Configure all components to include every patch issued for the versions in use.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k189_2
+  label: Have all patches issued for the versions of servers, frameworks, and system components currently running been installed?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k190_1
+  label: Disable directory listings on all application-serving paths.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k191_1
+  label: Configure web server, process, and service accounts with only the privileges necessary for their functions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k192_1
+  label: Handle exceptions so that failures preserve security controls and do not grant unauthorized access or expose sensitive
+    information.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k193_1
+  label: Remove functionality and files that are unnecessary for the deployed application's intended operation.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k194_2
+  label: Exclude test code and all other functionality not intended for production from deployment.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k195_1
+  label: Place directories excluded from public indexing under an isolated parent and disallow that parent in robots.txt without
+    listing each child directory.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k196_1
+  label: Explicitly define supported HTTP methods and any differences in method handling between application pages.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k197_1
+  label: Disable HTTP methods that the application does not need, including unnecessary WebDAV methods.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k197_2
+  label: Protect required extended HTTP methods that support file handling with a well-vetted authentication mechanism.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k198_1
+  label: If the web server supports both HTTP 1.0 and HTTP 1.1, are they configured similarly, or are any differences understood?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k199_1
+  label: Remove unnecessary operating system, web server version, and application framework details from HTTP response headers.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k200_1
+  label: Support human-readable output of the application's security configuration store for auditing.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k201_1
+  label: Is an asset management system implemented with the system's components and software registered in it?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k202_1
+  label: Isolate development environments from the production network.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k202_2
+  label: Restrict development environment access to authorized development and test groups.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k203_1
+  label: Is a software change control system used to manage and record code changes in both development and production?
+  type: bool
+  kind: given
+- name: Query.construction
+  type: enum
+  kind: measured
+  values:
+  - parameterized
+  - orm
+  - concatenated
+  - interpolated
+  - operator_object
+  label: how untrusted values reach the query (operator_object is a NoSQL filter object built from request data)
+- name: system.req_rfe5181cd6e_k205_2
+  label: Ensure database queries use strongly typed parameters and that ORM queries bind values.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k206_1
+  label: Validate and encode database inputs, including metacharacters, and prevent command execution when validation or encoding
+    fails.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k207_1
+  label: Ensure variables are strongly typed.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k208_1
+  label: Give the application's database identity only the privileges necessary for its operations.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k209_1
+  label: Use secure credentials for database access.
+  type: bool
+  kind: judged
+- name: Secret.kind
+  type: enum
+  kind: measured
+  values:
+  - private_key
+  - signing_key
+  - api_key
+  - password
+  - connection_string
+  - other
+- name: Secret.test_or_example
+  type: bool
+  kind: judged
+  label: the literal is only a test fixture
+- name: system.req_rfe5181cd6e_k210_2
+  label: Store connection strings in a separate configuration file on a trusted system.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k210_3
+  label: Encrypt stored connection strings.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k211_1
+  label: Abstract database access through stored procedures so that direct base-table permissions can be removed.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k212_1
+  label: Release database connections as soon as their work is complete.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k213_1
+  label: Remove or change all default database administrative passwords.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k213_2
+  label: Protect database administrative access with strong passwords or passphrases, or multifactor authentication.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k214_1
+  label: Enable only database features, procedures, services, and packages required by the application.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k215_1
+  label: Remove unnecessary default vendor database content, including sample schemas.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k216_1
+  label: Disable default database accounts that are unnecessary for business requirements.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k217_1
+  label: Use distinct database credentials for each application trust distinction.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k219_1
+  label: Prevent user-supplied data from being passed directly to dynamic include functions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k220_1
+  label: Require authentication before accepting file uploads.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k221_1
+  label: Allow uploads only of file types needed for business purposes.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k222_1
+  label: Validate uploaded file types using file headers rather than relying solely on filename extensions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k223_1
+  label: Store files on a content server or in a database outside the application's web context.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k224_1
+  label: Prevent or restrict uploads of file types that the web server can interpret.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k225_1
+  label: Disable execution privileges in file upload directories.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k226_1
+  label: Isolate UNIX upload directories using a dedicated logical drive mounted at the target path or a chroot environment.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k227_1
+  label: Validate file reference parameters against an allowlist of file names and types, rejecting mismatches or substituting
+    a hardcoded default.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k228_1
+  label: Allow user input in dynamic redirects only when it is validated as a relative path URL.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k229_1
+  label: Pass index values mapped to predefined paths instead of passing file or directory paths.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k230_1
+  label: Never send absolute file paths to clients.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k231_1
+  label: Configure application files and resources as read-only.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k232_1
+  label: Scan user-uploaded files for viruses and malware.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k234_1
+  label: Apply input validation and output controls wherever the application handles untrusted data.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k235_1
+  label: Verify that each buffer's allocated capacity is at least its specified size.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k236_1
+  label: Ensure bounded string copies produce a NULL-terminated destination when the result is used as a string.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k237_1
+  label: Check buffer boundaries during repeated function calls so no loop writes past allocated space.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k238_1
+  label: Truncate all input strings to a reasonable length before passing them to copy or concatenation functions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k239_1
+  label: Explicitly close resources instead of relying on garbage collection.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k240_1
+  label: Configure non-executable stacks wherever the platform supports them.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k241_1
+  label: Avoid known vulnerable functions, including printf, strcat, and strcpy.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k242_1
+  label: Properly free allocated memory at function completion and on every exit path.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k244_1
+  label: Use managed code for common tasks instead of creating new unmanaged implementations.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k244_2
+  label: Has the managed code used for common tasks been tested and approved?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k245_2
+  label: Use task-specific built-in APIs for operating system tasks.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k246_1
+  label: Verify the integrity of interpreted code, libraries, executables, and configuration files using checksums or hashes.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k247_1
+  label: Use locking or synchronization to prevent race conditions between simultaneous requests.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k248_1
+  label: Protect shared variables and resources from inappropriate concurrent access.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k249_1
+  label: Explicitly initialize all variables and data stores at declaration or before their first use.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k250_1
+  label: Raise application privileges as late as possible and drop them as soon as possible.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k251_1
+  label: Prevent calculation errors caused by numeric size, precision, signedness, truncation, conversions, NaN, overflow,
+    or underflow.
+  type: bool
+  kind: judged
+- name: CommandExecution.untrusted_input
+  type: bool
+  kind: measured
+  label: data from a request can reach the command or its arguments
+- name: system.req_rfe5181cd6e_k252_2
+  label: Do not pass user supplied data to other dynamic execution functions.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k253_1
+  label: Restrict users' ability to generate new code or alter existing code.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k254_1
+  label: Have all secondary applications, third party code, and libraries been reviewed to determine business necessity and
+    validate safe functionality?
+  type: bool
+  kind: given
+- name: system.req_rfe5181cd6e_k255_1
+  label: Implement a safe application update mechanism.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k255_2
+  label: If automatic updates are used, cryptographically sign update code and ensure download clients verify the signatures
+    before accepting it.
+  type: bool
+  kind: judged
+- name: system.req_rfe5181cd6e_k255_3
+  label: Transfer update code from the host server over encrypted channels.
+  type: bool
+  kind: judged

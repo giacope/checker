@@ -1,0 +1,4116 @@
+norms:
+- name: k4-1
+  title: Make the work's Creative Commons Attribution ShareAlike 3.0 license terms clear to recipients whenever it is reused
+    or distributed.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disclose license terms on reuse or distribution
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L5-L7
+    url: /regulations/rfe5181cd6e#c4
+    quote: 'This document is released under the Creative Commons Attribution ShareAlike 3.0 license. For any reuse or
+
+      distribution, you must make clear to others the license terms of this work.
+
+      http://creativecommons.org/licenses/by-sa/3.0/'
+  interpretation:
+    by: model
+    note: Disclosure during reuse or distribution is a process obligation that source code and configuration cannot establish.
+  require:
+    fact: system.req_rfe5181cd6e_k4_1
+- name: k9-1
+  title: Assess secure software development lifecycle maturity and development staff knowledge when starting to use the guide.
+  modality: obligation
+  status: draft
+  cite:
+    section: Assess development maturity and provide security validation capabilities
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L39-L46
+    url: /regulations/rfe5181cd6e#c9
+    quote: 'When utilizing this guide, development teams should start by assessing the maturity of their secure software
+
+      development lifecycle and the knowledge level of their development staff. Since this guide does not cover
+
+      the details of how to implement each coding practice, developers will either need to have the prior
+
+      knowledge or have sufficient resources available that provide the necessary guidance. This guide provides
+
+      coding practices that can be translated into coding requirements without the need for the developer to have an
+
+      in depth understanding of security vulnerabilities and exploits. However, other members of the development
+
+      team should have the responsibility, adequate training, tools and resources to validate that the design and
+
+      implementation of the entire system is secure.'
+  interpretation:
+    by: model
+    note: These assessments concern organisational practices and staff knowledge.
+  require:
+    fact: system.req_rfe5181cd6e_k9_1
+- name: k9-2
+  title: Ensure developers have the knowledge or guidance resources needed to implement the coding practices.
+  modality: obligation
+  status: draft
+  cite:
+    section: Assess development maturity and provide security validation capabilities
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L39-L46
+    url: /regulations/rfe5181cd6e#c9
+    quote: 'When utilizing this guide, development teams should start by assessing the maturity of their secure software
+
+      development lifecycle and the knowledge level of their development staff. Since this guide does not cover
+
+      the details of how to implement each coding practice, developers will either need to have the prior
+
+      knowledge or have sufficient resources available that provide the necessary guidance. This guide provides
+
+      coding practices that can be translated into coding requirements without the need for the developer to have an
+
+      in depth understanding of security vulnerabilities and exploits. However, other members of the development
+
+      team should have the responsibility, adequate training, tools and resources to validate that the design and
+
+      implementation of the entire system is secure.'
+  interpretation:
+    by: model
+    note: Developer knowledge and access to adequate guidance cannot be established from application source code.
+  require:
+    fact: system.req_rfe5181cd6e_k9_2
+- name: k9-3
+  title: Assign other development team members responsibility for validating the security of the entire system's design and
+    implementation.
+  modality: obligation
+  status: draft
+  cite:
+    section: Assess development maturity and provide security validation capabilities
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L39-L46
+    url: /regulations/rfe5181cd6e#c9
+    quote: 'When utilizing this guide, development teams should start by assessing the maturity of their secure software
+
+      development lifecycle and the knowledge level of their development staff. Since this guide does not cover
+
+      the details of how to implement each coding practice, developers will either need to have the prior
+
+      knowledge or have sufficient resources available that provide the necessary guidance. This guide provides
+
+      coding practices that can be translated into coding requirements without the need for the developer to have an
+
+      in depth understanding of security vulnerabilities and exploits. However, other members of the development
+
+      team should have the responsibility, adequate training, tools and resources to validate that the design and
+
+      implementation of the entire system is secure.'
+  interpretation:
+    by: model
+    note: Assignment of validation responsibilities is an organisational obligation.
+  require:
+    fact: system.req_rfe5181cd6e_k9_3
+- name: k9-4
+  title: Provide security validators with adequate training, tools, and resources.
+  modality: obligation
+  status: draft
+  cite:
+    section: Assess development maturity and provide security validation capabilities
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L39-L46
+    url: /regulations/rfe5181cd6e#c9
+    quote: 'When utilizing this guide, development teams should start by assessing the maturity of their secure software
+
+      development lifecycle and the knowledge level of their development staff. Since this guide does not cover
+
+      the details of how to implement each coding practice, developers will either need to have the prior
+
+      knowledge or have sufficient resources available that provide the necessary guidance. This guide provides
+
+      coding practices that can be translated into coding requirements without the need for the developer to have an
+
+      in depth understanding of security vulnerabilities and exploits. However, other members of the development
+
+      team should have the responsibility, adequate training, tools and resources to validate that the design and
+
+      implementation of the entire system is secure.'
+  interpretation:
+    by: model
+    note: The adequacy of personnel training and available validation resources requires organisational evidence.
+  require:
+    fact: system.req_rfe5181cd6e_k9_4
+- name: k12-1
+  title: Clearly define roles and responsibilities.
+  modality: obligation
+  status: draft
+  cite:
+    section: Define roles and responsibilities
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L51-L51
+    url: /regulations/rfe5181cd6e#c12
+    quote: • Clearly define roles and responsibilities
+  interpretation:
+    by: model
+    note: Team roles and responsibilities are organisational assignments.
+  require:
+    fact: system.req_rfe5181cd6e_k12_1
+- name: k13-1
+  title: Provide development teams with adequate software security training.
+  modality: obligation
+  status: draft
+  cite:
+    section: Provide software security training
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L52-L52
+    url: /regulations/rfe5181cd6e#c13
+    quote: • Provide development teams with adequate software security training
+  interpretation:
+    by: model
+    note: Training provision and adequacy cannot be established from application source code.
+  require:
+    fact: system.req_rfe5181cd6e_k13_1
+- name: k14-1
+  title: Implement a secure software development lifecycle.
+  modality: obligation
+  status: draft
+  cite:
+    section: Implement a secure software development lifecycle
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L53-L54
+    url: /regulations/rfe5181cd6e#c14
+    quote: '• Implement a secure software development lifecycle
+
+      o OWASP CLASP Project'
+  interpretation:
+    by: model
+    note: A development lifecycle is an organisational process.
+  require:
+    fact: system.req_rfe5181cd6e_k14_1
+- name: k15-1
+  title: Establish secure coding standards.
+  modality: obligation
+  status: draft
+  cite:
+    section: Establish secure coding standards
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L55-L56
+    url: /regulations/rfe5181cd6e#c15
+    quote: '• Establish secure coding standards
+
+      o OWASP Development Guide Project'
+  interpretation:
+    by: model
+    note: Establishing standards is a policy obligation.
+  require:
+    fact: system.req_rfe5181cd6e_k15_1
+- name: k16-1
+  title: Provide a reusable object library.
+  modality: obligation
+  status: draft
+  cite:
+    section: Build a reusable object library
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L57-L58
+    url: /regulations/rfe5181cd6e#c16
+    quote: '• Build a re-usable object library
+
+      o OWASP Enterprise Security API (ESAPI) Project'
+  interpretation:
+    by: model
+    note: A reviewer can inspect the source for a reusable library, but no supplied fact represents it.
+  require:
+    fact: system.req_rfe5181cd6e_k16_1
+- name: k17-1
+  title: Verify the effectiveness of security controls.
+  modality: obligation
+  status: draft
+  cite:
+    section: Verify security control effectiveness
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L59-L60
+    url: /regulations/rfe5181cd6e#c17
+    quote: '• Verify the effectiveness of security controls
+
+      o OWASP Application Security Verification Standard (ASVS) Project)'
+  interpretation:
+    by: model
+    note: Performing effectiveness verification requires evidence of validation activities and results.
+  require:
+    fact: system.req_rfe5181cd6e_k17_1
+- name: k18-1
+  title: Establish secure outsourced development practices.
+  modality: obligation
+  status: draft
+  cite:
+    section: Establish secure outsourced development practices
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L61-L63
+    url: /regulations/rfe5181cd6e#c18
+    quote: '• Establish secure outsourced development practices including defining security requirements and
+
+      verification methodologies in both the request for proposal (RFP) and contract.
+
+      o OWASP Legal Project'
+  interpretation:
+    by: model
+    note: Outsourced development practices are organisational processes.
+  require:
+    fact: system.req_rfe5181cd6e_k18_1
+- name: k18-2
+  title: Define security requirements and verification methodologies in both outsourced development RFPs and contracts.
+  modality: obligation
+  status: draft
+  cite:
+    section: Establish secure outsourced development practices
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L61-L63
+    url: /regulations/rfe5181cd6e#c18
+    quote: '• Establish secure outsourced development practices including defining security requirements and
+
+      verification methodologies in both the request for proposal (RFP) and contract.
+
+      o OWASP Legal Project'
+  interpretation:
+    by: model
+    note: RFP and contract contents require procurement and contractual evidence.
+  require:
+    fact: system.req_rfe5181cd6e_k18_2
+- name: k29-1
+  title: Perform all required data validation on a trusted system.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate data on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L110-L110
+    url: /regulations/rfe5181cd6e#c29
+    quote: • Conduct all data validation on a trusted system (e.g., The server)
+  interpretation:
+    by: model
+    note: A reviewer can trace validation execution and trust boundaries, but the supplied facts do not describe them.
+  require:
+    fact: system.req_rfe5181cd6e_k29_1
+- name: k30-1
+  title: Identify all data sources and classify each as trusted or untrusted.
+  modality: obligation
+  status: draft
+  cite:
+    section: Classify data sources and validate untrusted data
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L111-L112
+    url: /regulations/rfe5181cd6e#c30
+    quote: '• Identify all data sources and classify them into trusted and untrusted. Validate all data from untrusted
+
+      sources (e.g., Databases, file streams, etc.)'
+  interpretation:
+    by: model
+    note: A reviewer can inspect data ingress and its trust classification in source and configuration; no supplied fact captures
+      this.
+  require:
+    fact: system.req_rfe5181cd6e_k30_1
+- name: k30-2
+  title: Validate all data received from untrusted sources, including databases and file streams.
+  modality: obligation
+  status: draft
+  cite:
+    section: Classify data sources and validate untrusted data
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L111-L112
+    url: /regulations/rfe5181cd6e#c30
+    quote: '• Identify all data sources and classify them into trusted and untrusted. Validate all data from untrusted
+
+      sources (e.g., Databases, file streams, etc.)'
+  interpretation:
+    by: model
+    note: The supplied facts do not capture general validation of data from every untrusted source.
+  require:
+    fact: system.req_rfe5181cd6e_k30_2
+- name: k31-1
+  title: Provide a centralized input validation routine for the application.
+  modality: obligation
+  status: draft
+  cite:
+    section: Centralize input validation
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L113-L113
+    url: /regulations/rfe5181cd6e#c31
+    quote: • There should be a centralized input validation routine for the application
+  interpretation:
+    by: model
+    note: Validation centralization is visible in application structure but is not represented by the supplied facts.
+  require:
+    fact: system.req_rfe5181cd6e_k31_1
+- name: k32-1
+  title: Specify an appropriate character set, such as UTF-8, for every input source.
+  modality: obligation
+  status: draft
+  cite:
+    section: Specify input character sets
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L114-L114
+    url: /regulations/rfe5181cd6e#c32
+    quote: • Specify proper character sets, such as UTF-8, for all sources of input
+  interpretation:
+    by: model
+    note: The facts do not describe input character set declarations.
+  require:
+    fact: system.req_rfe5181cd6e_k32_1
+- name: k33-1
+  title: Convert input to a common character set before validating it.
+  modality: obligation
+  status: draft
+  cite:
+    section: Canonicalize data before validation
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L115-L115
+    url: /regulations/rfe5181cd6e#c33
+    quote: • Encode data to a common character set before validating (Canonicalize)
+  interpretation:
+    by: model
+    note: The facts do not capture character set conversion or validation order.
+  require:
+    fact: system.req_rfe5181cd6e_k33_1
+- name: k34-1
+  title: Reject input whenever validation fails.
+  modality: obligation
+  status: draft
+  cite:
+    section: Reject input when validation fails
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L116-L116
+    url: /regulations/rfe5181cd6e#c34
+    quote: • All validation failures should result in input rejection
+  interpretation:
+    by: model
+    note: The facts do not capture validation failure handling.
+  require:
+    fact: system.req_rfe5181cd6e_k34_1
+- name: k35-1
+  title: Determine whether UTF-8 extended characters are supported and, if supported, validate input only after UTF-8 decoding
+    completes.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate after UTF-8 decoding
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L117-L118
+    url: /regulations/rfe5181cd6e#c35
+    quote: '• Determine if the system supports UTF-8 extended character sets and if so, validate after UTF-8
+
+      decoding is completed'
+  interpretation:
+    by: model
+    note: Source code and configuration can show UTF-8 support and decoding order, but the facts do not capture them.
+  require:
+    fact: system.req_rfe5181cd6e_k35_1
+- name: k36-1
+  title: Validate all client-provided data before processing, including parameters, URLs, headers, cookies, and automated
+    submissions from embedded code.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate all client data before processing
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L119-L121
+    url: /regulations/rfe5181cd6e#c36
+    quote: '• Validate all client provided data before processing, including all parameters, URLs and HTTP header
+
+      content (e.g. Cookie names and values). Be sure to include automated post backs from JavaScript,
+
+      Flash or other embedded code'
+  interpretation:
+    by: model
+    note: The facts do not describe validation coverage or its order relative to processing.
+  require:
+    fact: system.req_rfe5181cd6e_k36_1
+- name: k37-1
+  title: Verify that request and response header values contain only ASCII characters.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict request and response headers to ASCII
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L122-L122
+    url: /regulations/rfe5181cd6e#c37
+    quote: • Verify that header values in both requests and responses contain only ASCII characters
+  interpretation:
+    by: model
+    note: The facts do not capture header character validation.
+  require:
+    fact: system.req_rfe5181cd6e_k37_1
+- name: k38-1
+  title: Validate data at redirect targets even when requests bypass validation performed before the redirect.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate data from redirects
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L123-L124
+    url: /regulations/rfe5181cd6e#c38
+    quote: '• Validate data from redirects (An attacker may submit malicious content directly to the target of the
+
+      redirect, thus circumventing application logic and any validation performed before the redirect)'
+  interpretation:
+    by: model
+    note: The facts do not capture redirect target validation.
+  require:
+    fact: system.req_rfe5181cd6e_k38_1
+- name: k39-1
+  title: Validate input against its expected data type.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate expected data types
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L125-L125
+    url: /regulations/rfe5181cd6e#c39
+    quote: • Validate for expected data types
+  interpretation:
+    by: model
+    note: The facts do not capture input type validation.
+  require:
+    fact: system.req_rfe5181cd6e_k39_1
+- name: k40-1
+  title: Validate input values against their permitted ranges.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate data ranges
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L126-L126
+    url: /regulations/rfe5181cd6e#c40
+    quote: • Validate data range
+  interpretation:
+    by: model
+    note: The facts do not capture general input range constraints.
+  require:
+    fact: system.req_rfe5181cd6e_k40_1
+- name: k41-1
+  title: Validate input lengths against their permitted limits.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate data lengths
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L127-L127
+    url: /regulations/rfe5181cd6e#c41
+    quote: • Validate data length
+  interpretation:
+    by: model
+    note: The facts do not capture general input length constraints; password limits alone do not establish this requirement.
+  require:
+    fact: system.req_rfe5181cd6e_k41_1
+- name: k42-1
+  title: Validate input against an allowlist of permitted characters wherever possible.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate input against allowed characters
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L128-L128
+    url: /regulations/rfe5181cd6e#c42
+    quote: • Validate all input against a "white" list of allowed characters, whenever possible
+  interpretation:
+    by: model
+    note: The facts do not capture character allowlists or where they are feasible.
+  require:
+    fact: system.req_rfe5181cd6e_k42_1
+- name: k43-1
+  title: Where potentially hazardous input characters are allowed, apply suitable additional controls throughout their use,
+    such as output encoding and secure task-specific APIs.
+  modality: obligation
+  status: draft
+  cite:
+    section: Apply additional controls when allowing hazardous characters
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L129-L132
+    url: /regulations/rfe5181cd6e#c43
+    quote: '• If any potentially hazardous characters must be allowed as input, be sure that you implement
+
+      additional controls like output encoding, secure task specific APIs and accounting for the utilization
+
+      of that data throughout the application . Examples of common hazardous characters include:
+
+      < > " '' % ( ) & + \ \'' \"'
+  interpretation:
+    by: model
+    note: The facts do not identify where hazardous characters are allowed or whether controls cover their uses; query construction
+      and HTML sanitization facts alone do not establish which controls are required.
+  require:
+    fact: system.req_rfe5181cd6e_k43_1
+- name: k44-1
+  title: Validate inputs for null bytes, newlines, and path traversal sequences, using separate checks where standard validation
+    is insufficient and canonicalization to address alternate encodings and obfuscation.
+  modality: obligation
+  status: draft
+  cite:
+    section: Check null bytes, newlines, and path alteration characters
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L133-L139
+    url: /regulations/rfe5181cd6e#c44
+    quote: '• If your standard validation routine cannot address the following inputs, then they should be checked
+
+      discretely
+
+      o Check for null bytes (%00)
+
+      o Check for new line characters (%0d, %0a, \r, \n)
+
+      o Check for “dot-dot-slash" (../ or ..\) path alterations characters. In cases where UTF-8 extended
+
+      character set encoding is supported, address alternate representation like: %c0%ae%c0%ae/
+
+      (Utilize canonicalization to address double encoding or other forms of obfuscation attacks)'
+  interpretation:
+    by: model
+    note: The facts do not describe input validation or canonicalization.
+  require:
+    fact: system.req_rfe5181cd6e_k44_1
+- name: k46-1
+  title: Perform all encoding on a trusted system such as the server.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encode output on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L141-L141
+    url: /regulations/rfe5181cd6e#c46
+    quote: • Conduct all encoding on a trusted system (e.g., The server)
+  interpretation:
+    by: model
+    note: The facts do not identify where encoding executes or whether that system is trusted.
+  require:
+    fact: system.req_rfe5181cd6e_k46_1
+- name: k47-1
+  title: Use a standard, tested routine for each type of outbound encoding.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use standard tested encoding routines
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L142-L142
+    url: /regulations/rfe5181cd6e#c47
+    quote: • Utilize a standard, tested routine for each type of outbound encoding
+  interpretation:
+    by: model
+    note: Encoding routines and their suitability are not represented by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k47_1
+- name: k48-1
+  title: Encode all data originating outside the application's trust boundary for its specific output context before returning
+    it to clients.
+  modality: obligation
+  status: draft
+  cite:
+    section: Contextually encode untrusted data returned to clients
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L143-L144
+    url: /regulations/rfe5181cd6e#c48
+    quote: '• Contextually output encode all data returned to the client that originated outside the application''s trust
+
+      boundary. HTML entity encoding is one example, but does not work in all cases'
+  interpretation:
+    by: model
+    note: The facts do not capture context-specific output encoding; HTML sanitization alone does not establish this requirement.
+  require:
+    fact: system.req_rfe5181cd6e_k48_1
+- name: k49-1
+  title: Encode every output character unless it is known to be safe for the intended interpreter.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encode characters unless safe for the interpreter
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L145-L145
+    url: /regulations/rfe5181cd6e#c49
+    quote: • Encode all characters unless they are known to be safe for the intended interpreter
+  interpretation:
+    by: model
+    note: The facts do not describe encoding character sets or the intended interpreter.
+  require:
+    fact: system.req_rfe5181cd6e_k49_1
+- name: k50-1
+  title: Apply context-appropriate sanitization or safe query binding to untrusted data used in SQL, XML, and LDAP queries.
+  modality: obligation
+  status: draft
+  cite:
+    section: Sanitize untrusted output to SQL, XML, and LDAP queries
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L146-L146
+    url: /regulations/rfe5181cd6e#c50
+    quote: • Contextually sanitize all output of un-trusted data to queries for SQL, XML, and LDAP
+  interpretation:
+    by: model
+    note: Query construction facts do not establish context-appropriate sanitization, and they do not cover XML and LDAP query
+      handling.
+  require:
+    fact: system.req_rfe5181cd6e_k50_1
+- name: k51-1
+  title: Sanitize untrusted data for its operating system command context before passing it to commands.
+  modality: obligation
+  status: draft
+  cite:
+    section: Sanitize untrusted output to operating system commands
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L147-L147
+    url: /regulations/rfe5181cd6e#c51
+    quote: • Sanitize all output of un-trusted data to operating system commands
+  interpretation:
+    by: model
+    note: Command construction and input provenance do not show whether command arguments or shell values are appropriately
+      sanitized.
+  require:
+    fact: system.req_rfe5181cd6e_k51_1
+- name: k53-1
+  title: Require authentication for every page and resource unless it is explicitly intended to be public.
+  modality: obligation
+  status: draft
+  cite:
+    section: Require authentication for nonpublic pages and resources
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L149-L149
+    url: /regulations/rfe5181cd6e#c53
+    quote: • Require authentication for all pages and resources, except those specifically intended to be public
+  interpretation:
+    by: model
+    note: The facts do not describe authentication coverage or which resources are explicitly public.
+  require:
+    fact: system.req_rfe5181cd6e_k53_1
+- name: k54-1
+  title: Enforce all authentication controls on a trusted system such as the server.
+  modality: obligation
+  status: draft
+  cite:
+    section: Enforce authentication on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L150-L150
+    url: /regulations/rfe5181cd6e#c54
+    quote: • All authentication controls must be enforced on a trusted system (e.g., The server)
+  interpretation:
+    by: model
+    note: The facts do not show the execution location or trust boundary of all authentication controls.
+  require:
+    fact: system.req_rfe5181cd6e_k54_1
+- name: k55-1
+  title: Use standard, tested authentication services wherever possible.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use standard tested authentication services
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L151-L151
+    url: /regulations/rfe5181cd6e#c55
+    quote: • Establish and utilize standard, tested, authentication services whenever possible
+  interpretation:
+    by: model
+    note: A reviewer can examine authentication implementations, dependencies, and available integration options, which the
+      facts do not capture.
+  require:
+    fact: system.req_rfe5181cd6e_k55_1
+- name: k56-1
+  title: Centralize all authentication controls, including libraries that call external authentication services.
+  modality: obligation
+  status: draft
+  cite:
+    section: Centralize authentication controls
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L152-L153
+    url: /regulations/rfe5181cd6e#c56
+    quote: '• Use a centralized implementation for all authentication controls, including libraries that call external
+
+      authentication services'
+  interpretation:
+    by: model
+    note: The facts do not describe authentication architecture or external authentication integrations.
+  require:
+    fact: system.req_rfe5181cd6e_k56_1
+- name: k57-1
+  title: Separate authentication logic from requested resources and redirect to and from the centralized authentication control.
+  modality: obligation
+  status: draft
+  cite:
+    section: Separate authentication logic and redirect through centralized controls
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L154-L155
+    url: /regulations/rfe5181cd6e#c57
+    quote: '• Segregate authentication logic from the resource being requested and use redirection to and from the
+
+      centralized authentication control'
+  interpretation:
+    by: model
+    note: The facts do not describe separation of authentication logic or authentication redirect flows.
+  require:
+    fact: system.req_rfe5181cd6e_k57_1
+- name: k58-1
+  title: All authentication controls must deny authentication when processing fails or encounters an error.
+  modality: obligation
+  status: draft
+  cite:
+    section: Fail securely in authentication controls
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L156-L156
+    url: /regulations/rfe5181cd6e#c58
+    quote: • All authentication controls should fail securely
+  interpretation:
+    by: model
+    note: The facts do not describe authentication error handling or failure defaults.
+  require:
+    fact: system.req_rfe5181cd6e_k58_1
+- name: k59-1
+  title: Administrative and account management functions must provide authentication security at least equivalent to the primary
+    authentication mechanism.
+  modality: obligation
+  status: draft
+  cite:
+    section: Secure administrative and account management authentication
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L157-L158
+    url: /regulations/rfe5181cd6e#c59
+    quote: '• All administrative and account management functions must be at least as secure as the primary
+
+      authentication mechanism'
+  interpretation:
+    by: model
+    note: The facts do not capture the authentication controls applied to individual functions or their relative strength.
+  require:
+    fact: system.req_rfe5181cd6e_k59_1
+- name: k60-1
+  title: Stored passwords must use per-password random salts and must not use plaintext, reversible encryption, MD5, or SHA-1.
+  modality: obligation
+  status: draft
+  for:
+    p: PasswordStore
+  cite:
+    section: Store strong salted password hashes and restrict credential writes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L159-L161
+    url: /regulations/rfe5181cd6e#c60
+    quote: '• If your application manages a credential store, it should ensure that only cryptographically strong one-
+
+      way salted hashes of passwords are stored and that the table/file that stores the passwords and keys is
+
+      write-able only by the application. (Do not use the MD5 algorithm if it can be avoided)'
+  interpretation:
+    by: model
+    note: The password storage facts capture necessary salt and algorithm restrictions, but do not fully establish cryptographic
+      strength.
+  require:
+    all:
+    - fact: p.salted
+    - not:
+        in:
+        - fact: p.algorithm
+        - - plaintext
+          - reversible
+          - md5
+          - sha1
+- name: k60-2
+  title: Password storage must use cryptographically strong one-way hashing with appropriate algorithm parameters.
+  modality: obligation
+  status: draft
+  cite:
+    section: Store strong salted password hashes and restrict credential writes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L159-L161
+    url: /regulations/rfe5181cd6e#c60
+    quote: '• If your application manages a credential store, it should ensure that only cryptographically strong one-
+
+      way salted hashes of passwords are stored and that the table/file that stores the passwords and keys is
+
+      write-able only by the application. (Do not use the MD5 algorithm if it can be avoided)'
+  interpretation:
+    by: model
+    note: The facts do not capture work factors, algorithm parameters, or the strength of custom implementations.
+  require:
+    fact: system.req_rfe5181cd6e_k60_2
+- name: k60-3
+  title: Password and key storage must be writable only by the application.
+  modality: obligation
+  status: draft
+  cite:
+    section: Store strong salted password hashes and restrict credential writes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L159-L161
+    url: /regulations/rfe5181cd6e#c60
+    quote: '• If your application manages a credential store, it should ensure that only cryptographically strong one-
+
+      way salted hashes of passwords are stored and that the table/file that stores the passwords and keys is
+
+      write-able only by the application. (Do not use the MD5 algorithm if it can be avoided)'
+  interpretation:
+    by: model
+    note: A reviewer can inspect database grants and filesystem permissions, which are not represented by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k60_3
+- name: k61-1
+  title: Password hashing must execute on a trusted system such as the server.
+  modality: obligation
+  status: draft
+  cite:
+    section: Hash passwords on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L162-L162
+    url: /regulations/rfe5181cd6e#c61
+    quote: • Password hashing must be implemented on a trusted system (e.g., The server).
+  interpretation:
+    by: model
+    note: The password storage facts do not identify where hashing executes or the trust boundary.
+  require:
+    fact: system.req_rfe5181cd6e_k61_1
+- name: k62-1
+  title: Authentication data must be validated only after all required authentication input has been supplied.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate authentication after all data is entered
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L163-L164
+    url: /regulations/rfe5181cd6e#c62
+    quote: '• Validate the authentication data only on completion of all data input, especially for sequential
+
+      authentication implementations'
+  interpretation:
+    by: model
+    note: The facts do not capture the ordering of input collection and authentication validation.
+  require:
+    fact: system.req_rfe5181cd6e_k62_1
+- name: k63-1
+  title: Authentication failures must return identical displayed and underlying responses regardless of which authentication
+    input is incorrect.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use identical authentication failure responses
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L165-L168
+    url: /regulations/rfe5181cd6e#c63
+    quote: '• Authentication failure responses should not indicate which part of the authentication data was
+
+      incorrect. For example, instead of "Invalid username" or "Invalid password", just use "Invalid
+
+      username and/or password" for both. Error responses must be truly identical in both display and
+
+      source code'
+  interpretation:
+    by: model
+    note: The facts do not capture authentication response messages, payloads, or rendered source.
+  require:
+    fact: system.req_rfe5181cd6e_k63_1
+- name: k64-1
+  title: Connections to external systems involving sensitive information or functions must use authentication.
+  modality: obligation
+  status: draft
+  cite:
+    section: Authenticate sensitive connections to external systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L169-L170
+    url: /regulations/rfe5181cd6e#c64
+    quote: '• Utilize authentication for connections to external systems that involve sensitive information or
+
+      functions'
+  interpretation:
+    by: model
+    note: The facts do not describe external connection authentication or identify all sensitive external functions.
+  require:
+    fact: system.req_rfe5181cd6e_k64_1
+- name: k65-1
+  title: External service authentication credentials must be encrypted and stored in a protected location on a trusted system,
+    outside source code.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encrypt and protect external service credentials
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L171-L173
+    url: /regulations/rfe5181cd6e#c65
+    quote: '• Authentication credentials for accessing services external to the application should be encrypted and
+
+      stored in a protected location on a trusted system (e.g., The server). The source code is NOT a secure
+
+      location'
+  interpretation:
+    by: model
+    note: Secret facts do not identify external service credentials, and no facts capture their encryption, storage protections,
+      or trusted location.
+  require:
+    fact: system.req_rfe5181cd6e_k65_1
+- name: k66-1
+  title: Authentication credentials must be transmitted only in HTTP POST requests.
+  modality: obligation
+  status: draft
+  cite:
+    section: Transmit authentication credentials only through HTTP POST
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L174-L174
+    url: /regulations/rfe5181cd6e#c66
+    quote: • Use only HTTP POST requests to transmit authentication credentials
+  interpretation:
+    by: model
+    note: The facts do not capture HTTP methods used for credential transmission.
+  require:
+    fact: system.req_rfe5181cd6e_k66_1
+- name: k67-1
+  title: Non-temporary passwords must be transmitted through encrypted connections or as encrypted data.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encrypt transmission of non-temporary passwords
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L175-L176
+    url: /regulations/rfe5181cd6e#c67
+    quote: '• Only send non-temporary passwords over an encrypted connection or as encrypted data, such as in an
+
+      encrypted email. Temporary passwords associated with email resets may be an exception'
+  interpretation:
+    by: model
+    note: The facts do not distinguish password transmission paths, temporary passwords, or payload encryption; application
+      HTTPS enforcement alone is not necessary when data is encrypted.
+  require:
+    fact: system.req_rfe5181cd6e_k67_1
+- name: k68-1
+  title: Enforced password complexity must satisfy applicable policy or regulation and withstand attacks typical of the deployed
+    environment.
+  modality: obligation
+  status: draft
+  cite:
+    section: Enforce password complexity requirements
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L177-L179
+    url: /regulations/rfe5181cd6e#c68
+    quote: '• Enforce password complexity requirements established by policy or regulation. Authentication
+
+      credentials should be sufficient to withstand attacks that are typical of the threats in the deployed
+
+      environment. (e.g., requiring the use of alphabetic as well as numeric and/or special characters)'
+  interpretation:
+    by: model
+    note: The facts do not specify applicable complexity rules or environmental threats, and a character-class requirement
+      is not necessarily mandated.
+  require:
+    fact: system.req_rfe5181cd6e_k68_1
+- name: k69-1
+  title: The application must enforce password length requirements established by applicable policy or regulation.
+  modality: obligation
+  status: draft
+  cite:
+    section: Enforce password length requirements
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L180-L181
+    url: /regulations/rfe5181cd6e#c69
+    quote: '• Enforce password length requirements established by policy or regulation. Eight characters is
+
+      commonly used, but 16 is better or consider the use of multi-word pass phrases'
+  interpretation:
+    by: model
+    note: The facts expose enforced lengths but supply no applicable policy threshold; the clause's example lengths are not
+      mandatory limits.
+  require:
+    fact: system.req_rfe5181cd6e_k69_1
+- name: k70-1
+  title: Obscure password entry on the user's screen.
+  modality: obligation
+  status: draft
+  cite:
+    section: Obscure password entry
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L182-L183
+    url: /regulations/rfe5181cd6e#c70
+    quote: '• Password entry should be obscured on the user''s screen. (e.g., on web forms use the input type
+
+      "password")'
+  interpretation:
+    by: model
+    note: The facts do not describe password field rendering.
+  require:
+    fact: system.req_rfe5181cd6e_k70_1
+- name: k71-1
+  title: Limit failed login attempts as a necessary part of account disabling.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable accounts after repeated invalid login attempts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L184-L186
+    url: /regulations/rfe5181cd6e#c71
+    quote: '• Enforce account disabling after an established number of invalid login attempts (e.g., five attempts is
+
+      common). The account must be disabled for a period of time sufficient to discourage brute force
+
+      guessing of credentials, but not so long as to allow for a denial-of-service attack to be performed'
+  interpretation:
+    by: model
+    note: Account disabling after repeated failed logins necessarily limits failed login attempts.
+  require:
+    fact: system.login_rate_limited
+- name: k71-2
+  title: Disable accounts after an established number of invalid login attempts for a duration that discourages brute force
+    without enabling denial of service.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable accounts after repeated invalid login attempts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L184-L186
+    url: /regulations/rfe5181cd6e#c71
+    quote: '• Enforce account disabling after an established number of invalid login attempts (e.g., five attempts is
+
+      common). The account must be disabled for a period of time sufficient to discourage brute force
+
+      guessing of credentials, but not so long as to allow for a denial-of-service attack to be performed'
+  interpretation:
+    by: model
+    note: The facts do not capture account disabling thresholds, duration, or denial-of-service resistance.
+  require:
+    fact: system.req_rfe5181cd6e_k71_2
+- name: k72-1
+  title: Apply controls to password resets and changes at the same level as account creation and authentication.
+  modality: obligation
+  status: draft
+  cite:
+    section: Apply authentication controls to password resets and changes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L187-L188
+    url: /regulations/rfe5181cd6e#c72
+    quote: '• Password reset and changing operations require the same level of controls as account creation and
+
+      authentication.'
+  interpretation:
+    by: model
+    note: The facts cannot compare the controls across these workflows.
+  require:
+    fact: system.req_rfe5181cd6e_k72_1
+- name: k73-1
+  title: Use password reset questions that support sufficiently random answers.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use reset questions supporting sufficiently random answers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L189-L190
+    url: /regulations/rfe5181cd6e#c73
+    quote: '• Password reset questions should support sufficiently random answers. (e.g., "favorite book" is a bad
+
+      question because “The Bible” is a very common answer)'
+  interpretation:
+    by: model
+    note: The facts do not describe reset questions or their possible answers.
+  require:
+    fact: system.req_rfe5181cd6e_k73_1
+- name: k74-1
+  title: Send email-based password resets only to preregistered addresses using a temporary link or password.
+  modality: obligation
+  status: draft
+  cite:
+    section: Send email resets only to preregistered addresses
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L191-L192
+    url: /regulations/rfe5181cd6e#c74
+    quote: '• If using email based resets, only send email to a pre-registered address with a temporary
+
+      link/password'
+  interpretation:
+    by: model
+    note: The facts do not describe reset recipients or reset credential generation.
+  require:
+    fact: system.req_rfe5181cd6e_k74_1
+- name: k75-1
+  title: Give temporary passwords and links a short expiration time.
+  modality: obligation
+  status: draft
+  cite:
+    section: Expire temporary passwords and links promptly
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L193-L193
+    url: /regulations/rfe5181cd6e#c75
+    quote: • Temporary passwords and links should have a short expiration time
+  interpretation:
+    by: model
+    note: The facts do not capture temporary credential or link expiration.
+  require:
+    fact: system.req_rfe5181cd6e_k75_1
+- name: k76-1
+  title: Require users to change temporary passwords on their next use.
+  modality: obligation
+  status: draft
+  cite:
+    section: Require temporary password changes on next use
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L194-L194
+    url: /regulations/rfe5181cd6e#c76
+    quote: • Enforce the changing of temporary passwords on the next use
+  interpretation:
+    by: model
+    note: The facts do not capture temporary password state or forced changes on use.
+  require:
+    fact: system.req_rfe5181cd6e_k76_1
+- name: k77-1
+  title: Notify users whenever a password reset occurs.
+  modality: obligation
+  status: draft
+  cite:
+    section: Notify users of password resets
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L195-L195
+    url: /regulations/rfe5181cd6e#c77
+    quote: • Notify users when a password reset occurs
+  interpretation:
+    by: model
+    note: The facts do not describe reset notification behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k77_1
+- name: k78-1
+  title: Prevent users from reusing previous passwords.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prevent password reuse
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L196-L196
+    url: /regulations/rfe5181cd6e#c78
+    quote: • Prevent password re-use
+  interpretation:
+    by: model
+    note: The facts do not describe password history or reuse prevention.
+  require:
+    fact: system.req_rfe5181cd6e_k78_1
+- name: k79-1
+  title: Prevent password changes until the current password is at least one day old.
+  modality: obligation
+  status: draft
+  cite:
+    section: Require minimum password age before changes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L197-L198
+    url: /regulations/rfe5181cd6e#c79
+    quote: '• Passwords should be at least one day old before they can be changed, to prevent attacks on password
+
+      re-use'
+  interpretation:
+    by: model
+    note: The facts do not capture minimum password age or the time of the last change.
+  require:
+    fact: system.req_rfe5181cd6e_k79_1
+- name: k80-1
+  title: Enforce password changes according to applicable policy or regulatory requirements.
+  modality: obligation
+  status: draft
+  cite:
+    section: Enforce password change schedules with administrative control
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L199-L200
+    url: /regulations/rfe5181cd6e#c80
+    quote: '• Enforce password changes based on requirements established in policy or regulation. Critical systems
+
+      may require more frequent changes. The time between resets must be administratively controlled'
+  interpretation:
+    by: model
+    note: The facts do not capture applicable schedules or whether enforced changes match them; periodic change alone cannot
+      establish this.
+  require:
+    fact: system.req_rfe5181cd6e_k80_1
+- name: k80-2
+  title: Make the time between required password resets administratively controlled.
+  modality: obligation
+  status: draft
+  cite:
+    section: Enforce password change schedules with administrative control
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L199-L200
+    url: /regulations/rfe5181cd6e#c80
+    quote: '• Enforce password changes based on requirements established in policy or regulation. Critical systems
+
+      may require more frequent changes. The time between resets must be administratively controlled'
+  interpretation:
+    by: model
+    note: The facts do not describe administrative control of password change intervals.
+  require:
+    fact: system.req_rfe5181cd6e_k80_2
+- name: k81-1
+  title: Disable remember-me functionality for password fields.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable password remember me functionality
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L201-L201
+    url: /regulations/rfe5181cd6e#c81
+    quote: • Disable "remember me" functionality for password fields
+  interpretation:
+    by: model
+    note: The facts do not describe password field persistence or remember-me functionality.
+  require:
+    fact: system.req_rfe5181cd6e_k81_1
+- name: k82-1
+  title: Report the account's most recent successful or unsuccessful use to the user at their next successful login.
+  modality: obligation
+  status: draft
+  cite:
+    section: Report previous account use at successful login
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L202-L203
+    url: /regulations/rfe5181cd6e#c82
+    quote: '• The last use (successful or unsuccessful) of a user account should be reported to the user at their next
+
+      successful login'
+  interpretation:
+    by: model
+    note: The facts do not capture account-use history or its presentation at login.
+  require:
+    fact: system.req_rfe5181cd6e_k82_1
+- name: k83-1
+  title: Implement monitoring that identifies attempts to use the same password across multiple user accounts.
+  modality: obligation
+  status: draft
+  cite:
+    section: Monitor password attacks across multiple accounts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L204-L205
+    url: /regulations/rfe5181cd6e#c83
+    quote: '• Implement monitoring to identify attacks against multiple user accounts, utilizing the same password.
+
+      This attack pattern is used to bypass standard lockouts, when user IDs can be harvested or guessed'
+  interpretation:
+    by: model
+    note: The facts do not capture detection of password attacks spanning multiple accounts.
+  require:
+    fact: system.req_rfe5181cd6e_k83_1
+- name: k84-1
+  title: Change vendor-supplied default passwords and user IDs or disable their associated accounts.
+  modality: obligation
+  status: draft
+  cite:
+    section: Change default credentials or disable associated accounts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L206-L206
+    url: /regulations/rfe5181cd6e#c84
+    quote: • Change all vendor-supplied default passwords and user IDs or disable the associated accounts
+  interpretation:
+    by: model
+    note: A reviewer can inspect account provisioning and configuration for unchanged vendor defaults; the facts do not identify
+      them.
+  require:
+    fact: system.req_rfe5181cd6e_k84_1
+- name: k85-1
+  title: Require users to reauthenticate before performing critical operations.
+  modality: obligation
+  status: draft
+  cite:
+    section: Reauthenticate users before critical operations
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L207-L207
+    url: /regulations/rfe5181cd6e#c85
+    quote: • Re-authenticate users prior to performing critical operations
+  interpretation:
+    by: model
+    note: The facts do not capture critical operations or reauthentication requirements.
+  require:
+    fact: system.req_rfe5181cd6e_k85_1
+- name: k86-1
+  title: Require multifactor authentication for highly sensitive or high value transactional accounts.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use multifactor authentication for sensitive transactional accounts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L208-L208
+    url: /regulations/rfe5181cd6e#c86
+    quote: • Use Multi-Factor Authentication for highly sensitive or high value transactional accounts
+  interpretation:
+    by: model
+    note: The facts do not identify the relevant accounts or whether multifactor authentication is required for them.
+  require:
+    fact: system.req_rfe5181cd6e_k86_1
+- name: k87-1
+  title: Carefully inspect third-party authentication code for malicious code before relying on it.
+  modality: obligation
+  status: draft
+  cite:
+    section: Inspect third party authentication code for malicious code
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L209-L210
+    url: /regulations/rfe5181cd6e#c87
+    quote: '• If using third party code for authentication, inspect the code carefully to ensure it is not affected by
+
+      any malicious code'
+  interpretation:
+    by: model
+    note: Completion and thoroughness of a code inspection are process matters that source code and configuration cannot establish.
+  require:
+    fact: system.req_rfe5181cd6e_k87_1
+- name: k89-1
+  title: Use server or framework session management controls and accept only session identifiers recognized by those controls.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use only server or framework session identifiers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L212-L213
+    url: /regulations/rfe5181cd6e#c89
+    quote: '• Use the server or framework’s session management controls. The application should only recognize
+
+      these session identifiers as valid'
+  interpretation:
+    by: model
+    note: The facts do not capture the session management implementation or identifier acceptance rules.
+  require:
+    fact: system.req_rfe5181cd6e_k89_1
+- name: k90-1
+  title: Create session identifiers only on trusted systems such as the server.
+  modality: obligation
+  status: draft
+  cite:
+    section: Create session identifiers on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L214-L214
+    url: /regulations/rfe5181cd6e#c90
+    quote: • Session identifier creation must always be done on a trusted system (e.g., The server)
+  interpretation:
+    by: model
+    note: The facts do not capture where session identifiers are generated or the trust boundary.
+  require:
+    fact: system.req_rfe5181cd6e_k90_1
+- name: k91-1
+  title: Generate sufficiently random session identifiers using well-vetted algorithms.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use vetted algorithms for random session identifiers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L215-L216
+    url: /regulations/rfe5181cd6e#c91
+    quote: '• Session management controls should use well vetted algorithms that ensure sufficiently random
+
+      session identifiers'
+  interpretation:
+    by: model
+    note: The facts do not capture session identifier generation algorithms or randomness strength.
+  require:
+    fact: system.req_rfe5181cd6e_k91_1
+- name: k92-1
+  title: Set appropriately restricted domain and path values for cookies containing authenticated session identifiers.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict session cookie domain and path
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L217-L218
+    url: /regulations/rfe5181cd6e#c92
+    quote: '• Set the domain and path for cookies containing authenticated session identifiers to an appropriately
+
+      restricted value for the site'
+  interpretation:
+    by: model
+    note: Cookie facts do not include domain or path attributes.
+  require:
+    fact: system.req_rfe5181cd6e_k92_1
+- name: k93-1
+  title: Ensure logout fully terminates the associated session or connection.
+  modality: obligation
+  status: draft
+  cite:
+    section: Fully terminate sessions on logout
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L219-L219
+    url: /regulations/rfe5181cd6e#c93
+    quote: • Logout functionality should fully terminate the associated session or connection
+  interpretation:
+    by: model
+    note: The facts do not capture logout behavior, session invalidation, or connection termination.
+  require:
+    fact: system.req_rfe5181cd6e_k93_1
+- name: k94-1
+  title: Make logout functionality available from every page protected by authorization.
+  modality: obligation
+  status: draft
+  cite:
+    section: Provide logout on all protected pages
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L220-L220
+    url: /regulations/rfe5181cd6e#c94
+    quote: • Logout functionality should be available from all pages protected by authorization
+  interpretation:
+    by: model
+    note: The facts do not capture protected pages or the availability of logout controls on them.
+  require:
+    fact: system.req_rfe5181cd6e_k94_1
+- name: k95-1
+  title: Enforce the shortest session inactivity timeout compatible with risk and business needs, normally no more than several
+    hours.
+  modality: obligation
+  status: draft
+  cite:
+    section: Establish short session inactivity timeouts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L221-L222
+    url: /regulations/rfe5181cd6e#c95
+    quote: '• Establish a session inactivity timeout that is as short as possible, based on balancing risk and business
+
+      functional requirements. In most cases it should be no more than several hours'
+  interpretation:
+    by: model
+    note: The facts do not describe inactivity timeouts or their suitability for the application's functionality.
+  require:
+    fact: system.req_rfe5181cd6e_k95_1
+- name: k96-1
+  title: Disallow persistent logins.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disallow persistent logins and periodically terminate active sessions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L223-L226
+    url: /regulations/rfe5181cd6e#c96
+    quote: '• Disallow persistent logins and enforce periodic session terminations, even when the session is active.
+
+      Especially for applications supporting rich network connections or connecting to critical systems.
+
+      Termination times should support business requirements and the user should receive sufficient
+
+      notification to mitigate negative impacts'
+  interpretation:
+    by: model
+    note: The facts do not capture persistent authentication or remember-me behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k96_1
+- name: k96-2
+  title: Enforce an absolute session lifetime that terminates sessions even while active and supports business requirements.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disallow persistent logins and periodically terminate active sessions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L223-L226
+    url: /regulations/rfe5181cd6e#c96
+    quote: '• Disallow persistent logins and enforce periodic session terminations, even when the session is active.
+
+      Especially for applications supporting rich network connections or connecting to critical systems.
+
+      Termination times should support business requirements and the user should receive sufficient
+
+      notification to mitigate negative impacts'
+  interpretation:
+    by: model
+    note: The facts do not capture absolute session lifetimes or active-session termination.
+  require:
+    fact: system.req_rfe5181cd6e_k96_2
+- name: k96-3
+  title: Notify users sufficiently before periodic session termination to mitigate disruption.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disallow persistent logins and periodically terminate active sessions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L223-L226
+    url: /regulations/rfe5181cd6e#c96
+    quote: '• Disallow persistent logins and enforce periodic session terminations, even when the session is active.
+
+      Especially for applications supporting rich network connections or connecting to critical systems.
+
+      Termination times should support business requirements and the user should receive sufficient
+
+      notification to mitigate negative impacts'
+  interpretation:
+    by: model
+    note: A reviewer can inspect expiration warnings and their timing, but the facts do not capture them.
+  require:
+    fact: system.req_rfe5181cd6e_k96_3
+- name: k97-1
+  title: Invalidate any prelogin session and establish a new session after successful login.
+  modality: obligation
+  status: draft
+  cite:
+    section: Replace prelogin sessions after successful login
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L227-L228
+    url: /regulations/rfe5181cd6e#c97
+    quote: '• If a session was established before login, close that session and establish a new session after a
+
+      successful login'
+  interpretation:
+    by: model
+    note: The facts do not capture session replacement during login.
+  require:
+    fact: system.req_rfe5181cd6e_k97_1
+- name: k98-1
+  title: Generate a new session identifier on every reauthentication.
+  modality: obligation
+  status: draft
+  cite:
+    section: Regenerate session identifiers on reauthentication
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L229-L229
+    url: /regulations/rfe5181cd6e#c98
+    quote: • Generate a new session identifier on any re-authentication
+  interpretation:
+    by: model
+    note: The facts do not describe session identifier regeneration or reauthentication flows.
+  require:
+    fact: system.req_rfe5181cd6e_k98_1
+- name: k99-1
+  title: Prevent concurrent logins using the same user ID.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prohibit concurrent logins with the same user ID
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L230-L230
+    url: /regulations/rfe5181cd6e#c99
+    quote: • Do not allow concurrent logins with the same user ID
+  interpretation:
+    by: model
+    note: The facts do not describe concurrent-session restrictions.
+  require:
+    fact: system.req_rfe5181cd6e_k99_1
+- name: k100-1
+  title: Expose session identifiers only through HTTP cookie headers, never through URLs, error messages, or logs.
+  modality: obligation
+  status: draft
+  cite:
+    section: Expose session identifiers only in HTTP cookie headers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L231-L232
+    url: /regulations/rfe5181cd6e#c100
+    quote: '• Do not expose session identifiers in URLs, error messages or logs. Session identifiers should only be
+
+      located in the HTTP cookie header. For example, do not pass session identifiers as GET parameters'
+  interpretation:
+    by: model
+    note: The facts do not track session identifier propagation or logging; credential logging facts do not specifically capture
+      session identifiers.
+  require:
+    fact: system.req_rfe5181cd6e_k100_1
+- name: k101-1
+  title: Configure access controls that protect server-side session data from unauthorized server users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Protect server session data with access controls
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L233-L234
+    url: /regulations/rfe5181cd6e#c101
+    quote: '• Protect server side session data from unauthorized access, by other users of the server, by
+
+      implementing appropriate access controls on the server'
+  interpretation:
+    by: model
+    note: Source and configuration can show session-store permissions and access controls, but the facts do not capture them.
+  require:
+    fact: system.req_rfe5181cd6e_k101_1
+- name: k102-1
+  title: Periodically generate a new session identifier and deactivate the old identifier.
+  modality: obligation
+  status: draft
+  cite:
+    section: Periodically replace and deactivate session identifiers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L235-L236
+    url: /regulations/rfe5181cd6e#c102
+    quote: '• Generate a new session identifier and deactivate the old one periodically. (This can mitigate certain
+
+      session hijacking scenarios where the original identifier was compromised)'
+  interpretation:
+    by: model
+    note: The facts do not capture periodic session rotation or invalidation.
+  require:
+    fact: system.req_rfe5181cd6e_k102_1
+- name: k103-1
+  title: Generate a new session identifier whenever a connection changes from HTTP to HTTPS.
+  modality: obligation
+  status: draft
+  cite:
+    section: Regenerate session identifiers when switching to HTTPS
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L237-L239
+    url: /regulations/rfe5181cd6e#c103
+    quote: '• Generate a new session identifier if the connection security changes from HTTP to HTTPS, as can
+
+      occur during authentication. Within an application, it is recommended to consistently utilize HTTPS
+
+      rather than switching between HTTP to HTTPS.'
+  interpretation:
+    by: model
+    note: The facts do not capture transport transitions or session rotation at those transitions.
+  require:
+    fact: system.req_rfe5181cd6e_k103_1
+- name: k103-2
+  title: Consistently use HTTPS within the application as recommended.
+  modality: obligation
+  status: draft
+  cite:
+    section: Regenerate session identifiers when switching to HTTPS
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L237-L239
+    url: /regulations/rfe5181cd6e#c103
+    quote: '• Generate a new session identifier if the connection security changes from HTTP to HTTPS, as can
+
+      occur during authentication. Within an application, it is recommended to consistently utilize HTTPS
+
+      rather than switching between HTTP to HTTPS.'
+  interpretation:
+    by: model
+    note: Production TLS enforcement alone does not establish consistent HTTPS use throughout application connections and
+      generated URLs.
+  require:
+    fact: system.req_rfe5181cd6e_k103_2
+- name: k104-1
+  title: Require strong random per-session tokens or parameters in addition to standard session management for sensitive server-side
+    operations.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use per-session random tokens for sensitive operations
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L240-L242
+    url: /regulations/rfe5181cd6e#c104
+    quote: '• Supplement standard session management for sensitive server-side operations, like account
+
+      management, by utilizing per-session strong random tokens or parameters. This method can be used
+
+      to prevent Cross Site Request Forgery attacks'
+  interpretation:
+    by: model
+    note: The CSRF fact allows mechanisms other than per-session random tokens and does not establish token strength or coverage
+      of sensitive operations.
+  require:
+    fact: system.req_rfe5181cd6e_k104_1
+- name: k105-1
+  title: Require strong random per-request tokens or parameters in addition to standard session management for highly sensitive
+    or critical operations.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use per-request random tokens for critical operations
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L243-L244
+    url: /regulations/rfe5181cd6e#c105
+    quote: '• Supplement standard session management for highly sensitive or critical operations by utilizing per-
+
+      request, as opposed to per-session, strong random tokens or parameters'
+  interpretation:
+    by: model
+    note: The facts do not capture per-request token generation, strength, validation, or operation sensitivity.
+  require:
+    fact: system.req_rfe5181cd6e_k105_1
+- name: k106-1
+  title: Set the Secure attribute on every cookie transmitted over TLS.
+  modality: obligation
+  status: draft
+  cite:
+    section: Set Secure on cookies transmitted over TLS
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L245-L245
+    url: /regulations/rfe5181cd6e#c106
+    quote: • Set the "secure" attribute for cookies transmitted over an TLS connection
+  interpretation:
+    by: model
+    note: Cookie facts capture Secure but do not identify which cookies are transmitted over TLS, so the required scope cannot
+      be expressed reliably.
+  require:
+    fact: system.req_rfe5181cd6e_k106_1
+- name: k107-1
+  title: Set HttpOnly on every cookie unless application scripts specifically need to read or set its value.
+  modality: obligation
+  status: draft
+  cite:
+    section: Set HttpOnly unless scripts require cookie access
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L246-L247
+    url: /regulations/rfe5181cd6e#c107
+    quote: '• Set cookies with the HttpOnly attribute, unless you specifically require client-side scripts within your
+
+      application to read or set a cookie''s value'
+  interpretation:
+    by: model
+    note: Cookie facts capture HttpOnly but cannot identify the permitted exception for required script access.
+  require:
+    fact: system.req_rfe5181cd6e_k107_1
+- name: k109-1
+  title: Base authorization decisions only on trusted system objects.
+  modality: obligation
+  status: draft
+  cite:
+    section: Base authorization decisions on trusted system objects
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L249-L250
+    url: /regulations/rfe5181cd6e#c109
+    quote: '• Use only trusted system objects, e.g. server side session objects, for making access authorization
+
+      decisions'
+  interpretation:
+    by: model
+    note: The facts do not capture the trustworthiness of objects used in authorization decisions.
+  require:
+    fact: system.req_rfe5181cd6e_k109_1
+- name: k110-1
+  title: Use a single sitewide component for authorization checks, including calls to external authorization services.
+  modality: obligation
+  status: draft
+  cite:
+    section: Centralize sitewide authorization checks
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L251-L252
+    url: /regulations/rfe5181cd6e#c110
+    quote: '• Use a single site-wide component to check access authorization. This includes libraries that call
+
+      external authorization services'
+  interpretation:
+    by: model
+    note: The facts do not describe the application's authorization architecture.
+  require:
+    fact: system.req_rfe5181cd6e_k110_1
+- name: k111-1
+  title: Ensure access controls deny access when authorization checks fail or encounter errors.
+  modality: obligation
+  status: draft
+  cite:
+    section: Fail securely in access controls
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L253-L253
+    url: /regulations/rfe5181cd6e#c111
+    quote: • Access controls should fail securely
+  interpretation:
+    by: model
+    note: The facts do not capture authorization failure behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k111_1
+- name: k112-1
+  title: Deny all access when the application cannot access its security configuration.
+  modality: obligation
+  status: draft
+  cite:
+    section: Deny access when security configuration is unavailable
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L254-L254
+    url: /regulations/rfe5181cd6e#c112
+    quote: • Deny all access if the application cannot access its security configuration information
+  interpretation:
+    by: model
+    note: The facts do not capture security configuration availability or the resulting access behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k112_1
+- name: k113-1
+  title: Enforce authorization on every request, including requests from server-side scripts, includes, and rich clients.
+  modality: obligation
+  status: draft
+  cite:
+    section: Enforce authorization on every request
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L255-L256
+    url: /regulations/rfe5181cd6e#c113
+    quote: '• Enforce authorization controls on every request, including those made by server side scripts,
+
+      "includes" and requests from rich client-side technologies like AJAX and Flash'
+  interpretation:
+    by: model
+    note: The facts do not capture authorization coverage across request paths.
+  require:
+    fact: system.req_rfe5181cd6e_k113_1
+- name: k114-1
+  title: Segregate privileged logic from other application code.
+  modality: obligation
+  status: draft
+  cite:
+    section: Separate privileged logic from other code
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L257-L257
+    url: /regulations/rfe5181cd6e#c114
+    quote: • Segregate privileged logic from other application code
+  interpretation:
+    by: model
+    note: The facts do not describe code boundaries around privileged logic.
+  require:
+    fact: system.req_rfe5181cd6e_k114_1
+- name: k115-1
+  title: Restrict access to files and other resources, including externally controlled resources, to authorized users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict file and resource access to authorized users
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L258-L259
+    url: /regulations/rfe5181cd6e#c115
+    quote: '• Restrict access to files or other resources, including those outside the application''s direct control, to
+
+      only authorized users'
+  interpretation:
+    by: model
+    note: The facts do not capture authorization for file and resource access.
+  require:
+    fact: system.req_rfe5181cd6e_k115_1
+- name: k116-1
+  title: Allow access to protected URLs only to authorized users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict protected URLs to authorized users
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L260-L260
+    url: /regulations/rfe5181cd6e#c116
+    quote: • Restrict access to protected URLs to only authorized users
+  interpretation:
+    by: model
+    note: The facts do not capture route protection or authorization decisions.
+  require:
+    fact: system.req_rfe5181cd6e_k116_1
+- name: k117-1
+  title: Allow execution of protected functions only by authorized users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict protected functions to authorized users
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L261-L261
+    url: /regulations/rfe5181cd6e#c117
+    quote: • Restrict access to protected functions to only authorized users
+  interpretation:
+    by: model
+    note: The facts do not capture function-level authorization.
+  require:
+    fact: system.req_rfe5181cd6e_k117_1
+- name: k118-1
+  title: Allow access through direct object references only to users authorized for the referenced objects.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict direct object references to authorized users
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L262-L262
+    url: /regulations/rfe5181cd6e#c118
+    quote: • Restrict direct object references to only authorized users
+  interpretation:
+    by: model
+    note: The facts do not capture object-level authorization or ownership checks.
+  require:
+    fact: system.req_rfe5181cd6e_k118_1
+- name: k119-1
+  title: Allow access to services only to authorized users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict service access to authorized users
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L263-L263
+    url: /regulations/rfe5181cd6e#c119
+    quote: • Restrict access to services to only authorized users
+  interpretation:
+    by: model
+    note: The facts do not capture service-level authorization.
+  require:
+    fact: system.req_rfe5181cd6e_k119_1
+- name: k120-1
+  title: Restrict application data access to authorized users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict application data access to authorized users
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L264-L264
+    url: /regulations/rfe5181cd6e#c120
+    quote: • Restrict access to application data to only authorized users
+  interpretation:
+    by: model
+    note: The facts do not capture data access authorization enforcement.
+  require:
+    fact: system.req_rfe5181cd6e_k120_1
+- name: k121-1
+  title: Restrict access to user attributes, data attributes, and policy information used by access controls.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict access to authorization attributes and policy information
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L265-L265
+    url: /regulations/rfe5181cd6e#c121
+    quote: • Restrict access to user and data attributes and policy information used by access controls
+  interpretation:
+    by: model
+    note: The facts do not capture access restrictions on authorization attributes or policies.
+  require:
+    fact: system.req_rfe5181cd6e_k121_1
+- name: k122-1
+  title: Restrict access to security-relevant configuration information to authorized users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict access to security configuration information
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L266-L266
+    url: /regulations/rfe5181cd6e#c122
+    quote: • Restrict access security-relevant configuration information to only authorized users
+  interpretation:
+    by: model
+    note: The facts do not capture authorization for access to security configuration.
+  require:
+    fact: system.req_rfe5181cd6e_k122_1
+- name: k123-1
+  title: Ensure server-side access control rules match their presentation-layer representations.
+  modality: obligation
+  status: draft
+  cite:
+    section: Match server and presentation access control rules
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L267-L267
+    url: /regulations/rfe5181cd6e#c123
+    quote: • Server side implementation and presentation layer representations of access control rules must match
+  interpretation:
+    by: model
+    note: A reviewer can compare server authorization enforcement with interface visibility and permissions.
+  require:
+    fact: system.req_rfe5181cd6e_k123_1
+- name: k124-1
+  title: Encrypt state data stored on the client.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encrypt client state and verify integrity on the server
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L268-L269
+    url: /regulations/rfe5181cd6e#c124
+    quote: '• If state data must be stored on the client, use encryption and integrity checking on the server side to
+
+      catch state tampering.'
+  interpretation:
+    by: model
+    note: The facts do not capture encryption of client-stored state.
+  require:
+    fact: system.req_rfe5181cd6e_k124_1
+- name: k124-2
+  title: Verify the integrity of client-stored state on the server to detect tampering.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encrypt client state and verify integrity on the server
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L268-L269
+    url: /regulations/rfe5181cd6e#c124
+    quote: '• If state data must be stored on the client, use encryption and integrity checking on the server side to
+
+      catch state tampering.'
+  interpretation:
+    by: model
+    note: The facts do not capture integrity verification for client state generally.
+  require:
+    fact: system.req_rfe5181cd6e_k124_2
+- name: k125-1
+  title: Enforce application flows that comply with business rules.
+  modality: obligation
+  status: draft
+  cite:
+    section: Enforce business rules in application flows
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L270-L270
+    url: /regulations/rfe5181cd6e#c125
+    quote: • Enforce application logic flows to comply with business rules
+  interpretation:
+    by: model
+    note: Application flow enforcement can be reviewed in code but is not represented by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k125_1
+- name: k126-1
+  title: Limit transactions per user or device over time at a level above legitimate business needs and low enough to deter
+    automated attacks.
+  modality: obligation
+  status: draft
+  cite:
+    section: Limit transaction rates per user or device
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L271-L273
+    url: /regulations/rfe5181cd6e#c126
+    quote: '• Limit the number of transactions a single user or device can perform in a given period of time. The
+
+      transactions/time should be above the actual business requirement, but low enough to deter automated
+
+      attacks'
+  interpretation:
+    by: model
+    note: The login rate limit fact does not describe transaction limits or their thresholds.
+  require:
+    fact: system.req_rfe5181cd6e_k126_1
+- name: k127-1
+  title: Use the Referer header only as a supplemental authorization check and never as the sole authorization check.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use referer headers only as supplemental authorization checks
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L274-L275
+    url: /regulations/rfe5181cd6e#c127
+    quote: '• Use the "referer" header as a supplemental check only, it should never be the sole authorization check,
+
+      as it is can be spoofed'
+  interpretation:
+    by: model
+    note: The facts do not describe reliance on Referer for authorization.
+  require:
+    fact: system.req_rfe5181cd6e_k127_1
+- name: k128-1
+  title: Periodically revalidate authorization during long authenticated sessions and require logout and reauthentication
+    when privileges change.
+  modality: obligation
+  status: draft
+  cite:
+    section: Revalidate authorization during long sessions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L276-L277
+    url: /regulations/rfe5181cd6e#c128
+    quote: '• If long authenticated sessions are allowed, periodically re-validate a user’s authorization to ensure that
+
+      their privileges have not changed and if they have, log the user out and force them to re-authenticate'
+  interpretation:
+    by: model
+    note: The facts do not capture session authorization revalidation or responses to privilege changes.
+  require:
+    fact: system.req_rfe5181cd6e_k128_1
+- name: k129-1
+  title: Conduct account audits to identify unused accounts.
+  modality: obligation
+  status: draft
+  cite:
+    section: Audit accounts and disable unused accounts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L278-L279
+    url: /regulations/rfe5181cd6e#c129
+    quote: '• Implement account auditing and enforce the disabling of unused accounts (e.g., After no more than 30
+
+      days from the expiration of an account’s password.)'
+  interpretation:
+    by: model
+    note: Performance of account audits is an operational process that source code cannot establish.
+  require:
+    fact: system.req_rfe5181cd6e_k129_1
+- name: k129-2
+  title: Enforce disabling of accounts identified as unused.
+  modality: obligation
+  status: draft
+  cite:
+    section: Audit accounts and disable unused accounts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L278-L279
+    url: /regulations/rfe5181cd6e#c129
+    quote: '• Implement account auditing and enforce the disabling of unused accounts (e.g., After no more than 30
+
+      days from the expiration of an account’s password.)'
+  interpretation:
+    by: model
+    note: Code and configuration can show unused-account disabling mechanisms, but the facts do not capture them.
+  require:
+    fact: system.req_rfe5181cd6e_k129_2
+- name: k130-1
+  title: Support disabling accounts when their authorization ceases.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable accounts and terminate sessions when authorization ceases
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L280-L281
+    url: /regulations/rfe5181cd6e#c130
+    quote: '• The application must support disabling of accounts and terminating sessions when authorization
+
+      ceases (e.g., Changes to role, employment status, business process, etc.)'
+  interpretation:
+    by: model
+    note: The facts do not capture account disabling or its authorization-related triggers.
+  require:
+    fact: system.req_rfe5181cd6e_k130_1
+- name: k130-2
+  title: Support terminating sessions when their authorization ceases.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable accounts and terminate sessions when authorization ceases
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L280-L281
+    url: /regulations/rfe5181cd6e#c130
+    quote: '• The application must support disabling of accounts and terminating sessions when authorization
+
+      ceases (e.g., Changes to role, employment status, business process, etc.)'
+  interpretation:
+    by: model
+    note: The facts do not capture session revocation when authorization changes.
+  require:
+    fact: system.req_rfe5181cd6e_k130_2
+- name: k131-1
+  title: Give service and integration accounts only the privileges needed for their functions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Apply least privilege to service and integration accounts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L282-L283
+    url: /regulations/rfe5181cd6e#c131
+    quote: '• Service accounts or accounts supporting connections to or from external systems should have the least
+
+      privilege possible'
+  interpretation:
+    by: model
+    note: Account permissions and integration scopes can be reviewed in configuration, but are not captured by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k131_1
+- name: k132-1
+  title: Establish an access control policy documenting application business rules, data types, authorization criteria or
+    processes, and access requirements for data and system resources.
+  modality: obligation
+  status: draft
+  cite:
+    section: Document access requirements in an access control policy
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L284-L286
+    url: /regulations/rfe5181cd6e#c132
+    quote: '• Create an Access Control Policy to document an application''s business rules, data types and access
+
+      authorization criteria and/or processes so that access can be properly provisioned and controlled. This
+
+      includes identifying access requirements for both the data and system resources'
+  interpretation:
+    by: model
+    note: Establishing and maintaining an organizational policy cannot be demonstrated by application code or configuration.
+  require:
+    fact: system.req_rfe5181cd6e_k132_1
+- name: k134-1
+  title: Implement all cryptographic functions that protect secrets from application users on a trusted system.
+  modality: obligation
+  status: draft
+  cite:
+    section: Implement secret-protecting cryptography on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L288-L289
+    url: /regulations/rfe5181cd6e#c134
+    quote: '• All cryptographic functions used to protect secrets from the application user must be implemented on
+
+      a trusted system (e.g., The server)'
+  interpretation:
+    by: model
+    note: A reviewer can inspect where cryptographic operations execute and whether users control that environment, but no
+      supplied fact captures this.
+  require:
+    fact: system.req_rfe5181cd6e_k134_1
+- name: k135-1
+  title: Protect master secrets from unauthorized access.
+  modality: obligation
+  status: draft
+  cite:
+    section: Protect master secrets from unauthorized access
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L290-L290
+    url: /regulations/rfe5181cd6e#c135
+    quote: • Protect master secrets from unauthorized access
+  interpretation:
+    by: model
+    note: Secret storage, exposure paths, and access restrictions require review; the supplied facts do not identify master
+      secrets or their access controls.
+  require:
+    fact: system.req_rfe5181cd6e_k135_1
+- name: k136-1
+  title: Ensure cryptographic modules fail without compromising security protections.
+  modality: obligation
+  status: draft
+  cite:
+    section: Fail securely in cryptographic modules
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L291-L291
+    url: /regulations/rfe5181cd6e#c136
+    quote: • Cryptographic modules should fail securely
+  interpretation:
+    by: model
+    note: A reviewer must inspect cryptographic failure paths and fallback behavior, which the facts do not capture.
+  require:
+    fact: system.req_rfe5181cd6e_k136_1
+- name: k137-1
+  title: Generate every random value intended to be unguessable using the cryptographic module's approved random number generator.
+  modality: obligation
+  status: draft
+  cite:
+    section: Generate unguessable values with approved cryptographic randomness
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L292-L294
+    url: /regulations/rfe5181cd6e#c137
+    quote: '• All random numbers, random file names, random GUIDs, and random strings should be generated
+
+      using the cryptographic module’s approved random number generator when these random values are
+
+      intended to be un-guessable'
+  interpretation:
+    by: model
+    note: The facts do not capture random generators or which generated values must resist guessing.
+  require:
+    fact: system.req_rfe5181cd6e_k137_1
+- name: k138-1
+  title: Use cryptographic modules compliant with FIPS 140-2 or an equivalent standard.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use cryptographic modules compliant with FIPS 140-2 or equivalent
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L295-L296
+    url: /regulations/rfe5181cd6e#c138
+    quote: '• Cryptographic modules used by the application should be compliant to FIPS 140-2 or an equivalent
+
+      standard. (See http://csrc.nist.gov/groups/STM/cmvp/validation.html)'
+  interpretation:
+    by: model
+    note: Module selection, versions, and compliance mode can be reviewed in dependencies and configuration, but are not captured
+      by the supplied facts.
+  require:
+    fact: system.req_rfe5181cd6e_k138_1
+- name: k139-1
+  title: Establish and use a policy and process for managing cryptographic keys.
+  modality: obligation
+  status: draft
+  cite:
+    section: Establish cryptographic key management policy and processes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L297-L297
+    url: /regulations/rfe5181cd6e#c139
+    quote: • Establish and utilize a policy and process for how cryptographic keys will be managed
+  interpretation:
+    by: model
+    note: The existence and use of organizational key management policy and processes cannot be established from application
+      code.
+  require:
+    fact: system.req_rfe5181cd6e_k139_1
+- name: k141-1
+  title: Exclude sensitive information, including system details, session identifiers, and account information, from error
+    responses.
+  modality: obligation
+  status: draft
+  cite:
+    section: Exclude sensitive information from error responses
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L299-L300
+    url: /regulations/rfe5181cd6e#c141
+    quote: '• Do not disclose sensitive information in error responses, including system details, session identifiers
+
+      or account information'
+  interpretation:
+    by: model
+    note: The supplied facts do not describe sensitive content in error responses.
+  require:
+    fact: system.req_rfe5181cd6e_k141_1
+- name: k142-1
+  title: Disable debugging features in production.
+  modality: obligation
+  status: draft
+  cite:
+    section: Suppress debugging and stack traces in error handlers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L301-L301
+    url: /regulations/rfe5181cd6e#c142
+    quote: • Use error handlers that do not display debugging or stack trace information
+  interpretation:
+    by: model
+    note: The production debug setting captures the configuration part of suppressing debugging output.
+  require:
+    not:
+      fact: system.debug_in_production
+- name: k142-2
+  title: Ensure error handlers do not display debugging information or stack traces.
+  modality: obligation
+  status: draft
+  cite:
+    section: Suppress debugging and stack traces in error handlers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L301-L301
+    url: /regulations/rfe5181cd6e#c142
+    quote: • Use error handlers that do not display debugging or stack trace information
+  interpretation:
+    by: model
+    note: Disabling production debugging does not establish that every error handler suppresses debugging information and
+      stack traces.
+  require:
+    fact: system.req_rfe5181cd6e_k142_2
+- name: k143-1
+  title: Return generic error messages.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use generic errors and custom error pages
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L302-L302
+    url: /regulations/rfe5181cd6e#c143
+    quote: • Implement generic error messages and use custom error pages
+  interpretation:
+    by: model
+    note: The content of application error messages is not captured by the supplied facts.
+  require:
+    fact: system.req_rfe5181cd6e_k143_1
+- name: k143-2
+  title: Use custom error pages.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use generic errors and custom error pages
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L302-L302
+    url: /regulations/rfe5181cd6e#c143
+    quote: • Implement generic error messages and use custom error pages
+  interpretation:
+    by: model
+    note: A reviewer can inspect error page templates and routing, but the supplied facts do not describe them.
+  require:
+    fact: system.req_rfe5181cd6e_k143_2
+- name: k144-1
+  title: Handle application errors within the application without relying on server configuration.
+  modality: obligation
+  status: draft
+  cite:
+    section: Handle application errors within the application
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L303-L303
+    url: /regulations/rfe5181cd6e#c144
+    quote: • The application should handle application errors and not rely on the server configuration
+  interpretation:
+    by: model
+    note: Application exception handling and reliance on server error handling require code and configuration review.
+  require:
+    fact: system.req_rfe5181cd6e_k144_1
+- name: k145-1
+  title: Properly release allocated memory when errors occur.
+  modality: obligation
+  status: draft
+  cite:
+    section: Free allocated memory on errors
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L304-L304
+    url: /regulations/rfe5181cd6e#c145
+    quote: • Properly free allocated memory when error conditions occur
+  interpretation:
+    by: model
+    note: Memory ownership and cleanup along error paths are reviewable in source code but absent from the supplied facts.
+  require:
+    fact: system.req_rfe5181cd6e_k145_1
+- name: k146-1
+  title: Security control errors must deny access by default.
+  modality: obligation
+  status: draft
+  cite:
+    section: Deny access by default on security control errors
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L305-L305
+    url: /regulations/rfe5181cd6e#c146
+    quote: • Error handling logic associated with security controls should deny access by default
+  interpretation:
+    by: model
+    note: The facts do not capture access decisions made when security controls encounter errors.
+  require:
+    fact: system.req_rfe5181cd6e_k146_1
+- name: k147-1
+  title: All logging controls must run on trusted systems.
+  modality: obligation
+  status: draft
+  cite:
+    section: Implement logging controls on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L306-L306
+    url: /regulations/rfe5181cd6e#c147
+    quote: • All logging controls should be implemented on a trusted system (e.g., The server)
+  interpretation:
+    by: model
+    note: Source code and deployment configuration can show where logging controls run, but the facts do not capture this.
+  require:
+    fact: system.req_rfe5181cd6e_k147_1
+- name: k148-1
+  title: Logging controls must support successful and failed outcomes for specified security events.
+  modality: obligation
+  status: draft
+  cite:
+    section: Support logging successful and failed security events
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L307-L307
+    url: /regulations/rfe5181cd6e#c148
+    quote: • Logging controls should support both success and failure of specified security events
+  interpretation:
+    by: model
+    note: The facts do not capture security event coverage or outcome logging.
+  require:
+    fact: system.req_rfe5181cd6e_k148_1
+- name: k149-1
+  title: Logs must contain the important data needed to understand each event.
+  modality: obligation
+  status: draft
+  cite:
+    section: Include important event data in logs
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L308-L308
+    url: /regulations/rfe5181cd6e#c149
+    quote: • Ensure logs contain important log event data
+  interpretation:
+    by: model
+    note: Log schemas and calls can be reviewed for relevant event data, which the facts do not describe.
+  require:
+    fact: system.req_rfe5181cd6e_k149_1
+- name: k150-1
+  title: Untrusted data in log entries must not execute as code in the intended log viewing software.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prevent untrusted log data from executing as code
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L309-L310
+    url: /regulations/rfe5181cd6e#c150
+    quote: '• Ensure log entries that include un-trusted data will not execute as code in the intended log viewing
+
+      interface or software'
+  interpretation:
+    by: model
+    note: The facts do not describe log viewer handling of untrusted log content.
+  require:
+    fact: system.req_rfe5181cd6e_k150_1
+- name: k151-1
+  title: Access to logs must be restricted to authorized individuals.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict log access to authorized individuals
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L311-L311
+    url: /regulations/rfe5181cd6e#c151
+    quote: • Restrict access to logs to only authorized individuals
+  interpretation:
+    by: model
+    note: Logging permissions and access control configuration can be reviewed, but are not captured by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k151_1
+- name: k152-1
+  title: All logging operations must use a shared master routine.
+  modality: obligation
+  status: draft
+  cite:
+    section: Centralize logging operations
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L312-L312
+    url: /regulations/rfe5181cd6e#c152
+    quote: • Utilize a master routine for all logging operations
+  interpretation:
+    by: model
+    note: The facts do not capture whether logging calls use a centralized routine.
+  require:
+    fact: system.req_rfe5181cd6e_k152_1
+- name: k153-1
+  title: Log statements must not record credentials.
+  modality: obligation
+  status: draft
+  for:
+    l: LogStatement
+  cite:
+    section: Exclude sensitive information from logs
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L313-L314
+    url: /regulations/rfe5181cd6e#c153
+    quote: '• Do not store sensitive information in logs, including unnecessary system details, session identifiers or
+
+      passwords'
+  interpretation:
+    by: model
+    note: The log statement fact directly captures credential logging, a prohibited subset of sensitive information.
+  require:
+    not:
+      fact: l.logs_credentials
+- name: k153-2
+  title: Logs must exclude other sensitive information, including session identifiers and unnecessary system details.
+  modality: obligation
+  status: draft
+  cite:
+    section: Exclude sensitive information from logs
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L313-L314
+    url: /regulations/rfe5181cd6e#c153
+    quote: '• Do not store sensitive information in logs, including unnecessary system details, session identifiers or
+
+      passwords'
+  interpretation:
+    by: model
+    note: The facts do not capture session identifier logging or whether other logged details are sensitive or unnecessary.
+  require:
+    fact: system.req_rfe5181cd6e_k153_2
+- name: k154-1
+  title: The system must provide a mechanism for analyzing logs.
+  modality: obligation
+  status: draft
+  cite:
+    section: Provide a log analysis mechanism
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L315-L315
+    url: /regulations/rfe5181cd6e#c154
+    quote: • Ensure that a mechanism exists to conduct log analysis
+  interpretation:
+    by: model
+    note: Dependencies and configuration can show log analysis capabilities, but the facts do not capture them.
+  require:
+    fact: system.req_rfe5181cd6e_k154_1
+- name: k155-1
+  title: All input validation failures must be logged.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log all input validation failures
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L316-L316
+    url: /regulations/rfe5181cd6e#c155
+    quote: • Log all input validation failures
+  interpretation:
+    by: model
+    note: The facts do not capture whether validation failure paths emit logs.
+  require:
+    fact: system.req_rfe5181cd6e_k155_1
+- name: k156-1
+  title: All authentication attempts, including failures, must be logged.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log all authentication attempts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L317-L317
+    url: /regulations/rfe5181cd6e#c156
+    quote: • Log all authentication attempts, especially failures
+  interpretation:
+    by: model
+    note: The facts do not capture logging coverage for authentication attempts.
+  require:
+    fact: system.req_rfe5181cd6e_k156_1
+- name: k157-1
+  title: All access control failures must be logged.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log all access control failures
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L318-L318
+    url: /regulations/rfe5181cd6e#c157
+    quote: • Log all access control failures
+  interpretation:
+    by: model
+    note: The facts do not capture logging on access denial paths.
+  require:
+    fact: system.req_rfe5181cd6e_k157_1
+- name: k158-1
+  title: Log all apparent tampering events, including unexpected changes to state data.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log apparent tampering events
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L319-L319
+    url: /regulations/rfe5181cd6e#c158
+    quote: • Log all apparent tampering events, including unexpected changes to state data
+  interpretation:
+    by: model
+    note: The facts do not capture tampering detection or logging coverage.
+  require:
+    fact: system.req_rfe5181cd6e_k158_1
+- name: k159-1
+  title: Log all connection attempts using invalid or expired session tokens.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log invalid or expired session token connection attempts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L320-L320
+    url: /regulations/rfe5181cd6e#c159
+    quote: • Log attempts to connect with invalid or expired session tokens
+  interpretation:
+    by: model
+    note: The facts do not capture logging of rejected session tokens.
+  require:
+    fact: system.req_rfe5181cd6e_k159_1
+- name: k160-1
+  title: Log all system exceptions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log all system exceptions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L321-L321
+    url: /regulations/rfe5181cd6e#c160
+    quote: • Log all system exceptions
+  interpretation:
+    by: model
+    note: The facts do not capture exception logging coverage.
+  require:
+    fact: system.req_rfe5181cd6e_k160_1
+- name: k161-1
+  title: Log all administrative functions, including changes to security configuration settings.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log administrative functions and security configuration changes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L322-L322
+    url: /regulations/rfe5181cd6e#c161
+    quote: • Log all administrative functions, including changes to the security configuration settings
+  interpretation:
+    by: model
+    note: The facts do not capture administrative activity or configuration change logging.
+  require:
+    fact: system.req_rfe5181cd6e_k161_1
+- name: k162-1
+  title: Log all backend TLS connection failures.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log backend TLS connection failures
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L323-L323
+    url: /regulations/rfe5181cd6e#c162
+    quote: • Log all backend TLS connection failures
+  interpretation:
+    by: model
+    note: The facts do not capture backend TLS failure logging.
+  require:
+    fact: system.req_rfe5181cd6e_k162_1
+- name: k163-1
+  title: Log cryptographic module failures.
+  modality: obligation
+  status: draft
+  cite:
+    section: Log cryptographic module failures
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L324-L324
+    url: /regulations/rfe5181cd6e#c163
+    quote: • Log cryptographic module failures
+  interpretation:
+    by: model
+    note: The facts do not capture cryptographic error handling or logging.
+  require:
+    fact: system.req_rfe5181cd6e_k163_1
+- name: k164-1
+  title: Use cryptographic hashes to validate log entry integrity.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate log entry integrity with cryptographic hashes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L325-L325
+    url: /regulations/rfe5181cd6e#c164
+    quote: • Use a cryptographic hash function to validate log entry integrity
+  interpretation:
+    by: model
+    note: The facts do not describe log integrity hashing or validation.
+  require:
+    fact: system.req_rfe5181cd6e_k164_1
+- name: k166-1
+  title: Restrict each user's access to the functionality, data, and system information required for their tasks.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict users to resources needed for their tasks
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L327-L328
+    url: /regulations/rfe5181cd6e#c166
+    quote: '• Implement least privilege, restrict users to only the functionality, data and system information that is
+
+      required to perform their tasks'
+  interpretation:
+    by: model
+    note: The facts do not describe task-specific permissions or authorization enforcement.
+  require:
+    fact: system.req_rfe5181cd6e_k166_1
+- name: k167-1
+  title: Protect all server-side cached and temporary copies of sensitive data from unauthorized access.
+  modality: obligation
+  status: draft
+  cite:
+    section: Protect and promptly purge temporary sensitive data
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L329-L330
+    url: /regulations/rfe5181cd6e#c167
+    quote: '• Protect all cached or temporary copies of sensitive data stored on the server from unauthorized access
+
+      and purge those temporary working files a soon as they are no longer required.'
+  interpretation:
+    by: model
+    note: The facts do not describe access controls for cached or temporary sensitive data.
+  require:
+    fact: system.req_rfe5181cd6e_k167_1
+- name: k167-2
+  title: Purge temporary working files containing sensitive data as soon as they are no longer required.
+  modality: obligation
+  status: draft
+  cite:
+    section: Protect and promptly purge temporary sensitive data
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L329-L330
+    url: /regulations/rfe5181cd6e#c167
+    quote: '• Protect all cached or temporary copies of sensitive data stored on the server from unauthorized access
+
+      and purge those temporary working files a soon as they are no longer required.'
+  interpretation:
+    by: model
+    note: The facts do not capture temporary file lifetimes or cleanup behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k167_2
+- name: k168-1
+  title: Do not store authentication verification passwords in plaintext.
+  modality: obligation
+  status: draft
+  for:
+    p: PasswordStore
+  cite:
+    section: Encrypt highly sensitive stored information using vetted algorithms
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L331-L332
+    url: /regulations/rfe5181cd6e#c168
+    quote: '• Encrypt highly sensitive stored information, like authentication verification data, even on the server
+
+      side. Always use well vetted algorithms, see "Cryptographic Practices" for additional guidance'
+  interpretation:
+    by: model
+    note: Plaintext password storage violates the requirement to protect highly sensitive stored authentication data.
+  require:
+    ne:
+    - fact: p.algorithm
+    - plaintext
+- name: k168-2
+  title: Protect highly sensitive stored information with cryptography using well-vetted algorithms.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encrypt highly sensitive stored information using vetted algorithms
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L331-L332
+    url: /regulations/rfe5181cd6e#c168
+    quote: '• Encrypt highly sensitive stored information, like authentication verification data, even on the server
+
+      side. Always use well vetted algorithms, see "Cryptographic Practices" for additional guidance'
+  interpretation:
+    by: model
+    note: The facts do not establish encryption coverage for highly sensitive information or whether the overall cryptographic
+      implementation uses vetted algorithms.
+  require:
+    fact: system.req_rfe5181cd6e_k168_2
+- name: k169-1
+  title: Prevent users from downloading server-side source code.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prevent users from downloading server source code
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L333-L333
+    url: /regulations/rfe5181cd6e#c169
+    quote: • Protect server-side source-code from being downloaded by a user
+  interpretation:
+    by: model
+    note: The facts do not describe static file exposure, download routes, or source file access controls.
+  require:
+    fact: system.req_rfe5181cd6e_k169_1
+- name: k170-1
+  title: Prevent client-side storage or embedding of passwords, connection strings, and other sensitive information in plaintext
+    or any cryptographically insecure form.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prevent insecure client storage of sensitive information
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L334-L336
+    url: /regulations/rfe5181cd6e#c170
+    quote: '• Do not store passwords, connection strings or other sensitive information in clear text or in any non-
+
+      cryptographically secure manner on the client side. This includes embedding in insecure formats like:
+
+      MS viewstate, Adobe flash or compiled code'
+  interpretation:
+    by: model
+    note: The facts do not identify client-side sensitive storage or the cryptographic protection applied to it.
+  require:
+    fact: system.req_rfe5181cd6e_k170_1
+- name: k171-1
+  title: Remove comments that reveal backend details or other sensitive information from user-accessible production code.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove sensitive comments from accessible production code
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L337-L338
+    url: /regulations/rfe5181cd6e#c171
+    quote: '• Remove comments in user accessible production code that may reveal backend system or other
+
+      sensitive information'
+  interpretation:
+    by: model
+    note: The facts do not capture comment contents or whether production code is accessible to users.
+  require:
+    fact: system.req_rfe5181cd6e_k171_1
+- name: k172-1
+  title: Remove unnecessary application and system documentation from the deployed system.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove unnecessary application and system documentation
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L339-L340
+    url: /regulations/rfe5181cd6e#c172
+    quote: '• Remove unnecessary application and system documentation as this can reveal useful information to
+
+      attackers'
+  interpretation:
+    by: model
+    note: A reviewer can inspect deployed documentation and its necessity, which the facts do not capture.
+  require:
+    fact: system.req_rfe5181cd6e_k172_1
+- name: k173-1
+  title: Exclude sensitive information from HTTP GET request parameters.
+  modality: obligation
+  status: draft
+  cite:
+    section: Exclude sensitive information from HTTP GET parameters
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L341-L341
+    url: /regulations/rfe5181cd6e#c173
+    quote: • Do not include sensitive information in HTTP GET request parameters
+  interpretation:
+    by: model
+    note: The facts do not describe request methods, parameters, or the sensitivity of their values.
+  require:
+    fact: system.req_rfe5181cd6e_k173_1
+- name: k174-1
+  title: Disable autocomplete on forms expected to contain sensitive information, including authentication forms.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable autocomplete on sensitive forms
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L342-L343
+    url: /regulations/rfe5181cd6e#c174
+    quote: '• Disable auto complete features on forms expected to contain sensitive information, including
+
+      authentication'
+  interpretation:
+    by: model
+    note: Form autocomplete settings are not represented by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k174_1
+- name: k175-1
+  title: Disable client-side caching of pages containing sensitive information.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable client caching of sensitive pages
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L344-L346
+    url: /regulations/rfe5181cd6e#c175
+    quote: '• Disable client side caching on pages containing sensitive information. Cache-Control: no-store, may
+
+      be used in conjunction with the HTTP header control "Pragma: no-cache", which is less effective, but
+
+      is HTTP/1.0 backward compatible'
+  interpretation:
+    by: model
+    note: The facts do not capture response caching directives or which pages contain sensitive information.
+  require:
+    fact: system.req_rfe5181cd6e_k175_1
+- name: k176-1
+  title: Support removal of sensitive data when it is no longer required.
+  modality: obligation
+  status: draft
+  cite:
+    section: Support removal of sensitive data no longer needed
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L347-L348
+    url: /regulations/rfe5181cd6e#c176
+    quote: '• The application should support the removal of sensitive data when that data is no longer required.
+
+      (e.g. personal information or certain financial data)'
+  interpretation:
+    by: model
+    note: Account erasure on request does not capture removal of all sensitive data when it is no longer needed.
+  require:
+    fact: system.req_rfe5181cd6e_k176_1
+- name: k177-1
+  title: Enforce appropriate access controls on sensitive server data, including cached data, temporary files, and data restricted
+    to specific system users.
+  modality: obligation
+  status: draft
+  cite:
+    section: Control access to sensitive server data
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L349-L350
+    url: /regulations/rfe5181cd6e#c177
+    quote: '• Implement appropriate access controls for sensitive data stored on the server. This includes cached
+
+      data, temporary files and data that should be accessible only by specific system users'
+  interpretation:
+    by: model
+    note: The facts do not represent authorization rules or permissions on stored data, caches, and files.
+  require:
+    fact: system.req_rfe5181cd6e_k177_1
+- name: k179-1
+  title: Encrypt all transmissions of sensitive information, using TLS for connections and appropriate encryption for other
+    transmission mechanisms.
+  modality: obligation
+  status: draft
+  cite:
+    section: Encrypt transmission of all sensitive information
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L352-L354
+    url: /regulations/rfe5181cd6e#c179
+    quote: '• Implement encryption for the transmission of all sensitive information. This should include TLS for
+
+      protecting the connection and may be supplemented by discrete encryption of sensitive files or non-
+
+      HTTP based connections'
+  interpretation:
+    by: model
+    note: The facts do not identify sensitive transmission paths or their encryption; global HTTP enforcement is not necessary
+      for paths carrying only nonsensitive information.
+  require:
+    fact: system.req_rfe5181cd6e_k179_1
+- name: k180-1
+  title: Configure TLS with unexpired certificates valid for the correct domain and include intermediate certificates when
+    required.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use valid TLS certificates with required intermediate certificates
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L355-L356
+    url: /regulations/rfe5181cd6e#c180
+    quote: '• TLS certificates should be valid and have the correct domain name, not be expired, and be installed
+
+      with intermediate certificates when required'
+  interpretation:
+    by: model
+    note: Certificate files and TLS configuration can be reviewed, but certificate validity and chain configuration are not
+      represented by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k180_1
+- name: k181-1
+  title: Prevent failed TLS connections from falling back to insecure connections.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prevent insecure fallback after TLS failures
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L357-L357
+    url: /regulations/rfe5181cd6e#c181
+    quote: • Failed TLS connections should not fall back to an insecure connection
+  interpretation:
+    by: model
+    note: The facts do not capture connection retry or fallback behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k181_1
+- name: k182-1
+  title: Require TLS for all authenticated content and all other sensitive information.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use TLS for authenticated and sensitive content
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L358-L359
+    url: /regulations/rfe5181cd6e#c182
+    quote: '• Utilize TLS connections for all content requiring authenticated access and for all other sensitive
+
+      information'
+  interpretation:
+    by: model
+    note: The facts do not capture TLS requirements by content or route; requiring TLS globally would exceed this obligation.
+  require:
+    fact: system.req_rfe5181cd6e_k182_1
+- name: k183-1
+  title: Use TLS for external system connections involving sensitive information or functions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use TLS for sensitive external system connections
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L360-L360
+    url: /regulations/rfe5181cd6e#c183
+    quote: • Utilize TLS for connections to external systems that involve sensitive information or functions
+  interpretation:
+    by: model
+    note: The facts do not describe TLS use on external connections or identify sensitive external functions.
+  require:
+    fact: system.req_rfe5181cd6e_k183_1
+- name: k184-1
+  title: Use a single standard TLS implementation with appropriate security configuration.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use a single appropriately configured TLS implementation
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L361-L361
+    url: /regulations/rfe5181cd6e#c184
+    quote: • Utilize a single standard TLS implementation that is configured appropriately
+  interpretation:
+    by: model
+    note: The facts do not identify TLS implementations or their security settings.
+  require:
+    fact: system.req_rfe5181cd6e_k184_1
+- name: k185-1
+  title: Explicitly specify character encodings for every connection.
+  modality: obligation
+  status: draft
+  cite:
+    section: Specify character encodings for all connections
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L362-L362
+    url: /regulations/rfe5181cd6e#c185
+    quote: • Specify character encodings for all connections
+  interpretation:
+    by: model
+    note: Connection encoding settings are not captured by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k185_1
+- name: k186-1
+  title: Ensure external links do not send sensitive parameters in the HTTP Referer header.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove sensitive parameters from external link referers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L363-L364
+    url: /regulations/rfe5181cd6e#c186
+    quote: '• Filter parameters containing sensitive information from the HTTP referer, when linking to external
+
+      sites'
+  interpretation:
+    by: model
+    note: The facts do not capture referrer policies or sensitive parameter filtering.
+  require:
+    fact: system.req_rfe5181cd6e_k186_1
+- name: k188-1
+  title: Configure servers, frameworks, and system components to use the latest versions approved by the organisation.
+  modality: obligation
+  status: draft
+  cite:
+    section: Run the latest approved system component versions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L366-L366
+    url: /regulations/rfe5181cd6e#c188
+    quote: • Ensure servers, frameworks and system components are running the latest approved version
+  interpretation:
+    by: model
+    note: Source and deployment configuration can identify configured versions, but the facts do not capture their approval
+      status or currency.
+  require:
+    fact: system.req_rfe5181cd6e_k188_1
+- name: k188-2
+  title: Ensure deployed servers, frameworks, and system components actually run the latest approved versions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Run the latest approved system component versions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L366-L366
+    url: /regulations/rfe5181cd6e#c188
+    quote: • Ensure servers, frameworks and system components are running the latest approved version
+  interpretation:
+    by: model
+    note: Actual deployed versions and the organisation's current approval baseline require operational evidence.
+  require:
+    fact: system.req_rfe5181cd6e_k188_2
+- name: k189-1
+  title: Configure all components to include every patch issued for the versions in use.
+  modality: obligation
+  status: draft
+  cite:
+    section: Apply all patches for component versions in use
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L367-L367
+    url: /regulations/rfe5181cd6e#c189
+    quote: • Ensure servers, frameworks and system components have all patches issued for the version in use
+  interpretation:
+    by: model
+    note: Patch levels can be reviewed in configuration, but vulnerability facts do not establish whether every issued patch
+      is installed.
+  require:
+    fact: system.req_rfe5181cd6e_k189_1
+- name: k189-2
+  title: Ensure all running servers, frameworks, and system components have every patch issued for their versions installed.
+  modality: obligation
+  status: draft
+  cite:
+    section: Apply all patches for component versions in use
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L367-L367
+    url: /regulations/rfe5181cd6e#c189
+    quote: • Ensure servers, frameworks and system components have all patches issued for the version in use
+  interpretation:
+    by: model
+    note: The patch state of running infrastructure requires operational evidence beyond source and configuration.
+  require:
+    fact: system.req_rfe5181cd6e_k189_2
+- name: k190-1
+  title: Disable directory listings on all application-serving paths.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable directory listings
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L368-L368
+    url: /regulations/rfe5181cd6e#c190
+    quote: • Turn off directory listings
+  interpretation:
+    by: model
+    note: The facts do not capture directory listing configuration.
+  require:
+    fact: system.req_rfe5181cd6e_k190_1
+- name: k191-1
+  title: Configure web server, process, and service accounts with only the privileges necessary for their functions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Minimize web server, process, and service account privileges
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L369-L369
+    url: /regulations/rfe5181cd6e#c191
+    quote: • Restrict the web server, process and service accounts to the least privileges possible
+  interpretation:
+    by: model
+    note: Account permissions and required privileges are not captured by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k191_1
+- name: k192-1
+  title: Handle exceptions so that failures preserve security controls and do not grant unauthorized access or expose sensitive
+    information.
+  modality: obligation
+  status: draft
+  cite:
+    section: Fail securely when exceptions occur
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L370-L370
+    url: /regulations/rfe5181cd6e#c192
+    quote: • When exceptions occur, fail securely
+  interpretation:
+    by: model
+    note: The facts do not describe exception paths or their security consequences.
+  require:
+    fact: system.req_rfe5181cd6e_k192_1
+- name: k193-1
+  title: Remove functionality and files that are unnecessary for the deployed application's intended operation.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove unnecessary functionality and files
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L371-L371
+    url: /regulations/rfe5181cd6e#c193
+    quote: • Remove all unnecessary functionality and files
+  interpretation:
+    by: model
+    note: Determining necessity requires reviewing application purpose, code, and deployment contents.
+  require:
+    fact: system.req_rfe5181cd6e_k193_1
+- name: k194-1
+  title: Disable debug features in production.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove test code and nonproduction functionality before deployment
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L372-L372
+    url: /regulations/rfe5181cd6e#c194
+    quote: • Remove test code or any functionality not intended for production, prior to deployment
+  interpretation:
+    by: model
+    note: Production debug features are a directly captured instance of functionality not intended for production.
+  require:
+    not:
+      fact: system.debug_in_production
+- name: k194-2
+  title: Exclude test code and all other functionality not intended for production from deployment.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove test code and nonproduction functionality before deployment
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L372-L372
+    url: /regulations/rfe5181cd6e#c194
+    quote: • Remove test code or any functionality not intended for production, prior to deployment
+  interpretation:
+    by: model
+    note: The facts do not capture deployed test code or other nonproduction functionality beyond debug features.
+  require:
+    fact: system.req_rfe5181cd6e_k194_2
+- name: k195-1
+  title: Place directories excluded from public indexing under an isolated parent and disallow that parent in robots.txt without
+    listing each child directory.
+  modality: obligation
+  status: draft
+  cite:
+    section: Avoid disclosing directory structure through robots.txt
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L373-L375
+    url: /regulations/rfe5181cd6e#c195
+    quote: '• Prevent disclosure of your directory structure in the robots.txt file by placing directories not intended
+
+      for public indexing into an isolated parent directory. Then "Disallow" that entire parent directory in
+
+      the robots.txt file rather than Disallowing each individual directory'
+  interpretation:
+    by: model
+    note: The facts do not capture directory layout or robots.txt rules.
+  require:
+    fact: system.req_rfe5181cd6e_k195_1
+- name: k196-1
+  title: Explicitly define supported HTTP methods and any differences in method handling between application pages.
+  modality: obligation
+  status: draft
+  cite:
+    section: Define supported HTTP methods and page handling
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L376-L377
+    url: /regulations/rfe5181cd6e#c196
+    quote: '• Define which HTTP methods, Get or Post, the application will support and whether it will be handled
+
+      differently in different pages in the application'
+  interpretation:
+    by: model
+    note: The facts do not capture route methods or page-specific request handling.
+  require:
+    fact: system.req_rfe5181cd6e_k196_1
+- name: k197-1
+  title: Disable HTTP methods that the application does not need, including unnecessary WebDAV methods.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable unnecessary HTTP methods and authenticate file handling extensions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L378-L379
+    url: /regulations/rfe5181cd6e#c197
+    quote: '• Disable unnecessary HTTP methods, such as WebDAV extensions. If an extended HTTP method that
+
+      supports file handling is required, utilize a well-vetted authentication mechanism'
+  interpretation:
+    by: model
+    note: The facts do not describe enabled HTTP methods or whether they are needed.
+  require:
+    fact: system.req_rfe5181cd6e_k197_1
+- name: k197-2
+  title: Protect required extended HTTP methods that support file handling with a well-vetted authentication mechanism.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable unnecessary HTTP methods and authenticate file handling extensions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L378-L379
+    url: /regulations/rfe5181cd6e#c197
+    quote: '• Disable unnecessary HTTP methods, such as WebDAV extensions. If an extended HTTP method that
+
+      supports file handling is required, utilize a well-vetted authentication mechanism'
+  interpretation:
+    by: model
+    note: The facts do not capture authentication for extended HTTP methods.
+  require:
+    fact: system.req_rfe5181cd6e_k197_2
+- name: k198-1
+  title: When both HTTP 1.0 and HTTP 1.1 are supported, configure them similarly or ensure their configuration differences
+    are understood.
+  modality: obligation
+  status: draft
+  cite:
+    section: Align HTTP 1.0 and 1.1 configurations or understand differences
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L380-L381
+    url: /regulations/rfe5181cd6e#c198
+    quote: '• If the web server handles both HTTP 1.0 and 1.1, ensure that both are configured in a similar manor
+
+      or insure that you understand any difference that may exist (e.g. handling of extended HTTP methods)'
+  interpretation:
+    by: model
+    note: Configuration can reveal differences, but the permitted alternative of understanding those differences requires
+      customer confirmation.
+  require:
+    fact: system.req_rfe5181cd6e_k198_1
+- name: k199-1
+  title: Remove unnecessary operating system, web server version, and application framework details from HTTP response headers.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove unnecessary system details from HTTP response headers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L382-L383
+    url: /regulations/rfe5181cd6e#c199
+    quote: '• Remove unnecessary information from HTTP response headers related to the OS, web-server version
+
+      and application frameworks'
+  interpretation:
+    by: model
+    note: The facts do not describe identifying response headers.
+  require:
+    fact: system.req_rfe5181cd6e_k199_1
+- name: k200-1
+  title: Support human-readable output of the application's security configuration store for auditing.
+  modality: obligation
+  status: draft
+  cite:
+    section: Support human readable security configuration output
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L384-L385
+    url: /regulations/rfe5181cd6e#c200
+    quote: '• The security configuration store for the application should be able to be output in human readable
+
+      form to support auditing'
+  interpretation:
+    by: model
+    note: A reviewer can inspect configuration export capabilities, but no fact captures them.
+  require:
+    fact: system.req_rfe5181cd6e_k200_1
+- name: k201-1
+  title: Maintain an asset management system and register system components and software in it.
+  modality: obligation
+  status: draft
+  cite:
+    section: Register system components and software in asset management
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L386-L386
+    url: /regulations/rfe5181cd6e#c201
+    quote: • Implement an asset management system and register system components and software in it
+  interpretation:
+    by: model
+    note: Asset management implementation and registration are organisational practices beyond application source and configuration.
+  require:
+    fact: system.req_rfe5181cd6e_k201_1
+- name: k202-1
+  title: Isolate development environments from the production network.
+  modality: obligation
+  status: draft
+  cite:
+    section: Isolate development environments and restrict access
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L387-L390
+    url: /regulations/rfe5181cd6e#c202
+    quote: '• Isolate development environments from the production network and provide access only to authorized
+
+      development and test groups. Development environments are often configured less securely than
+
+      production environments and attackers may use this difference to discover shared weaknesses or as an
+
+      avenue for exploitation'
+  interpretation:
+    by: model
+    note: Network and infrastructure configuration can show isolation, but the facts do not capture it.
+  require:
+    fact: system.req_rfe5181cd6e_k202_1
+- name: k202-2
+  title: Restrict development environment access to authorized development and test groups.
+  modality: obligation
+  status: draft
+  cite:
+    section: Isolate development environments and restrict access
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L387-L390
+    url: /regulations/rfe5181cd6e#c202
+    quote: '• Isolate development environments from the production network and provide access only to authorized
+
+      development and test groups. Development environments are often configured less securely than
+
+      production environments and attackers may use this difference to discover shared weaknesses or as an
+
+      avenue for exploitation'
+  interpretation:
+    by: model
+    note: Access configuration can show group restrictions, but no supplied fact describes them.
+  require:
+    fact: system.req_rfe5181cd6e_k202_2
+- name: k203-1
+  title: Use a software change control system to manage and record code changes in development and production.
+  modality: obligation
+  status: draft
+  cite:
+    section: Manage and record code changes through change control
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L391-L392
+    url: /regulations/rfe5181cd6e#c203
+    quote: '• Implement a software change control system to manage and record changes to the code both
+
+      in development and production'
+  interpretation:
+    by: model
+    note: Consistent use of change control across environments is a process requirement.
+  require:
+    fact: system.req_rfe5181cd6e_k203_1
+- name: k205-1
+  title: Use parameterized queries or ORM queries that bind values for database access.
+  modality: obligation
+  status: draft
+  for:
+    q: Query
+  cite:
+    section: Use strongly typed parameterized queries
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L394-L394
+    url: /regulations/rfe5181cd6e#c205
+    quote: • Use strongly typed parameterized queries
+  interpretation:
+    by: model
+    note: Query construction captures the necessary parameterization aspect; ORM construction still requires review of binding
+      behavior.
+  require:
+    in:
+    - fact: q.construction
+    - - parameterized
+      - orm
+- name: k205-2
+  title: Ensure database queries use strongly typed parameters and that ORM queries bind values.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use strongly typed parameterized queries
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L394-L394
+    url: /regulations/rfe5181cd6e#c205
+    quote: • Use strongly typed parameterized queries
+  interpretation:
+    by: model
+    note: The facts do not capture parameter types or establish that every ORM query uses typed bindings.
+  require:
+    fact: system.req_rfe5181cd6e_k205_2
+- name: k206-1
+  title: Validate and encode database inputs, including metacharacters, and prevent command execution when validation or encoding
+    fails.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate and encode database inputs before executing commands
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L395-L396
+    url: /regulations/rfe5181cd6e#c206
+    quote: '• Utilize input validation and output encoding and be sure to address meta characters. If these fail, do
+
+      not run the database command'
+  interpretation:
+    by: model
+    note: Query construction facts do not establish validation, encoding, metacharacter handling, or failure behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k206_1
+- name: k207-1
+  title: Ensure variables are strongly typed.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use strongly typed variables
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L397-L397
+    url: /regulations/rfe5181cd6e#c207
+    quote: • Ensure that variables are strongly typed
+  interpretation:
+    by: model
+    note: The facts do not describe variable types or type enforcement.
+  require:
+    fact: system.req_rfe5181cd6e_k207_1
+- name: k208-1
+  title: Give the application's database identity only the privileges necessary for its operations.
+  modality: obligation
+  status: draft
+  cite:
+    section: Minimize application database privileges
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L398-L398
+    url: /regulations/rfe5181cd6e#c208
+    quote: • The application should use the lowest possible level of privilege when accessing the database
+  interpretation:
+    by: model
+    note: Database grants and application needs require review and are not represented by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k208_1
+- name: k209-1
+  title: Use secure credentials for database access.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use secure database credentials
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L399-L399
+    url: /regulations/rfe5181cd6e#c209
+    quote: • Use secure credentials for database access
+  interpretation:
+    by: model
+    note: The facts do not capture database credential strength or security; a literal credential's presence alone does not
+      establish this requirement's violation.
+  require:
+    fact: system.req_rfe5181cd6e_k209_1
+- name: k210-1
+  title: Do not hard code connection strings within the application.
+  modality: obligation
+  status: draft
+  for:
+    s: Secret
+  cite:
+    section: Store encrypted connection strings separately on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L400-L401
+    url: /regulations/rfe5181cd6e#c210
+    quote: '• Connection strings should not be hard coded within the application. Connection strings should be
+
+      stored in a separate configuration file on a trusted system and they should be encrypted.'
+  interpretation:
+    by: model
+    note: Secret facts identify connection string literals in application code.
+  require:
+    any:
+    - ne:
+      - fact: s.kind
+      - connection_string
+    - fact: s.test_or_example
+- name: k210-2
+  title: Store connection strings in a separate configuration file on a trusted system.
+  modality: obligation
+  status: draft
+  cite:
+    section: Store encrypted connection strings separately on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L400-L401
+    url: /regulations/rfe5181cd6e#c210
+    quote: '• Connection strings should not be hard coded within the application. Connection strings should be
+
+      stored in a separate configuration file on a trusted system and they should be encrypted.'
+  interpretation:
+    by: model
+    note: A reviewer can inspect configuration storage and deployment boundaries, which the facts do not describe.
+  require:
+    fact: system.req_rfe5181cd6e_k210_2
+- name: k210-3
+  title: Encrypt stored connection strings.
+  modality: obligation
+  status: draft
+  cite:
+    section: Store encrypted connection strings separately on trusted systems
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L400-L401
+    url: /regulations/rfe5181cd6e#c210
+    quote: '• Connection strings should not be hard coded within the application. Connection strings should be
+
+      stored in a separate configuration file on a trusted system and they should be encrypted.'
+  interpretation:
+    by: model
+    note: The facts do not describe encryption of stored configuration.
+  require:
+    fact: system.req_rfe5181cd6e_k210_3
+- name: k211-1
+  title: Abstract database access through stored procedures so that direct base-table permissions can be removed.
+  modality: obligation
+  status: draft
+  cite:
+    section: Abstract data access through stored procedures
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L402-L403
+    url: /regulations/rfe5181cd6e#c211
+    quote: '• Use stored procedures to abstract data access and allow for the removal of permissions to the base
+
+      tables in the database'
+  interpretation:
+    by: model
+    note: Query construction facts do not describe stored procedure use or base-table permissions.
+  require:
+    fact: system.req_rfe5181cd6e_k211_1
+- name: k212-1
+  title: Release database connections as soon as their work is complete.
+  modality: obligation
+  status: draft
+  cite:
+    section: Close database connections promptly
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L404-L404
+    url: /regulations/rfe5181cd6e#c212
+    quote: • Close the connection as soon as possible
+  interpretation:
+    by: model
+    note: The facts do not describe connection lifetimes or release paths.
+  require:
+    fact: system.req_rfe5181cd6e_k212_1
+- name: k213-1
+  title: Remove or change all default database administrative passwords.
+  modality: obligation
+  status: draft
+  cite:
+    section: Replace default database administrator passwords with strong authentication
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L405-L406
+    url: /regulations/rfe5181cd6e#c213
+    quote: '• Remove or change all default database administrative passwords. Utilize strong passwords/phrases or
+
+      implement multi-factor authentication'
+  interpretation:
+    by: model
+    note: Database provisioning and credential configuration can show replacement or removal, but the facts do not capture
+      it.
+  require:
+    fact: system.req_rfe5181cd6e_k213_1
+- name: k213-2
+  title: Protect database administrative access with strong passwords or passphrases, or multifactor authentication.
+  modality: obligation
+  status: draft
+  cite:
+    section: Replace default database administrator passwords with strong authentication
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L405-L406
+    url: /regulations/rfe5181cd6e#c213
+    quote: '• Remove or change all default database administrative passwords. Utilize strong passwords/phrases or
+
+      implement multi-factor authentication'
+  interpretation:
+    by: model
+    note: Application password facts do not describe database administrator authentication.
+  require:
+    fact: system.req_rfe5181cd6e_k213_2
+- name: k214-1
+  title: Enable only database features, procedures, services, and packages required by the application.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable unnecessary database functionality
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L407-L408
+    url: /regulations/rfe5181cd6e#c214
+    quote: '• Turn off all unnecessary database functionality (e.g., unnecessary stored procedures or services, utility
+
+      packages, install only the minimum set of features and options required (surface area reduction))'
+  interpretation:
+    by: model
+    note: Database setup and configuration can show enabled functionality and its use, which the facts do not capture.
+  require:
+    fact: system.req_rfe5181cd6e_k214_1
+- name: k215-1
+  title: Remove unnecessary default vendor database content, including sample schemas.
+  modality: obligation
+  status: draft
+  cite:
+    section: Remove unnecessary default database content
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L409-L409
+    url: /regulations/rfe5181cd6e#c215
+    quote: • Remove unnecessary default vendor content (e.g., sample schemas)
+  interpretation:
+    by: model
+    note: Database initialization and migration configuration can show default content removal, but no supplied fact describes
+      it.
+  require:
+    fact: system.req_rfe5181cd6e_k215_1
+- name: k216-1
+  title: Disable default database accounts that are unnecessary for business requirements.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable unnecessary default database accounts
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L410-L410
+    url: /regulations/rfe5181cd6e#c216
+    quote: • Disable any default accounts that are not required to support business requirements
+  interpretation:
+    by: model
+    note: Account provisioning and database configuration can show account disabling, but the facts do not describe database
+      accounts.
+  require:
+    fact: system.req_rfe5181cd6e_k216_1
+- name: k217-1
+  title: Use distinct database credentials for each application trust distinction.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use distinct database credentials for each trust distinction
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L411-L412
+    url: /regulations/rfe5181cd6e#c217
+    quote: '• The application should connect to the database with different credentials for every trust distinction
+
+      (e.g., user, read-only user, guest, administrators)'
+  interpretation:
+    by: model
+    note: A reviewer can trace credentials and connection selection across trust distinctions; the facts do not capture this
+      mapping.
+  require:
+    fact: system.req_rfe5181cd6e_k217_1
+- name: k219-1
+  title: Prevent user-supplied data from being passed directly to dynamic include functions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prohibit direct user data in dynamic includes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L414-L414
+    url: /regulations/rfe5181cd6e#c219
+    quote: • Do not pass user supplied data directly to any dynamic include function
+  interpretation:
+    by: model
+    note: The facts do not describe dynamic includes or their input sources.
+  require:
+    fact: system.req_rfe5181cd6e_k219_1
+- name: k220-1
+  title: Require authentication before accepting file uploads.
+  modality: obligation
+  status: draft
+  cite:
+    section: Require authentication before file uploads
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L415-L415
+    url: /regulations/rfe5181cd6e#c220
+    quote: • Require authentication before allowing a file to be uploaded
+  interpretation:
+    by: model
+    note: The facts do not describe upload endpoints or their authentication enforcement.
+  require:
+    fact: system.req_rfe5181cd6e_k220_1
+- name: k221-1
+  title: Allow uploads only of file types needed for business purposes.
+  modality: obligation
+  status: draft
+  cite:
+    section: Limit uploads to necessary file types
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L416-L416
+    url: /regulations/rfe5181cd6e#c221
+    quote: • Limit the type of files that can be uploaded to only those types that are needed for business purposes
+  interpretation:
+    by: model
+    note: Upload validation and permitted file types are not represented by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k221_1
+- name: k222-1
+  title: Validate uploaded file types using file headers rather than relying solely on filename extensions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate uploaded file types using file headers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L417-L418
+    url: /regulations/rfe5181cd6e#c222
+    quote: '• Validate uploaded files are the expected type by checking file headers. Checking for file type by
+
+      extension alone is not sufficient'
+  interpretation:
+    by: model
+    note: The facts do not describe file header inspection or upload type validation.
+  require:
+    fact: system.req_rfe5181cd6e_k222_1
+- name: k223-1
+  title: Store files on a content server or in a database outside the application's web context.
+  modality: obligation
+  status: draft
+  cite:
+    section: Store files outside the application web context
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L419-L420
+    url: /regulations/rfe5181cd6e#c223
+    quote: '• Do not save files in the same web context as the application. Files should either go to the content
+
+      server or in the database.'
+  interpretation:
+    by: model
+    note: The facts do not describe file storage locations or web context boundaries.
+  require:
+    fact: system.req_rfe5181cd6e_k223_1
+- name: k224-1
+  title: Prevent or restrict uploads of file types that the web server can interpret.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict uploads of files interpretable by the web server
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L421-L421
+    url: /regulations/rfe5181cd6e#c224
+    quote: • Prevent or restrict the uploading of any file that may be interpreted by the web server.
+  interpretation:
+    by: model
+    note: The facts do not describe upload restrictions or web server file handlers.
+  require:
+    fact: system.req_rfe5181cd6e_k224_1
+- name: k225-1
+  title: Disable execution privileges in file upload directories.
+  modality: obligation
+  status: draft
+  cite:
+    section: Disable execution in upload directories
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L422-L422
+    url: /regulations/rfe5181cd6e#c225
+    quote: • Turn off execution privileges on file upload directories
+  interpretation:
+    by: model
+    note: The facts do not capture upload directory permissions or execution settings.
+  require:
+    fact: system.req_rfe5181cd6e_k225_1
+- name: k226-1
+  title: Isolate UNIX upload directories using a dedicated logical drive mounted at the target path or a chroot environment.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use logical drives or chroot environments for UNIX uploads
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L423-L424
+    url: /regulations/rfe5181cd6e#c226
+    quote: '• Implement safe uploading in UNIX by mounting the targeted file directory as a logical drive using the
+
+      associated path or the chrooted environment'
+  interpretation:
+    by: model
+    note: Deployment configuration can show mounts and chroot isolation, but the facts do not capture them.
+  require:
+    fact: system.req_rfe5181cd6e_k226_1
+- name: k227-1
+  title: Validate file reference parameters against an allowlist of file names and types, rejecting mismatches or substituting
+    a hardcoded default.
+  modality: obligation
+  status: draft
+  cite:
+    section: Validate file references against allowed names and types
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L425-L427
+    url: /regulations/rfe5181cd6e#c227
+    quote: '• When referencing existing files, use a white list of allowed file names and types. Validate the value of
+
+      the parameter being passed and if it does not match one of the expected values, either reject it or use a
+
+      hard coded default file value for the content instead'
+  interpretation:
+    by: model
+    note: The facts do not capture file reference validation or fallback behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k227_1
+- name: k228-1
+  title: Allow user input in dynamic redirects only when it is validated as a relative path URL.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict dynamic redirects to validated relative URLs
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L428-L429
+    url: /regulations/rfe5181cd6e#c228
+    quote: '• Do not pass user supplied data into a dynamic redirect. If this must be allowed, then the redirect
+
+      should accept only validated, relative path URLs'
+  interpretation:
+    by: model
+    note: The facts do not describe redirect destinations or URL validation.
+  require:
+    fact: system.req_rfe5181cd6e_k228_1
+- name: k229-1
+  title: Pass index values mapped to predefined paths instead of passing file or directory paths.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use mapped indexes instead of file or directory paths
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L430-L430
+    url: /regulations/rfe5181cd6e#c229
+    quote: • Do not pass directory or file paths, use index values mapped to pre-defined list of paths
+  interpretation:
+    by: model
+    note: The facts do not describe path parameters or index-to-path mappings.
+  require:
+    fact: system.req_rfe5181cd6e_k229_1
+- name: k230-1
+  title: Never send absolute file paths to clients.
+  modality: obligation
+  status: draft
+  cite:
+    section: Never send absolute file paths to clients
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L431-L431
+    url: /regulations/rfe5181cd6e#c230
+    quote: • Never send the absolute file path to the client
+  interpretation:
+    by: model
+    note: The facts do not capture file paths exposed in responses.
+  require:
+    fact: system.req_rfe5181cd6e_k230_1
+- name: k231-1
+  title: Configure application files and resources as read-only.
+  modality: obligation
+  status: draft
+  cite:
+    section: Make application files and resources read-only
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L432-L432
+    url: /regulations/rfe5181cd6e#c231
+    quote: • Ensure application files and resources are read-only
+  interpretation:
+    by: model
+    note: Source and deployment configuration can show read-only permissions, but the facts do not capture them.
+  require:
+    fact: system.req_rfe5181cd6e_k231_1
+- name: k232-1
+  title: Scan user-uploaded files for viruses and malware.
+  modality: obligation
+  status: draft
+  cite:
+    section: Scan uploaded files for viruses and malware
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L433-L433
+    url: /regulations/rfe5181cd6e#c232
+    quote: • Scan user uploaded files for viruses and malware
+  interpretation:
+    by: model
+    note: The facts do not describe upload scanning integrations or their coverage.
+  require:
+    fact: system.req_rfe5181cd6e_k232_1
+- name: k234-1
+  title: Apply input validation and output controls wherever the application handles untrusted data.
+  modality: obligation
+  status: draft
+  cite:
+    section: Control input and output of untrusted data
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L435-L435
+    url: /regulations/rfe5181cd6e#c234
+    quote: • Utilize input and output control for un-trusted data
+  interpretation:
+    by: model
+    note: The facts do not capture the coverage and contextual suitability of input and output controls across the application.
+  require:
+    fact: system.req_rfe5181cd6e_k234_1
+- name: k235-1
+  title: Verify that each buffer's allocated capacity is at least its specified size.
+  modality: obligation
+  status: draft
+  cite:
+    section: Verify specified buffer sizes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L436-L436
+    url: /regulations/rfe5181cd6e#c235
+    quote: • Double check that the buffer is as large as specified
+  interpretation:
+    by: model
+    note: The facts do not describe buffer allocations, capacities, or specified sizes.
+  require:
+    fact: system.req_rfe5181cd6e_k235_1
+- name: k236-1
+  title: Ensure bounded string copies produce a NULL-terminated destination when the result is used as a string.
+  modality: obligation
+  status: draft
+  cite:
+    section: Account for missing NULL termination in bounded copies
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L437-L438
+    url: /regulations/rfe5181cd6e#c236
+    quote: '• When using functions that accept a number of bytes to copy, such as strncpy(), be aware that if the
+
+      destination buffer size is equal to the source buffer size, it may not NULL-terminate the string'
+  interpretation:
+    by: model
+    note: The facts do not describe buffer sizes or string termination.
+  require:
+    fact: system.req_rfe5181cd6e_k236_1
+- name: k237-1
+  title: Check buffer boundaries during repeated function calls so no loop writes past allocated space.
+  modality: obligation
+  status: draft
+  cite:
+    section: Check buffer boundaries during looped function calls
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L439-L440
+    url: /regulations/rfe5181cd6e#c237
+    quote: '• Check buffer boundaries if calling the function in a loop and make sure there is no danger of writing
+
+      past the allocated space'
+  interpretation:
+    by: model
+    note: The facts do not capture loop bounds or buffer writes.
+  require:
+    fact: system.req_rfe5181cd6e_k237_1
+- name: k238-1
+  title: Truncate all input strings to a reasonable length before passing them to copy or concatenation functions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Truncate strings before copying or concatenating
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L441-L442
+    url: /regulations/rfe5181cd6e#c238
+    quote: '• Truncate all input strings to a reasonable length before passing them to the copy and concatenation
+
+      functions'
+  interpretation:
+    by: model
+    note: The facts do not capture string length limits or truncation before copying.
+  require:
+    fact: system.req_rfe5181cd6e_k238_1
+- name: k239-1
+  title: Explicitly close resources instead of relying on garbage collection.
+  modality: obligation
+  status: draft
+  cite:
+    section: Explicitly close resources
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L443-L444
+    url: /regulations/rfe5181cd6e#c239
+    quote: '• Specifically close resources, don’t rely on garbage collection. (e.g., connection objects, file handles,
+
+      etc.)'
+  interpretation:
+    by: model
+    note: Source code can show deterministic resource cleanup, but the facts do not capture it.
+  require:
+    fact: system.req_rfe5181cd6e_k239_1
+- name: k240-1
+  title: Configure non-executable stacks wherever the platform supports them.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use non-executable stacks when available
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L445-L445
+    url: /regulations/rfe5181cd6e#c240
+    quote: • Use non-executable stacks when available
+  interpretation:
+    by: model
+    note: The facts do not capture stack execution permissions or build settings.
+  require:
+    fact: system.req_rfe5181cd6e_k240_1
+- name: k241-1
+  title: Avoid known vulnerable functions, including printf, strcat, and strcpy.
+  modality: obligation
+  status: draft
+  cite:
+    section: Avoid known vulnerable functions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L446-L446
+    url: /regulations/rfe5181cd6e#c241
+    quote: • Avoid the use of known vulnerable functions (e.g., printf, strcat, strcpy etc.)
+  interpretation:
+    by: model
+    note: The facts do not identify calls to the prohibited functions.
+  require:
+    fact: system.req_rfe5181cd6e_k241_1
+- name: k242-1
+  title: Properly free allocated memory at function completion and on every exit path.
+  modality: obligation
+  status: draft
+  cite:
+    section: Free allocated memory at function completion and all exits
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L447-L447
+    url: /regulations/rfe5181cd6e#c242
+    quote: • Properly free allocated memory upon the completion of functions and at all exit points
+  interpretation:
+    by: model
+    note: The facts do not capture memory ownership or cleanup across exit paths.
+  require:
+    fact: system.req_rfe5181cd6e_k242_1
+- name: k244-1
+  title: Use managed code for common tasks instead of creating new unmanaged implementations.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use tested approved managed code for common tasks
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L449-L449
+    url: /regulations/rfe5181cd6e#c244
+    quote: • Use tested and approved managed code rather than creating new unmanaged code for common tasks
+  interpretation:
+    by: model
+    note: A reviewer can inspect implementation choices, but the facts do not capture managed versus unmanaged code.
+  require:
+    fact: system.req_rfe5181cd6e_k244_1
+- name: k244-2
+  title: Ensure managed code used for common tasks has been tested and approved.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use tested approved managed code for common tasks
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L449-L449
+    url: /regulations/rfe5181cd6e#c244
+    quote: • Use tested and approved managed code rather than creating new unmanaged code for common tasks
+  interpretation:
+    by: model
+    note: Testing and approval status require process evidence beyond source code and configuration.
+  require:
+    fact: system.req_rfe5181cd6e_k244_2
+- name: k245-1
+  title: Do not issue operating system commands directly from the application, including through command shells.
+  modality: obligation
+  status: draft
+  for:
+    c: CommandExecution
+  cite:
+    section: Use task specific APIs for operating system tasks
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L450-L452
+    url: /regulations/rfe5181cd6e#c245
+    quote: '• Utilize task specific built-in APIs to conduct operating system tasks. Do not allow the application to
+
+      issue commands directly to the Operating System, especially through the use of application initiated
+
+      command shells'
+  interpretation:
+    by: model
+    note: Every CommandExecution element represents a prohibited direct command execution.
+  require: false
+- name: k245-2
+  title: Use task-specific built-in APIs for operating system tasks.
+  modality: obligation
+  status: draft
+  cite:
+    section: Use task specific APIs for operating system tasks
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L450-L452
+    url: /regulations/rfe5181cd6e#c245
+    quote: '• Utilize task specific built-in APIs to conduct operating system tasks. Do not allow the application to
+
+      issue commands directly to the Operating System, especially through the use of application initiated
+
+      command shells'
+  interpretation:
+    by: model
+    note: The facts identify command execution but do not show whether operating system tasks use suitable built-in APIs.
+  require:
+    fact: system.req_rfe5181cd6e_k245_2
+- name: k246-1
+  title: Verify the integrity of interpreted code, libraries, executables, and configuration files using checksums or hashes.
+  modality: obligation
+  status: draft
+  cite:
+    section: Verify code and configuration integrity using checksums or hashes
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L453-L454
+    url: /regulations/rfe5181cd6e#c246
+    quote: '• Use checksums or hashes to verify the integrity of interpreted code, libraries, executables, and
+
+      configuration files'
+  interpretation:
+    by: model
+    note: The facts do not capture file integrity verification.
+  require:
+    fact: system.req_rfe5181cd6e_k246_1
+- name: k247-1
+  title: Use locking or synchronization to prevent race conditions between simultaneous requests.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prevent race conditions through locking or synchronization
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L455-L456
+    url: /regulations/rfe5181cd6e#c247
+    quote: '• Utilize locking to prevent multiple simultaneous requests or use a synchronization mechanism to
+
+      prevent race conditions'
+  interpretation:
+    by: model
+    note: The facts do not capture concurrency controls or race conditions.
+  require:
+    fact: system.req_rfe5181cd6e_k247_1
+- name: k248-1
+  title: Protect shared variables and resources from inappropriate concurrent access.
+  modality: obligation
+  status: draft
+  cite:
+    section: Protect shared variables and resources from inappropriate concurrent access
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L457-L457
+    url: /regulations/rfe5181cd6e#c248
+    quote: • Protect shared variables and resources from inappropriate concurrent access
+  interpretation:
+    by: model
+    note: The facts do not capture shared state or its concurrency protection.
+  require:
+    fact: system.req_rfe5181cd6e_k248_1
+- name: k249-1
+  title: Explicitly initialize all variables and data stores at declaration or before their first use.
+  modality: obligation
+  status: draft
+  cite:
+    section: Explicitly initialize variables and data stores before use
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L458-L459
+    url: /regulations/rfe5181cd6e#c249
+    quote: '• Explicitly initialize all your variables and other data stores, either during declaration or just before the
+
+      first usage'
+  interpretation:
+    by: model
+    note: The facts do not describe initialization or use order.
+  require:
+    fact: system.req_rfe5181cd6e_k249_1
+- name: k250-1
+  title: Raise application privileges as late as possible and drop them as soon as possible.
+  modality: obligation
+  status: draft
+  cite:
+    section: Minimize duration of elevated privileges
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L460-L461
+    url: /regulations/rfe5181cd6e#c250
+    quote: '• In cases where the application must run with elevated privileges, raise privileges as late as possible,
+
+      and drop them as soon as possible'
+  interpretation:
+    by: model
+    note: Privilege transitions and their duration require source code and configuration review.
+  require:
+    fact: system.req_rfe5181cd6e_k250_1
+- name: k251-1
+  title: Prevent calculation errors caused by numeric size, precision, signedness, truncation, conversions, NaN, overflow,
+    or underflow.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prevent calculation errors arising from numeric representations
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L462-L466
+    url: /regulations/rfe5181cd6e#c251
+    quote: '• Avoid calculation errors by understanding your programming language''s underlying representation
+
+      and how it interacts with numeric calculation. Pay close attention to byte size discrepancies, precision,
+
+      signed/unsigned distinctions, truncation, conversion and casting between types, "not-a-number"
+
+      calculations, and how your language handles numbers that are too large or too small for its underlying
+
+      representation'
+  interpretation:
+    by: model
+    note: The facts do not capture numeric representations or calculation behavior.
+  require:
+    fact: system.req_rfe5181cd6e_k251_1
+- name: k252-1
+  title: Do not pass user supplied data to operating system command execution functions, including as separate arguments.
+  modality: obligation
+  status: draft
+  for:
+    c: CommandExecution
+  cite:
+    section: Prohibit user data in dynamic execution functions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L467-L467
+    url: /regulations/rfe5181cd6e#c252
+    quote: • Do not pass user supplied data to any dynamic execution function
+  interpretation:
+    by: model
+    note: Command execution facts capture whether user supplied data reaches commands or their arguments.
+  require:
+    not:
+      fact: c.untrusted_input
+- name: k252-2
+  title: Do not pass user supplied data to other dynamic execution functions.
+  modality: obligation
+  status: draft
+  cite:
+    section: Prohibit user data in dynamic execution functions
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L467-L467
+    url: /regulations/rfe5181cd6e#c252
+    quote: • Do not pass user supplied data to any dynamic execution function
+  interpretation:
+    by: model
+    note: The facts do not capture user data reaching dynamic code evaluation or other execution functions.
+  require:
+    fact: system.req_rfe5181cd6e_k252_2
+- name: k253-1
+  title: Restrict users' ability to generate new code or alter existing code.
+  modality: obligation
+  status: draft
+  cite:
+    section: Restrict users from creating or modifying code
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L468-L468
+    url: /regulations/rfe5181cd6e#c253
+    quote: • Restrict users from generating new code or altering existing code
+  interpretation:
+    by: model
+    note: Code generation controls, authorization, and code write permissions are not captured by the facts.
+  require:
+    fact: system.req_rfe5181cd6e_k253_1
+- name: k254-1
+  title: Review all secondary applications, third party code, and libraries for business necessity and safe functionality.
+  modality: obligation
+  status: draft
+  cite:
+    section: Review third party components for necessity and safety
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L469-L470
+    url: /regulations/rfe5181cd6e#c254
+    quote: '• Review all secondary applications, third party code and libraries to determine business necessity and
+
+      validate safe functionality, as these can introduce new vulnerabilities'
+  interpretation:
+    by: model
+    note: Completion of component reviews and business necessity determinations is an organizational process.
+  require:
+    fact: system.req_rfe5181cd6e_k254_1
+- name: k255-1
+  title: Implement a safe application update mechanism.
+  modality: obligation
+  status: draft
+  cite:
+    section: Secure updates with verified signatures and encrypted transfers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L471-L473
+    url: /regulations/rfe5181cd6e#c255
+    quote: '• Implement safe updating. If the application will utilize automatic updates, then use cryptographic
+
+      signatures for your code and ensure your download clients verify those signatures. Use encrypted
+
+      channels to transfer the code from the host server'
+  interpretation:
+    by: model
+    note: The facts do not describe update mechanisms or their security controls.
+  require:
+    fact: system.req_rfe5181cd6e_k255_1
+- name: k255-2
+  title: If automatic updates are used, cryptographically sign update code and ensure download clients verify the signatures
+    before accepting it.
+  modality: obligation
+  status: draft
+  cite:
+    section: Secure updates with verified signatures and encrypted transfers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L471-L473
+    url: /regulations/rfe5181cd6e#c255
+    quote: '• Implement safe updating. If the application will utilize automatic updates, then use cryptographic
+
+      signatures for your code and ensure your download clients verify those signatures. Use encrypted
+
+      channels to transfer the code from the host server'
+  interpretation:
+    by: model
+    note: Update signing and client signature verification are not captured by token verification facts.
+  require:
+    fact: system.req_rfe5181cd6e_k255_2
+- name: k255-3
+  title: Transfer update code from the host server over encrypted channels.
+  modality: obligation
+  status: draft
+  cite:
+    section: Secure updates with verified signatures and encrypted transfers
+    at: OWASP_SCP_Quick_Reference_Guide_v2.pdf#L471-L473
+    url: /regulations/rfe5181cd6e#c255
+    quote: '• Implement safe updating. If the application will utilize automatic updates, then use cryptographic
+
+      signatures for your code and ensure your download clients verify those signatures. Use encrypted
+
+      channels to transfer the code from the host server'
+  interpretation:
+    by: model
+    note: The facts do not capture the transport security of update downloads.
+  require:
+    fact: system.req_rfe5181cd6e_k255_3
