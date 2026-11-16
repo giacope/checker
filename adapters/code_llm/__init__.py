@@ -24,6 +24,8 @@ executed. What leaves the machine is the selected files' text, sent to the confi
 from __future__ import annotations
 
 import concurrent.futures as cf
+import contextlib
+import fcntl
 import json
 import os
 import re
@@ -118,8 +120,39 @@ def codex_complete(model: str, system: str, user: str, timeout: float = 900) -> 
     raise ReaderError("codex: gave up after retries")
 
 
+@contextlib.contextmanager
+def _slot():
+    """One of NORMIR_LLM_MAX_PARALLEL slots (default 8) shared by every process on the machine, so several scans
+    and compiles running at once do not multiply the calls in flight. Slots are lock files; a crashed holder's
+    lock is released by the OS."""
+    n = max(1, int(os.environ.get("NORMIR_LLM_MAX_PARALLEL", "8")))
+    d = Path(tempfile.gettempdir()) / "normir-llm-slots"
+    d.mkdir(exist_ok=True)
+    while True:
+        for i in range(n):
+            f = open(d / f"slot{i}", "w")
+            try:
+                fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except OSError:
+                f.close()
+                continue
+            try:
+                yield
+            finally:
+                fcntl.flock(f, fcntl.LOCK_UN)
+                f.close()
+            return
+        time.sleep(0.2)
+
+
 def complete(provider: str, model: str, key: str, system: str, user: str, client: httpx.Client) -> str:
-    """One model call; returns the reply text. Retries rate limits and server errors."""
+    """One model call; returns the reply text. Retries rate limits and server errors. At most
+    NORMIR_LLM_MAX_PARALLEL calls are in flight on the machine at once."""
+    with _slot():
+        return _complete(provider, model, key, system, user, client)
+
+
+def _complete(provider: str, model: str, key: str, system: str, user: str, client: httpx.Client) -> str:
     if provider == "codex":
         return codex_complete(model, system, user)
     for attempt in range(5):
