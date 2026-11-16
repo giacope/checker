@@ -169,7 +169,7 @@ def test_riser_and_tread(riser, tread, ok):
 
 
 def test_validator_catches_authoring_mistakes(tmp_path):
-    (tmp_path / "package.yaml").write_text("package: bad\nversion: 0.0.1\ntext_policy: link-only\n")
+    (tmp_path / "package.yaml").write_text("package: bad\nversion: 0.0.1\nsubject: building\ntext_policy: link-only\n")
     (tmp_path / "rules.yaml").write_text(
         """
 predicates:
@@ -192,6 +192,9 @@ terms:
     assert "undeclared predicate 'building.stories'" in joined
     assert "needs a 'cite'" in joined
     assert "link-only" in joined
+    # the subject is declared, never assumed to be a building
+    (tmp_path / "package.yaml").write_text("package: bad\nversion: 0.0.1\ntext_policy: link-only\n")
+    assert any("declares no subject" in e for e in validate(load(tmp_path))[0])
 
 
 @pytest.mark.parametrize(
@@ -207,7 +210,7 @@ terms:
     ],
 )
 def test_validator_accepts_customer_document_citations(tmp_path, cite, ok):
-    (tmp_path / "package.yaml").write_text("package: own\nversion: '1'\ntext_policy: public\n")
+    (tmp_path / "package.yaml").write_text("package: own\nversion: '1'\nsubject: building\ntext_policy: public\n")
     (tmp_path / "rules.yaml").write_text(yaml.safe_dump({
         "predicates": [{"name": "building.sprinklered", "type": "bool"}],
         "norms": [{"name": "n1", "modality": "obligation", "cite": cite, "require": {"fact": "building.sprinklered"}}],

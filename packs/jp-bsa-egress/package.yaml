@@ -1,5 +1,6 @@
 package: jp-bsa-egress
 version: 0.1.0
+subject: building
 title: 建築基準法・同施行令 避難規定（階段・廊下・直通階段・歩行距離）
 publisher: e-Gov 法令検索（デジタル庁）
 jurisdiction: Japan (national law)

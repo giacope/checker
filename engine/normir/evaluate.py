@@ -328,7 +328,7 @@ def describe(expr: Any, rs: Ruleset) -> str:
         if "invalid" in x:
             return f"[cannot be evaluated: {x['invalid']}]"
         if "unlisted" in x:
-            return f"not listed in Table {x['unlisted'].lstrip('T')}; the building official assigns the nearest listed function"
+            return f"not listed in Table {x['unlisted'].lstrip('T')}; the authority having jurisdiction assigns the nearest listed function"
         return str(x)
 
     return d(expr)

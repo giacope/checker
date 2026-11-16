@@ -51,8 +51,9 @@ class Ruleset:
 
     @property
     def subject(self) -> str:
-        """Root name for facts about the thing checked as a whole: 'building', 'system', ..."""
-        return self.chain[0].meta.get("subject", "building")
+        """Root name for facts about the thing checked as a whole: 'building', 'system', ... (the base package's
+        `subject`; validate() reports a package that declares none)."""
+        return self.chain[0].meta.get("subject") or "subject"
 
     def overlays(self) -> list[Package]:
         return [p for p in self.chain if p.meta.get("adoption")]
@@ -361,6 +362,8 @@ def _has_key(obj: Any, key: str) -> bool:
 def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
     errors = list(rs.errors)
     warnings: list[str] = []
+    if not rs.chain[0].meta.get("subject"):
+        errors.append("package declares no subject (the root name of facts about the whole thing checked: building, system, ...)")
     preds = {name: el for (kind, name), el in rs.elements.items() if kind == "predicate"}
 
     def fact_key(path: str, scope: dict[str, str], where: str) -> str | None:
@@ -477,7 +480,7 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
             if key_pred:
                 missing = [v for v in key_pred.data["values"] if v not in seen]
                 if missing:
-                    warnings.append(f"{where}: no row for {', '.join(missing)}; lookups fall back to the building official")
+                    warnings.append(f"{where}: no row for {', '.join(missing)}; lookups fall back to the authority having jurisdiction")
 
     for pkg in rs.chain:
         if pkg.meta.get("text_policy") == "link-only" and any(_has_key(el.data, "quote") for el in pkg.elements.values()):
