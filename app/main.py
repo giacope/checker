@@ -321,7 +321,8 @@ def run_project(pid: str) -> None:
         _status(d, state="running", step=msg, log=log[-40:])
     try:
         progress("Queued")
-        data = buildings.process(d / "files", req["name"], progress=progress)
+        own = [c[4:] for c in req["codes"] if c.startswith("reg:")]
+        data = buildings.process(d / "files", req["name"], progress=progress, requirements=regs.assessed(own))
         _write(d, "data.json", data)
         _status(d, state="done", step="Done", seconds=data["seconds"])
     except buildings.ProjectError as e:
@@ -335,7 +336,7 @@ def new_project(name: str, codes: list[str], seed: str | None = None) -> tuple[s
     pid = secrets.token_hex(6)
     d = PROJECTS / pid
     (d / "files").mkdir(parents=True)
-    codes = [c for c in codes if c in buildings.CODES] or ["ibc"]
+    codes = [c for c in codes if c in buildings.CODES or (c.startswith("reg:") and regs.ready(c[4:], "building"))] or ["ibc"]
     _write(d, "request.json", {"name": name.strip()[:120] or "Untitled project", "codes": codes, "seed": seed,
                                "created": time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())})
     _status(d, state="queued", step="Queued")
@@ -362,6 +363,7 @@ def _projects(seeded: bool | None = None, limit: int = 30) -> list[dict]:
 def buildings_index(request: Request):
     return templates.TemplateResponse(request, "buildings_index.html", {
         "codes": buildings.CODES, "examples": _projects(seeded=True), "recent": _projects(seeded=False),
+        "regulations": [r for r in regs.regulations("building") if r["state"] == "done" and regs.ready(r["id"], "building")],
         "max_mb": MAX_UPLOAD // 1_000_000})
 
 
@@ -399,7 +401,9 @@ def show_project(request: Request, pid: str):
     d = _pdir(pid)
     st, req = _read(d, "status.json", {}), _read(d, "request.json")
     if st.get("state") != "done":
-        return templates.TemplateResponse(request, "project_progress.html", {"pid": pid, "req": req, "st": st, "codes": buildings.CODES})
+        codes = {**buildings.CODES, **{c: (None, (regs.ready(c[4:], "building") or {}).get("name", c), "your regulation")
+                                         for c in req["codes"] if c.startswith("reg:")}}
+        return templates.TemplateResponse(request, "project_progress.html", {"pid": pid, "req": req, "st": st, "codes": codes})
     return templates.TemplateResponse(request, "project_report.html", {
         "pid": pid, "req": req, "r": _project_report(pid, d), "VERDICT": report_mod.VERDICT_LABEL, "TYPE": buildings.TYPE_LABEL})
 

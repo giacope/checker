@@ -15,7 +15,11 @@
       {% for cid, (pack, label, covers) in codes.items() %}
       <label><input type="checkbox" name="codes" value="{{ cid }}" {% if cid in ("ibc", "ada") %}checked{% endif %}> {{ label }} <span class="muted small">— {{ covers }}</span></label>
       {% endfor %}
+      {% for r in regulations %}
+      <label><input type="checkbox" name="codes" value="reg:{{ r.id }}"> {{ r.name }} <span class="muted small">your regulation · {{ r.checks }} checks</span></label>
+      {% endfor %}
     </div>
+    <p class="small muted"><a href="/regulations">Add your own regulation</a>: upload building rules (domain: building) and they are turned into checks; checks a model assesses cite the sheet lines and model elements it read.</p>
     <p class="small muted">Classifications the drawings can't settle — occupancy group, sprinkler standard, which stairs are exits — are asked in the report, with the answer the drawings' own code-analysis notes suggest. Large OCR'd sets take a few minutes.</p>
     <button type="submit">Check drawings</button>
   </form>

@@ -32,7 +32,7 @@
 {% for s in r.standards %}
 <div class="card" id="{{ s.id }}">
   <h2>{{ s.label }}</h2>
-  <p class="small muted">{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (copyright){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
+  <p class="small muted">{% if s.id.startswith("reg:") %}Your regulation, compiled from {{ s.title }}: <a href="/regulations/{{ s.id[4:] }}">review its checks</a>{% else %}{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% endif %}{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (copyright){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
   {% for e in s.entries if e.verdict != "not_applicable" %}
   <details class="req" {% if e.verdict in ("fail", "uncertain", "unknown") %}open{% endif %}>
     <summary>{{ pill(e.verdict) }} <span class="sec">{{ e.section }}</span> <span>{{ e.title }}</span>
@@ -40,7 +40,15 @@
     <div class="body">
       <div class="small">Requirement: {% if e.url %}<a href="{{ e.url }}" target="_blank" rel="noopener">{{ e.section }}</a>{% else %}{{ e.section }}{% endif %}</div>
       {% if e.quote %}<blockquote class="small">{{ e.quote }}</blockquote>{% endif %}
-      {% for f in e.findings[:20] %}
+      {% if e.assessment %}{% set m = e.assessment %}
+      <div class="finding {{ 'pass' if m.value else 'fail' }}">
+        <div class="small"><b>Model assessment:</b> {{ "met" if m.value else "not met" }}{% if m.basis == "absence" %} (not found in the sheets searched){% endif %} <span class="muted">({{ m.source }})</span> — {{ m.note }}</div>
+        {% for a in m.at %}<div class="small" style="margin-top:6px">{{ where(a) }}
+          {% if a.element %}<div class="muted">{{ TYPE.get(a.element.type, a.element.type) }} <span class="kv">{{ a.element.id }}</span>{% for k, v in a.element.facts.items() %} · {{ k }} {{ v }}{% endfor %}</div>{% endif %}
+          {% if a.img %}<div><a href="{{ a.img }}" target="_blank" rel="noopener"><img class="crop" loading="lazy" src="{{ a.img }}" alt="{{ a.label }}"></a></div>{% endif %}</div>{% endfor %}
+      </div>
+      {% endif %}
+      {% for f in e.findings[:20] if not (e.assessment and not f.type) %}
       <div class="finding {{ f.verdict }}">
         <div>{{ pill(f.verdict) }} <b>{{ TYPE.get(f.type or "", f.type or "Building") }}</b> {% if f.type %}<span class="kv">{{ f.element }}</span>{% endif %}
           {% for a in f.at %} · {{ where(a) }}{% endfor %}{% if f.more_at %} <span class="muted small">+{{ f.more_at }} more</span>{% endif %}
@@ -48,7 +56,7 @@
         </div>
         {% for a in f.at[:1] if a.img %}<a href="{{ a.img }}" target="_blank" rel="noopener"><img class="crop" loading="lazy" src="{{ a.img }}" alt="{{ a.label }}"></a>{% endfor %}
         {% for k, vs in f.deciding.items() %}<div class="small">{% if f.precision_only and f.precision_only[k] %}<b>{{ k }}</b> as printed allows {{ vs | map(attribute="value") | join(" to ") }} <span class="muted">({{ vs[0].sources | join(", ") }})</span>, and the limit falls inside that range: the drawing is not precise enough to decide. A dimension at the limit settles it.{% else %}Sources disagree on <b>{{ k }}</b>: {% for d in vs %}{{ d.value }} <span class="muted">({{ d.sources | join(", ") }})</span>{% if not loop.last %} or {% endif %}{% endfor %} — the verdict differs between them.{% endif %}</div>{% endfor %}
-        {% if f.open %}<div class="small">Not shown on the drawings: {% for o in f.open %}<span class="kv">{{ o }}</span> {% endfor %}— see <a href="#questions">questions</a>.</div>{% endif %}
+        {% if f.open %}<div class="small">Not shown on the drawings: {% for o in (f.open_labels if s.id.startswith("reg:") else f.open) %}<span class="kv">{{ o }}</span> {% endfor %}— see <a href="#questions">questions</a>.</div>{% endif %}
       </div>
       {% endfor %}
       {% if e.findings | length > 20 %}<p class="small muted">… and {{ e.findings | length - 20 }} more in the JSON and Markdown exports.</p>{% endif %}

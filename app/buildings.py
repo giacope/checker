@@ -118,8 +118,10 @@ def _adapter(name: str):
 
 # ---------------------------------------------------------------- processing
 
-def process(files_dir: Path, name: str, progress=lambda m: None) -> dict:
-    """Run every adapter that applies and return {docs, sheets, notes, files, seconds}."""
+def process(files_dir: Path, name: str, progress=lambda m: None, requirements: list[dict] = ()) -> dict:
+    """Run every adapter that applies and return {docs, sheets, notes, files, seconds}. `requirements` are the
+    assessed checks of the customer regulations being checked (app.regulations.assessed): a model judges each one
+    from the sheets' text and the model elements, citing the lines and elements it read (adapters.assess)."""
     started = time.time()
     notes = expand_zips(files_dir)
     kinds = inventory(files_dir)
@@ -158,6 +160,20 @@ def process(files_dir: Path, name: str, progress=lambda m: None) -> dict:
             notes.append(f"{label} could not be read: {type(e).__name__}: {e}")
     if not docs:
         raise ProjectError("None of the uploaded files could be read. " + " ".join(notes))
+    if requirements:
+        llm = _adapter("adapters.code_llm")
+        if llm is not None and llm.provider_from_env() is not None:
+            from adapters.assess import assess
+            from adapters.assess.building import BuildingCorpus
+            progress(f"Assessing {len(requirements)} requirements of your regulations")
+            try:
+                corpus = BuildingCorpus.from_project(files_dir, docs, sheets, name, progress=progress)
+                docs.append(assess(list(requirements), corpus, progress=progress, subject={"kind": "building", "id": name}))
+            except Exception as e:  # noqa: BLE001 - the readers' evidence stands; those checks stay open
+                notes.append(f"Assessing your regulations' requirements failed: {e}. Those checks stay open.")
+        else:
+            notes.append(f"{len(requirements)} requirements of your regulations are judged by a model, and none is configured: "
+                         "they stay open as questions.")
     return {"docs": docs, "sheets": sheets, "notes": notes, "files": files, "seconds": round(time.time() - started, 1)}
 
 
@@ -173,10 +189,50 @@ def evaluate(docs: list[dict], codes: list[str], answers: dict | None = None) ->
     profile = profile_of(answers or {})
     out = {}
     for cid in codes:
-        pack, label, _ = CODES[cid]
-        rs = load(ROOT / "packs" / pack)
-        out[cid] = {"pack": pack, "label": label, "rs": rs, "norms": None, "rows": run(rs, ev, dict(profile))}
+        if cid.startswith("reg:"):  # a customer regulation (app.regulations): its compiled pack
+            from . import regulations
+            req = regulations.ready(cid[4:], "building")
+            if req is None:
+                continue
+            pack, label, short = f"regulations/{cid[4:]}", req["name"], req["name"]  # shown in reports: not the server path
+            rs = load(regulations.pack_dir(cid[4:]))
+        else:
+            pack, label, _ = CODES[cid]
+            short = None
+            rs = load(ROOT / "packs" / pack)
+        out[cid] = {"pack": pack, "label": label, "short": short, "rs": rs, "norms": None, "rows": run(rs, ev, dict(profile))}
     return {"evidence": ev, "results": out}
+
+
+def assessments(evaluation: dict, loc, by_at: dict) -> dict[tuple[str, str], dict]:
+    """(standard id, norm) -> what the model answered for an assessed check of a customer regulation: its value,
+    note and cited sheet regions or model elements, whatever the verdict (a pass cites too)."""
+    ev = evaluation["evidence"]
+    out = {}
+    for sid, res in evaluation["results"].items():
+        if not sid.startswith("reg:"):
+            continue
+        rs = res["rs"]
+        for (kind, name), el in rs.elements.items():
+            fact = (el.data.get("require") or {}).get("fact") if kind == "norm" and isinstance(el.data.get("require"), dict) else None
+            if not fact or not rs.has("predicate", fact) or rs.get("predicate", fact).data.get("kind") != "judged":
+                continue
+            f = ev.facts.get(fact.rpartition(".")[2])
+            obs = [o for o in (f.observations if f else []) if str(o.get("source", "")).startswith("llm:")]
+            if not obs:
+                continue
+            cites = []
+            for o in obs:
+                if o.get("at"):
+                    a = dict(loc(o["at"]))
+                    el_ = by_at.get(o["at"])
+                    if el_ is not None:
+                        a["element"] = {"id": el_.id, "type": el_.type,
+                                        "facts": {k: " / ".join(map(str, x.values()[:4])) for k, x in el_.facts.items()}}
+                    cites.append(a)
+            out[(sid, name)] = {"value": obs[0]["value"], "basis": obs[0].get("basis", "evidence"),
+                                "note": str(obs[0].get("note") or ""), "source": obs[0].get("source"), "at": cites}
+    return out
 
 
 def disagree(values: list[dict]) -> bool:
@@ -287,9 +343,11 @@ def build(pid: str, project: dict, data: dict, evaluation: dict, answers: dict |
     loc = lambda a: locate(pid, sheets, a)  # noqa: E731
     standards, questions = report_mod.sections(evaluation, loc, by_type=True)
     by_id = {e.id: e for e in ev.elements}
+    assessed = assessments(evaluation, loc, {a: e for e in ev.elements for a in e.at})
     for s in standards:
-        s["covers"] = CODES[s["id"]][2]
+        s["covers"] = CODES[s["id"]][2] if s["id"] in CODES else "your regulation"
         for e in s["entries"]:
+            e["assessment"] = assessed.get((s["id"], e["norm"]))
             for f in e["findings"]:
                 _focus(f, by_id.get(f["element"]), loc)
     given = {("_subject", k): v for k, v in (answers.get("subject") or {}).items()}
@@ -364,8 +422,14 @@ def markdown(rep: dict, base_url: str = "") -> str:
             if e["verdict"] == "not_applicable":
                 continue
             head = f"### {report_mod.VERDICT_LABEL[e['verdict']]}: {e['section']} {e['title']}"
-            out += [head, "", f"Requirement: [{e['section']}]({e['url']})" if e.get("url") else f"Requirement: {e['section']}", ""]
+            out += [head, "", f"Requirement: [{e['section']}]({base_url if e['url'].startswith('/') else ''}{e['url']})" if e.get("url") else f"Requirement: {e['section']}", ""]
+            if e.get("assessment"):
+                m = e["assessment"]
+                where = "; ".join(f"[{a['label']}]({base_url}{a['img']})" if a.get("img") else a["label"] for a in m["at"])
+                out += [f"- Model assessment ({m['source']}): {'met' if m['value'] else 'not met'}. {m['note']}" + (f" Cites: {where}" if where else ""), ""]
             for f in e["findings"][:40]:
+                if e.get("assessment") and not f["type"]:
+                    continue
                 where = "; ".join(f"[{a['label']}]({base_url}{a['img']})" if a.get("img") else a["label"] for a in f["at"]) or "the building as a whole"
                 facts = ", ".join(f"{k} {'/'.join(v)}" for k, v in f["facts"].items())
                 line = f"- **{report_mod.VERDICT_LABEL[f['verdict']]}** {TYPE_LABEL.get(f['type'] or '', f['type'] or 'building')} `{f['element']}` at {where}"
