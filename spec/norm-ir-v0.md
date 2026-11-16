@@ -7,7 +7,7 @@ v0 covers what the research mode needs: answering code questions from a project 
 ## Design rules
 
 1. **Rules are data, not programs.** Conditions and values are expression trees the evaluator can inspect. That is what lets it prune branches, report open facts, diff two editions, and later search for repairs. Code is used only to measure facts, never to decide.
-2. **Every rule cites its source.** Each table, term, and norm has `cite.section` and an `https` `cite.url`. Each branch of a table carries the row label as printed. The validator rejects a rule without them.
+2. **Every rule cites its source.** Each table, term, and norm has `cite.section` and an `https` `cite.url`, or, for a customer's own document, `cite.at` (see [Customer documents](#customer-documents)). Each branch of a table carries the row label as printed. The validator rejects a rule without them.
 3. **Adoption is explicit.** A jurisdiction's pack `extends` the model code pack and lists what the adopting law deletes, replaces, and redirects. Answers report, for every cited provision, whether the city changed it.
 4. **Unknown is an answer.** Missing facts leave a residual, the part of the rule that still depends on them. The evaluator never guesses a value.
 5. **Interpretations are visible.** Where the text leaves a choice to the formalizer, such as which table row wins or how to round, the element says so in `interpretation`.
@@ -99,6 +99,10 @@ Obligations a design must meet, for model checks:
 
 v0 has only obligations. Prohibitions, permissions, and exceptions as separate defeating norms come with the first chapter that needs them.
 
+### Customer documents
+
+A pack compiled from a customer's own regulation, such as an internal secure-coding standard or a building policy ([`adapters/regulation`](../adapters/regulation)), cites a document that has no public URL. Its elements cite it with `cite.at`, the file and line range the clause occupies (`policy.pdf#L120-L131`), and may give as `cite.url` a path in the app that shows the clause (`/regulations/r3f9a0b12c4#c12`) instead of an `https` URL. Such packs are `text_policy: public` and quote the clause, since the text is the customer's. Their norms are written by a model and say so with `interpretation.by: model` (hand-written packs use `by: pack`), with the model's reason in `interpretation.note`; they stay `draft` until a person reviews them.
+
 ## Expressions
 
 | Form | Meaning |
@@ -150,7 +154,7 @@ An **evidence document** (format in [`engine/normir/evidence.py`](../engine/norm
 
 `normir validate <package>` checks the package and everything it extends:
 
-- every table, term, and norm has `cite.section` and an `https` `cite.url`; every `cases` row has a `cite`; every table row has its printed `row` label;
+- every table, term, and norm has `cite.section` and an `https` `cite.url`, or `cite.at` with no `cite.url` or an app path starting with `/`; every `cases` row has a `cite`; every table row has its printed `row` label;
 - every fact resolves to a declared predicate through `building` or a `for` variable;
 - every symbol compared with an enum fact is one of its values;
 - terms, tables, and columns exist, and `of` binds the element type the term expects;

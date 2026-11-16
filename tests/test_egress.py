@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+import yaml
 
 from normir import Evaluator, Quantity, Residual, amendment_status, ask, load, validate
 
@@ -191,3 +192,25 @@ terms:
     assert "undeclared predicate 'building.stories'" in joined
     assert "needs a 'cite'" in joined
     assert "link-only" in joined
+
+
+@pytest.mark.parametrize(
+    "cite, ok",
+    [
+        ({"section": "4.2", "url": "https://example.com/std#4.2"}, True),
+        ({"section": "4.2", "at": "policy.pdf#L10-L12"}, True),                                   # customer document, no url
+        ({"section": "4.2", "at": "policy.pdf#L10-L12", "url": "/regulations/r1#c3"}, True),       # app path
+        ({"section": "4.2", "url": "/regulations/r1#c3"}, False),                                 # app path without at
+        ({"section": "4.2", "at": "policy.pdf#L10-L12", "url": "http://example.com"}, False),     # not https
+        ({"section": "4.2", "at": "policy.pdf#L10-L12", "url": "//evil.example/x"}, False),       # not an app path
+        ({"at": "policy.pdf#L10-L12"}, False),                                                     # no section
+    ],
+)
+def test_validator_accepts_customer_document_citations(tmp_path, cite, ok):
+    (tmp_path / "package.yaml").write_text("package: own\nversion: '1'\ntext_policy: public\n")
+    (tmp_path / "rules.yaml").write_text(yaml.safe_dump({
+        "predicates": [{"name": "building.sprinklered", "type": "bool"}],
+        "norms": [{"name": "n1", "modality": "obligation", "cite": cite, "require": {"fact": "building.sprinklered"}}],
+    }))
+    errors, _ = validate(load(tmp_path))
+    assert (errors == []) is ok, errors

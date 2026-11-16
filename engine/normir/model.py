@@ -226,8 +226,12 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
             errors.append(f"{where}: status must be one of {sorted(STATUSES)}")
         if kind != "predicate":
             cite = d.get("cite") or {}
-            if not cite.get("section") or not str(cite.get("url", "")).startswith("https://"):
-                errors.append(f"{where}: needs cite.section and an https cite.url")
+            url = str(cite.get("url") or "")
+            # A customer's own document has no public URL: it is cited by `at` (file and lines), with at most a
+            # path in the app that shows it.
+            customer = bool(cite.get("at")) and (not url or (url.startswith("/") and not url.startswith("//")))
+            if not cite.get("section") or not (url.startswith("https://") or customer):
+                errors.append(f"{where}: needs cite.section and an https cite.url (or cite.at for a customer document)")
         scope = dict(d.get("for") or {})
         if kind == "term":
             check_expr(d["value"], scope, where)
