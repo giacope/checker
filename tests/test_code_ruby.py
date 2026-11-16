@@ -652,3 +652,16 @@ def test_bench_evidence_is_valid():
         assert doc["sources"][0]["adapter"] == "adapters.code_ruby"
         assert doc["elements"] and doc["facts"]
         load_evidence(doc)
+
+
+def test_password_length_rule_follows_unless_negation_and_the_branch(tmp_path):
+    doc = repo(tmp_path, {"app/models/user.rb": """\
+        class User < ApplicationRecord
+          has_secure_password
+          def check(password)
+            raise ArgumentError if !(password.length >= 16)
+            errors.add(:password, "too long") unless password.length <= 40
+          end
+        end
+        """})
+    assert fact(doc, "password_min_length") == [16] and fact(doc, "password_max_length") == [40, 72]

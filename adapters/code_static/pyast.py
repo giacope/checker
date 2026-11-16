@@ -7,7 +7,7 @@ import re
 
 from .common import (Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
                      is_personal_name, is_stored_password_name, is_user_object_name, literal_secret_kind,
-                     plausible_secret_value, secret_kind_for_name, words)
+                     plausible_secret_value, secret_kind_for_name, words, length_bound, rejects_words)
 from .files import SourceFile
 from .models import Models, arg as model_arg
 
@@ -105,6 +105,51 @@ def names_in(expr) -> list[tuple[str, str | None]]:
             if k:
                 out.append((k, None))
     return out
+
+
+def _branch(stmts) -> str | None:
+    """"reject" when a branch rejects the input (raises, returns anything but True, aborts, records an error),
+    "accept" when it returns True, else None."""
+    if not stmts:
+        return None
+    names = []
+    for st in stmts:
+        for x in ast.walk(st):
+            if isinstance(x, ast.Raise):
+                return "reject"
+            if isinstance(x, ast.Return) and x in stmts:
+                return "accept" if isinstance(x.value, ast.Constant) and x.value.value is True else "reject"
+            if isinstance(x, ast.Call):
+                names += dotted(x.func) + [k.arg for k in x.keywords if k.arg]
+            elif isinstance(x, ast.Name):
+                names.append(x.id)
+            elif isinstance(x, ast.Constant) and isinstance(x.value, int) and 400 <= x.value <= 499:
+                return "reject"
+    return "reject" if rejects_words(names) else None
+
+
+def _invalid_when(pf, node) -> bool | None:
+    """Whether `node` (a condition) holding means the code rejects the input there (True), accepts it (False), or
+    the context does not say (None). `not` flips it; `and`/`or` pass it through."""
+    holds = True
+    while True:
+        parent = pf.parent.get(node)
+        if isinstance(parent, ast.UnaryOp) and isinstance(parent.op, ast.Not):
+            holds = not holds
+        elif isinstance(parent, ast.BoolOp):
+            pass
+        elif isinstance(parent, ast.If) and node is parent.test:
+            body, orelse = _branch(parent.body), _branch(parent.orelse)
+            if body == "reject" or orelse == "accept":
+                return holds
+            if body == "accept" or orelse == "reject":
+                return not holds
+            return None
+        elif isinstance(parent, (ast.Assert, ast.Return, ast.Lambda)):
+            return not holds        # asserted or returned: what holds is what passes
+        else:
+            return None
+        node = parent
 
 
 class PyFile:
@@ -1010,23 +1055,19 @@ class PyAnalyser:
         for a, b, o in ((left, right, op), (right, left, _flip(op))):
             if isinstance(a, ast.Call) and isinstance(a.func, ast.Name) and a.func.id == "len" and a.args and self.mentions_password(pf, a.args[0]) \
                     and isinstance(b, ast.Constant) and isinstance(b.value, int) and o is not None:
-                self._length(o, b.value, at, out, "server")
+                self._length(pf, n, o, b.value, at, out, "server")
         if isinstance(op, (ast.In, ast.NotIn)) and self.mentions_password(pf, left):
             if any(w in {"common", "blocklist", "blacklist", "banned", "weak", "pwned", "breached", "compromised", "denylist"}
                    for nm, _ in names_in(right) for w in words(nm)):
                 out.signal("pw_blocklist", at)
 
-    def _length(self, op, n, at, out, side):
-        if isinstance(op, ast.Lt):
-            out.signal("pw_min", at, n, side=side)
-        elif isinstance(op, ast.GtE):
-            out.signal("pw_min", at, n, side=side) if n < 16 else out.signal("pw_max", at, n - 1, side=side)
-        elif isinstance(op, ast.LtE):
-            out.signal("pw_min", at, n + 1, side=side) if n < 16 else out.signal("pw_max", at, n, side=side)
-        elif isinstance(op, ast.Gt):
-            out.signal("pw_min", at, n + 1, side=side) if n < 16 else out.signal("pw_max", at, n, side=side)
-        else:
+    def _length(self, pf: PyFile, node, op, n, at, out, side):
+        sym = {ast.Lt: "<", ast.LtE: "<=", ast.Gt: ">", ast.GtE: ">="}.get(type(op))
+        if sym is None:
             return
+        bound = length_bound(sym, n, _invalid_when(pf, node))
+        if bound:
+            out.signal("pw_min" if bound[0] == "min" else "pw_max", at, bound[1], side=side)
         out.signal("pw_validation", at, side=side)
 
     def function(self, pf: PyFile, f, out: Collector):

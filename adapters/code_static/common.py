@@ -246,6 +246,30 @@ SAAS_SDKS = {  # module name -> recipient
 
 # ---------------------------------------------------------------- collector
 
+REJECT_WORDS = {"abort", "error", "errors", "fail", "fails", "failure", "reject", "invalid", "deny", "denied", "flash", "throw",
+                "raise", "bad", "badrequest", "unprocessable", "forbidden", "validationerror", "exception", "warn", "alert"}
+
+
+def rejects_words(names: list[str]) -> bool:
+    """Whether calls or names in a branch say it rejects the input (abort, errors.add, ValidationError, flash...)."""
+    ws = [w for n in names for w in re.split(r"[^a-z]+", re.sub(r"([a-z])([A-Z])", r"\1_\2", str(n)).lower()) if w]
+    return any(w in REJECT_WORDS or w.endswith(("error", "exception")) for w in ws)
+
+
+def length_bound(op: str, n: int, invalid_when: bool | None) -> tuple[str, int] | None:
+    """The password length rule a comparison `len(password) <op> n` states: ("min", k) or ("max", k).
+
+    `invalid_when` is what the comparison holding means where it is: True when the code rejects the password then
+    (`if len(p) < 8: raise`), False when it accepts it then (`assert len(p) >= 8`, `return len(p) <= 64`, or under
+    one `not`), None when the context does not say, and then there is no rule to read."""
+    if invalid_when is None:
+        return None
+    valid = {  # the lengths that pass, as a bound
+        ("<", True): ("min", n), ("<=", True): ("min", n + 1), (">", True): ("max", n), (">=", True): ("max", n - 1),
+        (">=", False): ("min", n), (">", False): ("min", n + 1), ("<=", False): ("max", n), ("<", False): ("max", n - 1)}
+    return valid.get((op, invalid_when))
+
+
 @dataclass
 class Collector:
     """Elements and subject signals found so far; one element per (type, place)."""

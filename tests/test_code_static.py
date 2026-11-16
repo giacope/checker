@@ -564,3 +564,30 @@ def test_token_check_route_is_not_a_login_route(tmp_path):
             return current_user
         """})
     assert fact(doc, "login_rate_limited") == [(False, "login.py:5")]
+
+
+@pytest.mark.parametrize("body, lo, hi", [
+    ("if not len(password) >= 16:\n        abort(400)", 16, None),        # negated: the size of the number decides nothing
+    ("if len(password) > 12:\n        abort(400)", None, 12),             # a maximum of 12, not a minimum of 13
+    ("if len(password) < 8:\n        raise ValueError('short')", 8, None),
+    ("assert len(password) >= 20", 20, None),
+    ("x = len(password) >= 8", None, None),                               # the context does not say which: no rule
+])
+def test_password_length_rule_follows_what_the_code_does_when_the_check_holds(tmp_path, body, lo, hi):
+    (tmp_path / "app.py").write_text("from flask import Flask, abort\napp = Flask(__name__)\n@app.post('/register')\n"
+                                     f"def register(password):\n    {body}\n    user.set_password(password)\n")
+    f = analyse(tmp_path, "t")["facts"]
+    read = lambda k: [o["value"] for o in f.get(k, []) if o.get("basis") != "absence"]  # noqa: E731
+    assert read("password_min_length") == ([lo] if lo else []) and read("password_max_length") == ([hi] if hi else [])
+
+
+def test_password_length_rule_in_javascript_follows_negation_and_the_branch(tmp_path):
+    (tmp_path / "package.json").write_text('{"dependencies": {"express": "4.0.0", "bcrypt": "5.0.0"}}')
+    (tmp_path / "server.js").write_text(
+        "const express = require('express');\nconst bcrypt = require('bcrypt');\nconst app = express();\n"
+        "app.post('/register', async (req, res) => {\n  const password = req.body.password;\n"
+        "  if (!(password.length >= 16)) { return res.status(400).send('short'); }\n"
+        "  if (password.length > 64) { throw new Error('long'); }\n"
+        "  await User.create({ email: req.body.email, password: await bcrypt.hash(password, 10) });\n});\n")
+    f = analyse(tmp_path, "t")["facts"]
+    assert [o["value"] for o in f["password_min_length"]] == [16] and [o["value"] for o in f["password_max_length"]] == [64]

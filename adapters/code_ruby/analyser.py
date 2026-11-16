@@ -7,7 +7,7 @@ import re
 
 from tree_sitter import Node
 
-from adapters.code_static.common import (CRED_WORDS, ERASURE_REQUEST, LOCKOUT, Collector, analyse_password_regex, external_host,
+from adapters.code_static.common import (length_bound, rejects_words, CRED_WORDS, ERASURE_REQUEST, LOCKOUT, Collector, analyse_password_regex, external_host,
                                          is_credential_name, is_password_name, is_personal_name, is_stored_password_name,
                                          is_user_object_name, literal_secret_kind, model_policy, plausible_secret_value,
                                          secret_kind_for_name, session_cookie_name, words)
@@ -100,6 +100,59 @@ def _model_name_of(recv_name: str) -> str:
     n = re.sub(r"^(current|new|old|the|found|reset|showing)_", "", n)
     return "".join(w.capitalize() for w in n.split("_") if w)
 
+
+
+def _branch(n: Node | None) -> str | None:
+    """"reject" when a branch rejects the input (raises, returns anything but true, renders a 4xx, adds an error),
+    "accept" when it returns true, else None."""
+    if n is None:
+        return None
+    stack, names = [n], []
+    while stack:
+        x = stack.pop()
+        if x.type == "return":
+            vals = [c for c in x.named_children if c.type != "comment"]
+            return "accept" if vals and text(vals[0]).strip() == "true" else "reject"
+        if x.type in ("identifier", "constant", "simple_symbol"):
+            names.append(text(x).lstrip(":"))
+        elif x.type == "integer" and text(x).isdigit() and 400 <= int(text(x)) <= 499:
+            return "reject"
+        if x.type not in ("method", "singleton_method", "block", "do_block", "lambda"):
+            stack += reversed(x.named_children)
+    return "reject" if rejects_words(names) else None
+
+
+def _invalid_when(n: Node) -> bool | None:
+    """Whether condition `n` holding means the code rejects the input there (True), accepts it (False), or the
+    context does not say (None). `!`/`not` and `unless` flip it; `&&`, `and`, `||`, `or` pass it through; a method's
+    last expression is what it returns."""
+    holds = True
+    while True:
+        p = n.parent
+        if p is None:
+            return None
+        if p.type == "unary" and text(field(p, "operator")) in ("!", "not"):
+            holds = not holds
+        elif p.type == "parenthesized_statements" or (p.type == "binary" and text(field(p, "operator")) in ("&&", "||", "and", "or")):
+            pass
+        elif p.type in ("if", "unless", "if_modifier", "unless_modifier") and field(p, "condition") is not None and field(p, "condition").id == n.id:
+            if p.type.startswith("unless"):
+                holds = not holds
+            if p.type.endswith("modifier"):
+                body, orelse = _branch(field(p, "body")), None
+            else:
+                body, orelse = _branch(field(p, "consequence")), _branch(field(p, "alternative"))
+            if body == "reject" or orelse == "accept":
+                return holds
+            if body == "accept" or orelse == "reject":
+                return not holds
+            return None
+        elif p.type == "return" or (p.type == "body_statement" and p.parent is not None and p.parent.type in ("method", "singleton_method")
+                                    and [c for c in p.named_children if c.type != "comment"][-1].id == n.id):
+            return not holds        # returned: what holds is what passes
+        else:
+            return None
+        n = p
 
 class Analyser:
     def __init__(self, project: Project, files: list[RbFile], fm: Models, taint: Taint):
@@ -1334,13 +1387,9 @@ class Analyser:
             for a, b, o in ((left, right, op), (right, left, {"<": ">", ">": "<", "<=": ">=", ">=": "<="}[op])):
                 if a.type == "call" and method_name(a) in {"length", "size", "bytesize"} and self.mentions_password(field(a, "receiver")) \
                         and int_value(b) is not None:
-                    k = int_value(b)
-                    if o == "<":
-                        out.signal("pw_min", at, k, side="server")
-                    elif o == ">=":
-                        out.signal("pw_min", at, k, side="server") if k < 16 else out.signal("pw_max", at, k - 1, side="server")
-                    elif o in {">", "<="}:
-                        out.signal("pw_min", at, k + 1, side="server") if k < 16 else out.signal("pw_max", at, k, side="server")
+                    bound = length_bound(o, int_value(b), _invalid_when(n))
+                    if bound:
+                        out.signal("pw_min" if bound[0] == "min" else "pw_max", at, bound[1], side="server")
                     out.signal("pw_validation", at, side="server")
 
     # ------------------------------------------------------------------ classes and controller actions

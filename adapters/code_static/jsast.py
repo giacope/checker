@@ -8,7 +8,7 @@ import tree_sitter as ts
 import tree_sitter_javascript as tsjs
 import tree_sitter_typescript as tsts
 
-from .common import (Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
+from .common import (length_bound, rejects_words, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
                      is_personal_name, is_stored_password_name, is_user_object_name, literal_secret_kind,
                      plausible_secret_value, secret_kind_for_name, words, PW_WORDS, TRACKER_HOSTS, USER_OBJECTS)
 from .files import SourceFile
@@ -64,6 +64,56 @@ def unwrap(n):
 
 def kids(n):
     return [c for c in n.named_children if c.type != "comment"] if n is not None else []
+
+
+def _branch(n) -> str | None:
+    """"reject" when a branch rejects the input (throws, returns anything but true, sends a 4xx, records an error),
+    "accept" when it returns true, else None."""
+    if n is None:
+        return None
+    stack, names = [n], []
+    while stack:
+        x = stack.pop()
+        if x.type == "throw_statement":
+            return "reject"
+        if x.type == "return_statement":
+            kids = [c for c in x.named_children if c.type != "comment"]
+            return "accept" if kids and T(kids[0]) == "true" else "reject"
+        if x.type in ("identifier", "property_identifier"):
+            names.append(T(x))
+        elif x.type == "number" and T(x).isdigit() and 400 <= int(T(x)) <= 499:
+            return "reject"
+        if x.type not in ("function_declaration", "arrow_function", "function_expression", "function"):
+            stack += reversed(x.named_children)
+    return "reject" if rejects_words(names) else None
+
+
+def _invalid_when(n) -> bool | None:
+    """Whether condition `n` holding means the code rejects the input there (True), accepts it (False), or the
+    context does not say (None). `!` flips it; `&&`, `||` and parentheses pass it through."""
+    holds = True
+    while True:
+        p = n.parent
+        if p is None:
+            return None
+        if p.type == "unary_expression" and T(p.child_by_field_name("operator")) == "!":
+            holds = not holds
+        elif p.type == "parenthesized_expression" or (p.type == "binary_expression" and T(p.child_by_field_name("operator")) in ("&&", "||")):
+            pass
+        elif p.type == "if_statement" and p.child_by_field_name("condition") is not None and p.child_by_field_name("condition").id == n.id:
+            alt = p.child_by_field_name("alternative")
+            body, orelse = _branch(p.child_by_field_name("consequence")), _branch(alt)
+            if body == "reject" or orelse == "accept":
+                return holds
+            if body == "accept" or orelse == "reject":
+                return not holds
+            return None
+        elif p.type == "return_statement" or (p.type == "arrow_function" and p.child_by_field_name("body") is not None
+                                              and p.child_by_field_name("body").id == n.id):
+            return not holds        # returned: what holds is what passes
+        else:
+            return None
+        n = p
 
 
 def str_value(n) -> str | None:
@@ -1389,17 +1439,9 @@ class JSAnalyser:
         for a, b, o in ((left, right, op), (right, left, {"<": ">", ">": "<", "<=": ">=", ">=": "<="}.get(op))):
             if a is not None and b is not None and o and a.type == "member_expression" and dotted(a)[-1:] == ["length"] \
                     and loose_password((dotted(a) or ["", ""])[-2] if len(dotted(a)) > 1 else "") and b.type == "number" and T(b).isdigit():
-                v = int(T(b))
-                if o == "<":
-                    out.signal("pw_min", at, v, side=side)
-                elif o == "<=":
-                    out.signal("pw_min", at, v + 1, side=side) if v < 16 else out.signal("pw_max", at, v, side=side)
-                elif o == ">=":
-                    out.signal("pw_min", at, v, side=side) if v < 16 else out.signal("pw_max", at, v - 1, side=side)
-                elif o == ">":
-                    out.signal("pw_min", at, v + 1, side=side) if v < 16 else out.signal("pw_max", at, v, side=side)
-                else:
-                    continue
+                bound = length_bound(o, int(T(b)), _invalid_when(n))
+                if bound:
+                    out.signal("pw_min" if bound[0] == "min" else "pw_max", at, bound[1], side=side)
                 out.signal("pw_validation", at, side=side)
 
     def object(self, jf: JSFile, n, out: Collector, hashed):
