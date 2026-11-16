@@ -40,6 +40,7 @@ def client(tmp_path, monkeypatch):
     import app.scan as scan_mod
     importlib.reload(regs)
     main = importlib.reload(main)
+    monkeypatch.setattr(main, "ISOLATE", False)   # the fake scan below lives in this process
     calls = []
 
     def fake_scan(url, work, branch=None, progress=lambda m: None, **kw):
@@ -315,3 +316,27 @@ def test_questions_about_a_scan_with_its_regulation(client, compiler, monkeypatc
     assert client.post("/ask", data={"question": "hi there", "mode": "forever", "regulations": [rid]}).status_code == 400
     assert client.post("/ask", data={"question": "hi there"}).status_code == 400
     assert client.get("/questions/../../etc").status_code == 404
+
+
+def test_a_job_that_crashes_or_hangs_ends_in_an_error_and_the_server_lives(tmp_path, monkeypatch):
+    """Readers run on untrusted files in a child process: a native crash (a segfault in ifcopenshell, an abort in
+    pdfium) or a hang becomes that job's error state."""
+    import functools
+    import os
+    import time as time_mod
+
+    import app.main as main
+    monkeypatch.setattr(main, "ISOLATE", True)
+    for name, fn, args, expect in [("abort", os.abort, (), "crashed (SIGABRT)"),
+                                   ("hang", time_mod.sleep, (30,), "was stopped after 2 s")]:
+        d = tmp_path / name
+        d.mkdir()
+        main._status(d, state="running", step="Reading")
+        monkeypatch.setattr(main, "JOB_SECONDS", 2)
+        main.isolated(fn, d, *args)
+        st = json.loads((d / "status.json").read_text())
+        assert st["state"] == "error" and expect in st["error"], st
+    d = tmp_path / "ok"   # a job that finishes keeps the state it wrote
+    d.mkdir()
+    main.isolated(functools.partial(main._status, d, state="done", step="Done"), d)
+    assert json.loads((d / "status.json").read_text())["state"] == "done"

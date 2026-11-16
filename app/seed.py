@@ -93,7 +93,7 @@ def seed(key: str, spec: dict, refresh: bool = False, log=print) -> str | None:
     for f in spec["files"]:
         log(f"{key}: {place(f, d / 'files', log)}")
     log(f"{key}: processing as project {pid}")
-    main.run_project(pid)
+    main.isolated(main.run_project, d, pid)
     st = main._read(d, "status.json", {})
     log(f"{key}: {st.get('state')} {st.get('error') or ''} ({st.get('seconds', '?')} s)")
     return pid

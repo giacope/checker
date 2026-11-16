@@ -47,6 +47,7 @@ def client(tmp_path, monkeypatch):
     import app.regulations as regs
     importlib.reload(regs)
     main = importlib.reload(main)
+    monkeypatch.setattr(main, "ISOLATE", False)   # the fake readers below live in this process
     seen = {}
 
     def fake_process(files_dir, name, progress=lambda m: None, requirements=()):

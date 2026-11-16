@@ -10,10 +10,12 @@ from __future__ import annotations
 
 import contextlib
 import json
+import multiprocessing
 import os
 import re
 import secrets
 import shutil
+import signal
 import threading
 import time
 import traceback
@@ -41,6 +43,8 @@ PROJECTS.mkdir(parents=True, exist_ok=True)
 MAX_UPLOAD = int(os.environ.get("NORMIR_MAX_UPLOAD_MB", "1024")) * 1_000_000
 POOL = ThreadPoolExecutor(max_workers=int(os.environ.get("NORMIR_WORKERS", "2")))
 LOCK = threading.Lock()
+JOB_SECONDS = int(os.environ.get("NORMIR_JOB_SECONDS", "3600"))
+ISOLATE = True   # tests that replace the readers with in-process fakes turn this off
 SCAN_ID = re.compile(r"^[a-z0-9]{12}$")
 
 @contextlib.asynccontextmanager
@@ -85,6 +89,28 @@ def _status(d: Path, **kw) -> None:
         st = _read(d, "status.json", {})
         st.update(kw, updated=time.time())
         _write(d, "status.json", st)
+
+
+def isolated(fn, d: Path, *args) -> None:
+    """Run a job on untrusted input (fn(*args), which records its own state in d/status.json) in a child process.
+    A reader that crashes natively (a segfault in a geometry kernel, an abort in a PDF library) or runs past
+    JOB_SECONDS ends that job with an error instead of taking the server, and every other job, down with it."""
+    if not ISOLATE:
+        return fn(*args)
+    p = multiprocessing.get_context("forkserver").Process(target=fn, args=args, daemon=True)
+    p.start()
+    p.join(JOB_SECONDS)
+    if p.is_alive():
+        p.kill()
+        p.join()
+        why = f"was stopped after {JOB_SECONDS} s"
+    elif p.exitcode == 0:
+        return
+    else:
+        why = (f"crashed ({signal.Signals(-p.exitcode).name})" if p.exitcode < 0 else f"exited with code {p.exitcode}")
+    if (_read(d, "status.json", {}) or {}).get("state") != "done":
+        _status(d, state="error", error=f"The reader {why} on this input. The rest of the app is unaffected; "
+                                        "the input may be damaged or larger than the reader can handle.")
 
 
 def _run(sid: str) -> None:
@@ -158,7 +184,7 @@ def create(url: str = Form(...), branch: str = Form(""), asvs_level: int = Form(
     _write(d, "request.json", {"url": url.strip(), "branch": branch.strip(), "asvs_level": max(1, min(3, asvs_level)),
                                "standards": standards, "created": time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())})
     _status(d, state="queued", step="Queued")
-    POOL.submit(_run, sid)
+    POOL.submit(isolated, _run, d, sid)
     return RedirectResponse(f"/scans/{sid}", status_code=303)
 
 
@@ -269,7 +295,7 @@ async def create_regulation(name: str = Form(""), domain: str = Form("code"), fi
         rid = regs.create(name, domain, got)
     except ValueError as e:
         raise HTTPException(400, str(e)) from e
-    POOL.submit(regs.compile_regulation, rid)
+    POOL.submit(isolated, regs.compile_regulation, regs.reg_dir(rid), rid)
     return RedirectResponse(f"/regulations/{rid}", status_code=303)
 
 
@@ -410,7 +436,7 @@ async def create_project(name: str = Form(""), codes: list[str] = Form([]), file
     if total == 0:
         shutil.rmtree(d, ignore_errors=True)
         raise HTTPException(400, "No files were uploaded.")
-    POOL.submit(run_project, pid)
+    POOL.submit(isolated, run_project, PROJECTS / pid, pid)
     return RedirectResponse(f"/projects/{pid}", status_code=303)
 
 
@@ -519,7 +545,7 @@ def ask_question(question: str = Form(...), mode: str = Form("quick"), artifact_
         qid = qs.create(question, mode, artifact, regulations)
     except qs.QuestionError as e:
         raise HTTPException(400, str(e)) from e
-    POOL.submit(qs.run, qid)
+    POOL.submit(isolated, qs.run, regs.DATA / "questions" / qid, qid)
     return RedirectResponse(f"/questions/{qid}", status_code=303)
 
 
