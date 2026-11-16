@@ -30,27 +30,32 @@ class Quantity:
         if not isinstance(other, Quantity) or other.dim != self.dim:
             raise TypeError(f"cannot combine {self} with {other}")
 
+    # One tolerance for every comparison: 812.8 mm is exactly 32 in, but the two conversions differ in the last
+    # bits of a float, and a value at a limit must pass whichever units the drawing and the code use.
+    def _close(self, other: Quantity) -> bool:
+        return math.isclose(other.base, self.base, rel_tol=1e-9, abs_tol=1e-12)
+
     def __lt__(self, other):
         self._same(other)
-        return self.base < other.base
+        return self.base < other.base and not self._close(other)
 
     def __le__(self, other):
         self._same(other)
-        return self.base <= other.base
+        return self.base < other.base or self._close(other)
 
     def __gt__(self, other):
         self._same(other)
-        return self.base > other.base
+        return self.base > other.base and not self._close(other)
 
     def __ge__(self, other):
         self._same(other)
-        return self.base >= other.base
+        return self.base > other.base or self._close(other)
 
     def __eq__(self, other):
-        return isinstance(other, Quantity) and other.dim == self.dim and math.isclose(other.base, self.base)
+        return isinstance(other, Quantity) and other.dim == self.dim and self._close(other)
 
     def __hash__(self):
-        return hash((round(self.base, 9), self.dim))
+        return hash(self.dim)  # equal quantities must hash alike, and equality has a tolerance
 
     def __str__(self) -> str:
         v = round(self.base / UNITS[self.unit][0], 4)

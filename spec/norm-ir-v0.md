@@ -107,7 +107,7 @@ A pack compiled from a customer's own regulation, such as an internal secure-cod
 
 | Form | Meaning |
 |---|---|
-| `44 in`, `300 ft`, `150 sqft`, `1.2 m`, `279 mm`, `30 m2` | Quantities. Units are `in`, `ft`, `sqft`, `mm`, `m`, `m2`; comparisons check dimensions, so `1118 mm` and `44 in` compare directly. |
+| `44 in`, `300 ft`, `150 sqft`, `1.2 m`, `279 mm`, `30 m2` | Quantities. Units are `in`, `ft`, `sqft`, `mm`, `m`, `m2`; comparisons check dimensions, so `1118 mm` and `44 in` compare directly. Equal lengths in different units are equal: every comparison uses one relative tolerance of 1e-9, so a door of exactly 812.8 mm meets a 32 in minimum. |
 | `B`, `nfpa13`, `not-permitted` | Symbols. Compared with enum facts, the validator checks they are declared values. |
 | `true`, `false`, numbers | Literals. |
 | `{fact: c.occupant_load}` | A fact about the building or a bound element. |
@@ -125,6 +125,8 @@ The evaluator takes a ruleset, the known building facts, and optionally the fact
 - Logic is three-valued: true, false, or residual.
 - `cases` drops rows whose condition is false and records them as ruled out by the profile. It stops at the first row that is true. Rows that are still open stay, in order, so the residual reads as "72 in if …; 36 in if …; otherwise 44 in".
 - `max` folds the known arguments and keeps the open ones.
+- A comparison against a `cases` value whose row is still open decides when every row the evidence leaves possible gives the same answer and the rows end in `else`: a 2 m stair clears a minimum of 900 mm or 36 in whichever row applies. Otherwise it stays a residual naming the facts that pick the row.
+- A rule that cannot be evaluated on the values given (a length compared with the symbol `not-permitted`, a division by zero, a non-boolean under `all`) is a residual marked `invalid` with the reason, never an exception: that norm's verdict is unknown with an `error`, and the rest of the run goes on.
 - Every element and table row that contributed to the result is recorded with its citation.
 
 An answer (`normir ask`, or `ask()` in Python) contains the value or residual, a plain-language rendering, the open facts, the rows ruled out, every citation with its `status` and its adoption status ("Not amended", "Deleted and replaced by …", "Deleted by …; see …"), the `defers_to` provisions not yet formalized, and notes on facts whose meaning moved, such as sprinkler references that Austin redirects to its Fire Code.
@@ -150,6 +152,8 @@ An **evidence document** (format in [`engine/normir/evidence.py`](../engine/norm
 
 `evidence.run(pack, evidence, profile)` evaluates each norm on each element of its type for every combination of values in the sets: **pass** or **fail** when all combinations agree (certified), **uncertain** when they disagree (the facts that flip it are named with their sources), **unknown** when a fact the norm reads is open. `summarize` rolls elements up to one verdict per norm.
 
+Only facts the norm can still read are varied. Up to 4,096 combinations are enumerated, which also names the facts that flip the verdict; past that, `check` splits on one fact at a time and stops wherever the rule is already decided, which is exact and counts every combination (2^40 two-valued facts take milliseconds when the rule short-circuits). If that still exceeds 200,000 evaluations the verdict is unknown, or uncertain when both outcomes were seen, with the reason in `error`: a pass or fail is only ever given for combinations that were evaluated.
+
 ## Validation
 
 `normir validate <package>` checks the package and everything it extends:
@@ -160,6 +164,8 @@ An **evidence document** (format in [`engine/normir/evidence.py`](../engine/norm
 - terms, tables, and columns exist, and `of` binds the element type the term expects;
 - table keys are unique and declared; missing keys are reported;
 - no term depends on itself;
+- every expression has a known operator with the right arguments, every `cases` row has only `when`/`then`/`cite` or `else`/`cite`, and a `for` binds one variable;
+- orderings and arithmetic only combine values that can (a length is never ordered against a number), and a norm's `require` is boolean;
 - patches replace something that exists, and nothing else collides;
 - `link-only` packages store no `quote`.
 
@@ -169,7 +175,7 @@ An **evidence document** (format in [`engine/normir/evidence.py`](../engine/norm
 - No defeasible exceptions, priorities, or interpretation sets yet; an interpretation choice is a note plus the order of `cases` rows.
 - No time dimension in the evaluator. A pack is one edition as adopted; editions are separate packages.
 - No aggregation over elements (sums, counts, the largest of): a stair's occupant load from the spaces it serves is derived outside the pack and given as evidence or profile facts.
-- Value sets are enumerated, not solved, so a norm reading many multi-valued facts is capped at 4,096 combinations.
+- Value sets are enumerated or split, not solved: a norm whose verdict needs more than 200,000 evaluations is reported unknown with that reason.
 - No proof replay. The citation trace is the explanation.
 
 ## Coverage: 2024 IBC Chapter 10 as adopted by Austin

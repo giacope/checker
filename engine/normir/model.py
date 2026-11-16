@@ -157,6 +157,203 @@ def walk(expr: Any) -> Iterator[dict]:
             yield from walk(v)
 
 
+# ---------------------------------------------------------------- expression grammar and types
+
+ORDERING = {"lt", "le", "gt", "ge"}
+PRED_TYPE = {"bool": "bool", "length": "length", "area": "area", "number": "number", "enum": "symbol"}
+
+
+def shape_errors(expr: Any, where: str) -> list[str]:
+    """Every way `expr` departs from the Norm IR expression grammar. Rules that pass can be walked and
+    evaluated without structural surprises; this runs before any other check so none of them crash."""
+    out: list[str] = []
+
+    def bad(msg: str) -> None:
+        out.append(f"{where}: {msg}")
+
+    def go(e: Any) -> None:
+        if e is None or isinstance(e, (bool, int, float, str)):
+            return
+        if isinstance(e, list):
+            bad(f"a list is only allowed as an operator's arguments: {str(e)[:60]}")
+            return
+        if not isinstance(e, dict) or not e:
+            bad(f"not an expression: {str(e)[:60]}")
+            return
+        keys = set(e)
+        if keys == {"value"}:
+            if isinstance(e["value"], (dict, list)):
+                bad("'value' takes a literal")
+            return
+        if keys == {"fact"}:
+            if not isinstance(e["fact"], str) or e["fact"].count(".") != 1 or not all(e["fact"].split(".")):
+                bad(f"'fact' takes a name like var.attr, got {str(e['fact'])[:60]}")
+            return
+        if "term" in keys:
+            if not keys <= {"term", "of"} or not isinstance(e["term"], str) or not isinstance(e.get("of", ""), str):
+                bad("'term' takes a term name and optionally 'of' (a variable name)")
+            return
+        if "lookup" in keys:
+            if keys != {"lookup", "key", "column"} or not isinstance(e["lookup"], str) or not isinstance(e["column"], str):
+                bad("'lookup' takes a table name, a 'key' expression and a 'column' name")
+                return
+            go(e["key"])
+            return
+        if "cases" in keys:
+            rows = e["cases"]
+            if keys != {"cases"} or not isinstance(rows, list) or not rows:
+                bad("'cases' takes a non-empty list of rows")
+                return
+            for j, row in enumerate(rows):
+                if not isinstance(row, dict) or not ({"when", "then"} <= set(row) or "else" in row) or ("else" in row and j != len(rows) - 1) \
+                        or not set(row) <= {"when", "then", "else", "cite"}:
+                    bad("each cases row has 'when' and 'then', and only the last may be 'else'")
+                    return
+                cite = row.get("cite", {})
+                if not isinstance(cite, dict) or any(not isinstance(v, (str, int, float)) for v in cite.values()):
+                    bad("a cases row's 'cite' maps names to text")
+                    return
+                for k in ("when", "then", "else"):
+                    if k in row:
+                        go(row[k])
+            return
+        if len(keys) != 1:
+            bad(f"an operator node has one key, got {sorted(map(str, keys))[:5]}")
+            return
+        (op, args), = e.items()
+        if op in ("all", "any", "max", "min"):
+            if not isinstance(args, list) or not args:
+                bad(f"'{op}' takes a non-empty list")
+                return
+            for a in args:
+                go(a)
+        elif op in ("not", "ceil"):
+            go(args)
+        elif op in COMPARISONS or op in ("mul", "div"):
+            if not isinstance(args, list) or len(args) != 2:
+                bad(f"'{op}' takes exactly two arguments")
+                return
+            for a in args:
+                go(a)
+        elif op == "in":
+            if not isinstance(args, list) or len(args) != 2 or not isinstance(args[1], list) or not args[1] \
+                    or any(isinstance(x, (dict, list)) for x in args[1]):
+                bad("'in' takes an expression and a non-empty list of literals")
+                return
+            go(args[0])
+        else:
+            bad(f"unknown operator '{op}'")
+
+    go(expr)
+    return out
+
+
+def _literal_type(v: Any) -> str:
+    if isinstance(v, bool):
+        return "bool"
+    if isinstance(v, (int, float)):
+        return "number"
+    if isinstance(v, str):
+        q = Quantity.parse(v)
+        return "symbol" if q is None else ("length" if q.dim == 1 else "area")
+    return "none"
+
+
+def type_errors(rs: "Ruleset", expr: Any, scope: dict[str, str], where: str, boolean: bool = False) -> list[str]:
+    """Combinations that fail on every input: true/false operators over non-booleans, ordering or arithmetic
+    over values that can never be compared or combined. Types are sets of what a value may be (a table cell
+    may be a length or "not-permitted"), so only a combination that fails for every member is an error."""
+    out: list[str] = []
+    seen_terms: set[str] = set()
+
+    def pred_type(path: str, sc: dict) -> set[str]:
+        root, _, attr = path.partition(".")
+        key = f"{rs.subject}.{attr}" if root == rs.subject else f"{sc.get(root)}.{attr}"
+        if not rs.has("predicate", key):
+            return {"any"}
+        return {PRED_TYPE.get(rs.get("predicate", key).data.get("type"), "any")}
+
+    def t(e: Any, sc: dict) -> set[str]:
+        if not isinstance(e, dict):
+            return {_literal_type(e)}
+        if set(e) == {"value"}:
+            return {_literal_type(e["value"])}
+        if "fact" in e:
+            return pred_type(e["fact"], sc)
+        if "term" in e:
+            if not rs.has("term", e["term"]) or e["term"] in seen_terms:
+                return {"any"}
+            seen_terms.add(e["term"])
+            target = rs.get("term", e["term"]).data
+            var = next(iter(target.get("for") or {}), None)
+            inner = {var: sc.get(e.get("of"))} if var else {}
+            got = t(target.get("value"), inner)
+            seen_terms.discard(e["term"])
+            return got
+        if "lookup" in e:
+            if not rs.has("table", e["lookup"]):
+                return {"any"}
+            cells = [r.get(e["column"]) for r in rs.get("table", e["lookup"]).data.get("rows", []) if e["column"] in r]
+            return {_literal_type(c) for c in cells} or {"any"}
+        if "cases" in e:
+            got: set[str] = set()
+            for row in e["cases"]:
+                if "when" in row:
+                    need(row["when"], sc, "a cases condition")
+                got |= t(row.get("then", row.get("else")), sc)
+            return got
+        (op, args), = e.items()
+        if op in ("all", "any"):
+            for a in args:
+                need(a, sc, f"'{op}'")
+            return {"bool"}
+        if op == "not":
+            need(args, sc, "'not'")
+            return {"bool"}
+        if op in COMPARISONS:
+            a, b = t(args[0], sc), t(args[1], sc)
+            if op in ORDERING and "any" not in a | b:
+                ordered = {"number", "length", "area"}
+                if not any(x == y and x in ordered for x in a for y in b):
+                    out.append(f"{where}: '{op}' compares {'/'.join(sorted(a))} with {'/'.join(sorted(b))}, which never have an order")
+            return {"bool"}
+        if op == "in":
+            t(args[0], sc)
+            return {"bool"}
+        if op in ("max", "min"):
+            return set().union(*(t(a, sc) for a in args))
+        if op == "ceil":
+            t(args, sc)
+            return {"number"}
+        a, b = t(args[0], sc), t(args[1], sc)
+        if "any" in a | b:
+            return {"any"}
+        qty = {"length", "area"}
+        results: set[str] = set()
+        for x in a:
+            for y in b:
+                if op == "mul" and {x, y} <= qty | {"number"} and not (x in qty and y in qty):
+                    results.add(x if x in qty else y)
+                if op == "div" and x in qty | {"number"} and y in qty | {"number"} and not (x == "number" and y in qty) \
+                        and not (x in qty and y in qty and x != y):
+                    results.add("number" if x == y or x == "number" else x)
+        if not results:
+            out.append(f"{where}: '{op}' of {'/'.join(sorted(a))} and {'/'.join(sorted(b))} is never defined")
+            return {"any"}
+        return results
+
+    def need(e: Any, sc: dict, what: str) -> None:
+        got = t(e, sc)
+        if "any" not in got and "bool" not in got:
+            out.append(f"{where}: {what} needs true/false, got {'/'.join(sorted(got))}")
+
+    if boolean:
+        need(expr, scope, "the requirement")
+    else:
+        t(expr, scope)
+    return out
+
+
 def _has_key(obj: Any, key: str) -> bool:
     return any(key in node for node in walk(obj))
 
@@ -232,11 +429,19 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
             customer = bool(cite.get("at")) and (not url or (url.startswith("/") and not url.startswith("//")))
             if not cite.get("section") or not (url.startswith("https://") or customer):
                 errors.append(f"{where}: needs cite.section and an https cite.url (or cite.at for a customer document)")
-        scope = dict(d.get("for") or {})
-        if kind == "term":
-            check_expr(d["value"], scope, where)
-        if kind == "norm":
-            check_expr(d["require"], scope, where)
+        scope = d.get("for") or {}
+        if not isinstance(scope, dict) or len(scope) > 1 or not all(isinstance(k, str) and isinstance(v, str) for k, v in scope.items()):
+            errors.append(f"{where}: 'for' binds one variable to a type name")
+            continue
+        scope = dict(scope)
+        if kind in ("term", "norm"):
+            body = d.get("value" if kind == "term" else "require", ...)
+            shape = shape_errors(body, where) if body is not ... else [f"{where}: needs '{'value' if kind == 'term' else 'require'}'"]
+            if shape:
+                errors += shape
+                continue
+            check_expr(body, scope, where)
+            errors += type_errors(rs, body, scope, where, boolean=kind == "norm")
         if kind == "table":
             key_pred = preds.get(d["key"])
             if key_pred is None or key_pred.data.get("type") != "enum":
@@ -260,7 +465,7 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
             errors.append(f"{pkg.name}: text_policy is link-only, so elements may not store 'quote' text")
 
     # term cycles
-    graph = {name: {n["term"] for n in walk(el.data["value"]) if "term" in n}
+    graph = {name: {n["term"] for n in walk(el.data.get("value")) if isinstance(n.get("term"), str)}
              for (kind, name), el in rs.elements.items() if kind == "term"}
     state: dict[str, int] = {}
 

@@ -37,8 +37,51 @@ def literal(v: Any) -> Any:
     return v
 
 
+def invalid(el: Element, message: str) -> dict:
+    """A part of a rule that cannot be evaluated on these values (a length compared with "not-permitted", a
+    division by zero). It stays undetermined like an open fact: the rule is still decided when the rest decides
+    it whatever this part is, and is otherwise reported with the message."""
+    return {"invalid": f"{el.name}: {message}"}
+
+
+def attempt(el: Element, fn) -> Any:
+    try:
+        return fn()
+    except (TypeError, ValueError, ZeroDivisionError, ArithmeticError) as e:
+        return Residual(invalid(el, str(e)))
+
+
 def lift(v: Any) -> dict:
     return v.expr if isinstance(v, Residual) else {"value": v}
+
+
+def _row_values(v: Any) -> list | None:
+    """Every value an open `cases` can still take, when its rows are exhaustive and their values known."""
+    if not isinstance(v, Residual) or "cases" not in v.expr:
+        return [v] if not isinstance(v, Residual) else None
+    rows = v.expr["cases"]
+    if not rows or "else" not in rows[-1]:
+        return None  # no row may match: the value itself is undetermined
+    out = []
+    for row in rows:
+        val = row.get("then", row.get("else"))
+        if not (isinstance(val, dict) and set(val) == {"value"}):
+            return None
+        out.append(val["value"])
+    return out
+
+
+def _by_rows(op: str, a: Any, b: Any) -> bool | None:
+    """A comparison with an open table value is decided when it comes out the same for every row the open
+    conditions still allow: 2 m is wider than every row of a width table, whichever row applies."""
+    xs, ys = _row_values(a), _row_values(b)
+    if xs is None or ys is None:
+        return None
+    try:
+        got = {OPS[op](x, y) for x in xs for y in ys}
+    except TypeError:
+        return None
+    return got.pop() if len(got) == 1 else None
 
 
 class Evaluator:
@@ -119,18 +162,21 @@ class Evaluator:
                 elif v is stop:
                     return stop
                 elif not isinstance(v, bool):
-                    raise TypeError(f"{el.name}: '{op}' needs true/false, got {v!r}")
+                    rest.append(invalid(el, f"'{op}' needs true/false, got {v!r}"))
             if not rest:
                 return not stop
             return Residual(rest[0] if len(rest) == 1 else {op: rest})
         if op == "not":
             v = self.ev(args, scope, el)
-            return Residual({"not": v.expr}) if isinstance(v, Residual) else not v
+            if isinstance(v, Residual):
+                return Residual({"not": v.expr})
+            return not v if isinstance(v, bool) else Residual(invalid(el, f"'not' needs true/false, got {v!r}"))
         if op in OPS:
             a, b = (self.ev(x, scope, el) for x in args)
             if isinstance(a, Residual) or isinstance(b, Residual):
-                return Residual({op: [lift(a), lift(b)]})
-            return OPS[op](a, b)
+                decided = _by_rows(op, a, b)
+                return Residual({op: [lift(a), lift(b)]}) if decided is None else decided
+            return attempt(el, lambda: OPS[op](a, b))
         if op == "in":
             a = self.ev(args[0], scope, el)
             options = [literal(x) for x in args[1]]
@@ -139,7 +185,9 @@ class Evaluator:
             vals = [self.ev(x, scope, el) for x in args]
             known = [v for v in vals if not isinstance(v, Residual)]
             open_ = [v.expr for v in vals if isinstance(v, Residual)]
-            fold = (max if op == "max" else min)(known) if known else None
+            fold = attempt(el, lambda: (max if op == "max" else min)(known)) if known else None
+            if isinstance(fold, Residual):
+                return fold
             if not open_:
                 return fold
             items = ([{"value": fold}] if known else []) + open_
@@ -148,10 +196,10 @@ class Evaluator:
             a, b = (self.ev(x, scope, el) for x in args)
             if isinstance(a, Residual) or isinstance(b, Residual):
                 return Residual({op: [lift(a), lift(b)]})
-            return mul(a, b) if op == "mul" else div(a, b)
+            return attempt(el, lambda: mul(a, b) if op == "mul" else div(a, b))
         if op == "ceil":
             v = self.ev(args, scope, el)
-            return Residual({"ceil": v.expr}) if isinstance(v, Residual) else math.ceil(round(v, 9))
+            return Residual({"ceil": v.expr}) if isinstance(v, Residual) else attempt(el, lambda: math.ceil(round(v, 9)))
         raise ValueError(f"{el.name}: unknown operator '{op}'")
 
     def _cases(self, rows: list, scope: dict, el: Element) -> Any:
@@ -166,6 +214,8 @@ class Evaluator:
                 remaining.append({"else": lift(v), "cite": cite})
                 break
             w = self.ev(row["when"], scope, el)
+            if not isinstance(w, (bool, Residual)):
+                w = Residual(invalid(el, f"a cases condition needs true/false, got {w!r}"))
             if w is False:
                 self._cite(el, cite, self.ruled_out)
                 continue
@@ -245,6 +295,8 @@ def describe(expr: Any, rs: Ruleset) -> str:
             return f"the {x['column']} for {d(x['key'])} in Table {x['lookup'].lstrip('T')}"
         if "see" in x:
             return f"set by §{x['see']} ({x['row']})"
+        if "invalid" in x:
+            return f"[cannot be evaluated: {x['invalid']}]"
         if "unlisted" in x:
             return f"not listed in Table {x['unlisted'].lstrip('T')}; the building official assigns the nearest listed function"
         return str(x)

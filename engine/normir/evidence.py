@@ -29,6 +29,7 @@ fact the norm needs is open.
 from __future__ import annotations
 
 import itertools
+import math
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -37,11 +38,12 @@ from typing import Any, Callable
 import yaml
 
 from .evaluate import Evaluator, Residual, facts_in
-from .model import Ruleset
+from .model import Ruleset, walk
 from .quantity import Quantity
 
 LINE_TOLERANCE = 5
-MAX_COMBINATIONS = 4096
+MAX_COMBINATIONS = 4096  # enumerated in full below this; split fact by fact above it
+MAX_EVALUATIONS = 200_000
 CODE_LOCATOR = re.compile(r"^(?P<path>[^:]+):(?P<line>\d+)$")
 
 
@@ -198,54 +200,128 @@ def _vocab_map(rs: Ruleset, type_name: str) -> dict[str, str]:
     return out
 
 
+class _Budget(Exception):
+    pass
+
+
+def _evaluate(rs: Ruleset, norm: str, s: dict, i: dict | None) -> Any:
+    """One evaluation; a rule that cannot be evaluated on these values (a length compared with a symbol, a
+    division by zero) is an error string, so one bad rule never stops the others."""
+    try:
+        return Evaluator(rs, s).norm(norm, i)
+    except (TypeError, ValueError, ZeroDivisionError, KeyError, ArithmeticError) as e:
+        return _Error(f"{type(e).__name__}: {e}")
+
+
+@dataclass(frozen=True)
+class _Error:
+    message: str
+
+
 def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, Fact] | None = None) -> dict:
-    """Evaluate one norm over every combination of the values the evidence allows."""
+    """Evaluate one norm over every combination of the values the evidence allows.
+
+    Verdict: pass or fail when every combination gives it, uncertain when they differ, unknown when a fact the
+    norm needs is open. Up to MAX_COMBINATIONS combinations are enumerated, which also names the facts whose
+    value flips the verdict. Past that, the combinations are split fact by fact, evaluating each partial
+    assignment and stopping where the rule is already decided: exact, without enumerating the decided parts.
+    If even that exceeds MAX_EVALUATIONS, or the rule cannot be evaluated, the verdict is unknown (uncertain if
+    both outcomes were already seen) with a reason in `error`: never a pass or a fail that wasn't shown.
+    """
+    inst_type = next(iter((rs.get("norm", norm).data.get("for") or {}).values()), None)
     fixed_s = {k: f.values()[0] for k, f in subject.items() if len(f.values()) == 1}
     fixed_i = {k: f.values()[0] for k, f in (instance or {}).items() if len(f.values()) == 1}
     varying = [("s", k, f) for k, f in subject.items() if len(f.values()) > 1]
     varying += [("i", k, f) for k, f in (instance or {}).items() if len(f.values()) > 1]
+    keyed = {(w, k): (f"{rs.subject}.{k}" if w == "s" else f"{inst_type}.{k}") for w, k, _ in varying}
     # Only enumerate facts the norm can read: evaluate with the varying facts left open.
-    probe = Evaluator(rs, fixed_s).norm(norm, fixed_i if instance is not None else None)
+    probe = _evaluate(rs, norm, fixed_s, fixed_i if instance is not None else None)
     if isinstance(probe, Residual):
         needed = set(facts_in(probe.expr))
-        varying = [v for v in varying if any(n.endswith("." + v[1]) for n in needed)]
+        varying = [v for v in varying if keyed[(v[0], v[1])] in needed]
     else:
         varying = []
-    combos = list(itertools.product(*(f.values() for _, _, f in varying)))[:MAX_COMBINATIONS]
+    total = math.prod(len(f.values()) for _, _, f in varying)
     results: dict[str, list[tuple]] = {}
+    counts: dict[str, int] = {}
     open_facts: set[str] = set()
-    for combo in combos:
-        s, i = dict(fixed_s), dict(fixed_i)
-        for (where, k, _), v in zip(varying, combo):
-            (s if where == "s" else i)[k] = v
-        r = Evaluator(rs, s).norm(norm, i if instance is not None else None)
+    errors: list[str] = []
+    deciding: list[str] = []
+
+    def outcome(r: Any) -> str:
+        if isinstance(r, _Error):
+            errors.append(r.message)
+            return "error"
         if isinstance(r, Residual):
-            open_facts |= set(facts_in(r.expr))
-            r = "unknown"
-        results.setdefault(str(r), []).append(combo)
-    outcomes = {k: len(v) for k, v in results.items()}
-    if "unknown" in results:
+            needs = facts_in(r.expr)
+            bad = [n["invalid"] for n in walk(r.expr) if "invalid" in n]
+            errors.extend(bad[:1])
+            if bad and not needs:  # rests only on a part that cannot be evaluated
+                return "error"
+            open_facts.update(needs)
+            return "unknown"
+        return str(r)
+
+    if total <= MAX_COMBINATIONS:
+        for combo in itertools.product(*(f.values() for _, _, f in varying)):
+            s, i = dict(fixed_s), dict(fixed_i)
+            for (where, k, _), v in zip(varying, combo):
+                (s if where == "s" else i)[k] = v
+            results.setdefault(outcome(_evaluate(rs, norm, s, i if instance is not None else None)), []).append(combo)
+        counts = {k: len(v) for k, v in results.items()}
+        if len(results) > 1:
+            for j, (_, k, _) in enumerate(varying):
+                groups: dict[tuple, set] = {}
+                for r, cs in results.items():
+                    for c in cs:
+                        groups.setdefault(c[:j] + c[j + 1:], set()).add(r)
+                if any(len(g) > 1 for g in groups.values()):
+                    deciding.append(k)
+    else:
+        budget = [MAX_EVALUATIONS]
+
+        def split(s: dict, i: dict, rest: list, weight: int) -> set[str]:
+            budget[0] -= 1
+            if budget[0] < 0:
+                raise _Budget
+            r = _evaluate(rs, norm, s, i if instance is not None else None)
+            needed = set(facts_in(r.expr)) if isinstance(r, Residual) else set()
+            j = next((n for n, (w, k, _) in enumerate(rest) if keyed[(w, k)] in needed), None)
+            if j is None:  # decided, or open only on facts no source gave: the same for every value of the rest
+                o = outcome(r)
+                counts[o] = counts.get(o, 0) + weight
+                return {o}
+            w, k, f = rest[j]
+            vals = f.values()
+            seen = [split({**s, k: v} if w == "s" else s, {**i, k: v} if w == "i" else i, rest[:j] + rest[j + 1:], weight // len(vals))
+                    for v in vals]
+            if len({frozenset(x) for x in seen}) > 1 and k not in deciding:
+                deciding.append(k)
+            return set().union(*seen)
+        try:
+            split(dict(fixed_s), dict(fixed_i), varying, total)
+        except _Budget:
+            errors.append(f"more than {MAX_EVALUATIONS} evaluations needed to cover {total} combinations of the evidence")
+            counts["incomplete"] = total - sum(counts.values())
+    seen = set(counts) - {"incomplete"}
+    if "error" in seen or "incomplete" in counts:
+        verdict = "uncertain" if {"True", "False"} <= seen else "unknown"
+    elif "unknown" in seen:
         verdict = "unknown"
-    elif len(results) == 1:
-        verdict = "pass" if "True" in results else "fail"
+    elif len(seen) == 1:
+        verdict = "pass" if "True" in seen else "fail"
     else:
         verdict = "uncertain"
-    deciding = []
-    if len(results) > 1:
-        for j, (_, k, _) in enumerate(varying):
-            groups: dict[tuple, set] = {}
-            for r, cs in results.items():
-                for c in cs:
-                    groups.setdefault(c[:j] + c[j + 1:], set()).add(r)
-            if any(len(g) > 1 for g in groups.values()):
-                deciding.append(k)
     named = {k: f for _, k, f in varying}
-    return {
+    out = {
         "verdict": verdict,
-        "outcomes": outcomes,
+        "outcomes": counts,
         "deciding": {k: [{"value": str(v), "sources": named[k].sources_of(v)} for v in named[k].values()] for k in deciding},
         "open": sorted(open_facts),
     }
+    if errors:
+        out["error"] = errors[0]
+    return out
 
 
 def _profile_facts(raw: dict) -> dict[str, Fact]:
@@ -281,7 +357,7 @@ def run(rs: Ruleset, ev: Evidence, profile: dict | None = None) -> list[dict]:
         types = list((el.data.get("for") or {}).values())
         if not types:
             # A system-level norm is located where the facts it reads were observed.
-            probe = Evaluator(rs, {}).norm(name, None)
+            probe = _evaluate(rs, name, {}, None)
             reads = list(dict.fromkeys(facts_in(probe.expr))) if isinstance(probe, Residual) else []
             keys = [k for n in reads for k in [n.rpartition(".")[2]] if k in subject]
             # Facts that are simply true (password_auth, processes_personal_data) usually only make the
