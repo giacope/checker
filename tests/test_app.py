@@ -336,6 +336,12 @@ def test_a_job_that_crashes_or_hangs_ends_in_an_error_and_the_server_lives(tmp_p
         main.isolated(fn, d, *args)
         st = json.loads((d / "status.json").read_text())
         assert st["state"] == "error" and expect in st["error"], st
+    d = tmp_path / "big"   # past the memory cap: the child cannot allocate, the server's memory is untouched
+    d.mkdir()
+    monkeypatch.setattr(main, "JOB_MEMORY_MB", 512)
+    main.isolated(bytearray, d, 1 << 30)
+    st = json.loads((d / "status.json").read_text())
+    assert st["state"] == "error" and "exited with code 1" in st["error"], st
     d = tmp_path / "ok"   # a job that finishes keeps the state it wrote
     d.mkdir()
     main.isolated(functools.partial(main._status, d, state="done", step="Done"), d)

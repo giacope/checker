@@ -44,6 +44,8 @@ MAX_UPLOAD = int(os.environ.get("NORMIR_MAX_UPLOAD_MB", "1024")) * 1_000_000
 POOL = ThreadPoolExecutor(max_workers=int(os.environ.get("NORMIR_WORKERS", "2")))
 LOCK = threading.Lock()
 JOB_SECONDS = int(os.environ.get("NORMIR_JOB_SECONDS", "3600"))
+# Address space per job. OCR reserves about 2.2 GB of it while using under 0.5 GB, so this is generous on purpose.
+JOB_MEMORY_MB = int(os.environ.get("NORMIR_JOB_MEMORY_MB", "4096"))
 ISOLATE = True   # tests that replace the readers with in-process fakes turn this off
 SCAN_ID = re.compile(r"^[a-z0-9]{12}$")
 
@@ -91,13 +93,21 @@ def _status(d: Path, **kw) -> None:
         _write(d, "status.json", st)
 
 
+def _limited(fn, args: tuple, memory_mb: int) -> None:
+    """The child's side of isolated(): cap the address space, then run the job."""
+    import resource
+    resource.setrlimit(resource.RLIMIT_AS, (memory_mb << 20, memory_mb << 20))
+    fn(*args)
+
+
 def isolated(fn, d: Path, *args) -> None:
     """Run a job on untrusted input (fn(*args), which records its own state in d/status.json) in a child process.
-    A reader that crashes natively (a segfault in a geometry kernel, an abort in a PDF library) or runs past
-    JOB_SECONDS ends that job with an error instead of taking the server, and every other job, down with it."""
+    A reader that crashes natively (a segfault in a geometry kernel, an abort in a PDF library), runs past
+    JOB_SECONDS or needs more than JOB_MEMORY_MB ends that job with an error instead of taking the server, and every
+    other job, down with it."""
     if not ISOLATE:
         return fn(*args)
-    p = multiprocessing.get_context("forkserver").Process(target=fn, args=args, daemon=True)
+    p = multiprocessing.get_context("forkserver").Process(target=_limited, args=(fn, args, JOB_MEMORY_MB), daemon=True)
     p.start()
     p.join(JOB_SECONDS)
     if p.is_alive():
