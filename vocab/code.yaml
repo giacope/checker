@@ -10,6 +10,15 @@
 # "routes/login.ts:34". A fact about the system as a whole may cite several.
 domain: code
 subject: system
+# For the regulation compiler's prompt, written by hand for this vocabulary: what a fact can capture of a broader
+# requirement, and worked examples (each must compile without demotion; tests/test_regulation.py checks).
+compile:
+  partial: a cookie attribute, a query's construction, a production setting
+  examples:
+    - clause: Session cookies are only sent over TLS and are not readable by scripts.
+      check: {for: {var: c, type: Cookie}, applies: {fact: c.is_session}, require: {all: [{fact: c.secure}, {fact: c.http_only}]}}
+    - clause: Stored passwords are hashed with bcrypt, scrypt or Argon2.
+      check: {for: {var: p, type: PasswordStore}, require: {in: [{fact: p.algorithm}, [bcrypt, scrypt, argon2]]}}
 
 types:
   system:

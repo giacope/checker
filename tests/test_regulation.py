@@ -391,6 +391,22 @@ def test_checks_are_verified_and_bad_computed_checks_are_demoted(monkeypatch):
     assert "PasswordStore" in sent[0][0] and "password_blocklist_check" in sent[0][0]
 
 
+@pytest.mark.parametrize("vocab", [CODE, BIM], ids=["code", "bim"])
+def test_each_vocabulary_brings_worked_examples_that_compile(vocab):
+    """The prompt's examples are the vocabulary's own, and each passes the checks the model's output must pass."""
+    examples = vocab["compile"]["examples"]
+    assert examples
+    for n, e in enumerate(examples, 1):
+        stats = {"dropped": 0, "dropped_reasons": {}, "demoted": 0}
+        chk = regulation._check({"summary": e["clause"], "kind": "computed", "why": "example", "search": ["x"], **e["check"]},
+                                clause(n, e["clause"]), 1, vocab, stats)
+        assert chk["kind"] == "computed" and "demoted" not in chk and stats["demoted"] == 0, (e["clause"], chk)
+    t, sent = transport(lambda s, u: reply({"clauses": []}))
+    compile_checks([clause(1, "A requirement.")], vocab, provider=PROVIDER, transport=t)
+    assert all(json.dumps(e["check"], ensure_ascii=False) in sent[0][0] for e in examples)
+    assert vocab["compile"]["partial"] in sent[0][0]
+
+
 def test_checks_work_for_the_building_vocabulary(tmp_path):
     rules = [clause(1, "Stairs are at least 44 inches wide."), clause(2, "Stairs have at least 30 m2 of width."),
              clause(3, "Ramps are not permitted."), clause(4, "The building complies."),

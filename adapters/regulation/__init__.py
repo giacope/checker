@@ -341,9 +341,8 @@ Give each clause one or more checks: one per distinct obligation, usually one. E
 - "kind", one of:
   - "computed": an expression over the facts below. Give "for" and "require". It must be a necessary condition of \
 the requirement: whenever the expression is false, the requirement is not met. Use facts whose meaning is the \
-requirement's, never a loosely related fact. When facts capture a necessary part of a broader requirement (a cookie \
-attribute, a query's construction, a production setting), give a computed check for that part and an assessed check \
-for the rest.
+requirement's, never a loosely related fact. When facts capture a necessary part of a broader requirement \
+({partial}), give a computed check for that part and an assessed check for the rest.
   - "assessed": a property of {artifact} the facts below do not capture, but a reviewer reading it could judge.
   - "attested": an organisational or process requirement {artifact} cannot show (training, reviews, approvals, \
 policies and procedures, retention schedules, contracts, physical security, operations). Give "question": a yes/no \
@@ -360,7 +359,8 @@ Expressions ("require", JSON):
 - {{"fact": "{subject}.<attr>"}} reads a subject fact. With "for": {{"var": "x", "type": "<Type>"}} the check is \
 evaluated on each element of that type the evidence lists, and {{"fact": "x.<attr>"}} reads the element's attribute. \
 When no element of the type is found, a reviewer judges the requirement from the artifact instead, by the "search" terms.
-- Literals: true, false, numbers, enum values exactly as listed, quantities as strings ("44 in", "1.2 m", "30 m2").
+- Literals: true, false, numbers, enum values exactly as listed, quantities as strings with a unit ("900 mm", "3 ft", \
+"20 m2", "30 days").
 - {{"all": [e, ...]}}, {{"any": [e, ...]}}, {{"not": e}}; {{"eq": [a, b]}}, and likewise "ne", "lt", "le", "gt", \
 "ge"; {{"in": [{{"fact": ...}}, ["value", ...]]}}.
 - A bool fact is itself a condition. "require" is what must hold for the requirement to be met. A condition that \
@@ -368,7 +368,8 @@ only makes the requirement apply goes in "applies" (same language, same "for"): 
 applicable, which is reported as such and is not a pass. Leave "applies" null when the requirement always applies. \
 A prohibition of a kind of element \
 ("do not do X" where X is an element type) is "for" that type with "require": false: every such element fails.
-- Examples: {examples}
+- Examples, a clause and its check:
+{examples}
 - Nothing else: no terms, tables, arithmetic, or facts not listed.
 
 Reply with only JSON:
@@ -381,19 +382,9 @@ STOP = set("a an and any are as at be by can for from has have in into is it its
 
 
 def _examples(vocab: dict) -> str:
-    subject, types = vocab["subject"], vocab["types"]
-    out = []
-    sub = next((a for a, d in types.get(subject, {}).get("attrs", {}).items() if d["type"] == "bool"), None)
-    if sub:
-        out.append(json.dumps({"for": None, "require": {"fact": f"{subject}.{sub}"}}))
-    for t, td in types.items():
-        enum = next(((a, d) for a, d in (td.get("attrs") or {}).items() if d["type"] == "enum" and len(d.get("values", [])) > 1), None)
-        if t != subject and enum:
-            var = t[0].lower()
-            out.append(json.dumps({"for": {"var": var, "type": t},
-                                   "require": {"in": [{"fact": f"{var}.{enum[0]}"}, enum[1]["values"][:2]]}}))
-            break
-    return "; ".join(out) or "(none)"
+    """The vocabulary's own worked examples (its `compile.examples`), written for it by hand."""
+    ex = (vocab.get("compile") or {}).get("examples") or []
+    return "\n".join(f"  {json.dumps(e['clause'])} -> {json.dumps(e['check'], ensure_ascii=False)}" for e in ex) or "  (none)"
 
 
 def _batches(reqs: list[dict]) -> list[list[dict]]:
@@ -661,7 +652,8 @@ def compile_checks(clauses: list[dict], vocab: dict, provider=None, transport=No
     domain = vocab.get("domain")
     artifact, space = ARTIFACT.get(domain, ("the artifact under review", "the artifact's text"))
     system = COMPILE.format(artifact=artifact, search_space=space, subject=vocab["subject"], vocab=vocab_text(vocab),
-                            examples=_examples(vocab))
+                            examples=_examples(vocab),
+                            partial=(vocab.get("compile") or {}).get("partial") or "one attribute the facts record")
     groups = _batches(reqs)
     model = _Model(provider, transport)
     by_clause: dict[str, list[dict]] = {}

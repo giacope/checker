@@ -24,6 +24,14 @@
 # its source's own id (an IFC GlobalId).
 domain: bim
 subject: building
+# For the regulation compiler's prompt, written by hand for this vocabulary (see vocab/code.yaml).
+compile:
+  partial: a door's clear width, a stair's riser height, a storey's travel distance
+  examples:
+    - clause: External doors give a clear opening of at least 800 mm.
+      check: {for: {var: d, type: Door}, applies: {fact: d.is_external}, require: {ge: [{fact: d.clear_width}, "800 mm"]}}
+    - clause: No riser in a stair is higher than 190 mm.
+      check: {for: {var: s, type: Stair}, require: {le: [{fact: s.riser_height}, "190 mm"]}}
 
 types:
   building:
