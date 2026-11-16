@@ -173,6 +173,9 @@ def test_customer_regulation_upload_review_and_scan(client, compiler):
     assert 'id="c2"' in page and "Passwords must be hashed with a slow, salted hash." in page
     assert 'name="kind::2.1"' in page and "Does the service have a named security owner?" in page
     assert "2 lines are in no clause." in page and "acme.md lines 7–8" in page and "Keys are rotated every 90 days." in page
+    # a regulation that is not ready is refused, not swapped for the default standards
+    r = client.post("/scans", data={"url": "https://github.com/acme/shop", "standards": ["reg:r000000nope"]}, follow_redirects=False)
+    assert r.status_code == 400 and "reg:r000000nope" in r.text
     # the index offers it for scans; scanning with it hands the assessed check to the model assessor
     assert f'value="reg:{rid}"' in client.get("/").text
     r = client.post("/scans", data={"url": "https://github.com/acme/shop", "standards": [f"reg:{rid}"]}, follow_redirects=False)

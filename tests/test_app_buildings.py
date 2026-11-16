@@ -144,6 +144,8 @@ def test_zip_upload_is_unpacked_safely(client, tmp_path):
 def test_upload_rejects_other_formats_and_crop_stays_in_project(client):
     r = client.post("/projects", data={"name": "x", "codes": ["ibc"]}, files=[("files", ("run.sh", b"echo", "text/plain"))])
     assert r.status_code == 400
+    r = client.post("/projects", data={"name": "x", "codes": ["reg:r000000nope"]}, files=[("files", ("a.pdf", b"%PDF-1.4", "application/pdf"))])
+    assert r.status_code == 400 and "reg:r000000nope" in r.text   # not swapped for the IBC
     pid = upload(client, [("A11-1.pdf", b"%PDF-1.4 test", "application/pdf")])
     wait(client, pid)
     assert client.get(f"/projects/{pid}/crop", params={"at": "../../etc/passwd#page=1&bbox=0,0,1,1"}).status_code == 404
@@ -226,12 +228,12 @@ def test_building_regulation_is_assessed_against_the_drawings_and_model(client, 
     assert f'value="reg:{rid}"' in page and "ADK stairs" in page
     assert f'value="reg:{rid}"' not in client.get("/").text            # a building regulation is not offered for code
 
-    pid = upload(client, [("plans/A11-1.pdf", b"%PDF-1.4 test", "application/pdf")], codes=(f"reg:{rid}", "reg:rzzzzzzzzzz"))
+    pid = upload(client, [("plans/A11-1.pdf", b"%PDF-1.4 test", "application/pdf")], codes=(f"reg:{rid}",))
     assert wait(client, pid)["state"] == "done"
     assert len(readers) == 1 and f"req_{rid}_k2_1" in readers[0] and "Provide handrails on both sides of stairs." in readers[0]
     rep = client.get(f"/projects/{pid}/report.json").json()
     assert [(s["id"], s["label"], s["pack"], s["covers"]) for s in rep["standards"]] == [
-        (f"reg:{rid}", "ADK stairs", f"regulations/{rid}", "your regulation")]   # the unknown regulation is dropped
+        (f"reg:{rid}", "ADK stairs", f"regulations/{rid}", "your regulation")]
     entries = {e["norm"]: e for e in rep["standards"][0]["entries"]}
     hand = entries["k2-1"]
     assert hand["verdict"] == "pass" and hand["url"] == f"/regulations/{rid}#c2" and hand["section"] == "1.34"
@@ -287,10 +289,9 @@ def test_code_regulations_are_not_offered_for_buildings(client, monkeypatch):
     rid = r.headers["location"].rsplit("/", 1)[1]
     assert wait_reg(client, rid)["state"] == "done"
     assert f'value="reg:{rid}"' not in client.get("/buildings").text
-    pid = upload(client, [("A11-1.pdf", b"%PDF-1.4 test", "application/pdf")], codes=(f"reg:{rid}",))
-    assert wait(client, pid)["state"] == "done"
-    assert [s["id"] for s in client.get(f"/projects/{pid}/report.json").json()["standards"]] == ["ibc"]
-    assert client.seen["requirements"] == []
+    r = client.post("/projects", data={"name": "x", "codes": [f"reg:{rid}"]},
+                    files=[("files", ("A11-1.pdf", b"%PDF-1.4 test", "application/pdf"))], follow_redirects=False)
+    assert r.status_code == 400 and f"reg:{rid}" in r.text   # refused, not quietly checked against the IBC instead
 
 
 def test_the_disagreement_list_shows_enums_and_counts_but_not_text_or_printed_precision():

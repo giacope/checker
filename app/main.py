@@ -135,13 +135,21 @@ def index(request: Request):
         "private": bool(os.environ.get("GITHUB_TOKEN"))})
 
 
+def _check_choices(chosen: list[str], builtin, domain: str) -> None:
+    """Refuse a standard that cannot run (unknown, or a regulation still compiling) instead of quietly using another."""
+    bad = [c for c in chosen if c not in builtin and not (c.startswith("reg:") and regs.ready(c[4:], domain))]
+    if bad:
+        raise HTTPException(400, f"Not available: {', '.join(bad)}. A regulation can be used once it has finished compiling.")
+
+
 @app.post("/scans")
 def create(url: str = Form(...), branch: str = Form(""), asvs_level: int = Form(2), standards: list[str] = Form([])):
     try:
         parse_repo_url(url)
     except ScanError as e:
         raise HTTPException(400, str(e)) from e
-    standards = [s for s in standards if s in STANDARDS or (s.startswith("reg:") and regs.ready(s[4:], "code"))] or ["asvs", "nist", "gdpr"]
+    _check_choices(standards, STANDARDS, "code")
+    standards = standards or ["asvs", "nist", "gdpr"]
     if "gdpr" in standards and "uk-gdpr" in standards:
         standards.remove("gdpr")  # UK GDPR extends the EU pack: one report section, not two
     sid = secrets.token_hex(6)
@@ -378,6 +386,7 @@ def buildings_index(request: Request):
 
 @app.post("/projects")
 async def create_project(name: str = Form(""), codes: list[str] = Form([]), files: list[UploadFile] = File(...)):
+    _check_choices(codes, buildings.CODES, "building")
     pid, d = new_project(name or (files[0].filename if files else ""), codes)
     total = 0
     try:
