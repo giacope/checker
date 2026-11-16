@@ -52,11 +52,6 @@ TYPE_LABEL = {"Stair": "stair", "Door": "door", "Space": "space", "Storey": "sto
               "Exit": "exit", "EscapeRoute": "escape route", "Room": "room", "Floor": "floor", "Route": "accessible route",
               "TurningSpace": "turning space", "Handrail": "handrail", "WaterCloset": "water closet"}
 
-# Words a code-analysis note uses for an IBC occupancy group.
-STATED_GROUP = [(r"\bBUSINESS\b", "B"), (r"\bMERCANTILE\b", "M"), (r"\bEDUCATIONAL\b", "E"), (r"\bFACTORY\b", "F-1"),
-                (r"\bSTORAGE\b", "S-1"), (r"\bUTILITY\b", "U"), (r"\bGROUP\s+([A-Z](?:-\d)?)\b", None),
-                (r"\bOCCUPANCY\s*(?:GROUP|CLASSIFICATION)?\s*[:=]?\s*([A-Z](?:-\d)?)\b", None)]
-
 
 class ProjectError(Exception):
     pass
@@ -296,16 +291,22 @@ def skipped_summary(docs: list[dict]) -> list[dict]:
     return sorted(({"reason": k, "count": len(v), "examples": v[:4]} for k, v in groups.items()), key=lambda g: -g["count"])
 
 
-def suggestions(ev) -> dict[str, str]:
-    """Answers the drawings themselves suggest (a code-analysis note), keyed by attribute. A reviewer confirms them."""
+def suggestions(ev, evaluation: dict) -> dict[str, str]:
+    """Answers the drawings themselves suggest, keyed by attribute: a pack's predicate that says how the drawings
+    state it (`stated_as`: a stated fact and [regex, value] patterns) is matched against that fact. A reviewer
+    confirms them; a pack without patterns gets no suggestion."""
     out = {}
-    stated = _value(ev.facts.get("stated_occupancy_classification"))
-    if stated:
-        for pat, group in STATED_GROUP:
-            m = re.search(pat, stated.upper())
-            if m:
-                out["occupancy_group"] = group or m.group(1)
-                break
+    for res in evaluation["results"].values():
+        for (kind, name), el in res["rs"].elements.items():
+            spec = el.data.get("stated_as") if kind == "predicate" else None
+            attr = str(el.data.get("vocab") or name).rpartition(".")[2]
+            stated = _value(ev.facts.get(spec["fact"])) if spec else None
+            if not stated or attr in out:
+                continue
+            for pat, value in spec["patterns"]:
+                if m := re.search(pat, stated.upper()):
+                    out[attr] = value or m.group(1)
+                    break
     return out
 
 
@@ -375,7 +376,7 @@ def build(pid: str, project: dict, data: dict, evaluation: dict, answers: dict |
     given = {("_subject", k): v for k, v in (answers.get("subject") or {}).items()}
     given |= {(t, k): v for t, fs in (answers.get("types") or {}).items() for k, v in fs.items()}
     given |= {(e, k): v for e, fs in (answers.get("elements") or {}).items() for k, v in fs.items()}
-    suggest = suggestions(ev)
+    suggest = suggestions(ev, evaluation)
     for q in questions.values():
         q["answer"] = given.get((q["element"], q["attr"]))
         q["suggested"] = suggest.get(q["attr"]) if q["element"] == "_subject" else None

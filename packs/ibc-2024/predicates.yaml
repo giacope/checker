@@ -10,6 +10,19 @@ predicates:
     values: [A-1, A-2, A-3, A-4, A-5, B, E, F-1, F-2, H-1, H-2, H-3, H-4, H-5, I-1, I-2, I-3, I-4, M, R-1, R-2, R-3, R-4, S-1, S-2, U]
     kind: given
     note: v0 assumes one occupancy group for the whole building; mixed occupancies come later.
+    # How a code-analysis note on the drawings names a group, tried in order: [regex, value], a null value taking
+    # the regex's first group. The match is offered as the suggested answer; a reviewer confirms it.
+    stated_as:
+      fact: stated_occupancy_classification
+      patterns:
+        - ['\bBUSINESS\b', B]
+        - ['\bMERCANTILE\b', M]
+        - ['\bEDUCATIONAL\b', E]
+        - ['\bFACTORY\b', F-1]
+        - ['\bSTORAGE\b', S-1]
+        - ['\bUTILITY\b', U]
+        - ['\bGROUP\s+([A-Z](?:-\d)?)\b', null]
+        - ['\bOCCUPANCY\s*(?:GROUP|CLASSIFICATION)?\s*[:=]?\s*([A-Z](?:-\d)?)\b', null]
 
   - name: building.sprinkler_system
     label: automatic sprinkler system throughout

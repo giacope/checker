@@ -302,3 +302,15 @@ def test_the_disagreement_list_shows_enums_and_counts_but_not_text_or_printed_pr
     assert not disagree([v("OFFICE 101", "drawings"), v("OFF. 101", "ifc")], "text")
     assert not disagree([v("915 mm", "ifc"), v("914.5 mm", "drawings"), v("915.5 mm", "drawings")], "length")
     assert disagree([v("915 mm", "ifc"), v("1000 mm", "drawings")], "length")
+
+
+def test_suggested_answers_come_from_the_pack_that_asks_not_from_the_app():
+    from normir.evidence import load_evidence
+
+    from app.buildings import suggestions
+    ev = load_evidence({"sources": [{"id": "drawings"}], "facts": {
+        "stated_occupancy_classification": [{"value": "Purpose group 5 (assembly and recreation) with storage"}]}})
+    pack = lambda name, data: {"results": {"p": {"rs": types.SimpleNamespace(elements={("predicate", name): types.SimpleNamespace(data=data)})}}}  # noqa: E731
+    assert suggestions(ev, pack("building.occupancy_group", {"type": "enum"})) == {}   # no patterns, no guess
+    uk = {"fact": "stated_occupancy_classification", "patterns": [[r"\bPURPOSE GROUP\s+(\d)", None]]}
+    assert suggestions(ev, pack("building.purpose_group", {"stated_as": uk})) == {"purpose_group": "5"}
