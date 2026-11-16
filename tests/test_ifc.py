@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 from ifcopenshell import api
-from normir.quantity import Quantity
+from normir.quantity import UNITS, Quantity
 
 from adapters.ifc import analyse, extract
 
@@ -14,7 +14,7 @@ FOOT = 0.3048
 
 def metres(v: str) -> float:
     q = Quantity.parse(v)
-    return q.base * 0.0254 ** q.dim
+    return q.base / UNITS["m" if q.dim == "length" else "m2"][1]  # metres or square metres
 
 
 class Model:

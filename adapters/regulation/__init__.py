@@ -34,7 +34,7 @@ import yaml
 from adapters.code_llm import ReaderError, complete, parse_json, provider_from_env, vocab_text
 from normir.evaluate import NOT_APPLICABLE, Evaluator, Residual
 from normir.model import load, validate
-from normir.quantity import Quantity
+from normir.quantity import DIMENSIONS, SAMPLE, Quantity
 
 from .documents import Document, Line, RegulationError, read
 
@@ -426,9 +426,9 @@ def _literal_ok(spec: dict, v: Any) -> bool:
         return isinstance(v, (int, float)) and not isinstance(v, bool)
     if t == "enum":
         return v in spec.get("values", [])
-    if t in ("length", "area"):
+    if t in DIMENSIONS:
         q = Quantity.parse(v) if isinstance(v, str) else None
-        return q is not None and q.dim == (1 if t == "length" else 2)
+        return q is not None and q.dim == t
     return isinstance(v, str)
 
 
@@ -508,7 +508,7 @@ def _check_expr(expr: Any, scope: dict[str, str], vocab: dict) -> tuple[Any, lis
                     errors.append(f"'{op}' compares a {sa['type']} fact with a {sb['type']} fact")
             elif not _literal_ok(sa, b):
                 errors.append(f"'{b}' is not a value of {a['fact']} ({'/'.join(map(str, sa['values'])) if 'values' in sa else sa['type']})")
-            if op not in ("eq", "ne") and sa["type"] not in ("number", "length", "area"):
+            if op not in ("eq", "ne") and sa["type"] not in ("number", *DIMENSIONS):
                 errors.append(f"'{op}' needs a number or quantity, but {a['fact']} is {sa['type']}")
             return {op: [a, b]}
         if op == "in":
@@ -531,7 +531,7 @@ def _check_expr(expr: Any, scope: dict[str, str], vocab: dict) -> tuple[Any, lis
 
 
 def _sample(spec: dict) -> Any:
-    return {"bool": True, "number": 1, "enum": (spec.get("values") or ["x"])[0], "length": "1 m", "area": "1 m2"}.get(spec["type"], "x")
+    return {"bool": True, "number": 1, "enum": (spec.get("values") or ["x"])[0], **SAMPLE}.get(spec["type"], "x")
 
 
 def _verify_computed(chk: dict, clause: dict, vocab: dict) -> str | None:

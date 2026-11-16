@@ -4,6 +4,7 @@ from pathlib import Path
 
 from normir import load, validate
 from normir.evidence import conflicts, load_evidence, prefer_sources, run, summarize
+from normir.quantity import Quantity, mul
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -135,6 +136,29 @@ def test_lengths_at_a_limit_compare_equal_in_any_unit(tmp_path):
     rs = _pack(tmp_path)
     assert _verdicts(rs, {"q0": "812.8 mm"}, ["at_least_32in"])["at_least_32in"]["verdict"] == "pass"  # exactly 32 in
     assert _verdicts(rs, {"q0": "812.7 mm"}, ["at_least_32in"])["at_least_32in"]["verdict"] == "fail"
+
+
+def test_quantities_read_units_spellings_and_decimal_commas_and_never_mix_dimensions():
+    q = Quantity.parse
+    same = [("75 cm", "750 mm"), ("1,2 m", "1200 mm"), ("1,200 mm", "1.2 m"), ("120 m²", "1200000 cm2"), ("4 ℃", "4 °C"),
+            ("39.2 °F", "4 °C"), ("277.15 K", "4 °C"), ("30 days", "720 h"), ("1 GiB", "1073741824 bytes"), ("2 bar", "200 kPa")]
+    for a, b in same:
+        assert q(a) is not None and q(a) == q(b), (a, b)
+    assert q("4 °C") < q("5 °C") and q("1 GB") < q("1 GiB") and q("1 week") > q("6 days")
+    assert q("75 cm").dim == "length" and q("30 days").dim == "time"
+    for a, b in [("1 m", "1 s"), ("1 m", "1 m2"), ("4 °C", "4 kg")]:
+        try:
+            q(a) < q(b)
+        except TypeError:
+            continue
+        raise AssertionError(f"{a} compared with {b}")
+    assert str(mul(q("1,5 m"), 2)) == "3 m"
+    try:
+        mul(q("4 °C"), 2)   # 8 °C is not twice as warm
+    except TypeError:
+        pass
+    else:
+        raise AssertionError("scaled a temperature with an offset")
 
 
 def test_an_open_table_row_decides_when_every_row_agrees(tmp_path):

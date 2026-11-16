@@ -8,7 +8,7 @@ from typing import Any, Iterator
 
 import yaml
 
-from .quantity import Quantity
+from .quantity import DIMENSIONS, Quantity
 
 KINDS = {"predicates": "predicate", "tables": "table", "terms": "term", "norms": "norm"}
 COMPARISONS = {"eq", "ne", "lt", "le", "gt", "ge"}
@@ -160,7 +160,7 @@ def walk(expr: Any) -> Iterator[dict]:
 # ---------------------------------------------------------------- expression grammar and types
 
 ORDERING = {"lt", "le", "gt", "ge"}
-PRED_TYPE = {"bool": "bool", "length": "length", "area": "area", "number": "number", "enum": "symbol"}
+PRED_TYPE = {"bool": "bool", "number": "number", "enum": "symbol", **{d: d for d in DIMENSIONS}}
 
 
 def shape_errors(expr: Any, where: str) -> list[str]:
@@ -255,7 +255,7 @@ def _literal_type(v: Any) -> str:
         return "number"
     if isinstance(v, str):
         q = Quantity.parse(v)
-        return "symbol" if q is None else ("length" if q.dim == 1 else "area")
+        return "symbol" if q is None else q.dim
     return "none"
 
 
@@ -313,7 +313,7 @@ def type_errors(rs: "Ruleset", expr: Any, scope: dict[str, str], where: str, boo
         if op in COMPARISONS:
             a, b = t(args[0], sc), t(args[1], sc)
             if op in ORDERING and "any" not in a | b:
-                ordered = {"number", "length", "area"}
+                ordered = {"number", *DIMENSIONS}
                 if not any(x == y and x in ordered for x in a for y in b):
                     out.append(f"{where}: '{op}' compares {'/'.join(sorted(a))} with {'/'.join(sorted(b))}, which never have an order")
             return {"bool"}
@@ -328,7 +328,7 @@ def type_errors(rs: "Ruleset", expr: Any, scope: dict[str, str], where: str, boo
         a, b = t(args[0], sc), t(args[1], sc)
         if "any" in a | b:
             return {"any"}
-        qty = {"length", "area"}
+        qty = set(DIMENSIONS)
         results: set[str] = set()
         for x in a:
             for y in b:

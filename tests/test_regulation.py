@@ -387,7 +387,8 @@ def test_checks_are_verified_and_bad_computed_checks_are_demoted(monkeypatch):
 
 def test_checks_work_for_the_building_vocabulary(tmp_path):
     rules = [clause(1, "Stairs are at least 44 inches wide."), clause(2, "Stairs have at least 30 m2 of width."),
-             clause(3, "Ramps are not permitted."), clause(4, "The building complies.")]
+             clause(3, "Ramps are not permitted."), clause(4, "The building complies."),
+             clause(5, "Stairs are at least 110 cm wide.")]
 
     def answer(system, user):
         return reply({"clauses": [
@@ -399,13 +400,17 @@ def test_checks_work_for_the_building_vocabulary(tmp_path):
             {"clause": "c3", "checks": [{"summary": "No ramps.", "kind": "computed", "why": "prohibition",
                                          "for": {"var": "r", "type": "Ramp"}, "require": False, "search": ["ramp", "slope", "incline"]}]},
             {"clause": "c4", "checks": [{"summary": "Complies.", "kind": "computed", "why": "always", "for": None, "require": True,
-                                         "search": ["code", "compliance", "analysis"]}]}]})
+                                         "search": ["code", "compliance", "analysis"]}]},
+            {"clause": "c5", "checks": [{"summary": "Stairs are at least 110 cm wide.", "kind": "computed", "why": "Stair.width",
+                                         "for": {"var": "s", "type": "Stair"}, "require": {"ge": [{"fact": "s.width"}, "110 cm"]},
+                                         "search": ["stair", "width", "cm"]}]}]})
     t, sent = transport(answer)
     checks, _ = compile_checks(rules, BIM, provider=PROVIDER, transport=t)
     assert checks[0]["kind"] == "computed" and checks[0]["for"] == {"var": "s", "type": "Stair"}
     assert checks[1]["kind"] == "assessed" and "'30 m2' is not a value of s.width" in checks[1]["demoted"]
     assert checks[2]["kind"] == "computed" and checks[2]["require"] is False   # a prohibition: every ramp fails
     assert checks[3]["kind"] == "assessed" and "reads no fact" in checks[3]["demoted"]
+    assert checks[4]["kind"] == "computed" and "demoted" not in checks[4]   # any length unit is a length
     assert "building." in sent[0][0] and "drawings" in sent[0][0]
     out = build_pack({"id": "rb1", "name": "Stairs", "clauses": rules, "checks": checks}, BIM, tmp_path / "pack")
     rs = load(out)
@@ -417,6 +422,7 @@ def test_checks_work_for_the_building_vocabulary(tmp_path):
     verdicts = {(r["norm"], r["element"]): r["verdict"] for r in run(rs, ev)}
     assert verdicts[("k1-1", "stair:A")] == "pass" and verdicts[("k1-1", "stair:B")] == "fail"
     assert verdicts[("k3-1", "ramp:1")] == "fail" and ("k4-1", "subject") in verdicts
+    assert verdicts[("k5-1", "stair:A")] == "pass" and verdicts[("k5-1", "stair:B")] == "fail"
 
 
 # ---------------------------------------------------------------- pack
