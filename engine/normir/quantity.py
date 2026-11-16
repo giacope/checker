@@ -5,6 +5,7 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass
+from functools import lru_cache
 
 # unit -> (size in base units, length exponent). Base unit is the inch.
 M = 1000 / 25.4
@@ -19,6 +20,7 @@ class Quantity:
     unit: str  # unit to display in
 
     @staticmethod
+    @lru_cache(maxsize=4096)  # rules and evidence repeat the same few literals; a Quantity is immutable
     def parse(text: str) -> Quantity | None:
         m = QUANTITY_RE.match(text)
         if not m:

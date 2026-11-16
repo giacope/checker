@@ -268,8 +268,9 @@ def check(rs: Ruleset, norm: str, subject: dict[str, Fact], instance: dict[str, 
         if isinstance(r, Residual) and met_if_applicable(r.expr):
             return "True"
         if isinstance(r, Residual):
-            needs = facts_in(r.expr)
-            bad = [n["invalid"] for n in walk(r.expr) if "invalid" in n]
+            nodes = list(walk(r.expr))
+            needs = sorted({n["fact"] for n in nodes if "fact" in n})
+            bad = [n["invalid"] for n in nodes if "invalid" in n]
             errors.extend(bad[:1])
             if bad and not needs:  # rests only on a part that cannot be evaluated
                 return "error"
