@@ -164,6 +164,13 @@ def test_static_decides_measured_facts_and_a_reader_only_narrows_among_its_value
     assert facts([False, True], [False]) == ["False"]  # static's sites disagree: the reader picks among them
     assert facts([8, 12], [10]) == ["12", "8"]  # a value static never saw does not narrow
     assert facts([], [True]) == ["True"]  # no static observation: the reader's stands
+    # static found no length rule (minimum taken as 0); the reader read one: what was read wins, in either order
+    ev = load_evidence({"sources": [{"id": "static"}, {"id": "llm:m"}], "facts": {"f": [
+        {"value": 0, "source": "static", "at": "a.py:3", "basis": "absence"}, {"value": 15, "source": "llm:m", "at": "a.py:9"}]}})
+    for order in (["static", "llm"], ["llm", "static"]):
+        assert prefer_sources(ev, lambda t, a, o=order: o, narrow=True).facts["f"].values() == [15]
+    only = load_evidence({"sources": [{"id": "static"}], "facts": {"f": [{"value": 0, "source": "static", "basis": "absence"}]}})
+    assert prefer_sources(only, rank).facts["f"].values() == [0]   # with nothing read, the absence stands
 
 
 def test_a_norm_that_does_not_apply_is_not_applicable_not_a_pass(tmp_path):

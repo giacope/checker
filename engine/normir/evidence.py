@@ -180,6 +180,9 @@ def prefer_sources(ev: Evidence, rank: Callable[[str, str], list[str]], narrow: 
     widens each value set and turns a wrong observation from any one source into an uncertain verdict; the code
     benchmark (bench/code_check.py) measured that, which is why precedence exists.
 
+    Observations with basis "absence" (what a source infers from finding no rule) rank below every observation
+    of a source that read the value itself, whatever the order.
+
     With `narrow`, where the best source's own observations disagree (one site measured true, another false),
     the next-ranked source that holds some but not all of those values narrows the fact to them: it can choose
     among what the best source saw, never add a value. The code benchmark measured that too.
@@ -188,7 +191,10 @@ def prefer_sources(ev: Evidence, rank: Callable[[str, str], list[str]], narrow: 
         order = rank(type_, attr) or []
         kind = lambda o: _source_kind(o.get("source", "?"))  # noqa: E731
         present = {kind(o) for o in f.observations}
-        best = next((k for k in order if k in present), None)
+        # A source that only reports what it did not find (basis absence: no length rule seen, so minimum 0) ranks
+        # below every source that read the thing itself; among those, the given order.
+        read = {kind(o) for o in f.observations if o.get("basis") != "absence"}
+        best = next((k for k in order if k in read), None) or next((k for k in order if k in present), None)
         if best is None:
             return Fact(list(f.observations), list(f.overridden))
         keep = [o for o in f.observations if kind(o) == best or kind(o) not in order]

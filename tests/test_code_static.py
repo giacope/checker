@@ -274,6 +274,9 @@ def test_password_policy_server_and_client(tmp_path):
     assert mins == [(0, "server/users.js:3")]  # nothing on the server; the browser's 12 is not enforced
     assert fact(doc, "login_rate_limited") == [(False, "server/routes.js:3")]
     assert fact(doc, "password_periodic_change") == [(False, "server/users.js:3")]
+    # each of these rests on finding nothing, which a source that read a rule outranks
+    assert all(o.get("basis") == "absence" for k in ("password_min_length", "login_rate_limited", "password_periodic_change")
+               for o in doc["facts"][k])
 
 
 def test_login_rate_limited(tmp_path):

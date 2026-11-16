@@ -33,6 +33,12 @@ def _obs(value, ats) -> list[dict]:
     return [{"value": value, "source": SOURCE, "at": a} for a in ats]
 
 
+def _absent(value, ats) -> list[dict]:
+    """Observations of what the code is taken to do because no rule was found (no length check: minimum 0). They
+    cite where the rule was looked for, and any source that read the rule itself outranks them."""
+    return [{**o, "basis": "absence"} for o in _obs(value, ats)]
+
+
 def _path(at: str) -> str:
     return at.rpartition(":")[0]
 
@@ -85,24 +91,24 @@ def derive(out: Collector, app_root: Callable[[str], str] = lambda rel: "", is_c
             for v in sorted({s[0] for s in group}):
                 target += _obs(v, _ats([s for s in group if s[0] == v], 4))
         if set_sites and not server_min:
-            mins += _obs(0, _ats(set_sites, 4))
+            mins += _absent(0, _ats(set_sites, 4))
         if set_sites and not server_max:
-            maxs += _obs(NO_MAX, _ats(set_sites, 4))
+            maxs += _absent(NO_MAX, _ats(set_sites, 4))
         seen_policy = mine("pw_validation") + (mine("django_pw_validation") if wired else []) + set_sites
         comp = mine("pw_composition") + (mine("django_pw_composition") if wired else [])
         if comp:
             comps += _obs(True, _ats(comp, 4))
         elif seen_policy:
-            comps += _obs(False, _ats(seen_policy, 4))
+            comps += _absent(False, _ats(seen_policy, 4))
         block = mine("pw_blocklist") + (mine("django_pw_blocklist") if wired else [])
         if block:
             blocks += _obs(True, _ats(block, 4))
         elif seen_policy:
-            blocks += _obs(False, _ats(seen_policy, 4))
+            blocks += _absent(False, _ats(seen_policy, 4))
         if mine("pw_expiry"):
             periodic += _obs(True, _ats(mine("pw_expiry"), 4))
         elif set_sites:
-            periodic += _obs(False, _ats(set_sites, 4))
+            periodic += _absent(False, _ats(set_sites, 4))
     for name, obs in (("password_min_length", mins), ("password_max_length", maxs), ("password_composition_rules", comps),
                       ("password_blocklist_check", blocks), ("password_periodic_change", periodic)):
         if obs:
@@ -121,7 +127,7 @@ def derive(out: Collector, app_root: Callable[[str], str] = lambda rel: "", is_c
             limited += [(True, a, {}) for a in _ats(covering, 2)]
         else:
             unlimited.append(route)
-    obs = _obs(True, _ats(limited, 2 * MAX_LOCATORS)) + _obs(False, _ats(unlimited, 2 * MAX_LOCATORS))
+    obs = _obs(True, _ats(limited, 2 * MAX_LOCATORS)) + _absent(False, _ats(unlimited, 2 * MAX_LOCATORS))
     if not sig("login_route"):
         obs = _obs(True, _ats([s for s in sig("rate_limit") if s[2].get("scope") in {"login", "global"}] + sig("lockout")))
     if obs:
@@ -137,5 +143,5 @@ def derive(out: Collector, app_root: Callable[[str], str] = lambda rel: "", is_c
         facts["account_erasure"] = _obs(True, _ats(sig("user_delete")))
     elif personal and (sig("user_model") or auth):
         # nothing deletes a user: cite a recorded erasure request if there is one (the path to check), else the user model
-        facts["account_erasure"] = _obs(False, _ats(sig("erasure_request") or sig("user_model") or personal, 4))
+        facts["account_erasure"] = _absent(False, _ats(sig("erasure_request") or sig("user_model") or personal, 4))
     return facts
