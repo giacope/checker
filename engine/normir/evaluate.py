@@ -23,7 +23,8 @@ OPS = {
     "ge": lambda a, b: a >= b,
 }
 # What a norm evaluates to when its `applies` condition is false: the requirement is about something the subject
-# does not have or is not (a dwelling-only provision on a clinic, a security-question rule where there are none).
+# does not have or is not (a lift provision for a single-storey building, a card-payment rule for software that
+# takes no payments).
 NOT_APPLICABLE = "not_applicable"
 SYMBOLS = {"eq": "is", "ne": "is not", "lt": "<", "le": "≤", "gt": ">", "ge": "≥"}
 

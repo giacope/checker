@@ -77,17 +77,22 @@ def excerpt_part(user):
 
 # ---------------------------------------------------------------- the corpus
 
-def test_search_ranks_by_entry_files_then_distinct_terms_then_density(corpus):
+def test_search_ranks_by_distinct_terms_then_entry_files_then_density(corpus, tmp_path):
     found = corpus.search(["http", "timeout", "force_ssl"], 100_000)
     heads = [h for h, _ in found]
-    # the production config matches one term, but entry files come first; then both.rb (two distinct terms) ahead of
-    # the denser noise.rb (one term); examples and tests are never shown
-    assert heads[0] == "config/environments/production.rb"
-    assert heads.index("app/models/both.rb") < heads.index("app/models/noise.rb")
+    # both.rb (two distinct terms) comes ahead of the production config and the denser noise.rb (one term each);
+    # among one-term files the entry file comes first; examples and tests are never shown
+    assert heads[0] == "app/models/both.rb"
+    assert heads.index("config/environments/production.rb") < heads.index("app/models/noise.rb")
     assert not any("example" in h or h.startswith("tests/") for h in heads)
     assert found == corpus.search(["http", "timeout", "force_ssl"], 100_000)   # deterministic
     assert corpus.search(["HTTP.GET"], 100_000)[0][0].startswith("app/")       # case-insensitive
     assert corpus.search([], 100_000) == [] and corpus.search(["zzz-not-there"], 100_000) == []
+    # many entry files mentioning one term do not crowd out the one file holding all of them
+    files = {f"config/initializers/i{n:02}.rb": "# session\n" + "x = 1\n" * 400 for n in range(25)}
+    files["app/controllers/sessions_controller.rb"] = "def create\n  reset_session\n  session[:uid] = u.id  # login cookie\nend\n"
+    big = CodeCorpus(write(tmp_path / "big", files), "big")
+    assert big.search(["session", "reset_session", "login", "cookie"], 20_000)[0][0] == "app/controllers/sessions_controller.rb"
 
 
 def test_large_files_come_in_numbered_windows_and_the_budget_holds(corpus):
@@ -295,3 +300,20 @@ def test_second_look_batches_do_not_depend_on_the_order_replies_arrive(corpus, m
         assess(reqs, corpus, provider=PROVIDER, transport=transport, workers=1)
         prompts.append(sorted(re.sub(r"[0-9a-f]{16}", "", u) for _, u in sent))
     assert len(prompts[0]) == 4 and prompts[0] == prompts[1]   # 10 open, 8 per call, asked twice
+
+
+def test_absence_needs_every_match_shown(tmp_path, monkeypatch):
+    """When the search matched more than the budget let through, "not found" is not a finding: the fact stays open."""
+    monkeypatch.setattr(assess_mod, "REQUIREMENT_CHARS", 300)
+    files = {f"app/m{n}.rb": f"# audit log {n}\n" + "y = 2\n" * 20 for n in range(6)}
+    c = CodeCorpus(write(tmp_path / "r", files), "r")
+    transport, sent = fake({"req_log": {"attr": "req_log", "value": "not_met", "basis": "absence", "note": "no audit trail"},
+                            "req_few": {"attr": "req_few", "value": "not_met", "basis": "absence", "note": "no m0 rule"}})
+    doc = assess([req("req_log", "audit"), req("req_few", "log 0")], c, PROVIDER, transport)
+    payload = json.loads(sent[0][1].split("Requirements:\n", 1)[1].split("\n\nExcerpts:", 1)[0])
+    seen = {p["attr"]: (p["excerpts_found"], p["excerpts_matching"]) for p in payload}
+    assert seen["req_log"][1] == 6 and seen["req_log"][0] < 6 and seen["req_few"] == (1, 1)
+    assert "req_log" not in doc["facts"] and doc["facts"]["req_few"][0]["basis"] == "absence"
+    src = doc["sources"][0]
+    assert src["dropped"] == {"absence claimed but not every match was shown": 1}
+    assert "not every excerpt" in src["unsettled"]["req_log"]

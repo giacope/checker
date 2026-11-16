@@ -55,9 +55,9 @@ class BuildingCorpus:
         "allow). Judge the building as drawn and modelled. The excerpts are only part of the drawing set: when the "
         "requirement concerns a feature the excerpts do not show or dimension, answer null rather than false; use "
         "basis \"absence\" only when the requirement is that the drawings themselves state something and the "
-        "searched sheets would show it. A requirement that applies only to a kind of building or element (dwellings, "
-        "spectator seating, loft conversions) is true only when the excerpts show the building is not that kind or "
-        "the provision is met; otherwise null.")
+        "searched sheets would show it. A requirement that applies only to a kind of building or element is "
+        "not_applicable when the excerpts show the building is not that kind or has no such element (cite what "
+        "shows it, such as the stated use); when they do not show which kind it is, null.")
 
     def __init__(self, name: str, docs: list[dict], sheets: list[tuple[dict, list]] = ()):
         self.name = name
