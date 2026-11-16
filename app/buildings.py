@@ -29,6 +29,7 @@ from adapters.regulation import ANSWER_LABELS, upgrade
 from normir.evaluate import facts_in
 from normir.evidence import conflicts, load_evidence, run
 
+from . import regulations as regulations_mod
 from . import report as report_mod
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -253,15 +254,18 @@ def assessments(evaluation: dict, loc, by_at: dict) -> dict[tuple[str, str], dic
     return out
 
 
-def disagree(values: list[dict]) -> bool:
-    """Whether sources really disagree: a model's 915 mm and a drawing's printed-precision 914.5 to 915.5 mm
-    agree. Lengths and areas disagree when the sources' ranges are apart by more than 1 mm or 0.2 %. Text
-    (a room name abbreviated on a schedule) is not a disagreement no verdict reads; counts and flags are."""
+def disagree(values: list[dict], typ: str | None = None) -> bool:
+    """Whether sources really disagree on a fact of vocabulary type `typ`: a model's 915 mm and a drawing's
+    printed-precision 914.5 to 915.5 mm agree. Quantities disagree when the sources' ranges are apart by more than
+    1 mm or 0.2 %. Text (a room name abbreviated on a schedule) is not a disagreement no verdict reads; any other
+    value that differs (an enum, a count, a flag) is."""
+    if typ == "text":
+        return False
     by_source: dict[str, list[float]] = {}
     for v in values:
         q = Quantity.parse(str(v["value"]))
         if q is None:
-            return all(re.fullmatch(r"-?\d+(\.\d+)?|True|False", str(x["value"])) for x in values)
+            return True
         for s in v["sources"]:
             by_source.setdefault(s, []).append(q.base)
     if len(by_source) < 2:
@@ -391,8 +395,10 @@ def build(pid: str, project: dict, data: dict, evaluation: dict, answers: dict |
         elements.append({"id": e.id, "type": e.type, "sources": sorted(e.sources),
                          "facts": {k: _value(f) for k, f in e.facts.items()}, "at": [loc(a) for a in e.at[:2]]})
     confl = []
+    types = regulations_mod.vocab("building")["types"]
     for c in conflicts(ev):
-        if not disagree(c["values"]):
+        typ = ((types.get(c.get("type") or "building") or {}).get("attrs", {}).get(c["fact"]) or {}).get("type")
+        if not disagree(c["values"], typ):
             continue
         el = next((x for x in ev.elements if x.id == c["element"]), None)
         obs = el.facts[c["fact"]].observations if el is not None and c["fact"] in el.facts else []

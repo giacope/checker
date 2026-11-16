@@ -290,3 +290,13 @@ def test_code_regulations_are_not_offered_for_buildings(client, monkeypatch):
     assert wait(client, pid)["state"] == "done"
     assert [s["id"] for s in client.get(f"/projects/{pid}/report.json").json()["standards"]] == ["ibc"]
     assert client.seen["requirements"] == []
+
+
+def test_the_disagreement_list_shows_enums_and_counts_but_not_text_or_printed_precision():
+    from app.buildings import disagree
+    v = lambda value, source: {"value": value, "sources": [source]}  # noqa: E731
+    assert disagree([v("nfpa13", "drawings"), v("none", "ifc")], "enum")
+    assert disagree([v("3", "drawings"), v("4", "ifc")], "number")
+    assert not disagree([v("OFFICE 101", "drawings"), v("OFF. 101", "ifc")], "text")
+    assert not disagree([v("915 mm", "ifc"), v("914.5 mm", "drawings"), v("915.5 mm", "drawings")], "length")
+    assert disagree([v("915 mm", "ifc"), v("1000 mm", "drawings")], "length")
