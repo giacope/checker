@@ -81,7 +81,7 @@ def requirements(reg: dict) -> list[dict]:
         if k.get("enabled") and (k["kind"] == "assessed" or fallback):
             out.append({"attr": fact_attr(reg["id"], k["id"]), "summary": k["summary"],
                         "clause": clauses.get(k["clause"], {}).get("text", ""),   # adapters.assess cuts and says so
-                        "search": k.get("search") or re.findall(r"[A-Za-z_]{4,}", k["summary"])[:8],
+                        "search": k.get("search") or words(k["summary"])[:8],
                         **({"for_type": k["for"]["type"]} if fallback else {})})
     return out
 
@@ -376,6 +376,18 @@ Reply with only JSON:
 {{"clauses": [{{"clause": "c1", "checks": [{{"summary": "...", "kind": "computed|assessed|attested", "why": "...", \
 "for": null, "applies": null, "require": null, "search": ["..."], "question": null}}]}}]}}"""
 
+CJK = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]{2,}|[\u30a0-\u30ff\u31f0-\u31ff]{2,}")   # Han, or katakana
+
+
+def words(text: str, min_len: int = 4) -> list[str]:
+    """Content words in any script: runs of Han characters or katakana (scripts written without spaces; hiragana,
+    mostly particles and endings, separate them), and other words of min_len letters or more."""
+    text = str(text or "")
+    out = CJK.findall(text)
+    rest = re.sub(r"[\u3040-\u309f]", " ", CJK.sub(" ", text))
+    return out + re.findall(rf"[^\W\d_][\w-]{{{min_len - 1},}}", rest)
+
+
 STOP = set("a an and any are as at be by can for from has have in into is it its may must not of on or shall should "
            "that the their there these this to use used when where which with within without all each every only "
            "ensure system application".split())
@@ -414,7 +426,7 @@ def _search(raw: Any, summary: str) -> list[str]:
         if t and t.lower() not in {x.lower() for x in terms}:
             terms.append(t)
     if len(terms) < 3:  # fall back on the summary's content words, so an assessor always has something to look for
-        for w in re.findall(r"[A-Za-z][A-Za-z0-9_-]{3,}", summary):
+        for w in words(summary):
             if w.lower() not in STOP and w.lower() not in {x.lower() for x in terms}:
                 terms.append(w.lower())
             if len(terms) >= 3:

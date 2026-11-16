@@ -197,3 +197,6 @@ def test_question_and_corpus_text_stay_inside_the_markers(code):
 def test_keywords():
     assert keywords("How are user passwords stored?") == ["user", "password", "stored"]
     assert keywords('Which policies mention "rate limit" or config.force_ssl?') == ["rate limit", "polic", "mention", "rate", "limit", "config.force_ssl"]
+    # scripts written without spaces, and letters outside ASCII
+    assert keywords("避難階段の幅は何メートル以上必要ですか？") == ["避難階段", "メートル", "以上必要"]
+    assert keywords("Wie breit müssen Rettungswege sein?") == ["wie", "breit", "müssen", "rettungswege", "sein"]

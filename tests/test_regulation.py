@@ -407,6 +407,12 @@ def test_each_vocabulary_brings_worked_examples_that_compile(vocab):
     assert vocab["compile"]["partial"] in sent[0][0]
 
 
+def test_fallback_search_terms_come_from_a_summary_in_any_script():
+    assert regulation.words("パスワードはbcryptでハッシュ化する") == ["パスワード", "ハッシュ", "bcrypt"]
+    assert regulation.words("Les mots de passe sont hachés.") == ["mots", "passe", "sont", "hachés"]
+    assert regulation._search([], "Fluchtwege müssen gekennzeichnet sein.") == ["fluchtwege", "müssen", "gekennzeichnet"]
+
+
 def test_a_long_clause_is_cut_with_a_marker_and_its_checks_say_so(monkeypatch):
     monkeypatch.setattr(regulation, "MAX_CLAUSE_CHARS", 50)
     t, sent = transport(lambda s, u: reply({"clauses": [{"clause": "c1", "checks": [

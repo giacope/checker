@@ -30,6 +30,7 @@ from pathlib import Path
 import httpx
 
 from adapters.assess import CONTROL, Corpus, cited
+from adapters.regulation import CJK
 from adapters.code_llm import ReaderError, complete, parse_json, provider_from_env
 
 VERSION = "0.1.0"
@@ -162,8 +163,9 @@ def keywords(question: str) -> list[str]:
     """Search terms from a question: quoted phrases and identifiers as written, other words without stop words and
     a plural s."""
     q = str(question or "")
-    out = [p.strip() for p in re.findall(r"[\"“'`](.{2,60}?)[\"”'`]", q)]
-    for w in re.findall(r"[A-Za-z0-9_][A-Za-z0-9_.\-/:]*[A-Za-z0-9_]", q):
+    out = [p.strip() for p in re.findall(r"[\"“'`「『](.{2,60}?)[\"”'`」』]", q)]
+    out += CJK.findall(q)   # Han and katakana runs: words in scripts written without spaces
+    for w in re.findall(r"\w[\w.\-/:]*\w", re.sub(r"[\u3040-\u309f]", " ", CJK.sub(" ", q))):
         lw = w.lower()
         if lw in STOP or len(lw) < 3 and not lw.isdigit():
             continue
