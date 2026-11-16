@@ -441,6 +441,9 @@ def title_block(sheet: Sheet, ls: list[Line]) -> tuple[str | None, str | None, l
 
 SPRINKLER_STD = re.compile(r"NFPA\s*-?\s*13\s*([RD])?(?![\d])", re.I)
 SPRINKLER_NONE = re.compile(r"\b(?:NON|UN)\s*-?\s*SPRINKLERED\b|\bNOT\s+(?:BE\s+)?SPRINKLERED\b|\bNO\s+(?:AUTOMATIC\s+)?SPRINKLER", re.I)
+# a named installation standard: a designation with a number after "to", "per", "in accordance with"
+SPRINKLER_NAMED = re.compile(r"\b(?:TO|PER|IN\s+ACCORDANCE\s+WITH|COMPLY(?:ING)?\s+WITH|CONFORMING\s+TO)\s+"
+                             r"(?!(?:IBC|CBC|UBC|IFC|NFPA|SECTION|SEC\b|CODE|THE)\b)(?P<std>[A-Z][A-Z/.&]*(?:\s+[A-Z][A-Z/.&]*){0,2}\s*-?\s*\d[\w.:-]*)", re.I)
 SPRINKLER_PARTIAL = re.compile(r"\bPARTIAL(?:LY)?\s+SPRINKLERED\b", re.I)
 SPRINKLER_FULL = re.compile(r"\b(?:FULLY|COMPLETELY)\s+SPRINKLERED\b|\bSPRINKLERED\s+THROUGHOUT\b|"
                             r"\bSPRINKLER\s+SYSTEM\s+THROUGHOUT\b|\bTHROUGHOUT\s+WITH\s+(?:AN\s+)?(?:AUTOMATIC\s+)?SPRINKLER|"
@@ -478,6 +481,10 @@ def read_notes(r: Reading, ph: list[Line]) -> None:
                     at, ok = _confident(r, l, m.start(), m.end(), "sprinkler note")
                     if ok:
                         r.add(None, "sprinkler_system", _one("nfpa13" + (m[1] or "").lower(), at, t))
+            elif (m := SPRINKLER_FULL.search(t)) and (named := SPRINKLER_NAMED.search(t)):
+                # another installation standard (BS EN 12845, AS 2118): what it is in NFPA terms is not this reader's call
+                at, _ = _confident(r, l, m.start(), m.end(), "sprinkler note")
+                r.skip(at, t, f"sprinkler note names {named['std'].strip()}, not an NFPA 13 standard: no NFPA class recorded")
             elif (m := SPRINKLER_FULL.search(t)):
                 at, ok = _confident(r, l, m.start(), m.end(), "sprinkler note")
                 if ok:

@@ -147,6 +147,9 @@ def test_sprinkler_notes():
     assert values(notes("BUILDING IS NON-SPRINKLERED")["sprinkler_system"]) == ["none"]
     assert "sprinkler_system" not in notes("NFPA 13 SPRINKLER HEADS SHALL BE CONCEALED")
     assert "sprinkler_system" not in notes("PARTIALLY SPRINKLERED")
+    for other in ("BUILDING SPRINKLERED THROUGHOUT TO BS EN 12845", "FULLY SPRINKLERED IN ACCORDANCE WITH AS 2118.1"):
+        assert "sprinkler_system" not in notes(other)                        # another standard is not an NFPA class
+    assert values(notes("FULLY SPRINKLERED PER IBC 903.3.1.1")["sprinkler_system"]) == ["nfpa13", "nfpa13r"]   # the code itself
 
 
 def test_occupancy_construction_and_code_notes():
