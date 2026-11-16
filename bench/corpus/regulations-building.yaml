@@ -1,0 +1,1203 @@
+- slug: uk-england-ad-h-drainage-h1
+  title: 'Approved Document H: Drainage and waste disposal (2015 edition) - Requirement H1 Foul water drainage'
+  publisher: Department for Levelling Up, Housing and Communities (HM Government)
+  jurisdiction: GB-ENG
+  url: https://www.gov.uk/government/publications/drainage-and-waste-disposal-approved-document-h
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: ad-h-2015-h1-foul-drainage.pdf
+    sha256: 7e7401165a27648b5a2c9df02f4ade9bd65137ce3ecf349fdf24a90fa0c249f5
+    format: pdf
+    pages: 8-30
+  section: 'Requirement H1 Foul water drainage: Sections 1-2 and Appendices H1-A to H1-C'
+  language: en
+  topic: drainage
+  structure: mixed
+  why: Pipe sizes, gradients, trap seal depths and branch lengths in tables and diagrams; source PDF is owner-password
+    encrypted (extract re-written unencrypted).
+  lines: 1256
+- slug: uk-england-ad-m-vol1-category-2
+  title: 'Approved Document M Volume 1: Dwellings (2015 incl. 2016 amendments) - M4(2) Category 2 Accessible and
+    adaptable dwellings'
+  publisher: Department for Levelling Up, Housing and Communities (HM Government)
+  jurisdiction: GB-ENG
+  url: https://www.gov.uk/government/publications/access-to-and-use-of-buildings-approved-document-m
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: ad-m-vol1-m4-2-category-2.pdf
+    sha256: 2bd9160e548b1e866245d625da97694982731f1eaf98dd01538637c9d2d8bf9f
+    format: pdf
+    pages: 18-31
+  section: Optional requirement M4(2) and Section 2 (2A Approach to the dwelling, 2B Private entrances and spaces
+    within the dwelling)
+  language: en
+  topic: accessibility
+  structure: prescriptive
+  why: Dense numeric accessibility rules (door clear openings, approach gradients, turning circles, parking bay
+    widths) with diagram references; optional-requirement layering.
+  lines: 563
+- slug: uk-england-ad-q-security
+  title: 'Approved Document Q: Security - Dwellings (2015 edition)'
+  publisher: Department for Levelling Up, Housing and Communities (HM Government)
+  jurisdiction: GB-ENG
+  url: https://www.gov.uk/government/publications/security-in-dwellings-approved-document-q
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: ad-q-2015.pdf
+    sha256: 481635d8004b08191390cc3b7c70168c614fa298de73624f6ad82f1d6d13baf5
+    format: pdf
+    pages: 20
+  language: en
+  topic: general
+  structure: performance
+  why: Short whole document (20 pages), owner-password encrypted PDF kept as published; requirements point to product
+    standards (PAS 24) rather than measurable geometry.
+  lines: 583
+- slug: uk-wales-ad-b-vol1-means-of-escape
+  title: 'Approved Document B (Wales) Fire safety Volume 1: Dwellinghouses - Section 3 Means of escape'
+  publisher: Welsh Government
+  jurisdiction: GB-WLS
+  url: https://www.gov.wales/approved-document-b-fire-safety
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: ad-b-wales-vol1-section-3-means-of-escape.pdf
+    sha256: e72d4666883d035ee9854d35e9f013e7be244e4c0e8869e09ec80fcfb00414c1
+    format: pdf
+    pages: 31-42
+  section: Section 3 Means of escape (B1)
+  language: en
+  topic: egress
+  structure: mixed
+  why: Escape-window sizes, inner rooms, protected stairway rules by storey height (4.5 m / 7.5 m thresholds) with
+    diagrams; Welsh variant of the English text with sprinkler requirement.
+  lines: 286
+- slug: uk-wales-ad-o-overheating
+  title: 'Approved Document O (Wales): Overheating (2022 edition)'
+  publisher: Welsh Government
+  jurisdiction: GB-WLS
+  url: https://www.gov.wales/approved-document-o-overheating
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: ad-o-wales-2022.pdf
+    sha256: 3e047586c994a36e64e31eb520bb0f8115ae95c7f0ce29fa86c6d369ca1fb9d9
+    format: pdf
+    pages: 32
+  language: en
+  topic: ventilation
+  structure: mixed
+  why: 'Whole 32-page document: simplified method with glazing-area limits keyed by orientation and location plus
+    a dynamic-modelling (CIBSE TM59) performance route; PDF has a navigation bar repeated on each page.'
+  lines: 934
+- slug: uk-wales-ad-n-glazing
+  title: 'Approved Document N (Wales): Glazing - safety in relation to impact, opening and cleaning'
+  publisher: Welsh Government
+  jurisdiction: GB-WLS
+  url: https://www.gov.wales/approved-document-n-glazing-safety-relation-impact-opening-and-cleaning
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: ad-n-wales-glazing.pdf
+    sha256: 78e68e48b89ad88b343b90879fe53ad3db8fe443340ed598b3d10be68e5e66f5
+    format: pdf
+    pages: 19
+  language: en
+  topic: general
+  structure: guide
+  why: Short whole document (19 pages) of critical-location glazing zones, manifestation heights and window-cleaning
+    reach; text layer splits drop-cap letters ('T | he').
+  lines: 428
+- slug: uk-wales-ad-l-vol1-section-3-fabric
+  title: 'Approved Document L (Wales) Volume 1: Dwellings (2026) - Section 3 Limiting heat losses and gains'
+  publisher: Welsh Government
+  jurisdiction: GB-WLS
+  url: https://www.gov.wales/approved-document-l-conservation-fuel-and-power
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: ad-l-wales-vol1-2026-section-3.pdf
+    sha256: 7bc18c5c75a67eed4457ef0f8c5ad4e47302d54fb861075d2ecfc3ec893764a8
+    format: pdf
+    pages: 37-51
+  section: Section 3 Limiting heat losses and gains, and target fabric performance values
+  language: en
+  topic: energy
+  structure: tables
+  why: Limiting U-values by element for new and existing dwellings, air permeability, thermal bridging; numeric
+    tables with footnotes.
+  lines: 387
+- slug: uk-scotland-domestic-4-3-stairs-ramps
+  title: 'Building Standards Technical Handbook 2023: Domestic (Dec 2023 addendum) - 4.3 Stairs and ramps'
+  publisher: Scottish Government Building Standards Division
+  jurisdiction: GB-SCT
+  url: https://www.gov.scot/publications/building-standards-technical-handbook-2023-domestic/
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: domestic-handbook-2023-4-3-stairs-and-ramps.pdf
+    sha256: fc03f71a5585f5a1b2d6bc0e8aefeecdd5df78e31e169dc31f40e254d004f361
+    format: pdf
+    pages: 357-368
+  section: Section 4 Safety, standard 4.3 Stairs and ramps (pages 357-368 of 616)
+  language: en
+  topic: stairs
+  structure: prescriptive
+  why: Scottish standard-plus-guidance layout (mandatory standard text then numbered clauses 4.3.1...), rise/going/pitch
+    limits, tapered treads, landings and ramp gradients.
+  lines: 317
+- slug: uk-scotland-domestic-3-14-ventilation
+  title: 'Building Standards Technical Handbook 2023: Domestic - 3.14 Ventilation'
+  publisher: Scottish Government Building Standards Division
+  jurisdiction: GB-SCT
+  url: https://www.gov.scot/publications/building-standards-technical-handbook-2023-domestic/
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: domestic-handbook-2023-3-14-ventilation.pdf
+    sha256: 6b4903324d3685001b57e24c9959612419e7c4e89bb4387393ff632127755fad
+    format: pdf
+    pages: 235-246
+  section: Section 3 Environment, standard 3.14 Ventilation
+  language: en
+  topic: ventilation
+  structure: mixed
+  why: Extract rates and trickle-ventilator areas per room type, references to an annex guide; performance standard
+    plus prescriptive tables.
+  lines: 480
+- slug: uk-scotland-domestic-3-6-3-7-drainage
+  title: 'Building Standards Technical Handbook 2023: Domestic - 3.6 Surface water drainage and 3.7 Wastewater drainage'
+  publisher: Scottish Government Building Standards Division
+  jurisdiction: GB-SCT
+  url: https://www.gov.scot/publications/building-standards-technical-handbook-2023-domestic/
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: domestic-handbook-2023-3-6-3-7-drainage.pdf
+    sha256: 50495f0c06403f58dd173046732541956dd825392fbf44ea7c524def621b8548
+    format: pdf
+    pages: 195-203
+  section: Section 3 Environment, standards 3.6 and 3.7
+  language: en
+  topic: drainage
+  structure: performance
+  why: Short (9 pages) drainage standards that defer heavily to BS EN references and SuDS design; few direct numeric
+    checks.
+  lines: 330
+- slug: uk-scotland-domestic-6-2-insulation-envelope
+  title: 'Building Standards Technical Handbook 2023: Domestic - 6.2 Building insulation envelope'
+  publisher: Scottish Government Building Standards Division
+  jurisdiction: GB-SCT
+  url: https://www.gov.scot/publications/building-standards-technical-handbook-2023-domestic/
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: domestic-handbook-2023-6-2-insulation-envelope.pdf
+    sha256: 31271ea3d40b7198f061b8f612ad2bf1f674c967cf8f907952e820960c475fcb
+    format: pdf
+    pages: 455-466
+  section: Section 6 Energy, standard 6.2 Building insulation envelope
+  language: en
+  topic: energy
+  structure: tables
+  why: Maximum U-values for new and existing building elements, conversions and extensions, in tables keyed by element
+    type and work type.
+  lines: 490
+- slug: uk-scotland-non-domestic-2-9-escape
+  title: 'Building Standards Technical Handbook 2023: Non-domestic (Dec 2023 addendum) - 2.9 Escape'
+  publisher: Scottish Government Building Standards Division
+  jurisdiction: GB-SCT
+  url: https://www.gov.scot/publications/building-standards-technical-handbook-2023-non-domestic/
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: non-domestic-handbook-2023-2-9-escape.pdf
+    sha256: 0fa8b7ccd9e4601f0467b56ff51e15725a35d3167ad5c6f83dcb72b3de3a779b
+    format: pdf
+    pages: 138-170
+  section: Section 2 Fire, standard 2.9 Escape
+  language: en
+  topic: egress
+  structure: tables
+  why: Occupancy capacity load factors by room use, travel distance limits, exit widths per occupant, stair widths;
+    the classic tables-keyed-by-use egress case.
+  lines: 1120
+- slug: uk-scotland-non-domestic-4-1-access
+  title: 'Building Standards Technical Handbook 2023: Non-domestic - 4.1 Access to buildings'
+  publisher: Scottish Government Building Standards Division
+  jurisdiction: GB-SCT
+  url: https://www.gov.scot/publications/building-standards-technical-handbook-2023-non-domestic/
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: non-domestic-handbook-2023-4-1-access-to-buildings.pdf
+    sha256: 530fa6840592e4c55f7ca71fe7085837ddd5e375091cb41e4749e8729365f1b0
+    format: pdf
+    pages: 372-378
+  section: Section 4 Safety, standard 4.1 Access to buildings
+  language: en
+  topic: site
+  structure: prescriptive
+  why: 'Short site-level rules: accessible car parking counts and bay sizes, accessible routes from boundary, gradients
+    and dropped kerbs.'
+  lines: 236
+- slug: ie-building-regulations-1997-si-497
+  title: S.I. No. 497/1997 - Building Regulations, 1997 (as made)
+  publisher: Office of the Attorney General (Irish Statute Book)
+  jurisdiction: IE
+  url: https://www.irishstatutebook.ie/eli/1997/si/497/made/en/print
+  licence: Oireachtas (Open Data) PSI Licence (incorporates CC BY 4.0)
+  licence_url: https://www.irishstatutebook.ie/eli/open-data.html
+  files:
+  - name: si-1997-497-building-regulations.html
+    sha256: 18df4989a3b01187aa4d97fd5d010d8f75ad1fbef4425937125ab866c4854111
+    format: html
+  language: en
+  topic: general
+  structure: performance
+  why: 'Whole statutory instrument: Second Schedule Parts A-M functional requirements (''shall be designed and constructed
+    so that...''), almost no numbers; HTML print page with site navigation and bilingual chrome.'
+  lines: 491
+- slug: ie-building-regulations-part-m-amendment-2010
+  title: S.I. No. 513/2010 - Building Regulations (Part M Amendment) Regulations 2010
+  publisher: Office of the Attorney General (Irish Statute Book)
+  jurisdiction: IE
+  url: https://www.irishstatutebook.ie/eli/2010/si/513/made/en/print
+  licence: Oireachtas (Open Data) PSI Licence (incorporates CC BY 4.0)
+  licence_url: https://www.irishstatutebook.ie/eli/open-data.html
+  files:
+  - name: si-2010-513-part-m-amendment.html
+    sha256: f507c9e6b40feed40215a3e9a3a646264794d5d031e4652eaacaf33c547ac1be
+    format: html
+  language: en
+  topic: accessibility
+  structure: legal
+  why: 'Very short amending instrument (a few pages): substitutes the Part M requirement text and commencement/transitional
+    rules; tests amendment-style legal drafting.'
+  lines: 77
+- slug: jp-kenchiku-kijun-ho-sekorei-stairs
+  title: 建築基準法施行令 第二章 第三節 階段（第二十三条～第二十七条）
+  publisher: デジタル庁 e-Gov 法令検索 (Government of Japan)
+  jurisdiction: JP
+  url: https://laws.e-gov.go.jp/law/325CO0000000338
+  licence: Public Data License 1.0 (PDL1.0); statute text is not copyrighted (Copyright Act art. 13)
+  licence_url: https://www.digital.go.jp/resources/open_data/public_data_license_v1.0
+  files:
+  - name: sekorei-ch2-sec3-kaidan.html
+    sha256: cf3031e4ee41eefd56aee0d9199b8f0e11a2851d71e9a9b4935605625eb3327e
+    format: html
+  section: 第二章 第三節 階段 (Arts. 23-27), revision 325CO0000000338_20261101_508CO0000000284
+  language: ja
+  topic: stairs
+  structure: tables
+  why: Short legal text whose core is a table of stair width / riser / tread limits keyed by building use (小学校,
+    劇場, 住宅...); Japanese with full-width numerals and ideographic spaces.
+  lines: 48
+- slug: jp-kenchiku-kijun-ho-sekorei-ch5-egress
+  title: 建築基準法施行令 第五章 避難施設等
+  publisher: デジタル庁 e-Gov 法令検索 (Government of Japan)
+  jurisdiction: JP
+  url: https://laws.e-gov.go.jp/law/325CO0000000338
+  licence: Public Data License 1.0 (PDL1.0); statute text is not copyrighted (Copyright Act art. 13)
+  licence_url: https://www.digital.go.jp/resources/open_data/public_data_license_v1.0
+  files:
+  - name: sekorei-ch5-hinan-shisetsu.html
+    sha256: 1d2a4df8e0d108f52dcf488743f24280d25f1a42386515d995dc3e76e10bc59d
+    format: html
+  section: '第五章 避難施設等 (Arts. 116-2 to 126-7: 廊下, 避難階段, 出入口, 排煙設備, 非常用の照明装置, 非常用の進入口, 敷地内の避難上必要な通路)'
+  language: ja
+  topic: egress
+  structure: legal
+  why: Egress articles with nested 項/号 numbering, travel distance tables by use and construction, cross-references
+    to 法 and 告示.
+  lines: 209
+- slug: jp-kenchiku-kijun-ho-sekorei-wood-structure
+  title: 建築基準法施行令 第三章 第三節 木造
+  publisher: デジタル庁 e-Gov 法令検索 (Government of Japan)
+  jurisdiction: JP
+  url: https://laws.e-gov.go.jp/law/325CO0000000338
+  licence: Public Data License 1.0 (PDL1.0); statute text is not copyrighted (Copyright Act art. 13)
+  licence_url: https://www.digital.go.jp/resources/open_data/public_data_license_v1.0
+  files:
+  - name: sekorei-ch3-sec3-mokuzo.html
+    sha256: 87e3b08e395374fe061888c68777803a648e0632a331466fdd57752d8bef3881
+    format: html
+  section: 第三章 第三節 木造 (Arts. 40-50)
+  language: ja
+  topic: structure
+  structure: tables
+  why: 'Prescriptive timber structure rules: column slenderness tables, required wall-length (壁量) multipliers per
+    floor area keyed by roof weight and storey.'
+  lines: 43
+- slug: jp-kenchiku-kijun-ho-ch3-roads-site
+  title: 建築基準法 第三章 第二節～第四節（道路、用途、敷地及び構造）
+  publisher: デジタル庁 e-Gov 法令検索 (Government of Japan)
+  jurisdiction: JP
+  url: https://laws.e-gov.go.jp/law/325AC0000000201
+  licence: Public Data License 1.0 (PDL1.0); statute text is not copyrighted (Copyright Act art. 13)
+  licence_url: https://www.digital.go.jp/resources/open_data/public_data_license_v1.0
+  files:
+  - name: kijunho-ch3-sec2-4-doro-yoto-shikichi.html
+    sha256: 2f857f3a616da09ec1538da9c8a9bab55e41ff510766ecac050b2a2f6d62b50c
+    format: html
+  section: 第三章 第二節 道路 (Arts. 42-47), 第三節 用途 (Art. 48-51), 第四節 敷地及び構造 (Arts. 52-68)
+  language: ja
+  topic: site
+  structure: legal
+  why: 'Site/zoning rules: road frontage (接道 2 m), floor-area and coverage ratios by zone, setback/slant-plane height
+    limits; formulas and zone-keyed lists in legal prose.'
+  lines: 221
+- slug: jp-shobo-ho-sekorei-alarm-escape-equipment
+  title: 消防法施行令 第二章 第三節 第三款 警報設備に関する基準・第四款 避難設備に関する基準
+  publisher: デジタル庁 e-Gov 法令検索 (Government of Japan)
+  jurisdiction: JP
+  url: https://laws.e-gov.go.jp/law/336CO0000000037
+  licence: Public Data License 1.0 (PDL1.0); statute text is not copyrighted (Copyright Act art. 13)
+  licence_url: https://www.digital.go.jp/resources/open_data/public_data_license_v1.0
+  files:
+  - name: shoboho-sekorei-keiho-hinan-setsubi.html
+    sha256: 9a2a2a2e9ee5aedfc8dd8196fdbd7fe846a4a934dd0e134c7500586d55104d61
+    format: html
+  section: 第二章 第三節 第三款 警報設備 (Arts. 21-24) and 第四款 避難設備 (Arts. 25-26)
+  language: ja
+  topic: fire
+  structure: legal
+  why: Fire alarm and escape-equipment thresholds keyed by 別表第一 occupancy classes and floor area (e.g. 延べ面積 300
+    m2 以上), heavy cross-referencing to an annex not included.
+  lines: 197
+  reader_problem: The escape-equipment table (避難はしご, 救助袋, 緩降機 ... by floor and occupancy) is flattened to one cell
+    per line (33% of lines are short) so equipment lists lose their row/column keys. No exception.
+- slug: jp-barrier-free-ho-sekorei
+  title: 高齢者、障害者等の移動等の円滑化の促進に関する法律施行令（バリアフリー法施行令）
+  publisher: デジタル庁 e-Gov 法令検索 (Government of Japan)
+  jurisdiction: JP
+  url: https://laws.e-gov.go.jp/law/418CO0000000379
+  licence: Public Data License 1.0 (PDL1.0); statute text is not copyrighted (Copyright Act art. 13)
+  licence_url: https://www.digital.go.jp/resources/open_data/public_data_license_v1.0
+  files:
+  - name: barrier-free-ho-sekorei.docx
+    sha256: fe9f1b98db7ac9dae51eac62c0a4ee3b5f3b49029a495ceeb51893cf6c06088d
+    format: docx
+  language: ja
+  topic: accessibility
+  structure: prescriptive
+  why: 'Whole cabinet order as e-Gov''s Word export: accessible route widths (120 cm), slopes (1/12), lift car sizes,
+    toilet and parking requirements for 特別特定建築物; DOCX with Japanese numbering.'
+  lines: 339
+- slug: jp-building-energy-ho-sekorei
+  title: 建築物のエネルギー消費性能の向上等に関する法律施行令（建築物省エネ法施行令）
+  publisher: デジタル庁 e-Gov 法令検索 (Government of Japan)
+  jurisdiction: JP
+  url: https://laws.e-gov.go.jp/law/428CO0000000008
+  licence: Public Data License 1.0 (PDL1.0); statute text is not copyrighted (Copyright Act art. 13)
+  licence_url: https://www.digital.go.jp/resources/open_data/public_data_license_v1.0
+  files:
+  - name: kenchikubutsu-shoene-ho-sekorei.docx
+    sha256: ec2f588e767cb6d68a43ca0cc227f750731e33941cfd4b72026e75132dd6d532
+    format: docx
+  language: ja
+  topic: energy
+  structure: legal
+  why: 'Short whole order (DOCX): which buildings fall under energy duties (延べ面積 over 10,000 m2, the 10 m2 open-space
+    rule, exempt uses such as car parks and barns); definitional rather than measurable.'
+  lines: 75
+- slug: us-ada-2010-ch2-scoping
+  title: 2010 ADA Standards for Accessible Design - Chapter 2 Scoping requirements (201-226)
+  publisher: U.S. Department of Justice
+  jurisdiction: US
+  url: https://www.ada.gov/law-and-regs/design-standards/2010-stds/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 2010-ada-standards-ch2-scoping-201-226.pdf
+    sha256: 090157a91041a1a10056923dd644f5c1d5934824defd24822ef0dec398b9c509
+    format: pdf
+    pages: 54-91
+  section: ADA Chapter 2 Scoping, sections 201 to 226 (page 91 also starts 227)
+  language: en
+  topic: accessibility
+  structure: tables
+  why: Scoping tables keyed by counts (accessible parking spaces per total, wheelchair spaces per seating capacity,
+    accessible guest rooms per room count) with exceptions and advisory notes.
+  lines: 1452
+- slug: us-ada-2010-ch6-plumbing
+  title: 2010 ADA Standards for Accessible Design - Chapter 6 Plumbing elements and facilities
+  publisher: U.S. Department of Justice
+  jurisdiction: US
+  url: https://www.ada.gov/law-and-regs/design-standards/2010-stds/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 2010-ada-standards-ch6-plumbing.pdf
+    sha256: 29cce4219c1c1ea6a2cae5c01cfa0150fcdf1319fdf2448b405298ca3f486dc9
+    format: pdf
+    pages: 163-189
+  section: Chapter 6 Plumbing elements and facilities (601-612)
+  language: en
+  topic: drainage
+  structure: mixed
+  why: Fixture clearances, grab bar heights, lavatory knee space in inches with millimetre equivalents and many
+    figures (captions only in the text layer).
+  lines: 625
+- slug: us-ada-2010-ch10-recreation
+  title: 2010 ADA Standards for Accessible Design - Chapter 10 Recreation facilities
+  publisher: U.S. Department of Justice
+  jurisdiction: US
+  url: https://www.ada.gov/law-and-regs/design-standards/2010-stds/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 2010-ada-standards-ch10-recreation.pdf
+    sha256: 3b79498820ff66cf48c84d9463ace1658c1640b77a54790ccc287bb6f725e0e7
+    format: pdf
+    pages: 228-256
+  section: Chapter 10 Recreation facilities (1001-1011)
+  language: en
+  topic: accessibility
+  structure: prescriptive
+  why: 'Unusual building types (pools, play areas, boating, golf): tests whether checks generalise beyond rooms
+    and doors.'
+  lines: 755
+- slug: us-ufc-3-101-01-architecture
+  title: UFC 3-101-01 Architecture (16 Dec 2020, Change 4, 8 Jan 2024) - Chapters 1-5
+  publisher: U.S. Department of Defense (published on WBDG / NIBS)
+  jurisdiction: US
+  url: https://www.wbdg.org/dod/ufc/ufc-3-101-01
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: ufc-3-101-01-2020-c4-ch1-5.pdf
+    sha256: ed4b3f07815c937269378f1b84a9051a798c3df0c67ab194b6cb18c6baa41f35
+    format: pdf
+    pages: 1-46
+  section: Front matter and Chapters 1-5 (modifications to the IBC, design, programming, design services); appendices
+    omitted
+  language: en
+  topic: general
+  structure: mixed
+  why: A code that amends another code (Chapter 2 'Modifications to the IBC', keyed by IBC section numbers); archived
+    version with a 'CANCELLED' watermark in the text layer, because WBDG links the July 2026 edition only behind
+    a page script.
+  lines: 1696
+  reader_problem: 'Diagonal ''CANCELLED'' watermark in the text layer: 292 single-letter lines (D, E, L, E, C, N,
+    A, C) interleaved through the document, and watermark letters merged into words (''ARCHITELCTURE'', ''AIR FORCE
+    CIVIL ENGINEER CENTER L''). No exception.'
+- slug: us-ufs-4-010-01-ch5-min-at-standards
+  title: UFS 4-010-01 Antiterrorism, Force Protection, and Security Engineering (30 Sep 2026) - Chapter 5 Minimum
+    antiterrorism standards for buildings
+  publisher: U.S. Department of Defense (published on WBDG / NIBS)
+  jurisdiction: US
+  url: https://www.wbdg.org/dod/ufc/ufc-4-010-01
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: ufs-4-010-01-2026-ch5.pdf
+    sha256: e59ed6e95258ef4a86cd2d69822758b86092e66d523f7f91652d4830e4c640af
+    format: pdf
+    pages: 59-63
+  section: Chapter 5 Minimum antiterrorism standards for buildings (5-1 to 5-16)
+  language: en
+  topic: site
+  structure: tables
+  why: Short (5 pages) chapter laid out as a two-column requirement/commentary table ('No Comment' cells); standoff
+    distances, parking and roadway setbacks, air intake heights.
+  lines: 132
+- slug: us-gsa-p100-2024-ch4-structural-civil
+  title: GSA P100 Facilities Standards for the Public Buildings Service (2024) - Chapter 4 Structural and civil
+    engineering
+  publisher: U.S. General Services Administration
+  jurisdiction: US
+  url: https://www.gsa.gov/real-estate/design-and-construction/engineering-and-architecture/facilities-standards-for-the-public-buildings-service
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: gsa-p100-2024-ch4-structural-civil.pdf
+    sha256: 92a5bf3504096067a1beb6fe5108493b18b66d25f5fa40e121aba2d9cf2a33e9
+    format: pdf
+    pages: 170-185
+  section: Chapter 4 Structural and civil engineering
+  language: en
+  topic: structure
+  structure: tables
+  why: Performance tables with Baseline / Tier 1-3 levels (a matrix of alternative compliance tiers) plus prescriptive
+    civil requirements; tests tiered requirements.
+  lines: 542
+- slug: us-gsa-p100-2024-ch5-mechanical
+  title: GSA P100 (2024) - Chapter 5 Mechanical engineering
+  publisher: U.S. General Services Administration
+  jurisdiction: US
+  url: https://www.gsa.gov/real-estate/design-and-construction/engineering-and-architecture/facilities-standards-for-the-public-buildings-service
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: gsa-p100-2024-ch5-mechanical.pdf
+    sha256: 2425652d1c4789167586bbca879174d43a8befbd4a8de0cb2a47f5098edc779c
+    format: pdf
+    pages: 186-214
+  section: Chapter 5 Mechanical engineering (incl. 5.4 Plumbing)
+  language: en
+  topic: ventilation
+  structure: mixed
+  why: HVAC design conditions, outdoor air rates, filtration, plumbing; tier tables plus prescriptive numeric requirements.
+  lines: 1078
+- slug: us-gsa-p100-2024-ch7-fire-protection
+  title: GSA P100 (2024) - Chapter 7 Fire protection
+  publisher: U.S. General Services Administration
+  jurisdiction: US
+  url: https://www.gsa.gov/real-estate/design-and-construction/engineering-and-architecture/facilities-standards-for-the-public-buildings-service
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: gsa-p100-2024-ch7-fire-protection.pdf
+    sha256: a9090e75a750d83744c4884f61e2223036ce91ae366ec0347d3497e3ff326ccc
+    format: pdf
+    pages: 278-306
+  section: Chapter 7 Fire protection (goals, means of egress, sprinklers, alarms)
+  language: en
+  topic: fire
+  structure: mixed
+  why: 'Federal overlay on IBC/NFPA: mostly ''comply with X, except Y'' text referring to paywalled codes; tests
+    reference-heavy clauses.'
+  lines: 943
+- slug: us-gsa-p100-2024-performance-matrix
+  title: GSA 2024 P100 Performance Matrix
+  publisher: U.S. General Services Administration
+  jurisdiction: US
+  url: https://www.gsa.gov/real-estate/design-and-construction/engineering-and-architecture/facilities-standards-for-the-public-buildings-service
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 2024-p100-performance-matrix.docx
+    sha256: 1788c0f9dd1b29299624d20d3ddce504cc438ad9f054bf39ef72af69dd5a4bef
+    format: docx
+  language: en
+  topic: general
+  structure: tables
+  why: Whole DOCX that is only a large table (attribute x Baseline/Tier 1/2/3); tests Word table extraction.
+  lines: 437
+- slug: us-access-board-guide-stairways
+  title: 'U.S. Access Board Guide to the ADA Accessibility Standards - Chapter 5: Stairways'
+  publisher: U.S. Access Board
+  jurisdiction: US
+  url: https://www.access-board.gov/ada/guides/chapter-5-stairways/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: guide-chapter-5-stairways.html
+    sha256: 331d3878f7f63fb15e67b7ce23f6f8ce459d2d9badf1642adc91b5e40f46b942
+    format: html
+  language: en
+  topic: stairs
+  structure: guide
+  why: Short explanatory design guide (a web page with site navigation) restating 504 stair rules with figure captions
+    and 'Tip' boxes; not normative text.
+  lines: 69
+- slug: us-access-board-guide-toilet-rooms
+  title: 'U.S. Access Board Guide to the ADA Accessibility Standards - Chapter 6: Toilet rooms'
+  publisher: U.S. Access Board
+  jurisdiction: US
+  url: https://www.access-board.gov/ada/guides/chapter-6-toilet-rooms/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: guide-chapter-6-toilet-rooms.html
+    sha256: 7bf59a9e92a0cf4d3016e5a64aff237aa2229d30bca2c06e2f7cfc9068f77372
+    format: html
+  language: en
+  topic: accessibility
+  structure: guide
+  why: Diagram-heavy guide page (image alt texts and captions carry the dimensions); tests HTML whose numbers live
+    in figures.
+  lines: 310
+- slug: us-access-board-guide-accessible-egress
+  title: 'U.S. Access Board Guide to the ADA Accessibility Standards - Chapter 4: Accessible means of egress'
+  publisher: U.S. Access Board
+  jurisdiction: US
+  url: https://www.access-board.gov/ada/guides/chapter-4-accessible-means-of-egress/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: guide-chapter-4-accessible-means-of-egress.html
+    sha256: b92b920977ab7fa9f73818ac8dcd0677718449d626315ba021f75b1ee17ad3cc
+    format: html
+  language: en
+  topic: egress
+  structure: guide
+  why: Guide that mostly points to the IBC (areas of refuge, evacuation elevators) rather than stating rules; tests
+    clauses that delegate to an external code.
+  lines: 123
+- slug: us-access-board-guide-parking
+  title: 'U.S. Access Board Guide to the ADA Accessibility Standards - Chapter 5: Parking (PDF)'
+  publisher: U.S. Access Board
+  jurisdiction: US
+  url: https://www.access-board.gov/ada/guides/chapter-5-parking/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: guide-chapter-5-parking.pdf
+    sha256: 952f8cb493fbcd3cdb831755581f3880c6e103e875846680076757caca6384f5
+    format: pdf
+    pages: 19
+  language: en
+  topic: site
+  structure: guide
+  why: Whole 19-page illustrated guide sheet on parking counts, van spaces and access aisles; figure-heavy PDF.
+  lines: 540
+- slug: us-aba-ch5-site-stairs
+  title: Architectural Barriers Act (ABA) Accessibility Standards - Chapter 5 General site and building elements
+    (501-505)
+  publisher: U.S. Access Board
+  jurisdiction: US
+  url: https://www.access-board.gov/aba/
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: aba-standards-ch5-501-505.html
+    sha256: 2dd97e60c401c0765b07ea3cd620674f1d5b084b4dc7b5d860dc80db160d111c
+    format: html
+  section: 'Chapter 5: 501 General, 502 Parking spaces, 503 Passenger loading zones, 504 Stairways, 505 Handrails
+    (HTML cut from the single-page ABA standards)'
+  language: en
+  topic: stairs
+  structure: prescriptive
+  why: Stair riser/tread, nosing and handrail height/extension rules plus parking-space geometry; HTML headings
+    carry the section numbers.
+  lines: 124
+- slug: us-osha-1910-subpart-e-exit-routes
+  title: 29 CFR Part 1910 Subpart E - Exit Routes and Emergency Planning (eCFR)
+  publisher: Office of the Federal Register / GPO (eCFR); OSHA rule
+  jurisdiction: US
+  url: https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XVII/part-1910/subpart-E
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 29-cfr-1910-subpart-e.html
+    sha256: d1ccf2c7f76ef6072f99dafb7cd57ea4d65d8ae112426fec9fefc8f92f26ff18
+    format: html
+  section: Subpart E, 1910.33-1910.39
+  language: en
+  topic: egress
+  structure: legal
+  why: Workplace exit-route rule (ceiling 7 ft 6 in, width 28 in, exit discharge) in CFR paragraph numbering (a)(1)(i);
+    an HTML fragment without html/head elements.
+  lines: 163
+- slug: us-osha-1926-1052-stairways
+  title: 29 CFR 1926.1052 Stairways (construction) (eCFR)
+  publisher: Office of the Federal Register / GPO (eCFR); OSHA rule
+  jurisdiction: US
+  url: https://www.ecfr.gov/current/title-29/subtitle-B/chapter-XVII/part-1926/subpart-X/section-1926.1052
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 29-cfr-1926-1052-stairways.html
+    sha256: 3a137babb5fc3be45a51d1ba360c21c075e06bf105cc680ea56115693b291045
+    format: html
+  language: en
+  topic: stairs
+  structure: prescriptive
+  why: 'Short single section: landings at least 22 in deep every 12 ft of vertical rise, riser/tread uniformity,
+    stairrail and handrail heights; temporary-works rules rather than the finished building.'
+  lines: 40
+- slug: us-hud-24-cfr-100-205-fha-design
+  title: 24 CFR 100.205 Design and construction requirements (Fair Housing Act) (eCFR)
+  publisher: Office of the Federal Register / GPO (eCFR); HUD rule
+  jurisdiction: US
+  url: https://www.ecfr.gov/current/title-24/subtitle-B/chapter-I/subchapter-A/part-100/subpart-D/section-100.205
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 24-cfr-100-205.html
+    sha256: 82eefffdd4a72a6fb08f1dfc22c6d595679e5ed8cad17716d065b9ab30d19dcb
+    format: html
+  language: en
+  topic: accessibility
+  structure: performance
+  why: Short legal section with the seven FHA design requirements for covered multifamily dwellings, stated functionally
+    ('usable door', 'accessible route') with site-impracticality exceptions.
+  lines: 38
+- slug: us-doe-10-cfr-433-federal-energy
+  title: 10 CFR Part 433 - Energy efficiency standards for new Federal commercial and multi-family high-rise residential
+    buildings (eCFR)
+  publisher: Office of the Federal Register / GPO (eCFR); DOE rule
+  jurisdiction: US
+  url: https://www.ecfr.gov/current/title-10/chapter-II/subchapter-D/part-433
+  licence: Public domain (work of the U.S. Government, 17 U.S.C. 105)
+  licence_url: https://www.copyright.gov/title17/92chap1.html#105
+  files:
+  - name: 10-cfr-433.html
+    sha256: 58d67d0c3d9a81a2ffe8cfe6db4c098e0d8fc0d285a161d5c0e9d477f2ab70e1
+    format: html
+  language: en
+  topic: energy
+  structure: legal
+  why: Energy rule that incorporates ASHRAE 90.1 by reference and adds percentage-better-than-baseline and fossil-fuel
+    reduction targets by year; numbers are relative, not absolute.
+  lines: 408
+- slug: au-ncc-2025-vol1-d2-provision-for-escape
+  title: National Construction Code 2025 Volume One - Part D2 Provision for escape
+  publisher: Australian Building Codes Board
+  jurisdiction: AU
+  url: https://ncc.abcb.gov.au/editions/ncc-2025/adopted/volume-one/d-access-and-egress/part-d2-provision-escape
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: ncc-2025-vol1-part-d2.html
+    sha256: ce48b8563617e35d62e4073d6a03d122b5bacd82e8f01382f9698f527c07e78f
+    format: html
+  section: Volume One, Part D2 (one web page of the online NCC)
+  language: en
+  topic: egress
+  structure: mixed
+  why: 'Performance requirements (D1P..) followed by Deemed-to-Satisfy D2D clauses: number of exits, travel distances
+    (20 m / 40 m), exit width per occupant, with state variations; heavy page chrome.'
+  lines: 826
+- slug: au-ncc-2025-housing-h11-2-stairway-ramp
+  title: National Construction Code 2025 Housing Provisions - Part 11.2 Stairway and ramp construction
+  publisher: Australian Building Codes Board
+  jurisdiction: AU
+  url: https://ncc.abcb.gov.au/editions/ncc-2025/adopted/housing-provisions/11-safe-movement-and-access/part-112-stairway-and-ramp-construction
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: ncc-2025-housing-part-11-2.html
+    sha256: 2e5622c6e05ec087f025ad64b57c4a8fb87c09f05701c83ddb2175788d583a99
+    format: html
+  section: Housing Provisions Part 11.2
+  language: en
+  topic: stairs
+  structure: tables
+  why: Riser/going/2R+G table, slip-resistance table keyed by surface condition, ramp gradient 1:8; images of figures
+    carry the geometry.
+  lines: 235
+- slug: au-ncc-2025-vol3-c2-sanitary-drainage
+  title: National Construction Code 2025 Volume Three (Plumbing Code of Australia) - Part C2 Sanitary drainage systems
+  publisher: Australian Building Codes Board
+  jurisdiction: AU
+  url: https://ncc.abcb.gov.au/editions/ncc-2025/adopted/volume-three/c-sanitary-plumbing-and-drainage-systems/part-c2-sanitary-drainage-systems
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: ncc-2025-vol3-part-c2.html
+    sha256: 90917caa1a6d3cb7d4f99c90c01963f0231f13261f9087c759c3de81f62ff933
+    format: html
+  section: Volume Three Part C2
+  language: en
+  topic: drainage
+  structure: performance
+  why: 'Plumbing code: performance requirements and verification methods that mostly defer to AS/NZS 3500 (paywalled);
+    few checkable numbers.'
+  lines: 640
+- slug: au-ncc-2025-vol1-b1-structural-provisions
+  title: National Construction Code 2025 Volume One - Part B1 Structural provisions
+  publisher: Australian Building Codes Board
+  jurisdiction: AU
+  url: https://ncc.abcb.gov.au/editions/ncc-2025/adopted/volume-one/b-structure/part-b1-structural-provisions
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: ncc-2025-vol1-part-b1.html
+    sha256: 5cfe50b9c97a548a9ca0b182d179ce50116ac0f7031df33b0795e54651317fac
+    format: html
+  section: Volume One Part B1
+  language: en
+  topic: structure
+  structure: performance
+  why: Structural performance requirements with importance levels, annual probability of exceedance tables, and
+    lists of referenced standards for DTS compliance.
+  lines: 976
+- slug: au-ncc-2025-housing-13-2-building-fabric
+  title: National Construction Code 2025 Housing Provisions - Part 13.2 Building fabric
+  publisher: Australian Building Codes Board
+  jurisdiction: AU
+  url: https://ncc.abcb.gov.au/editions/ncc-2025/adopted/housing-provisions/13-energy-efficiency/part-132-building-fabric
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: ncc-2025-housing-part-13-2.html
+    sha256: f1e94a5b4d2683e34eca8d7d6db0e5f2ae747989f9de50e33808dab6a8accb39
+    format: html
+  section: Housing Provisions Part 13.2
+  language: en
+  topic: energy
+  structure: tables
+  why: Many large tables of required total R-values keyed by climate zone and construction type; the biggest table
+    load in the corpus.
+  lines: 4256
+  reader_problem: HTML tables are flattened to one cell per line with no row or column markers (51% of 4256 lines
+    are <=3 characters); with rowspan/colspan the R-value cells ('2.5', '3.0', 'X') cannot be re-associated with
+    their climate zone and roof/floor type. No exception.
+- slug: au-ncc-2025-vol1-d4-access-disability
+  title: National Construction Code 2025 Volume One - Part D4 Access for people with a disability
+  publisher: Australian Building Codes Board
+  jurisdiction: AU
+  url: https://ncc.abcb.gov.au/editions/ncc-2025/adopted/volume-one/d-access-and-egress/part-d4-access-people-disability
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: ncc-2025-vol1-part-d4.html
+    sha256: 7732b60f5f5e0d5ada1aa8d874897f136c25e38b3efa898a2050d4c7f28ccb89
+    format: html
+  section: Volume One Part D4
+  language: en
+  topic: accessibility
+  structure: tables
+  why: Access requirements by building class (Table D4D2), accessible carparking and sanitary facility provisions;
+    defers geometry to AS 1428.1.
+  lines: 471
+- slug: nz-building-code-clauses-b-d
+  title: Building Regulations 1992 Schedule 1 (New Zealand Building Code) - Clauses B1-D2
+  publisher: Parliamentary Counsel Office (New Zealand Legislation)
+  jurisdiction: NZ
+  url: https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1992/150/en/latest/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: nz-building-code-2026-01-15-clauses-b1-d2.pdf
+    sha256: e80441a0e5a77227b3a85aa6ae1ea31afb8969f8aa7e987acb35dad56e0f4705
+    format: pdf
+    pages: 26-44
+  section: Schedule 1 clauses B1 Structure, B2 Durability, C1-C6 Protection from fire, D1 Access routes, D2 Mechanical
+    installations for access (version as at 15 Jan 2026)
+  language: en
+  topic: general
+  structure: performance
+  why: Objective / functional requirement / performance clauses in a two-column 'Provisions | Limits on application'
+    layout; tests column interleaving in PDF text extraction.
+  lines: 864
+  reader_problem: 'Interleaved columns: the two-column ''Provisions | Limits on application'' layout comes out line
+    by line alternating between columns (e.g. line 566 ''Performance D1.3.3(h) shall not apply'' sits between D1.3.3(d)
+    ''have adequate slip-resistant'' and ''walking surfaces under all''), so limits text is spliced into the requirement
+    sentences. No exception.'
+- slug: nz-building-code-clauses-g-h
+  title: Building Regulations 1992 Schedule 1 (New Zealand Building Code) - Clauses G1-H1
+  publisher: Parliamentary Counsel Office (New Zealand Legislation)
+  jurisdiction: NZ
+  url: https://www.legislation.govt.nz/secondary-legislation/pco-drafted/1992/150/en/latest/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: nz-building-code-2026-01-15-clauses-g1-h1.pdf
+    sha256: d339c4bb4202e036449fc61c0b57a061730d3e0215f53a13e889d2cfbe7525da
+    format: pdf
+    pages: 61-89
+  section: Schedule 1 clauses G1-G15 Services and facilities (incl. G4 Ventilation, G13 Foul water) and H1 Energy
+    efficiency
+  language: en
+  topic: ventilation
+  structure: performance
+  why: 'Same two-column performance layout for services: ventilation, sanitary facilities, foul water, energy efficiency
+    with a few numeric performance criteria.'
+  lines: 1239
+  reader_problem: 'Interleaved columns: both columns are merged into the same line, e.g. line 56 ''G1.3.4 Personal
+    hygiene facilities provided Performance G1.3.4 shall not apply to'' and line 57 ''for people with disabilities
+    shall be housing, outbuildings, backcountry huts,''. No exception.'
+- slug: nz-d1-as1-access-routes
+  title: Acceptable Solution D1/AS1 Access routes (2nd edition, amendment 6)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/d-access/d1-access-routes/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: d1-access-routes-2nd-edition-amendment-6.pdf
+    sha256: 02132b6af9bae0f875b2dca2cd6d29c1a9c23f8567691e7356b7a872f40e33a9
+    format: pdf
+    pages: 52
+  language: en
+  topic: stairs
+  structure: mixed
+  why: 'Whole 52-page acceptable solution: stair rise/going tables by stair type, ramp gradients, handrails, accessible
+    parking; amendment marks in margins.'
+  lines: 1676
+- slug: nz-g4-as1-ventilation
+  title: Acceptable Solution G4/AS1 Ventilation (5th edition)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/g-services-and-facilities/g4-ventilation/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: g4-ventilation-as1-5th-edition.pdf
+    sha256: 4f3238fafa522a35c17c226efa7a757b703daa61610fcdd18041e4cb0229095b
+    format: pdf
+    pages: 22
+  language: en
+  topic: ventilation
+  structure: prescriptive
+  why: 'Whole 22-page document: openable window area as 5% of floor area, extract rates for kitchens and bathrooms,
+    carpark ventilation.'
+  lines: 656
+- slug: nz-g4-vm1-ventilation
+  title: Verification Method G4/VM1 Ventilation (5th edition)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/g-services-and-facilities/g4-ventilation/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: g4-ventilation-vm1-5th-edition.pdf
+    sha256: 13016219777ac63527d56dd219bbe40f57c3f6110163b9a3ca2371a079107284
+    format: pdf
+    pages: 7
+  language: en
+  topic: ventilation
+  structure: performance
+  why: Very short (7 pages) verification method that points to a calculation standard; tests a document with almost
+    nothing directly checkable.
+  lines: 142
+- slug: nz-e1-surface-water
+  title: Acceptable Solution and Verification Method E1 Surface water (1st edition, amendment 12)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/e-moisture/e1-surface-water/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: e1-surface-water-1st-edition-amendment-12.pdf
+    sha256: 61b3a228f86598402271bf5020427d9f063d58ade077f91cb3bb9e7f756aaacc
+    format: pdf
+    pages: 59
+  language: en
+  topic: drainage
+  structure: mixed
+  why: Rainfall intensity maps, pipe sizing tables, gutter and downpipe sizing; 59 pages of older typesetting with
+    amendment bars.
+  lines: 3043
+  reader_problem: Formulas are broken into one glyph per line and merged into the neighbouring table row (runoff
+    coefficient formula C = sum(CiAi)/A becomes lines '_', '∑', '_', 'C', '__i', 'A', 'i', 'A', with 'C = _' appended
+    to a table row); 100 single-character lines. No exception.
+- slug: nz-h1-as1-energy
+  title: Acceptable Solution H1/AS1 Energy efficiency for housing and buildings up to 300 m2 (6th edition)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/h-energy-efficiency/h1-energy-efficiency/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: h1-energy-efficiency-as1-6th-edition.pdf
+    sha256: aead7368878fd3e371a51de53aadddb9540a015cd091b3f2bf966da67e1b03a0
+    format: pdf
+    pages: 55
+  language: en
+  topic: energy
+  structure: tables
+  why: R-value tables keyed by climate zone (1-6) and building element, glazing ratio limits and a calculation method;
+    55 pages.
+  lines: 2236
+- slug: nz-f4-safety-from-falling
+  title: Acceptable Solution F4/AS1 Safety from falling (3rd edition, amendment 2)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/f-safety-of-users/f4-safety-from-falling/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: f4-safety-from-falling-3rd-edition-amendment-2.pdf
+    sha256: 28ce15ca3292df5bb66a4a90f0bc1feaba35d8733a2cfa504a60b9af4f99506c
+    format: pdf
+    pages: 24
+  language: en
+  topic: stairs
+  structure: prescriptive
+  why: Barrier heights (1000/1100 mm), 100 mm sphere rule, window sill heights, climbable-rail zones; 24 pages with
+    diagrams.
+  lines: 444
+- slug: nz-g13-foul-water
+  title: Acceptable Solutions and Verification Method G13 Foul water (2nd edition, amendment 10)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/g-services-and-facilities/g13-foul-water/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: g13-foul-water-2nd-edition-amendment-10.pdf
+    sha256: 5113e5fae38e2bc03ee5e325210e745bfeca5a70918e456d21caa04c6793d2ab
+    format: pdf
+    pages: 61
+  language: en
+  topic: drainage
+  structure: tables
+  why: Discharge units, pipe gradients and trap sizes in tables; 61 pages of older typesetting.
+  lines: 1966
+  reader_problem: Figure labels come out as doubled glyphs and U+FFFD (7 replacement characters), e.g. 'LL 45 4
+    0 5 o j u ju n n c c t t i i o on n /t', 'S S i i d d e e e e le le v v a a � t o io n n'; body text is fine.
+    No exception.
+- slug: nz-b1-vm1-structure
+  title: Verification Method B1/VM1 Structure (2nd edition)
+  publisher: Ministry of Business, Innovation and Employment (MBIE)
+  jurisdiction: NZ
+  url: https://www.building.govt.nz/building-code-compliance/b-stability/b1-structure/
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: b1-structure-vm1-2nd-edition.pdf
+    sha256: 79be31f17279f9030577e82c5974a9268e4dddb3fd01c05873e6b560906548c1
+    format: pdf
+    pages: 23
+  language: en
+  topic: structure
+  structure: mixed
+  why: 'Structural verification method: lists of cited standards with NZ modifications (''delete clause X and replace
+    with ...''), load combinations; 23 pages.'
+  lines: 754
+- slug: eu-epbd-2024-1275-de-articles
+  title: Richtlinie (EU) 2024/1275 über die Gesamtenergieeffizienz von Gebäuden (Neufassung) - Artikel 1-14
+  publisher: Publications Office of the European Union (EUR-Lex)
+  jurisdiction: EU
+  url: https://eur-lex.europa.eu/legal-content/DE/TXT/HTML/?uri=CELEX:32024L1275
+  licence: EUR-Lex reuse policy (Commission Decision 2011/833/EU; editorial content CC BY 4.0)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: richtlinie-eu-2024-1275-art-1-14.html
+    sha256: 7961e65cf7740b5771c96e076f8a723081c07e7e8a7db5715cbeaddca93f2cd9
+    format: html
+  section: Artikel 1-14 (Gegenstand, Begriffsbestimmungen, Renovierungsplan, Mindestanforderungen, Nullemissionsgebäude,
+    Solarenergie, nachhaltige Mobilität)
+  language: de
+  topic: energy
+  structure: legal
+  why: 'German EU directive: obligations addressed to Member States rather than buildings, yet Art. 14 has checkable
+    numbers (charging points per parking spaces, bicycle spaces); dates and thresholds.'
+  lines: 533
+  reader_problem: EUR-Lex lays out enumerations as two-cell tables, so every list label is its own line ('a)', 'b)',
+    'i)') separated from its item text; 33% of lines are labels only. No exception.
+- slug: eu-epbd-2024-1275-es-annexes
+  title: Directiva (UE) 2024/1275 relativa a la eficiencia energética de los edificios (refundición) - Anexos I-X
+  publisher: Publications Office of the European Union (EUR-Lex)
+  jurisdiction: EU
+  url: https://eur-lex.europa.eu/legal-content/ES/TXT/HTML/?uri=CELEX:32024L1275
+  licence: EUR-Lex reuse policy (Commission Decision 2011/833/EU; editorial content CC BY 4.0)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: directiva-ue-2024-1275-anexos.html
+    sha256: 8f75296dcbcde933f45ab5e98107cf07166db693c9831e2707f168b50b161bdb
+    format: html
+  section: Anexos I-X (cálculo de la eficiencia energética, clases de certificado A-G, requisitos de edificios de
+    cero emisiones, potencial de calentamiento global)
+  language: es
+  topic: energy
+  structure: mixed
+  why: 'Spanish annexes: calculation framework, energy-class scale, ZEB thresholds and tables; the technical half
+    of the directive.'
+  lines: 831
+  reader_problem: 'Same EUR-Lex list layout: labels (''a)'', ''v)'') on their own lines, separate from the item
+    text (36% short lines). No exception.'
+- slug: eu-2016-364-reaction-to-fire-fr
+  title: Règlement délégué (UE) 2016/364 de la Commission relatif à la classification des caractéristiques de réaction
+    au feu des produits de construction
+  publisher: Publications Office of the European Union (EUR-Lex)
+  jurisdiction: EU
+  url: https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32016R0364
+  licence: EUR-Lex reuse policy (Commission Decision 2011/833/EU; editorial content CC BY 4.0)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: reglement-delegue-ue-2016-364.html
+    sha256: 6bbcdbc2d4f2a9c49b24679ceb2a3e332018b00aaee7fc6dd5c6e2d72cae2b8e
+    format: html
+  language: fr
+  topic: fire
+  structure: tables
+  why: Short whole regulation that is almost entirely classification tables (A1, A2, B-F; s1-s3, d0-d2) with test-method
+    thresholds (ΔT ≤ 30 °C, FIGRA, PCS ≤ 2,0 MJ/kg); French decimal commas and symbols.
+  lines: 391
+- slug: es-orden-viv-561-2010-espacios-urbanizados
+  title: Orden VIV/561/2010 - documento técnico de condiciones básicas de accesibilidad y no discriminación para
+    el acceso y utilización de los espacios públicos urbanizados (texto consolidado)
+  publisher: Agencia Estatal Boletín Oficial del Estado (BOE)
+  jurisdiction: ES
+  url: https://www.boe.es/buscar/act.php?id=BOE-A-2010-4057
+  licence: Condiciones de reutilización de la sede electrónica del BOE (licencia tipo, Resolución de 27 de junio
+    de 2024)
+  licence_url: https://www.boe.es/informacion/aviso_legal/index.php
+  files:
+  - name: orden-viv-561-2010-consolidado.html
+    sha256: 968d66dfb2c87fd5147c3f6cb3efec631524e438fe08fce11ef163a8fce17d62
+    format: html
+  language: es
+  topic: site
+  structure: prescriptive
+  why: 'Whole consolidated order: accessible pedestrian routes (1,80 m width, 6% longitudinal slope), ramps, stairs,
+    crossings, parking in public urban space; Spanish decimal commas.'
+  lines: 684
+- slug: es-cte-rd-314-2006-parte-1
+  title: Real Decreto 314/2006 por el que se aprueba el Código Técnico de la Edificación (texto consolidado, Parte
+    I)
+  publisher: Agencia Estatal Boletín Oficial del Estado (BOE)
+  jurisdiction: ES
+  url: https://www.boe.es/buscar/act.php?id=BOE-A-2006-5515
+  licence: Condiciones de reutilización de la sede electrónica del BOE (licencia tipo, Resolución de 27 de junio
+    de 2024)
+  licence_url: https://www.boe.es/informacion/aviso_legal/index.php
+  files:
+  - name: rd-314-2006-cte-consolidado.html
+    sha256: c13600cd2b9a8ba308223147955eb460161dbf543fa6f47239864bfa5e86127a
+    format: html
+  language: es
+  topic: general
+  structure: performance
+  why: 'Spanish building code Part I: basic requirements (SE, SI, SUA, HS, HR, HE) stated as objectives, project-content
+    annexes, terminology; Part II (DB documents) is only referenced.'
+  lines: 745
+- slug: de-bayern-baybo-art-31-36-rettungswege
+  title: Bayerische Bauordnung (BayBO) - Dritter Teil Abschnitt V Rettungswege, Öffnungen, Umwehrungen (Art. 31-36)
+  publisher: Bayerische Staatskanzlei (BAYERN.RECHT)
+  jurisdiction: DE-BY
+  url: https://www.gesetze-bayern.de/Content/Document/BayBO-33
+  licence: Amtliches Werk, gemeinfrei nach § 5 Abs. 1 UrhG (statute text not protected by copyright)
+  licence_url: https://www.gesetze-im-internet.de/urhg/__5.html
+  files:
+  - name: baybo-art-31-36-rettungswege.pdf
+    sha256: 247e0eca5b86c3e7db331aed70c5e9aebb4df8188d25ab9796ac3952a4e6042e
+    format: pdf
+    pages: 17-21
+  section: Art. 31 Rettungswege to Art. 36 Umwehrungen (pages 17-21 of the 63-page full-text PDF; the first and
+    last pages also carry the end of Art. 30 and the start of Art. 37)
+  language: de
+  topic: egress
+  structure: legal
+  why: 'Short German state building code articles: escape routes, stairs, stairwells (35 m distance), corridors,
+    guarding where the drop exceeds 0,50 m and 0,90 m parapet heights, keyed by Gebäudeklasse; sentence numbers
+    printed as superscripts glued to the text.'
+  lines: 197
+  reader_problem: Superscript sentence numbers are fused into the following word ('1Von jeder Stelle', '2Übereinanderliegende',
+    '3Sind mehrere'), which also corrupts numbers that follow a sentence break. No exception.
+- slug: au-ncc-2025-vol1-c3-compartmentation
+  title: National Construction Code 2025 Volume One - Part C3 Compartmentation and separation
+  publisher: Australian Building Codes Board
+  jurisdiction: AU
+  url: https://ncc.abcb.gov.au/editions/ncc-2025/adopted/volume-one/c-fire-resistance/part-c3-compartmentation-and-separation
+  licence: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: ncc-2025-vol1-part-c3.html
+    sha256: 31d82215c2ac26db9bfa5d7fe681d749a449867be26b8cf7a077dfdeba2c1f5f
+    format: html
+  section: Volume One Part C3
+  language: en
+  topic: fire
+  structure: tables
+  why: Maximum fire compartment floor area and volume keyed by building class and type of construction (Table C3D3),
+    separation of openings by distance, fire-isolated exits.
+  lines: 404
+- slug: uk-scotland-non-domestic-2-1-2-2-compartmentation
+  title: 'Building Standards Technical Handbook 2023: Non-domestic - 2.1 Compartmentation and 2.2 Separation'
+  publisher: Scottish Government Building Standards Division
+  jurisdiction: GB-SCT
+  url: https://www.gov.scot/publications/building-standards-technical-handbook-2023-non-domestic/
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: non-domestic-handbook-2023-2-1-2-2-compartmentation-separation.pdf
+    sha256: 033509d534d01e2c62c658f66196b3f26f0217f780725f79eade0f3a6c084ca1
+    format: pdf
+    pages: 89-103
+  section: Section 2 Fire, standards 2.1 Compartmentation and 2.2 Separation
+  language: en
+  topic: fire
+  structure: tables
+  why: Maximum compartment areas and fire-resistance durations keyed by building use and storey height (Table 2.1),
+    sprinkler-dependent limits.
+  lines: 584

@@ -1,0 +1,1161 @@
+# Openly licensed regulations, standards and policies that apply to software, for stress-testing the
+# regulation reader and compiler. Files: .amp/in/corpus/regulations/code/<slug>/ (each with SOURCES.md).
+# `lines` is len(read(file).lines) from adapters/regulation/documents.py; `reader_problem` records
+# failures or garbage output of that reader (findings, not fixed).
+- slug: anssi-rust-guide-devenv-fr
+  title: 'ANSSI — Règles de programmation Rust : Environnement de développement'
+  publisher: ANSSI (Agence nationale de la sécurité des systèmes d'information)
+  url: https://anssi-fr.github.io/rust-guide/
+  licence: Licence Ouverte / Open Licence 2.0 (Etalab)
+  licence_url: https://www.etalab.gouv.fr/licence-ouverte-open-licence/
+  files:
+  - name: devenv.md
+    sha256: ce6f8f79dbae9ac6dbb632e738cd28af6c75df7fe6013db0590ac3d9f6570c63
+    format: md
+    lines: 298
+  section: Chapter 'Environnement de développement' (src/fr/devenv.md) only
+  language: fr
+  kind: secure-coding rules
+  structure: numbered
+  lines: 298
+  why: French; rules DENV-STABLE, DENV-CARGO-LOCK, DENV-FORMAT on toolchain, Cargo.toml profiles and clippy; checkable in
+    a Rust repo.
+- slug: anssi-rust-guide-memoire-fr
+  title: 'ANSSI — Règles de programmation pour le développement d''applications sécurisées en Rust : Gestion de la mémoire'
+  publisher: ANSSI (Agence nationale de la sécurité des systèmes d'information)
+  url: https://anssi-fr.github.io/rust-guide/
+  licence: Licence Ouverte / Open Licence 2.0 (Etalab)
+  licence_url: https://www.etalab.gouv.fr/licence-ouverte-open-licence/
+  files:
+  - name: memory.md
+    sha256: a6d0b3454a3f431f4f75e6718d9f2b1bb2a72b97811b6749213207f79ceb084e
+    format: md
+    lines: 173
+  section: Chapter 'Gestion de la mémoire' (src/fr/unsafe/memory.md) only
+  language: fr
+  kind: secure-coding rules
+  structure: numbered
+  lines: 173
+  why: French; rules as custom mdbook blocks (MEM-FORGET, MEM-MANUALLY-DROP …) with large commented-out sections; Rust code
+    checkable.
+- slug: cfr-21-part-11
+  title: 21 CFR Part 11 — Electronic Records; Electronic Signatures
+  publisher: US FDA / Office of the Federal Register (eCFR)
+  url: https://www.ecfr.gov/current/title-21/chapter-I/subchapter-A/part-11
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: 21-CFR-Part-11.html
+    sha256: 6e2f5408be14f600420bb50fb8e57e58ef7e3c900d3ec8c3f065259ea03b314e
+    format: html
+    lines: 90
+  language: en
+  kind: regulation (medical/pharma software)
+  structure: numbered
+  lines: 90
+  why: Short regulation with §11.10 (a)–(k) controls for audit trails, access checks, signatures; checkable in records systems.
+- slug: cfr-36-1194-appendix-c-section-508
+  title: 36 CFR Part 1194 Appendix C — Section 508 Functional Performance Criteria and Technical Requirements
+  publisher: US Access Board / Office of the Federal Register (eCFR)
+  url: https://www.ecfr.gov/current/title-36/chapter-XI/part-1194/appendix-Appendix%20C%20to%20Part%201194
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: 36-CFR-1194-Appendix-C.html
+    sha256: 53be1eadb8bc9c6b98b92149afbe90c35dbee4abf2b2975f56453b0413045493
+    format: html
+    lines: 240
+  section: Appendix C only (Appendices A, B, D and §§1194.1-2 omitted)
+  language: en
+  kind: accessibility standard
+  structure: numbered
+  lines: 240
+  why: Chapters 3–7 with numbered requirements (302.1, 502.3.1 …) and WCAG incorporation by reference; web/app UIs checkable.
+- slug: cfr-45-164-subpart-c-hipaa-security
+  title: 45 CFR Part 164 Subpart C — HIPAA Security Rule
+  publisher: US HHS / Office of the Federal Register (eCFR)
+  url: https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-C/part-164/subpart-C
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: 45-CFR-164-Subpart-C.html
+    sha256: 36e766acd9631d3b21e89bb33b6eba253bfd0564cefe3736b8f8fc6ce8053a55
+    format: html
+    lines: 260
+  language: en
+  kind: regulation (health data)
+  structure: mixed
+  lines: 260
+  why: Nested (a)(1)(ii)(A) paragraphs marked (Required)/(Addressable) plus an appendix matrix table; §164.312 technical safeguards
+    checkable.
+- slug: curl-code-style
+  title: curl source code style
+  publisher: curl project
+  url: https://curl.se/dev/code-style.html
+  licence: curl licence (MIT/X derivative)
+  licence_url: https://curl.se/docs/copyright.html
+  files:
+  - name: CODE_STYLE.md
+    sha256: 6ec17cdb932636d1f3cc754a0c8691cd7a8e8893c92e2fadbf547296aa603d5b
+    format: md
+    lines: 353
+  language: en
+  kind: contributor coding rules
+  structure: style-guide
+  lines: 353
+  why: Short project coding rules (line length 79, no tabs, brace placement) checkable on C sources.
+- slug: curl-vulnerability-disclosure-policy
+  title: curl Vulnerability Disclosure Policy
+  publisher: curl project
+  url: https://curl.se/dev/secprocess.html
+  licence: curl licence (MIT/X derivative)
+  licence_url: https://curl.se/docs/copyright.html
+  files:
+  - name: VULN-DISCLOSURE-POLICY.md
+    sha256: 448007fe2c138ca1f6c133a54c7aad8684d2721d2a333aa5533fb2e412634379
+    format: md
+    lines: 355
+  language: en
+  kind: project security policy
+  structure: policy
+  lines: 355
+  why: Internal-policy-like process document (disclosure steps, embargo); mostly process, few code-checkable items.
+- slug: django-security-policy
+  title: Django's security policies
+  publisher: Django Software Foundation
+  url: https://docs.djangoproject.com/en/dev/internals/security/
+  licence: BSD-3-Clause (Django LICENSE)
+  licence_url: https://github.com/django/django/blob/main/LICENSE
+  files:
+  - name: security.txt
+    sha256: 6ba6795d36d5a91aecdc8fe2b324c63d986fac39ca25f74b9797df1cb99569c5
+    format: txt
+    lines: 437
+  language: en
+  kind: project security policy
+  structure: policy
+  lines: 437
+  why: Sphinx reST source with .txt extension (as published); reporting, supported versions, disclosure process.
+- slug: eu-ai-act-high-risk-requirements-de
+  title: Verordnung (EU) 2024/1689 (KI-Verordnung) — Kapitel III Abschnitt 2, Art. 8–15
+  publisher: European Union (Publications Office / EUR-Lex)
+  url: https://eur-lex.europa.eu/legal-content/DE/TXT/?uri=CELEX:32024R1689
+  licence: EU reuse policy, Commission Decision 2011/833/EU (EUR-Lex legal notice)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: KI-VO-2024-1689-Art-8-15-de.html
+    sha256: f6b6e01d6c461db9b094c05e6a745db3482655983179a8cf69067381ce4a6de7
+    format: html
+    lines: 161
+  section: Articles 8-15 (Chapter III Section 2, requirements for high-risk AI systems)
+  language: de
+  kind: regulation (AI systems)
+  structure: prose
+  lines: 161
+  why: 'German legal prose with numbered paragraphs and lettered points: risk management, data governance, logging (Art. 12),
+    accuracy, robustness.'
+- slug: eu-cra-annex-i-fr
+  title: Règlement (UE) 2024/2847 (Cyber Resilience Act) — Annexe I Exigences essentielles de cybersécurité
+  publisher: European Union (Publications Office / EUR-Lex)
+  url: https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32024R2847
+  licence: EU reuse policy, Commission Decision 2011/833/EU (EUR-Lex legal notice)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: CRA-2024-2847-annexe-I-fr.html
+    sha256: 3834299627bb63259bf958ce3010a6f1b2e8bb12a26b050532a2cf0d57786502
+    format: html
+    lines: 55
+  section: Annex I only (Parts I and II)
+  language: fr
+  kind: regulation (product cybersecurity)
+  structure: checklist
+  lines: 55
+  why: 'French; short annex of lettered requirements (a)–(m) for products with digital elements: secure defaults, updates,
+    SBOM, vulnerability handling.'
+- slug: eu-dora-chapter-ii-it
+  title: Regolamento (UE) 2022/2554 (DORA) — Capo II Gestione dei rischi informatici, artt. 5–16
+  publisher: European Union (Publications Office / EUR-Lex)
+  url: https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX:32022R2554
+  licence: EU reuse policy, Commission Decision 2011/833/EU (EUR-Lex legal notice)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: DORA-2022-2554-art-5-16-it.html
+    sha256: dee37facc91e73101e570a2da1d968a65106f0e38f770121039d04cf77bf5611
+    format: html
+    lines: 248
+  section: Articles 5-16 (Chapter II, ICT risk management)
+  language: it
+  kind: regulation (financial ICT)
+  structure: prose
+  lines: 248
+  why: Italian; long articles on ICT risk management for financial entities (logging, backup, encryption, change management).
+- slug: eu-gdpr-security-art25-32-34-es
+  title: Reglamento (UE) 2016/679 (RGPD) — Artículos 25 y 32–34
+  publisher: European Union (Publications Office / EUR-Lex)
+  url: https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32016R0679
+  licence: EU reuse policy, Commission Decision 2011/833/EU (EUR-Lex legal notice)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: RGPD-2016-679-art-25-32-34-es.html
+    sha256: 268e46f4e057baab5aee65850ab97ce2df34d1b31011c118eb8644d2f56b111d
+    format: html
+    lines: 50
+  section: Articles 25 (data protection by design and by default) and 32-34 (security of processing, breach notification)
+  language: es
+  kind: regulation (privacy)
+  structure: prose
+  lines: 50
+  why: Spanish; short legal articles mixing obligations and open-textured terms ('medidas técnicas y organizativas apropiadas'),
+    pseudonymisation and encryption.
+- slug: eu-nis2-chapter-iv-en
+  title: Directive (EU) 2022/2555 (NIS 2) — Chapter IV Cybersecurity risk-management measures and reporting obligations
+  publisher: European Union (Publications Office / EUR-Lex)
+  url: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555
+  licence: EU reuse policy, Commission Decision 2011/833/EU (EUR-Lex legal notice)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: NIS2-2022-2555-Art-20-25-en.html
+    sha256: e389a19b12f13f9d35d5cda40c82a8c7d4a103bd1126adffd42a4ccf358939c5
+    format: html
+    lines: 95
+  section: Articles 20-25 (Chapter IV)
+  language: en
+  kind: directive (cybersecurity)
+  structure: prose
+  lines: 95
+  why: Directive addressed to Member States; Art. 21(2)(a)–(j) list of measures (supply chain, crypto, MFA) only partly checkable
+    in code.
+- slug: eu-nis2-implementing-reg-2024-2690-annex-en
+  title: 'Commission Implementing Regulation (EU) 2024/2690 — Annex: technical and methodological requirements (NIS 2)'
+  publisher: European Union (Publications Office / EUR-Lex)
+  url: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2690
+  licence: EU reuse policy, Commission Decision 2011/833/EU (EUR-Lex legal notice)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: CIR-2024-2690-Annex-en.html
+    sha256: bd9bb19a65fdb9849b3108f1d946979e6defd1f58eb691e1f8c42cb2fd69d14b
+    format: html
+    lines: 821
+  section: Annex only
+  language: en
+  kind: implementing regulation (cybersecurity)
+  structure: numbered
+  lines: 821
+  why: Deeply numbered requirements (6.8.2(a), 11.6.1) on logging, access control, crypto, secure development; many are checkable
+    in a repo.
+- slug: eu-web-accessibility-directive-nl
+  title: Richtlijn (EU) 2016/2102 inzake de toegankelijkheid van de websites en mobiele applicaties van overheidsinstanties
+  publisher: European Union (Publications Office / EUR-Lex)
+  url: https://eur-lex.europa.eu/legal-content/NL/TXT/?uri=CELEX:32016L2102
+  licence: EU reuse policy, Commission Decision 2011/833/EU (EUR-Lex legal notice)
+  licence_url: https://eur-lex.europa.eu/content/legal-notice/legal-notice.html
+  files:
+  - name: Richtlijn-2016-2102-nl.xhtml
+    sha256: 553d7c7c5f01cec03ef9340f8a7edbfc4bdc3e969ba2b3be8b01f61df4cfeaed
+    format: xhtml
+    lines: 300
+  language: nl
+  kind: directive (accessibility)
+  structure: prose
+  lines: 300
+  why: Dutch; whole act with 56 recitals before 15 articles (raw .xhtml file with XML declaration and DOCTYPE); web/mobile
+    accessibility.
+- slug: github-actions-secure-use
+  title: GitHub Actions — Secure use reference
+  publisher: GitHub (GitHub Docs)
+  url: https://docs.github.com/en/actions/reference/security/secure-use
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: secure-use.md
+    sha256: 0b2d692984fae55eff6334aabb52ca3c97bd38757cca1e2cc3437460cbc4b1d5
+    format: md
+    lines: 230
+  language: en
+  kind: CI pipeline hardening
+  structure: mixed
+  lines: 230
+  reader_problem: 'secure-use.md: 40 lines are site-template directives kept as text (e.g. ''{% ifversion fpt or ghec %}'')'
+  why: Liquid templating ({% data reusables %}, {% ifversion %}) in front of workflow-hardening rules (pin actions to SHA,
+    GITHUB_TOKEN permissions); .github/workflows checkable.
+- slug: go-security-policy
+  title: Go Security Policy
+  publisher: The Go project (go.dev)
+  url: https://go.dev/doc/security/policy
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: policy.md
+    sha256: 36017dd3a399ae8f75dda4e8715184ad70cd865ef4bc043aa0b660e352d66ceb
+    format: md
+    lines: 155
+  language: en
+  kind: project security policy
+  structure: policy
+  lines: 155
+  why: Short project policy with PUBLIC/PRIVATE/URGENT track definitions; few code-checkable items (a stress case for 'nothing
+    to check').
+- slug: google-python-style-guide
+  title: Google Python Style Guide
+  publisher: Google
+  url: https://google.github.io/styleguide/pyguide.html
+  licence: CC BY 3.0
+  licence_url: https://creativecommons.org/licenses/by/3.0/
+  files:
+  - name: pyguide.md
+    sha256: 45ad9731b1142f97ce010942c1ae21f0d921b77b1d17a867e12a4b4fabfb4419
+    format: md
+    lines: 2918
+  language: en
+  kind: coding style guide
+  structure: style-guide
+  lines: 2918
+  reader_problem: 'pyguide.md: raw HTML passed through as text, 694 of 2918 lines start with a tag or comment (e.g. ''<!--'')'
+  why: Long (~117k chars) style guide with numbered sections (2.1, 3.8.4), Pros/Cons/Decision blocks and code; checkable on
+    Python code.
+- slug: google-shell-style-guide
+  title: Google Shell Style Guide
+  publisher: Google
+  url: https://google.github.io/styleguide/shellguide.html
+  licence: CC BY 3.0
+  licence_url: https://creativecommons.org/licenses/by/3.0/
+  files:
+  - name: shellguide.md
+    sha256: fe70ba34e153e09a4666bbc9c2f2eac3607160e0efd27ce35b08259b4969f47a
+    format: md
+    lines: 1050
+  language: en
+  kind: coding style guide
+  structure: style-guide
+  lines: 1050
+  why: Style rules with many fenced code examples; checkable against shell scripts in a repo.
+- slug: jp-electronic-books-preservation-ordinance
+  title: 電子計算機を使用して作成する国税関係帳簿書類の保存方法等の特例に関する法律施行規則（平成十年大蔵省令第四十三号）
+  publisher: Government of Japan (e-Gov 法令検索, Digital Agency)
+  url: https://laws.e-gov.go.jp/law/410M50000040043
+  licence: Not subject to copyright (Japanese Copyright Act Art. 13(i), laws and regulations)
+  licence_url: https://laws.e-gov.go.jp/law/345AC0000000048#Mp-Ch_2-Se_1-At_13
+  files:
+  - name: 電子帳簿保存法施行規則.html
+    sha256: 85c496818cf8b30a52a51447b5911c431d9630f7132c124a51c4bff7d71cf7bb
+    format: html
+    lines: 184
+  language: ja
+  kind: ministerial ordinance (financial records software)
+  structure: numbered
+  lines: 184
+  why: Ordinance with system requirements for electronic bookkeeping software (訂正削除履歴, 検索機能, タイムスタンプ); long nested 号/イ/ロ/(1)
+    items.
+- slug: jp-electronic-signatures-act-ordinance
+  title: 電子署名及び認証業務に関する法律施行規則（平成十三年総務省・法務省・経済産業省令第二号）
+  publisher: Government of Japan (e-Gov 法令検索, Digital Agency)
+  url: https://laws.e-gov.go.jp/law/413M60000418002
+  licence: Not subject to copyright (Japanese Copyright Act Art. 13(i), laws and regulations)
+  licence_url: https://laws.e-gov.go.jp/law/345AC0000000048#Mp-Ch_2-Se_1-At_13
+  files:
+  - name: 電子署名及び認証業務に関する法律施行規則.docx
+    sha256: c92a38beadb701596709990840a6ced4e05f557509732140dab625510c85b5f8
+    format: docx
+    lines: 223
+  language: ja
+  kind: ministerial ordinance (electronic signatures, crypto)
+  structure: numbered
+  lines: 223
+  why: Ordinance fixing signature algorithms and key lengths (RSA 2048, ECDSA) and CA system controls; checkable in signing
+    code.
+- slug: jp-unauthorized-computer-access-act
+  title: 不正アクセス行為の禁止等に関する法律（平成十一年法律第百二十八号）
+  publisher: Government of Japan (e-Gov 法令検索, Digital Agency)
+  url: https://laws.e-gov.go.jp/law/411AC0000000128
+  licence: Not subject to copyright (Japanese Copyright Act Art. 13(i), laws and regulations)
+  licence_url: https://laws.e-gov.go.jp/law/345AC0000000048#Mp-Ch_2-Se_1-At_13
+  files:
+  - name: 不正アクセス行為の禁止等に関する法律.docx
+    sha256: 072824e499cd20bc42dd1f03dfde20f521aee0a039ac881cf7da9042ee11a6ee
+    format: docx
+    lines: 81
+  language: ja
+  kind: statute (computer misuse, access control)
+  structure: numbered
+  lines: 81
+  why: 'Japanese statute in e-Gov''s own DOCX: 第N条 articles, 項 and 号 (一, 二, イ, ロ); Art. 8 obliges access administrators to
+    protect identification codes.'
+- slug: k8s-pod-security-standards
+  title: Kubernetes Pod Security Standards
+  publisher: The Kubernetes Authors (kubernetes.io)
+  url: https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: pod-security-standards.md
+    sha256: 468430055152f2671c9071bd8cddd2f15525ab7ee2f9059a8fb1f60af9238127
+    format: md
+    lines: 541
+  language: en
+  kind: configuration standard
+  structure: tables
+  lines: 541
+  reader_problem: 'pod-security-standards.md: raw HTML passed through as text, 425 of 541 lines start with a tag or comment
+    (e.g. ''<!-- overview -->'')'
+  why: Policy tables written as raw HTML <table> with field paths and allowed values inside Hugo front matter/shortcodes;
+    manifests checkable.
+- slug: k8s-pod-security-standards-ja
+  title: Pod Security Standards (Japanese translation)
+  publisher: The Kubernetes Authors (kubernetes.io)
+  url: https://kubernetes.io/ja/docs/concepts/security/pod-security-standards/
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: pod-security-standards.md
+    sha256: a934e180e3457b759cc088748836c04ba99bc8ffe32ae1e6ac3a7be3ef1ad9a1
+    format: md
+    lines: 369
+  language: ja
+  kind: configuration standard
+  structure: tables
+  lines: 369
+  reader_problem: 'pod-security-standards.md: raw HTML passed through as text, 191 of 369 lines start with a tag or comment
+    (e.g. ''<!-- overview -->'')'
+  why: Japanese translation (older revision) of the Pod Security Standards; Japanese prose inside HTML tables with English
+    field paths.
+- slug: k8s-pod-security-standards-zh-cn
+  title: Pod 安全性标准 (Pod Security Standards, Simplified Chinese)
+  publisher: The Kubernetes Authors (kubernetes.io)
+  url: https://kubernetes.io/zh-cn/docs/concepts/security/pod-security-standards/
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: pod-security-standards.md
+    sha256: a949d6b98261a6bab72977499842c463cd839c4b6595e48aeddb352c84426e01
+    format: md
+    lines: 763
+  language: zh
+  kind: configuration standard
+  structure: tables
+  lines: 763
+  reader_problem: 'pod-security-standards.md: raw HTML passed through as text, 482 of 763 lines start with a tag or comment
+    (e.g. ''<!--'')'
+  why: Chinese translation that keeps the English original in HTML comments (<!-- -->) next to every paragraph; the .md reader
+    shows both.
+- slug: k8s-security-checklist
+  title: Kubernetes Security Checklist
+  publisher: The Kubernetes Authors (kubernetes.io)
+  url: https://kubernetes.io/docs/concepts/security/security-checklist/
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: security-checklist.md
+    sha256: 45b19b870fae7739107ae83966b3babee3b23db3e623abbef87660a426493a34
+    format: md
+    lines: 335
+  language: en
+  kind: configuration checklist
+  structure: checklist
+  lines: 335
+  why: Markdown task-list checkboxes ('- [ ]') grouped by area; RBAC, network policy, secrets checkable in manifests.
+- slug: linux-kernel-coding-style
+  title: Linux kernel coding style
+  publisher: The Linux kernel community
+  url: https://docs.kernel.org/process/coding-style.html
+  licence: GPL-2.0 (Linux kernel documentation default licence)
+  licence_url: https://www.kernel.org/doc/html/latest/process/license-rules.html
+  files:
+  - name: coding-style.txt
+    sha256: 332454d2ab9a0462dd9f292c52291cf3b5e1afcd638aa06df15f557c47a126f5
+    format: txt
+    lines: 943
+  language: en
+  kind: contributor coding rules
+  structure: style-guide
+  lines: 943
+  why: Numbered chapters (1) Indentation … with tab-indented code; checkable on C code (indent 8, 80 columns).
+- slug: mdn-content-security-policy
+  title: MDN — Content Security Policy (CSP) guide
+  publisher: Mozilla and individual contributors (MDN Web Docs)
+  url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
+  licence: CC BY-SA 2.5
+  licence_url: https://creativecommons.org/licenses/by-sa/2.5/
+  files:
+  - name: index.md
+    sha256: 7634104d53e84ec0ab79791464f49b35dbc61def6b7df64228ab49047cbf964d
+    format: md
+    lines: 428
+  language: en
+  kind: web security guidance
+  structure: prose
+  lines: 428
+  why: Explanatory guide with MDN macros ({{HTTPHeader}}, {{CSP('...')}}) and many HTTP header examples; CSP headers checkable
+    in server config.
+- slug: microsoft-azure-rest-api-guidelines
+  title: Microsoft Azure REST API Guidelines
+  publisher: Microsoft
+  url: https://github.com/microsoft/api-guidelines/blob/vNext/azure/Guidelines.md
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: Guidelines.md
+    sha256: dae068243d3fa68482e8cc924d5c3abf6e34c87da4eab61cfa181dbff0320684
+    format: md
+    lines: 868
+  language: en
+  kind: API design rules
+  structure: numbered
+  lines: 868
+  reader_problem: 'Guidelines.md: raw HTML passed through as text, 262 of 868 lines start with a tag or comment (e.g. ''<!--
+    cspell:ignore autorest, BYOS, etag, idempotency, maxpag'')'
+  why: '~1,000 requirement lines tagged with emoji-like markers (:white_check_mark: DO, :no_entry: DO NOT) and HTML anchors;
+    OpenAPI specs checkable.'
+- slug: microsoft-graph-api-guidelines
+  title: Microsoft Graph REST API Guidelines
+  publisher: Microsoft
+  url: https://github.com/microsoft/api-guidelines/blob/vNext/graph/GuidelinesGraph.md
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: GuidelinesGraph.md
+    sha256: c0c1abe6d55da7fe07a8e8fdfb8731e9e2ee1f6a319d4256a96d401363a34288
+    format: md
+    lines: 306
+  language: en
+  kind: API design rules
+  structure: tables
+  lines: 306
+  why: 'Requirement tables with emoji markers (:heavy_check_mark: MUST, :ballot_box_with_check: SHOULD) in Markdown pipe tables;
+    API schemas checkable.'
+- slug: nist-ir-8397-developer-verification
+  title: NISTIR 8397 Guidelines on Minimum Standards for Developer Verification of Software
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/ir/8397/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.IR.8397.pdf
+    sha256: cadab12c1f7b1a6a8f844d19180381211e1c29d05554bd9efb277442d8fd983d
+    format: pdf
+    lines: 1345
+  language: en
+  kind: software verification guidance
+  structure: mixed
+  lines: 1345
+  reader_problem: 'NIST.IR.8397.pdf: words run together without spaces in 45 of 1345 lines (e.g. line 82: ''Wethankthefollowingforreviewingvariouscodes,standards,guides,andothermate-'');
+    NIST.IR.8397.pdf: 322 of 1345 lines are a single short word (most frequent: ''available'' x30, ''free'' x30, ''of'' x30,
+    ''from:'' x30, ''publication'' x30, ''is'' x30)'
+  why: 'Whole 33-page report: 11 minimum verification techniques (threat modelling, SAST, fuzzing, secrets in code) checkable
+    in CI.'
+- slug: nist-sp-800-131a-r2-crypto-transitions
+  title: NIST SP 800-131A Rev. 2 Transitioning the Use of Cryptographic Algorithms and Key Lengths
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/131/a/r2/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-131Ar2.pdf
+    sha256: 5c81a1095e0eee35ce0e627b8cc672c1c2239367b0de9bb53d7271c9ab9d7d27
+    format: pdf
+    lines: 1498
+  language: en
+  kind: cryptography standard
+  structure: tables
+  lines: 1498
+  reader_problem: 'NIST.SP.800-131Ar2.pdf: 447 of 1498 lines are a single short word (most frequent: ''available'' x30, ''free''
+    x30, ''of'' x30, ''from:'' x30, ''publication'' x30, ''is'' x30)'
+  why: 'Whole 33-page SP: tables of algorithms with Acceptable / Deprecated / Disallowed status by date; crypto choices checkable
+    in code.'
+- slug: nist-sp-800-190-containers
+  title: NIST SP 800-190 Application Container Security Guide
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/190/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-190.pdf
+    sha256: 0ebad52c4a3aba971b3a707b056e57238d1c4ad8f212dffd461ff9f5fed1bdb6
+    format: pdf
+    lines: 2620
+  language: en
+  kind: container security guidance
+  structure: prose
+  lines: 2620
+  reader_problem: 'NIST.SP.800-190.pdf: 593 of 2620 lines are a single short word (most frequent: ''of'' x61, ''from:'' x61,
+    ''charge'' x61, ''is'' x61, ''available'' x61, ''This'' x61)'
+  why: Whole 63-page guide; numbered sections of risks and countermeasures (image, registry, orchestrator) checkable on Dockerfiles/manifests.
+- slug: nist-sp-800-204-microservices
+  title: NIST SP 800-204 Security Strategies for Microservices-based Application Systems
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/204/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-204.pdf
+    sha256: 25412c860165e5ee1cfbf26ed47c56f4d213b1996a73365f5561be6403cf7588
+    format: pdf
+    lines: 2047
+  language: en
+  kind: architecture security guidance
+  structure: numbered
+  lines: 2047
+  reader_problem: 'NIST.SP.800-204.pdf: 473 of 2047 lines are a single short word (most frequent: ''available'' x47, ''free''
+    x47, ''of'' x47, ''from:'' x47, ''publication'' x47, ''is'' x47)'
+  why: Whole 50-page guide with numbered security strategies (MS-SS-1 …) for auth, gateways, service mesh, rate limiting.
+- slug: nist-sp-800-218-ssdf
+  title: NIST SP 800-218 Secure Software Development Framework (SSDF) Version 1.1
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/218/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-218.pdf
+    sha256: 617746e553a9e2da49bfbd4eef0dfc3094758a39b869314e4173ac36605cde22
+    format: pdf
+    lines: 1653
+  language: en
+  kind: secure-development framework
+  structure: tables
+  lines: 1653
+  reader_problem: 'NIST.SP.800-218.pdf: table columns interleaved line by line, e.g. lines 563-569 alternate ''Example 4:
+    Acquire or create training ... MSSDL: 1'' / ''NISTCSF: PR.AT'' / ''Example 5: ...'' / ''OWASPSAMM: EG1-A, EG2-A'', so
+    example text and references are mixed'
+  why: Whole 36-page PDF whose core is a multi-column table (practice / task / notional implementation examples / references)
+    spanning pages.
+- slug: nist-sp-800-52r2-tls-servers
+  title: NIST SP 800-52 Rev. 2 Guidelines for TLS Implementations — Section 3 Minimum Requirements for TLS Servers
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/52/r2/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-52r2-sec3-pp17-41.pdf
+    sha256: 5520b152bcb921d5f6dd7ae0238c9b8b41b46ef1801eda18f3f346b717a4d10e
+    format: pdf
+    pages: 17-41
+    lines: 890
+  section: Section 3 Minimum Requirements for TLS Servers, PDF pages 17-41 of 72
+  language: en
+  kind: TLS configuration standard
+  structure: mixed
+  lines: 890
+  why: '''shall/should'' requirements with cipher-suite lists and extension tables; server TLS config checkable.'
+- slug: nist-sp-800-53r5-au
+  title: NIST SP 800-53 Rev. 5 — Audit and Accountability (AU) control family
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-53r5-AU-pp92-109.pdf
+    sha256: b432da1b7c460e8020994bfa0b96379dda2fec8ce2a225f78aadc85ffb363476
+    format: pdf
+    pages: 92-109
+    lines: 930
+  section: Section 3.3 Audit and Accountability, PDF pages 92-109 of 492
+  language: en
+  kind: security control catalogue
+  structure: numbered
+  lines: 930
+  reader_problem: 'NIST.SP.800-53r5-AU-pp92-109.pdf: 174 of 930 lines are a single short word (most frequent: ''of'' x18,
+    ''from:'' x18, ''charge'' x18, ''is'' x18, ''available'' x18, ''This'' x18)'
+  why: Control family AU-1..AU-16 with enhancements, discussion, related controls; logging requirements checkable in code;
+    vertical DOI sidebar on every page.
+- slug: nist-sp-800-53r5-cm
+  title: NIST SP 800-53 Rev. 5 — Configuration Management (CM) control family
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-53r5-CM-pp123-141.pdf
+    sha256: 933dd4a9a4c94c1626e037d7391bd32eebe73105636b05f5fa139c89c84acaef
+    format: pdf
+    pages: 123-141
+    lines: 1014
+  section: Section 3.5 Configuration Management, PDF pages 123-141 of 492
+  language: en
+  kind: security control catalogue
+  structure: numbered
+  lines: 1014
+  reader_problem: 'NIST.SP.800-53r5-CM-pp123-141.pdf: 179 of 1014 lines are a single short word (most frequent: ''of'' x19,
+    ''from:'' x19, ''charge'' x19, ''is'' x19, ''available'' x19, ''This'' x19)'
+  why: Control family CM-1..CM-14 (baseline configuration, least functionality, signed components) checkable on IaC and build
+    config.
+- slug: nist-sp-800-92-log-management
+  title: NIST SP 800-92 Guide to Computer Security Log Management — Sections 4 and 5
+  publisher: NIST
+  url: https://csrc.nist.gov/pubs/sp/800/92/final
+  licence: Public domain (US federal government work, 17 U.S.C. 105)
+  licence_url: https://www.law.cornell.edu/uscode/text/17/105
+  files:
+  - name: NIST.SP.800-92-sec4-5-pp39-60.pdf
+    sha256: feae03a11b45056d7c792f89a77e8483479896ed34a3fbc6380d6296e8f274df
+    format: pdf
+    pages: 39-60
+    lines: 827
+  section: Section 4 Log Management Planning and Section 5 Log Management Operational Processes, PDF pages 39-60 of 72
+  language: en
+  kind: logging guidance
+  structure: mixed
+  lines: 827
+  why: 2006 legacy-layout PDF (pages numbered 4-1, 5-1); logging policy tables with retention/rotation values; log configuration
+    checkable.
+- slug: nodejs-security-policy
+  title: Node.js SECURITY.md (security policy and threat model)
+  publisher: OpenJS Foundation / Node.js project
+  url: https://github.com/nodejs/node/blob/main/SECURITY.md
+  licence: MIT (Node.js LICENSE)
+  licence_url: https://github.com/nodejs/node/blob/main/LICENSE
+  files:
+  - name: SECURITY.md
+    sha256: a754d87754631c2a99bf7bdb7f79fd7c4bfcf0137432f47cf2e81a9c04fb82f2
+    format: md
+    lines: 587
+  language: en
+  kind: project security policy
+  structure: policy
+  lines: 587
+  why: 'A real SECURITY.md: reporting process, bug bounty, and a threat model listing what is and is not a vulnerability.'
+- slug: openssf-best-practices-badge-criteria
+  title: OpenSSF Best Practices Badge — Criteria (passing level)
+  publisher: OpenSSF Best Practices Badge project
+  url: https://www.bestpractices.dev/en/criteria/0
+  licence: MIT OR CC-BY-3.0+ (SPDX header in the file)
+  licence_url: https://creativecommons.org/licenses/by/3.0/
+  files:
+  - name: criteria.md
+    sha256: 7c835762daf61721633527b72ff9e7c7a58a04f0c3dfe2ab6378006c26770da9
+    format: md
+    lines: 436
+  language: en
+  kind: project criteria
+  structure: checklist
+  lines: 436
+  reader_problem: 'criteria.md: raw HTML passed through as text, 156 of 436 lines start with a tag or comment (e.g. ''<!--
+    SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->'')'
+  why: Generated file of ~70 criteria with ids in angle brackets (<sup>[<a href=...>description_good</a>]</sup>) and MUST/SHOULD/SUGGESTED;
+    repo-level checks (LICENSE, CI, tests).
+- slug: openssf-compiler-hardening-c-cpp
+  title: OpenSSF Compiler Options Hardening Guide for C and C++ — Recommended Compiler Options
+  publisher: OpenSSF Best Practices Working Group
+  url: https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: Compiler-Options-Hardening-Guide-for-C-and-C++-recommended-options.md
+    sha256: c85a3a61ca5d92a6a02e8e27f90d2a2eb4f38c119e31e256a863a0152885d14e
+    format: md
+    lines: 726
+  section: Section 'Recommended Compiler Options' (plus title and licence lines)
+  language: en
+  kind: build hardening guidance
+  structure: tables
+  lines: 726
+  why: Big pipe tables of compiler flags with version requirements, then per-flag sections and footnotes; Makefile/CMake flags
+    checkable (~146k chars).
+- slug: openssf-concise-guide-secure-software
+  title: OpenSSF Concise Guide for Developing More Secure Software
+  publisher: OpenSSF Best Practices Working Group
+  url: https://best.openssf.org/Concise-Guide-for-Developing-More-Secure-Software
+  licence: CC BY 4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  files:
+  - name: Concise-Guide-for-Developing-More-Secure-Software.md
+    sha256: adb2925c4bbe4f384c262f91107265e8fc396f1f3a636b31b7ea703ad8e7572c
+    format: md
+    lines: 38
+  language: en
+  kind: secure-development guidance
+  structure: numbered
+  lines: 38
+  why: Short single numbered list (1–29) of bold-titled practices; MFA, dependency pinning, CI checks.
+- slug: openssf-scorecard-checks
+  title: OpenSSF Scorecard — Check Documentation
+  publisher: Open Source Security Foundation (OpenSSF)
+  url: https://github.com/ossf/scorecard/blob/main/docs/checks.md
+  licence: Apache-2.0
+  licence_url: https://www.apache.org/licenses/LICENSE-2.0
+  files:
+  - name: checks.md
+    sha256: fa84a01753971589571c22597d5b7f65ed34dc373dfc466d2233437faf4dc81f
+    format: md
+    lines: 544
+  language: en
+  kind: supply-chain checks
+  structure: mixed
+  lines: 544
+  why: Generated doc of ~19 named checks (Branch-Protection, Pinned-Dependencies, Token-Permissions) each directly checkable
+    on a repo.
+- slug: owasp-api-top10-2023-api4
+  title: OWASP API Security Top 10 2023 — API4:2023 Unrestricted Resource Consumption
+  publisher: OWASP API Security project (OWASP Foundation)
+  url: https://owasp.org/API-Security/editions/2023/en/0xa4-unrestricted-resource-consumption/
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: 0xa4-unrestricted-resource-consumption.md
+    sha256: 8df9df403fd0007bc28bd9a9a60e46739c6797b1f7135c7f0f683a7362f40e38
+    format: md
+    lines: 135
+  section: API4:2023 chapter only
+  language: en
+  kind: security risk catalogue
+  structure: tables
+  lines: 135
+  why: Starts with an HTML-in-Markdown table (threat agents / weaknesses / impacts); rate limits, pagination limits checkable
+    in API code.
+- slug: owasp-asvs-4-0-3-v2-v3-docx
+  title: OWASP ASVS 4.0.3 — V2 Authentication and V3 Session Management (Word)
+  publisher: OWASP Application Security Verification Standard project
+  url: https://owasp.org/www-project-application-security-verification-standard/
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: OWASP-ASVS-4.0.3-en-V2-V3.docx
+    sha256: d3b1c1948788827e6716210423cabe7ad7809098c8f9dfe4093b74ace2e32ed3
+    format: docx
+    lines: 716
+  section: Chapters V2 Authentication and V3 Session Management only
+  language: en
+  kind: verification standard
+  structure: tables
+  lines: 716
+  reader_problem: 'OWASP-ASVS-4.0.3-en-V2-V3.docx: table rows are flattened, every cell becomes its own line, so a requirement
+    is split over 7 lines (''Verify users can change their password.'', ''✓'', ''✓'', ''✓'', ''620'', ''5.1.1.2'') and the
+    level columns lose their headers'
+  why: Word tables of requirements (# / description / L1 / L2 / L3 / CWE / NIST §); version 4.0.3, distinct from the excluded
+    ASVS 5.
+- slug: owasp-cicd-top10-sec-04
+  title: OWASP Top 10 CI/CD Security Risks — CICD-SEC-4 Poisoned Pipeline Execution
+  publisher: OWASP Top 10 CI/CD Security Risks project
+  url: https://owasp.org/www-project-top-10-ci-cd-security-risks/CICD-SEC-04-Poisoned-Pipeline-Execution
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: CICD-SEC-04-Poisoned-Pipeline-Execution.md
+    sha256: ee5d4a43f02d960d89edb85df3d974c81e4a63eddfcc1b982411c9a96dc2d37b
+    format: md
+    lines: 136
+  section: CICD-SEC-4 only (one of ten risk pages)
+  language: en
+  kind: security risk catalogue
+  structure: prose
+  lines: 136
+  why: Jekyll page (front matter, layout tags) describing a CI risk with recommendations; workflow triggers on pull_request_target
+    checkable.
+- slug: owasp-cs-cicd-security
+  title: OWASP CI/CD Security Cheat Sheet
+  publisher: OWASP Cheat Sheet Series (OWASP Foundation)
+  url: https://cheatsheetseries.owasp.org/cheatsheets/CI_CD_Security_Cheat_Sheet.html
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: CI_CD_Security_Cheat_Sheet.md
+    sha256: 25b927dd92a7a0ac1acb821444c3e7df4a3ad69b75edc34c855acb20f973e593
+    format: md
+    lines: 90
+  language: en
+  kind: secure-coding guidance
+  structure: prose
+  lines: 90
+  why: Pipeline hardening (pinning actions, least-privilege tokens) checkable against workflow files.
+- slug: owasp-cs-docker-security
+  title: OWASP Docker Security Cheat Sheet
+  publisher: OWASP Cheat Sheet Series (OWASP Foundation)
+  url: https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: Docker_Security_Cheat_Sheet.md
+    sha256: 135c6f3fa1214befb9c09cff88cc35c7642ae3e77f3462359eea98104433d7f7
+    format: md
+    lines: 264
+  language: en
+  kind: secure-coding guidance
+  structure: numbered
+  lines: 264
+  why: 'Numbered RULE #0..#13 for Dockerfiles/compose (non-root USER, no privileged, read-only fs).'
+- slug: owasp-cs-http-headers
+  title: OWASP HTTP Security Response Headers Cheat Sheet
+  publisher: OWASP Cheat Sheet Series (OWASP Foundation)
+  url: https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: HTTP_Headers_Cheat_Sheet.md
+    sha256: 5c029d7ef3227eb58ba41adb74adec2613fe78173ab6d365bf719a3db018fd72
+    format: md
+    lines: 232
+  language: en
+  kind: secure-coding guidance
+  structure: mixed
+  lines: 232
+  why: Per-header recommendations with exact values (HSTS, CSP, X-Content-Type-Options) checkable in server config.
+- slug: owasp-cs-iac-security
+  title: OWASP Infrastructure as Code Security Cheat Sheet
+  publisher: OWASP Cheat Sheet Series (OWASP Foundation)
+  url: https://cheatsheetseries.owasp.org/cheatsheets/Infrastructure_as_Code_Security_Cheat_Sheet.html
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: Infrastructure_as_Code_Security_Cheat_Sheet.md
+    sha256: d1b9bedd6c92cf53609c9283b2793f676e306d88b317d76d7c7835421c2bd4e8
+    format: md
+    lines: 37
+  language: en
+  kind: secure-coding guidance
+  structure: checklist
+  lines: 37
+  why: Short bulleted checklist split by develop/distribute/deploy phases; IaC repos.
+- slug: owasp-cs-logging
+  title: OWASP Logging Cheat Sheet
+  publisher: OWASP Cheat Sheet Series (OWASP Foundation)
+  url: https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: Logging_Cheat_Sheet.md
+    sha256: 55ed0b4e9b2a68dba0f5a26c817a20760632d91b315aa42bb33ecfe36cc7195d
+    format: md
+    lines: 283
+  language: en
+  kind: secure-coding guidance
+  structure: mixed
+  lines: 283
+  why: Which events to log and which data never to log; long bulleted lists checkable against logging code.
+- slug: owasp-cs-password-storage
+  title: OWASP Password Storage Cheat Sheet
+  publisher: OWASP Cheat Sheet Series (OWASP Foundation)
+  url: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: Password_Storage_Cheat_Sheet.md
+    sha256: 5004d1ead2dfa8270df8be7789c9decb39746261639ddf271e24ba1ac68b32a1
+    format: md
+    lines: 121
+  language: en
+  kind: secure-coding guidance
+  structure: mixed
+  lines: 121
+  why: Concrete parameters (Argon2id m/t/p, bcrypt cost, PBKDF2 iterations) checkable in auth code.
+- slug: owasp-cs-secrets-management
+  title: OWASP Secrets Management Cheat Sheet
+  publisher: OWASP Cheat Sheet Series (OWASP Foundation)
+  url: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: Secrets_Management_Cheat_Sheet.md
+    sha256: c7b67badc6e5990da90d1942f48b73e6e354f157de9b4eee56381cf4a906ae61
+    format: md
+    lines: 413
+  language: en
+  kind: secure-coding guidance
+  structure: mixed
+  lines: 413
+  why: Deeply nested numbered headings (2.1, 3.4.1) on secrets in code, CI and cloud.
+- slug: owasp-llm-top10-2025-llm01
+  title: OWASP Top 10 for LLM Applications 2025 — LLM01:2025 Prompt Injection
+  publisher: OWASP GenAI Security Project
+  url: https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: LLM01_PromptInjection.md
+    sha256: 0b6c84e994ed7e2813ae4d758259adcd6344c20f48b14a65fb1c59e61871a1b9
+    format: md
+    lines: 73
+  section: LLM01 only (one of ten risk chapters)
+  language: en
+  kind: AI security risk catalogue
+  structure: mixed
+  lines: 73
+  why: Risk description, numbered prevention strategies and attack scenarios for LLM apps; checkable in prompt-handling code.
+- slug: owasp-llm-top10-2025-llm06-de
+  title: OWASP Top 10 für LLM-Anwendungen 2025 — LLM06:2025 Übermäßige Handlungsfreiheit (Excessive Agency)
+  publisher: OWASP GenAI Security Project (German translation)
+  url: https://genai.owasp.org/llm-top-10/
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: LLM06_ExcessiveAgency.md
+    sha256: 6d1cca3264d6fc01b69edb053b8463c53d31c16a9e2b75c24e2830d26cb0f880
+    format: md
+    lines: 59
+  section: LLM06 only, de-DE translation
+  language: de
+  kind: AI security risk catalogue
+  structure: mixed
+  lines: 59
+  why: German translation; numbered mitigations (least-privilege tools, human approval) checkable in agent code.
+- slug: owasp-masvs-2-1
+  title: OWASP Mobile Application Security Verification Standard (MASVS) v2.1.0
+  publisher: OWASP Mobile Application Security project (OWASP Foundation)
+  url: https://mas.owasp.org/MASVS/
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: OWASP_MASVS.pdf
+    sha256: 93d48b6bf8595ad097c82a16faa03229922cbc88e3dc7e8db4fbe45ffc247d21
+    format: pdf
+    lines: 742
+  language: en
+  kind: verification standard
+  structure: numbered
+  lines: 742
+  reader_problem: 'OWASP_MASVS.pdf: words run together without spaces in 39 of 742 lines (e.g. line 81: ''theyareubiquitousbothinbusinessandinoursociallives.'')'
+  why: Whole release PDF with control IDs (MASVS-STORAGE-1 …) for mobile apps; a designed PDF with cover pages and tables.
+- slug: owasp-top10-2025-a03-supply-chain
+  title: OWASP Top 10:2025 A03 Software Supply Chain Failures
+  publisher: OWASP Top 10 project (OWASP Foundation)
+  url: https://owasp.org/Top10/2025/A03_2025-Software_Supply_Chain_Failures/
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: A03_2025-Software_Supply_Chain_Failures.md
+    sha256: d4108c04991ef2f5ab1d8ef301b51cfeef0fea35c550665c3dcfba7aa346758e
+    format: md
+    lines: 124
+  section: Chapter A03:2025 only (one of ten risk chapters)
+  language: en
+  kind: security risk catalogue
+  structure: mixed
+  lines: 124
+  reader_problem: 'A03_2025-Software_Supply_Chain_Failures.md: raw HTML passed through as text, 42 of 124 lines start with
+    a tag or comment (e.g. ''<table>'')'
+  why: A single risk chapter with a CWE table, description, prevention bullets and attack scenarios; dependency/SBOM checks.
+- slug: pep-8
+  title: PEP 8 — Style Guide for Python Code
+  publisher: Python Software Foundation (Python Enhancement Proposals)
+  url: https://peps.python.org/pep-0008/
+  licence: Public domain (placed in the public domain by its authors)
+  licence_url: https://peps.python.org/pep-0008/#copyright
+  files:
+  - name: pep-0008.txt
+    sha256: 6028935c6cb2c674d5f4d512c7ba6ce2923713b1c47ce1a78adc690db817fc5d
+    format: txt
+    lines: 1190
+  language: en
+  kind: coding style guide
+  structure: style-guide
+  lines: 1190
+  why: 'reStructuredText source read as plain text: RST header field list, ''::'' code blocks, underline-style headings.'
+- slug: rust-api-guidelines-checklist
+  title: Rust API Guidelines — Checklist
+  publisher: Rust Library Team (rust-lang)
+  url: https://rust-lang.github.io/api-guidelines/checklist.html
+  licence: Apache-2.0
+  licence_url: https://www.apache.org/licenses/LICENSE-2.0
+  files:
+  - name: checklist.md
+    sha256: 6e8afb1f55d7f079b9c48f48925ca80d52de78ea27beb8d0e5fadf91123f23b2
+    format: md
+    lines: 126
+  language: en
+  kind: API design rules
+  structure: checklist
+  lines: 126
+  why: Very short checklist of rule IDs (C-CASE, C-CONV …) with links; Rust crate APIs checkable.
+- slug: slsa-build-requirements
+  title: 'SLSA — Build: Requirements for producing artifacts'
+  publisher: SLSA project (OpenSSF)
+  url: https://slsa.dev/spec/v1.1/build-requirements
+  licence: Community Specification License 1.0
+  licence_url: https://github.com/CommunitySpecification/1.0
+  files:
+  - name: build-requirements.md
+    sha256: a5390551497ff58fc737e8b1f466bd596337bc253c852a12e6caaaffa5446564
+    format: md
+    lines: 321
+  language: en
+  kind: supply-chain specification
+  structure: tables
+  lines: 321
+  why: Requirements per level as a Markdown table with checkmarks per Build L1/L2/L3 column, RFC 2119 keywords; build provenance
+    checkable in CI config.
+- slug: uk-ai-cyber-security-code-of-practice
+  title: Code of Practice for the Cyber Security of AI
+  publisher: UK Department for Science, Innovation and Technology (GOV.UK)
+  url: https://www.gov.uk/government/publications/ai-cyber-security-code-of-practice/code-of-practice-for-the-cyber-security-of-ai
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: code-of-practice-for-the-cyber-security-of-ai.html
+    sha256: 17c4b9b8994c9512d0664395b3361fc6cf12d49bfea089c73753b758edb2c2ec
+    format: html
+    lines: 265
+  language: en
+  kind: code of practice (AI systems)
+  structure: numbered
+  lines: 265
+  why: 13 principles with provisions numbered 5.1.1, 6.2.3 addressed to Developers/System Operators/Data Custodians; AI repos.
+- slug: uk-dpa-2018-part3-ch4
+  title: Data Protection Act 2018 — Part 3 Chapter 4 Controller and processor (ss. 55-71)
+  publisher: UK Parliament / The National Archives (legislation.gov.uk)
+  url: https://www.legislation.gov.uk/ukpga/2018/12/part/3/chapter/4
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: DPA-2018-Part-3-Chapter-4.html
+    sha256: b9cb6b89410298429c86ea402af1aa6c7084f5418d98955c6033d17bbe5c536b
+    format: html
+    lines: 557
+  section: Part 3 Chapter 4 only (sections 55-71)
+  language: en
+  kind: statute (privacy, law enforcement processing)
+  structure: numbered
+  lines: 557
+  why: 'UK statute layout: sections with (1)(a)(i) subsections and textual-amendment annotations; s.62 logging and s.66 security
+    checkable.'
+- slug: uk-ncsc-caf-4-objective-b
+  title: NCSC Cyber Assessment Framework 4.0 — Objective B Protecting against cyber attack
+  publisher: UK National Cyber Security Centre
+  url: https://www.ncsc.gov.uk/collection/cyber-assessment-framework
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: NCSC-CAF-4.0-Objective-B-pp24-51.pdf
+    sha256: 6483cb3838a9697597e6fde155caad91bf23f4a2ebe8f7f22a8c917d854bf0e9
+    format: pdf
+    pages: 24-51
+    lines: 1172
+  section: Objective B (Principles B1-B6), PDF pages 24-51 of 68
+  language: en
+  kind: assessment framework
+  structure: tables
+  lines: 1172
+  reader_problem: 'NCSC-CAF-4.0-Objective-B-pp24-51.pdf: the three-column indicator tables (Not achieved / Partially achieved
+    / Achieved) come out merged row by row, e.g. line 195 ''devices and systems does mechanisms, such as multi- mechanisms,
+    such as multi-'', so cells from different columns are interleaved'
+  why: Indicators of good practice as three-column tables (Not achieved / Partially achieved / Achieved) for B1-B6; access
+    control, data in transit, secure configuration.
+- slug: uk-software-security-code-of-practice
+  title: Software Security Code of Practice
+  publisher: UK Department for Science, Innovation and Technology and NCSC (GOV.UK)
+  url: https://www.gov.uk/government/publications/software-security-code-of-practice/software-security-code-of-practice
+  licence: Open Government Licence v3.0
+  licence_url: https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+  files:
+  - name: software-security-code-of-practice.html
+    sha256: d3d50060be088454aaf0214c8fa6650f2bd2eb8e48075c92fbe46a8895fb3979
+    format: html
+    lines: 194
+  language: en
+  kind: code of practice (software vendors)
+  structure: numbered
+  lines: 194
+  why: Short code of 14 numbered principles (1.1 … 4.4) in four themes; full web page with GOV.UK chrome around it.
+- slug: w3c-wcag-2-2
+  title: Web Content Accessibility Guidelines (WCAG) 2.2
+  publisher: W3C
+  url: https://www.w3.org/TR/WCAG22/
+  licence: W3C Document License (2023)
+  licence_url: https://www.w3.org/copyright/document-license-2023/
+  files:
+  - name: WCAG22.html
+    sha256: 6e3c5fe397257cae509a2fb4752b73062cf8cbeb92c2cec618989b17e4cf7057
+    format: html
+    lines: 2256
+  language: en
+  kind: accessibility standard
+  structure: numbered
+  lines: 2256
+  why: 'Whole Recommendation (~150k chars of text): success criteria 1.1.1 … 4.1.3 with levels A/AA/AAA, notes, glossary;
+    web UIs checkable.'

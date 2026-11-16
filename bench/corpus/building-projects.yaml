@@ -1,0 +1,1121 @@
+# Openly licensed building projects for stress-testing the building pipeline (app.buildings.process).
+# Files: .amp/in/corpus/projects/building/<slug>/files/ ; provenance in each SOURCES.md.
+# processed: app.buildings.process(files, slug, requirements=()) with NORMIR_LLM_PROVIDER=none, no API keys, timeout 600 s,
+# on a scratch copy of the files (process() unpacks and deletes zips in place).
+- slug: bsi-simple-scene-architecture-ifc2x3
+  title: 'buildingSMART Simple Scene: building architecture (IFC2x3)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%202.3.0.1%20%28IFC%202x3%20TC1%29/Simple-Scene/Building-Architecture.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: Building-Architecture.ifc
+    sha256: c4db65ba847f6b369a95d6c54fa11f4750cbe6d59f021934e8923d8d578e5885
+    format: ifc
+    size_mb: 0.09
+  schema: IFC2X3
+  units: millimetre
+  building_type: small building (certification sample)
+  notes: buildingSMART certification dataset; same scene exists in IFC4 and IFC4.3.
+  processed:
+    seconds: 0.1
+    elements:
+      Space: 2
+      Corridor: 1
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bsi-simple-scene-architecture-ifc4
+  title: 'buildingSMART Simple Scene: building architecture (IFC4)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%204.0.2.1%20%28IFC%204%20ADD2%20TC1%29/Simple-Scene/Building-Architecture.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: Building-Architecture.ifc
+    sha256: 8790a1e193e82b8e7e7f337ec2633cd40f2120590317a1443503a25b079e2e80
+    format: ifc
+    size_mb: 0.14
+  schema: IFC4
+  units: metre
+  building_type: small building (certification sample)
+  notes: IFC4 ADD2 TC1 version of the same scene.
+  processed:
+    seconds: 0.2
+    elements:
+      Space: 2
+      Corridor: 1
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bsi-simple-scene-architecture-ifc4x3
+  title: 'buildingSMART Simple Scene: building architecture (IFC4.3)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%204.3.2.0%20%28IFC%204.3%20ADD2%29/Simple-Scene/Building-Architecture.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: Building-Architecture.ifc
+    sha256: 96e7103812b15b65eb1fd7802d36b9962833485dce5ead4f440bbf529530881d
+    format: ifc
+    size_mb: 0.14
+  schema: IFC4X3_ADD2
+  units: metre
+  building_type: small building (certification sample)
+  notes: IFC4.3 ADD2 version of the same scene.
+  processed:
+    seconds: 0.2
+    elements:
+      Space: 2
+      Corridor: 1
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bsi-simple-scene-structural-ifc4
+  title: 'buildingSMART Simple Scene: building structural (IFC4)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%204.0.2.1%20%28IFC%204%20ADD2%20TC1%29/Simple-Scene/Building-Structural.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: Building-Structural.ifc
+    sha256: 903b5a005901397aa2b235daf6a60f46c099eae286cb01c815abf0a341707432
+    format: ifc
+    size_mb: 0.19
+  schema: IFC4
+  units: metre
+  building_type: small building, structural discipline
+  notes: 'Structural model: expected no spaces or doors.'
+  processed:
+    seconds: 0.1
+    elements:
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bsi-simple-scene-hvac-ifc2x3
+  title: 'buildingSMART Simple Scene: building HVAC (IFC2x3)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%202.3.0.1%20%28IFC%202x3%20TC1%29/Simple-Scene/Building-Hvac.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: Building-Hvac.ifc
+    sha256: f39478ce12ae2029eed8b565551412a3a4b518d10a8b501bc5e9c2a8a6d78bdb
+    format: ifc
+    size_mb: 0.07
+  schema: IFC2X3
+  units: millimetre
+  building_type: small building, HVAC discipline
+  notes: 'MEP model: expected no architectural elements.'
+  processed:
+    seconds: 0.1
+    elements:
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bsi-simple-scene-bridge-ifc4x3
+  title: 'buildingSMART Simple Scene: bridge (IFC4.3)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%204.3.2.0%20%28IFC%204.3%20ADD2%29/Simple-Scene/Infra-Bridge.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: Infra-Bridge.ifc
+    sha256: 97e84cb93e07bfbedbc1bdc57aef161f4998e09accd77175dd0561af2ab4ffab
+    format: ifc
+    size_mb: 1.74
+  schema: IFC4X3_ADD2
+  units: metre
+  building_type: infrastructure (bridge)
+  notes: IfcBridge, no building storeys expected.
+  processed:
+    seconds: 0.2
+    elements: {}
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bsi-simple-scene-road-ifc2x3
+  title: 'buildingSMART Simple Scene: road (IFC2x3)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%202.3.0.1%20%28IFC%202x3%20TC1%29/Simple-Scene/Infra-Road.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: Infra-Road.ifc
+    sha256: 45efd6b6d2a26daf17a3f83a331c780234faf0b73069f0410155ffa7ead222f4
+    format: ifc
+    size_mb: 0.18
+  schema: IFC2X3
+  units: millimetre
+  building_type: infrastructure (road)
+  notes: Road scene expressed in IFC2x3 (no IfcRoad in that schema).
+  processed:
+    seconds: 0.1
+    elements: {}
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bsi-wall-with-opening-and-window-ifc4
+  title: 'buildingSMART ISO spec: wall with opening and window (IFC4)'
+  url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/IFC%204.0.2.1%20%28IFC%204%20ADD2%20TC1%29/ISO%20Spec%20-%20ReferenceView_V1.2/wall-with-opening-and-window.ifc
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingSMART/Sample-Test-Files/blob/80d976a9b193a26a8e928c3e79bff67af1de68a8/LICENSE
+  files:
+  - name: wall-with-opening-and-window.ifc
+    sha256: 73b0e45d931d5dc13bfee5fdc7bd80f796526445458b2de74c4168d209097832
+    format: ifc
+    size_mb: 0.01
+  schema: IFC4
+  units: millimetre
+  building_type: single element test model
+  notes: 'Tiny unit-test model: one wall, one window, no storey content to speak of.'
+  processed:
+    seconds: 0.1
+    elements:
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: nibs-duplex-architecture
+  title: 'NIBS/buildingSMART Common BIM Files: Duplex Apartment, architectural'
+  url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Duplex%20Apartment
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Duplex%20Apartment/README.md
+  files:
+  - name: Duplex_A_20110907.ifc
+    sha256: b347a2c8aa8fff6db896a4417a9c50c22ac0ccd7c5cfc22b99b8d29336c606ed
+    format: ifc
+    size_mb: 2.38
+  schema: IFC2X3
+  units: metre
+  building_type: apartments (two-storey duplex)
+  notes: Coordination MVD from Revit; was hosted by NIBS 2009-2020.
+  processed:
+    seconds: 0.4
+    elements:
+      Space: 21
+      Door: 14
+      Storey: 4
+      Stair: 2
+      Corridor: 2
+    notes: []
+    sheets: 0
+    facts: 5
+    skipped: []
+- slug: nibs-duplex-mechanical-rooms-spaces
+  title: 'NIBS/buildingSMART Common BIM Files: Duplex Apartment, mechanical with rooms and spaces'
+  url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Duplex%20Apartment
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Duplex%20Apartment/README.md
+  files:
+  - name: Duplex_M_20111024_ROOMS_AND_SPACES.ifc
+    sha256: 3cd577ecff9daf91632789a408070251a431b198de7be47f64e01c7fda1be92b
+    format: ifc
+    size_mb: 8.78
+  schema: IFC2X3
+  units: metre
+  building_type: apartments (two-storey duplex), HVAC
+  notes: HVAC model carrying rooms/spaces.
+  processed:
+    seconds: 0.4
+    elements:
+      Space: 37
+      Corridor: 3
+      Storey: 3
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: nibs-clinic-structural
+  title: 'NIBS/buildingSMART Common BIM Files: Medical-Dental Clinic, structural'
+  url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Medical-Dental%20Clinic
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Medical-Dental%20Clinic/README.md
+  files:
+  - name: Clinic_Structural.ifc
+    sha256: 325287b375f154dc79504c4bbf67b40c501f458f23a8c4ba13b27171e00533d8
+    format: ifc
+    size_mb: 19.06
+  schema: IFC2X3
+  units: metre
+  building_type: clinic (healthcare), structural discipline
+  notes: Clinic_A_20110906.ifc is excluded as already used; Clinic_Architectural.ifc (13.0 MB) was skipped as a likely re-export of it.
+  processed:
+    seconds: 0.8
+    elements:
+      Storey: 4
+      Stair: 1
+      Ramp: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: esplan-esplanades-architecture
+  title: 'Esplan: Esplanades example architectural model (Estonia)'
+  url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Esplanades
+  licence: CC BY 4.0
+  licence_url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%202.3.0.1%20%28IFC%202x3%29/Esplanades/readme.md
+  files:
+  - name: 1807_EP_AR_v18.ifc
+    sha256: b97db10a2cb679a6543ccf4e34cfa8e77753f14e67f51b403e6cd9a819e3748f
+    format: ifc
+    size_mb: 12.11
+  schema: IFC2X3
+  units: metre
+  building_type: multi-storey building (Estonia)
+  notes: Example model with Estonian modelling requirements; (c) Esplan.
+  processed:
+    seconds: 3.4
+    elements:
+      Space: 285
+      Door: 211
+      Storey: 7
+      Ramp: 6
+      Stair: 4
+    notes: []
+    sheets: 0
+    facts: 5
+    skipped: []
+- slug: schependomlaan-design-model
+  title: 'Schependomlaan, Nijmegen: design model (ArchiCAD, IFC2x3)'
+  url: https://github.com/jakob-beetz/DataSetSchependomlaan
+  licence: CC BY 4.0
+  licence_url: https://github.com/jakob-beetz/DataSetSchependomlaan/blob/master/LICENSE.MD
+  files:
+  - name: IFC Schependomlaan.ifc
+    sha256: 2c3565ca1904f2aa61adab92024cf3755b2c5b21a498144d3094d7cb58cebec7
+    format: ifc
+    size_mb: 49.29
+  schema: IFC2X3
+  units: millimetre
+  building_type: apartments (row/terraced dwellings)
+  notes: LICENSE.MD in the original dataset repo says CC BY 4.0 ((c) original owners); its README also says owners permitted scientific/academic
+    use. File fetched from the buildingSMART community copy.
+  processed:
+    seconds: 5.0
+    elements:
+      Door: 205
+      Space: 100
+      Stair: 9
+      Storey: 6
+      Corridor: 2
+    notes: []
+    sheets: 0
+    facts: 5
+    skipped: []
+- slug: cbbt-chesapeake-bay-bridge-tunnel-ifc4x3
+  title: Chesapeake Bay Bridge-Tunnel synthetic IFC4.3 model
+  url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%204.3.2.0%20%28IFC%204.3%29/Chesapeake%20Bay%20Bridge-Tunnel%20IFC%20Model
+  licence: MIT
+  licence_url: https://github.com/buildingsmart-community/Community-Sample-Test-Files/blob/31eb1dd0a0406fb9ebf0ebd823b48e1ec95afc08/IFC%204.3.2.0%20%28IFC%204.3%29/Chesapeake%20Bay%20Bridge-Tunnel%20IFC%20Model/LICENSE
+  files:
+  - name: chesapeake_bay_bridge_tunnel_4x3.ifc
+    sha256: b7fcf20aa8f977aa66ea38e0d11ef982967103f76312841d9fe0ccd5f5d1158f
+    format: ifc
+    size_mb: 26.28
+  schema: IFC4X3_ADD2
+  units: metre
+  building_type: infrastructure (bridge, tunnel, road, marine)
+  notes: Synthetic IfcOpenShell-generated model, 295k entities, 17.5k elements; tunnels as IfcFacility.
+  processed:
+    seconds: 1.5
+    elements: {}
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: kit-fzk-haus
+  title: 'KIT IAI: FZK-Haus (IFC4)'
+  url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  licence: unrestricted use, attribution to IAI/KIT requested
+  licence_url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  files:
+  - name: AC20-FZK-Haus.ifc
+    sha256: 70cc8ff245fc0894201d96496c031005a5cbd7a96b22d8a1b87c5a883fb77994
+    format: ifc
+    size_mb: 2.57
+  schema: IFC4
+  units: metre
+  building_type: house (detached)
+  notes: ArchiCAD 20 export.
+  processed:
+    seconds: 0.6
+    elements:
+      Space: 7
+      Door: 5
+      Storey: 2
+      Stair: 1
+      Corridor: 1
+    notes: []
+    sheets: 0
+    facts: 5
+    skipped: []
+- slug: kit-institute-var-2
+  title: 'KIT IAI: Institute / office building Var-2 (IFC4)'
+  url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  licence: unrestricted use, attribution to IAI/KIT requested
+  licence_url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  files:
+  - name: AC20-Institute-Var-2.ifc
+    sha256: cfb2124497b25d9a72101075e84be0feb44ff669cb1bd3251be11efebeea945c
+    format: ifc
+    size_mb: 10.93
+  schema: IFC4
+  units: metre
+  building_type: office (institute)
+  notes: ArchiCAD 20 export, 'phantasy office building'.
+  processed:
+    seconds: 1.4
+    elements:
+      Space: 82
+      Door: 77
+      Corridor: 9
+      Storey: 5
+      Stair: 4
+    notes: []
+    sheets: 0
+    facts: 5
+    skipped: []
+- slug: kit-smiley-west
+  title: 'KIT IAI: Smiley West terraced houses (IFC4, zipped)'
+  url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  licence: unrestricted use, attribution to IAI/KIT requested
+  licence_url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  files:
+  - name: AC-20-Smiley-West-10-Bldg.zip
+    sha256: b63301362117534946856474c32577261ab8e7ce1098a881f759f5fd3b4acb29
+    format: zip
+    size_mb: 1.28
+  schema: IFC4
+  units: metre
+  building_type: terraced houses
+  notes: Delivered as a .zip; the app unpacks it.
+  processed:
+    seconds: 2.6
+    elements:
+      Door: 170
+      Space: 140
+      Corridor: 40
+      Stair: 30
+      Storey: 5
+    notes: []
+    sheets: 0
+    facts: 5
+    skipped: []
+- slug: kit-bridge-ifc4x2
+  title: 'KIT IAI: KIT-Bridge (IFC4x2, zipped)'
+  url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  licence: unrestricted use, attribution to IAI/KIT requested
+  licence_url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  files:
+  - name: KIT-Bridge.zip
+    sha256: d01c398929904e14e3b50f48228f931d7f4faa0952a6e628bdec91d9bb507d85
+    format: zip
+    size_mb: 0.35
+  schema: IFC4X2
+  units: millimetre
+  building_type: infrastructure (bridge)
+  notes: IFC4x2 is a draft schema ifcopenshell may not know.
+  processed:
+    seconds: 0.1
+    elements: {}
+    notes: []
+    error: "ProjectError: None of the uploaded files could be read. IFC model KIT-Bridge/KIT-Bridge.ifc could not be read: SchemaError: Unsupported\
+      \ schema: IFC4X2\nTraceback (most recent call last):\n  File \"/home/user/workspace/repo/.amp/in/orb-backup/corpus-work/run_one.py\", line\
+      \ 26, in <module>\n    data = buildings.process(files, slug, requirements=())\n  File \"/home/user/workspace/repo/app/buildings.py\", line\
+      \ 164, in process\n    raise ProjectError(\"None of the uploaded files could be read. \" + \" \".join(notes))\napp.buildings.ProjectError:\
+      \ None of the uploaded files could be read. IFC model KIT-Bridge/KIT-Bridge.ifc could not be read: SchemaError: Unsupported schema: IFC4X2\n"
+- slug: kit-simple-road-ifc4x3-rc2
+  title: 'KIT IAI: KIT-Simple-Road-Test (IFC4x3_RC2, zipped)'
+  url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  licence: unrestricted use, attribution to IAI/KIT requested
+  licence_url: https://www.ifcwiki.org/index.php?title=KIT_IFC_Examples
+  files:
+  - name: KIT-Simple-Road-Test-Web-IFC4x3_RC2.zip
+    sha256: 3c3ab928bcf26784b126473820b47f173bfa353f13a8eda1be14d74f4c460208
+    format: zip
+    size_mb: 0.09
+  schema: IFC4X3_RC2
+  units: millimetre
+  building_type: infrastructure (road)
+  notes: Release-candidate schema IFC4X3_RC2.
+  processed:
+    seconds: 0.1
+    elements: {}
+    notes: []
+    error: "ProjectError: None of the uploaded files could be read. IFC model KIT-Simple-Road-Test-Web-IFC4x3_RC2/KIT-Simple-Road-Test-Web-IFC4x3_RC2.ifc\
+      \ could not be read: SchemaError: Unsupported schema: IFC4X3_RC2\nTraceback (most recent call last):\n  File \"/home/user/workspace/repo/.amp/in/orb-backup/corpus-work/run_one.py\"\
+      , line 26, in <module>\n    data = buildings.process(files, slug, requirements=())\n  File \"/home/user/workspace/repo/app/buildings.py\"\
+      , line 164, in process\n    raise ProjectError(\"None of the uploaded files could be read. \" + \" \".join(notes))\napp.buildings.ProjectError:\
+      \ None of the uploaded files could be read. IFC model KIT-Simple-Road-Test-Web-IFC4x3_RC2/KIT-Simple-Road-Test-Web-IFC4x3_RC2.ifc could\
+      \ not be read: SchemaError: Unsupported schema: IFC4X3_RC2\n"
+- slug: ifcopenshell-bonsai-tutorial-project0
+  title: 'IfcOpenShell/Bonsai tutorial: project0 walls with openings'
+  url: https://github.com/IfcOpenShell/IfcOpenShell/blob/7ab6fca86733a5cda959114e56244eee0a4ec822/src/bonsai/docs/tutorials/files/project0-openings.ifc
+  licence: LGPL-3.0
+  licence_url: https://github.com/IfcOpenShell/IfcOpenShell/blob/7ab6fca86733a5cda959114e56244eee0a4ec822/COPYING
+  files:
+  - name: project0-openings.ifc
+    sha256: 0f9444facdf4fc2a6a05241b5d40eda63863e0de276009a7ae06dea449e03773
+    format: ifc
+    size_mb: 0.05
+  schema: IFC4
+  units: metre
+  building_type: small building shell (tutorial)
+  notes: 'Bonsai tutorial file: walls and openings, IFC4.'
+  processed:
+    seconds: 0.1
+    elements:
+      Door: 2
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bimcraft-f01-house
+  title: BimCraft F01 synthetic house (IFC4, mm)
+  url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/fixtures/f01/house.ifc
+  licence: Apache-2.0
+  licence_url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/LICENSE
+  files:
+  - name: house.ifc
+    sha256: e3f82ef8e0469794492606aa4887711a2eacf4b53b786150a41e419613857be2
+    format: ifc
+    size_mb: 0.04
+  schema: IFC4
+  units: millimetre
+  building_type: house (single storey)
+  notes: Four exterior walls, one partition, one window; no doors.
+  processed:
+    seconds: 0.1
+    elements:
+      Space: 2
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bimcraft-f01-missing-host
+  title: BimCraft F01 derivative with a deleted host wall (IFC4)
+  url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/fixtures/f01/missing-host.ifc
+  licence: Apache-2.0
+  licence_url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/LICENSE
+  files:
+  - name: missing-host.ifc
+    sha256: ab6f0eef516d4a35460ba15e271776634efc65639bc40240f02415a62303c8e8
+    format: ifc
+    size_mb: 0.03
+  schema: IFC4
+  units: millimetre
+  building_type: house (single storey)
+  notes: 'Deliberately broken: dimensions reference a deleted wall.'
+  processed:
+    seconds: 0.1
+    elements:
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bimcraft-f02-foot-local
+  title: BimCraft F02 precision fixture in feet (IFC4)
+  url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/fixtures/f02/foot-local.ifc
+  licence: Apache-2.0
+  licence_url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/LICENSE
+  files:
+  - name: foot-local.ifc
+    sha256: b594de7709d6155994f11ef7aff3b8e1df9ce9a1237299328dc3d66e991c1c53
+    format: ifc
+    size_mb: 0.05
+  schema: IFC4
+  units: foot
+  building_type: wall test model
+  notes: Conversion-based foot length unit; three 5 m chord walls incl. curved.
+  processed:
+    seconds: 0.1
+    elements:
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped: []
+- slug: bimcraft-kitchen-count
+  title: BimCraft kitchen plan K-101 (DXF in inches + plotted PDF)
+  url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/fixtures/cad/kitchen-count.dxf
+  licence: Apache-2.0
+  licence_url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/LICENSE
+  files:
+  - name: kitchen-count.dxf
+    sha256: 98ed60030a6c08cb2d07bc14b74cc0f35cc7236d038f9c7cde90eb3cefa54539
+    format: dxf
+    size_mb: 0.03
+  - name: kitchen-count-k101.pdf
+    sha256: 3a65892aabc899917c49ffb4e71ee5f8894bfda3edeaf96a32d9c37e46e925a0
+    format: pdf
+    size_mb: 0.0
+  units: inches
+  building_type: commercial kitchen (foodservice)
+  notes: Blocks on frozen and off layers, MINSERT-free; hand counts in kitchen-count.truth.json upstream.
+  processed:
+    seconds: 0.4
+    elements: {}
+    notes: []
+    sheets: 3
+    facts: 0
+    skipped:
+    - '1 x dxf: 1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (FREEZER ROOM) (e.g. kitchen-count.dxf:
+      1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (FREEZER ROOM))'
+- slug: bimcraft-no-units-dxf
+  title: BimCraft DXF with INSUNITS 0
+  url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/fixtures/cad/no-units.dxf
+  licence: Apache-2.0
+  licence_url: https://github.com/getcadcraft/bimcraft/blob/2eddcdac1e0861e2fc8421c0c4429c83da84f1f6/LICENSE
+  files:
+  - name: no-units.dxf
+    sha256: e76cf6c3f369247f1fb6377a8ef8bb3ab55e6117de313a1dce822cee00b9236b
+    format: dxf
+    size_mb: 0.01
+  units: unitless
+  building_type: not a building (unitless posts)
+  notes: 'Unusual: no drawing units, 7 POST blocks.'
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 1
+    facts: 0
+    skipped: []
+- slug: cadcraft-sample-house
+  title: CadCraft sample house (DXF, feet and inches, four ARCH D sheets)
+  url: https://github.com/getcadcraft/cadcraft/blob/30005651ede56a856d8ee696629086ec2b7f7534/app/samples/sample-house.dxf
+  licence: CC0 1.0
+  licence_url: https://github.com/getcadcraft/cadcraft/blob/30005651ede56a856d8ee696629086ec2b7f7534/app/samples/README.md
+  files:
+  - name: sample-house.dxf
+    sha256: a0e8bcfe3033d7d24b1e438d89fe448716559a3247bc0527d127cbfffc3e27c2
+    format: dxf
+    size_mb: 0.05
+  units: inches
+  building_type: house
+  notes: Plan, elevation, section, wall detail; title-block attributes. CC0 per the samples README.
+  processed:
+    seconds: 0.3
+    elements:
+      Door: 5
+    notes: []
+    sheets: 5
+    facts: 0
+    skipped:
+    - '1 x dxf: 5 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (BATH, BEDROOM 1, BEDROOM 2, KITCHEN,
+      LIVING) (e.g. sample-house.dxf: 5 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (BATH, BEDROOM 1,
+      BEDROOM 2, KITCHEN, LIVING))'
+- slug: cadcraft-sample-asbuilt
+  title: CadCraft sample as-built office (DXF, millimetres)
+  url: https://github.com/getcadcraft/cadcraft/blob/30005651ede56a856d8ee696629086ec2b7f7534/app/samples/sample-asbuilt.dxf
+  licence: CC0 1.0
+  licence_url: https://github.com/getcadcraft/cadcraft/blob/30005651ede56a856d8ee696629086ec2b7f7534/app/samples/README.md
+  files:
+  - name: sample-asbuilt.dxf
+    sha256: 290da701248db1f3d9cf1ca82e973daa74dff7b99d2c57af8b28d49becc63cd0
+    format: dxf
+    size_mb: 0.11
+  units: millimetres
+  building_type: office (as-built survey)
+  notes: Scan slice as POINTs, traced walls, revision clouds, A3 sheet at 1:25.
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 2
+    facts: 0
+    skipped:
+    - '1 x dxf: 2 linear dimension(s) with DIMLFAC other than 1 (scaled details): not used for widths or tread depths (e.g. sample-asbuilt.dxf:
+      2 linear dimension(s) with DIMLFAC other than 1 (scaled details): not used for widths or tread depths)'
+    - '1 x dxf: 1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (OFFICE) (e.g. sample-asbuilt.dxf: 1 room-name
+      text(s) not inside a wall-enclosed area or room boundary: not read as rooms (OFFICE))'
+- slug: testsimulator-apartment-59
+  title: 'MySketchBook sample: 59 m2 apartment (DXF ASCII + binary DXF + PDF)'
+  url: https://github.com/knix008/TestSimulator/blob/5372d990e166e20d0a383118d10f74138ec4f027/MySketchBookMultiOSV10/samples/plans/apartment-59.dxf
+  licence: Apache-2.0
+  licence_url: https://github.com/knix008/TestSimulator/blob/5372d990e166e20d0a383118d10f74138ec4f027/LICENSE
+  files:
+  - name: apartment-59.dxf
+    sha256: 20430d6617c39d69b2e948092d97bad67c0b76960e9ac7c5401a0b2161de7522
+    format: dxf
+    size_mb: 0.01
+  - name: apartment-59-binary.dxf
+    sha256: 8556cc9aa445a8f957148ac29d30b51979472e19bdbb1d01a49167890e9bce95
+    format: dxf
+    size_mb: 0.01
+  - name: apartment-59.pdf
+    sha256: d6e3f0b5265ae9a6b9d46311321048a24b0f747f433304211216f5084d1e7c40
+    format: pdf
+    size_mb: 0.18
+  units:
+  - binary DXF
+  - millimetres
+  building_type: apartment
+  notes: Includes a binary DXF (unusual).
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 2
+    facts: 0
+    skipped:
+    - '1 x dxf: not readable as DXF (DXFStructureError: Invalid group code "AutoCAD Binary DXF" at line 1.) (e.g. apartment-59-binary.dxf: not
+      readable as DXF (DXFStructureError: Invalid group code "AutoCAD Binary DXF" at line 1.))'
+    - '1 x dxf: not readable as DXF (DXFStructureError: missing ''AcDbPolyline'' subclass in LWPOLYLINE(#None)) (e.g. apartment-59.dxf: not readable
+      as DXF (DXFStructureError: missing ''AcDbPolyline'' subclass in LWPOLYLINE(#None)))'
+    - '1 x drawings: low-confidence OCR (< 0.85): not read for facts (e.g. 2 of 2 tokens (apartment-59.pdf))'
+- slug: testsimulator-small-office
+  title: 'MySketchBook sample: small office and door-variety DXF'
+  url: https://github.com/knix008/TestSimulator/blob/5372d990e166e20d0a383118d10f74138ec4f027/MySketchBookMultiOSV10/samples/plans/small-office.dxf
+  licence: Apache-2.0
+  licence_url: https://github.com/knix008/TestSimulator/blob/5372d990e166e20d0a383118d10f74138ec4f027/LICENSE
+  files:
+  - name: small-office.dxf
+    sha256: d5a66f3551ee12e07def90e123bb05a06939269c9ed92e7a297e1fdfd1275d34
+    format: dxf
+    size_mb: 0.01
+  - name: doors-variety.dxf
+    sha256: 0680ac223a2e43a2d165d25e0eb3b1d7b7d012e82b04500070f02c9d89c5da1b
+    format: dxf
+    size_mb: 0.01
+  units: millimetres
+  building_type: office (small)
+  notes: Two small generated plans.
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped:
+    - '2 x dxf: not readable as DXF (DXFStructureError: missing ''AcDbPolyline'' subclass in LWPOLYLINE(#None)) (e.g. doors-variety.dxf: not readable
+      as DXF (DXFStructureError: missing ''AcDbPolyline'' subclass in LWPOLYLINE(#None)))'
+- slug: testsimulator-duplex-ifc
+  title: 'MySketchBook sample: duplex (IFC)'
+  url: https://github.com/knix008/TestSimulator/blob/5372d990e166e20d0a383118d10f74138ec4f027/MySketchBookMultiOSV10/samples/plans/duplex.ifc
+  licence: Apache-2.0
+  licence_url: https://github.com/knix008/TestSimulator/blob/5372d990e166e20d0a383118d10f74138ec4f027/LICENSE
+  files:
+  - name: duplex.ifc
+    sha256: 858ff4304ec683bf10bccb0a69ee39c08998548e1a718f21b27092522ac732fa
+    format: ifc
+    size_mb: 0.04
+  schema: IFC4
+  units: millimetre
+  building_type: apartments (duplex)
+  notes: Generated by a small app, not a BIM tool.
+  processed:
+    seconds: 0.2
+    elements:
+      Door: 7
+      Space: 7
+      Storey: 2
+      Stair: 1
+    notes: []
+    sheets: 0
+    facts: 4
+    skipped:
+    - '1 x ifc: no exit (stair enclosures) is reachable from any space (e.g. travel distance on 2F: no exit (stair enclosures) is reachable from
+      any space)'
+- slug: store-mcp-sample-store
+  title: store-mcp sample store (DXF + IFC)
+  url: https://github.com/Jaysunnn8solutions/store-mcp/blob/9c5e4f321339ba4fbc734046c3873016e4a1c99d/public/samples/sample-store.dxf
+  licence: MIT
+  licence_url: https://github.com/Jaysunnn8solutions/store-mcp/blob/9c5e4f321339ba4fbc734046c3873016e4a1c99d/LICENSE
+  files:
+  - name: sample-store.dxf
+    sha256: fcb905169f861d8c4992b21ef0ad85e110939f807866071cb44ffe7b843ab6a7
+    format: dxf
+    size_mb: 0.01
+  - name: sample-store.ifc
+    sha256: 4a6661f639a6371ad481341514783f83ea01efac0d844efef7b6f636b4e68bf8
+    format: ifc
+    size_mb: 0.02
+  schema: IFC4
+  units:
+  - metre
+  - millimetres
+  building_type: retail store
+  notes: 'Mixed project: model and drawing of the same store.'
+  processed:
+    seconds: 0.3
+    elements:
+      Door: 4
+      Space: 2
+      Storey: 1
+    notes: []
+    sheets: 0
+    facts: 0
+    skipped:
+    - '1 x dxf: not readable as DXF (DXFStructureError: missing ''AcDbPolyline'' subclass in LWPOLYLINE(#None)) (e.g. sample-store.dxf: not readable
+      as DXF (DXFStructureError: missing ''AcDbPolyline'' subclass in LWPOLYLINE(#None)))'
+- slug: draftline-meridian-house
+  title: 'Draftline sample: Meridian House (DXF)'
+  url: https://github.com/wieslawsoltes/Draftline/blob/cdb4f81a832b89bbb5f278a8c08adccf0cb61dc0/samples/Meridian%20House.dxf
+  licence: MIT
+  licence_url: https://github.com/wieslawsoltes/Draftline/blob/cdb4f81a832b89bbb5f278a8c08adccf0cb61dc0/LICENSE
+  files:
+  - name: Meridian House.dxf
+    sha256: 780b74e9848fb11d0a0d969041170ce2f2c50ecbc12952431f9614c334eb2186
+    format: dxf
+    size_mb: 0.09
+  units: millimetres
+  building_type: house
+  notes: Sample drawing of a CAD app.
+  processed:
+    seconds: 0.4
+    elements:
+      Door: 12
+      Space: 7
+    notes: []
+    sheets: 1
+    facts: 0
+    skipped:
+    - '1 x dxf: 2 room tags share one enclosed area (open plan): floor areas not computed for BEDROOM 02, STUDIO (e.g. Meridian House.dxf: 2 room
+      tags share one enclosed area (open plan): floor areas not computed for BEDROOM 02, STUDIO)'
+    - '1 x dxf: travel distance: no exterior door (a door with a room on one side only) found on the plan (e.g. Meridian House.dxf: travel distance:
+      no exterior door (a door with a room on one side only) found on the plan)'
+- slug: stratumcad-riverside-studio
+  title: 'StratumCAD example: Riverside Studio (DXF)'
+  url: https://github.com/wieslawsoltes/StratumCAD/blob/1095712c79ac432d466f8f80c98ffddaaf84c1aa/examples/Riverside-Studio.dxf
+  licence: MIT
+  licence_url: https://github.com/wieslawsoltes/StratumCAD/blob/1095712c79ac432d466f8f80c98ffddaaf84c1aa/LICENSE
+  files:
+  - name: Riverside-Studio.dxf
+    sha256: ca9e4970797796d1fbed3b5f44d5f4f0919381e88b84c64969312e7d81e9e9e2
+    format: dxf
+    size_mb: 0.07
+  units: millimetres
+  building_type: studio / small commercial
+  notes: Sample drawing of a CAD app.
+  processed:
+    seconds: 0.3
+    elements:
+      Door: 7
+    notes: []
+    sheets: 1
+    facts: 0
+    skipped: []
+- slug: kestrelcad-courtyard
+  title: 'KestrelCAD example: courtyard (DXF)'
+  url: https://github.com/wieslawsoltes/KestrelCAD/blob/7a1e84c67fd24410c22f0d1a45b2e54120b32d0e/examples/courtyard.dxf
+  licence: MIT
+  licence_url: https://github.com/wieslawsoltes/KestrelCAD/blob/7a1e84c67fd24410c22f0d1a45b2e54120b32d0e/LICENSE
+  files:
+  - name: courtyard.dxf
+    sha256: 5cacf27957ad08c1cbe7dd88002e7f6f3b755f35ca6a72fc912dff4aa2b05c87
+    format: dxf
+    size_mb: 0.05
+  units: millimetres
+  building_type: courtyard building
+  notes: Sample drawing of a CAD app.
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 1
+    facts: 0
+    skipped:
+    - '1 x dxf: 4 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (BATH, BEDROOM, KITCHEN / DINING, LIVING
+      / LOUNGE) (e.g. courtyard.dxf: 4 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (BATH, BEDROOM, KITCHEN
+      / DINING, LIVING / LOUNGE))'
+- slug: optesc-factory-plan
+  title: OPTEsc sample factory plan (DXF + PDF)
+  url: https://github.com/iliasreg/OPTEsc/blob/cc9ea789b82ebd5f03bcc9183546813320f2431a/data/samples/factory_plan.dxf
+  licence: MIT
+  licence_url: https://github.com/iliasreg/OPTEsc/blob/cc9ea789b82ebd5f03bcc9183546813320f2431a/LICENSE
+  files:
+  - name: factory_plan.dxf
+    sha256: f67ad296a6c0d71ce7abb39fe2f2955377f79e14dd3563664755bed98e459db1
+    format: dxf
+    size_mb: 0.04
+  - name: factory_plan.pdf
+    sha256: 8ad20e4e5cc56aa73fafabbc34a7e683b79a7a184d1371250b8fde44fc36cae7
+    format: pdf
+    size_mb: 0.01
+  units: millimetres
+  building_type: industrial (factory)
+  notes: Escape-route app sample.
+  processed:
+    seconds: 0.6
+    elements:
+      Door: 10
+      Space: 7
+      Stair: 1
+    notes: []
+    sheets: 2
+    facts: 0
+    skipped:
+    - '1 x dxf: 2 room tags share one enclosed area (open plan): floor areas not computed for STORAGE, PRODUCTION HALL (e.g. factory_plan.dxf:
+      2 room tags share one enclosed area (open plan): floor areas not computed for STORAGE, PRODUCTION HALL)'
+    - '1 x dxf: 1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (LOADING BAY) (e.g. factory_plan.dxf:
+      1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (LOADING BAY))'
+    - '1 x dxf: travel distance: open-plan rooms get none of their own (their area is shared): STORAGE, PRODUCTION HALL (e.g. factory_plan.dxf:
+      travel distance: open-plan rooms get none of their own (their area is shared): STORAGE, PRODUCTION HALL)'
+- slug: bimcompiler-duplex-dxf-set
+  title: 'BIMCompiler duplex drawing set (8 DXF: floors, elevations, roof, plumbing)'
+  url: https://github.com/red1oon/BIMCompiler/blob/bc402e862f8b293a85f7b8e2f7432182c1566b9e/deploy/dev/dxf
+  licence: MIT
+  licence_url: https://github.com/red1oon/BIMCompiler/blob/bc402e862f8b293a85f7b8e2f7432182c1566b9e/LICENSE
+  files:
+  - name: DX_FLOOR_GF.dxf
+    sha256: 9e3ecf8af0911bc5a0db3540a4529b188159db7a8c3bf54413292775f724dc56
+    format: dxf
+    size_mb: 0.18
+  - name: DX_FLOOR_FF.dxf
+    sha256: ff827a75fdec2df3a27648a456279c054ca7a7aa6c27653f7db8600265dc60e3
+    format: dxf
+    size_mb: 0.27
+  - name: DX_FRONT.dxf
+    sha256: 8bee16a9105c1ef57500db2bfa6586b6f8af155a7c5a684ad4a9724ba162ed70
+    format: dxf
+    size_mb: 0.07
+  - name: DX_REAR.dxf
+    sha256: 36eab1ae0f1cb0ef18fc9d468ab0ee63b7b3d3ae68cded69d4162f7463f529da
+    format: dxf
+    size_mb: 0.07
+  - name: DX_LEFT.dxf
+    sha256: 5df37ebfb54e3b1fb55a97038debd8b383dad16a0ee0fa7a25ef9733f2d7b9fb
+    format: dxf
+    size_mb: 0.07
+  - name: DX_RIGHT.dxf
+    sha256: 97822818e29ec019f3296623032a71719c813e85b7aced10fbd99a9fdb2369ce
+    format: dxf
+    size_mb: 0.07
+  - name: DX_ROOF.dxf
+    sha256: 031f6e7aad79e2a2f7754077aa8e4bd88a1e231498d8be885a10dd64c7a33cd5
+    format: dxf
+    size_mb: 0.06
+  - name: DX_PLUMBING.dxf
+    sha256: f292214469e64472e2f7f7f85bac509dbb6b21571dbb1cad03011f107f822b14
+    format: dxf
+    size_mb: 0.13
+  units: millimetres
+  building_type: apartments (duplex)
+  notes: DXF sheets generated from an IFC model (likely the Duplex).
+  processed:
+    seconds: 1.0
+    elements:
+      Door: 12
+    notes: []
+    sheets: 8
+    facts: 0
+    skipped:
+    - '2 x dxf: door block ''DOOR_TAG'' (8C) has no swing of a door''s size (380-1650 mm): width not read (e.g. DX_FRONT.dxf: door block ''DOOR_TAG''
+      (8C) has no swing of a door''s size (380-1650 mm): width not read)'
+    - '2 x dxf: door block ''DOOR_TAG'' (8F) has no swing of a door''s size (380-1650 mm): width not read (e.g. DX_FRONT.dxf: door block ''DOOR_TAG''
+      (8F) has no swing of a door''s size (380-1650 mm): width not read)'
+    - '2 x dxf: door block ''DOOR_TAG'' (A3) has no swing of a door''s size (380-1650 mm): width not read (e.g. DX_LEFT.dxf: door block ''DOOR_TAG''
+      (A3) has no swing of a door''s size (380-1650 mm): width not read)'
+    - '1 x dxf: 1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (BEDROOM) (e.g. DX_FLOOR_FF.dxf: 1 room-name
+      text(s) not inside a wall-enclosed area or room boundary: not read as rooms (BEDROOM))'
+    - '1 x dxf: 1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (LIVING ROOM) (e.g. DX_FLOOR_GF.dxf: 1
+      room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (LIVING ROOM))'
+    - '1 x dxf: travel distance: no exterior door (a door with a room on one side only) found on the plan (e.g. DX_FLOOR_GF.dxf: travel distance:
+      no exterior door (a door with a room on one side only) found on the plan)'
+- slug: libredwg-example-2000
+  title: 'LibreDWG test data: example_2000.dxf'
+  url: https://github.com/LibreDWG/libredwg/blob/b8ef800c305e69385d8e87b25d2b735e887c8177/test/test-data/example_2000.dxf
+  licence: GPL-3.0
+  licence_url: https://github.com/LibreDWG/libredwg/blob/b8ef800c305e69385d8e87b25d2b735e887c8177/COPYING
+  files:
+  - name: example_2000.dxf
+    sha256: 43284cbdddbeb8720a4895be73f493fc94e670909e76f5871fdcd87b25170597
+    format: dxf
+    size_mb: 1.39
+  units: millimetres
+  building_type: not a building (CAD feature test)
+  notes: 'Control: no walls, Esperanto text, REGION/SPLINE/ATTDEF entities.'
+  processed:
+    seconds: 0.5
+    elements: {}
+    notes: []
+    sheets: 3
+    facts: 0
+    skipped: []
+- slug: ezdxf-houses-of-parliament
+  title: 'ezdxf test: Houses of Parliament georeferenced footprint (DXF R2018)'
+  url: https://github.com/mozman/ezdxf/blob/a5a2eb642f8b2bac31414f9a06bed398d276883b/tests/test_01_dxf_entities/houses_of_parliament_georeferenced.dxf
+  licence: MIT
+  licence_url: https://github.com/mozman/ezdxf/blob/a5a2eb642f8b2bac31414f9a06bed398d276883b/LICENSE
+  files:
+  - name: houses_of_parliament_georeferenced.dxf
+    sha256: a892e62134665452eb6bc9dee23ff8f8c68977e866ca67594acd0b2bfd47b109
+    format: dxf
+    size_mb: 0.23
+  units: inches
+  building_type: footprint only (parliament building)
+  notes: 'Unusual: a single LWPOLYLINE with GEODATA, no layers beyond 0.'
+  processed:
+    seconds: 0.4
+    elements: {}
+    notes: []
+    sheets: 1
+    facts: 0
+    skipped: []
+- slug: wikihouse-pionierswoning
+  title: WikiHouse Pionierswoning, Almere (CNC-parts DXF + architectural PDF)
+  url: https://github.com/VincentMuller/Pionierswoning-WikiHouse/blob/06abbbee193a1881938d27e9bc475169ad0d50dd/README.md
+  licence: CC BY-SA 4.0
+  licence_url: https://github.com/VincentMuller/Pionierswoning-WikiHouse/blob/06abbbee193a1881938d27e9bc475169ad0d50dd/README.md
+  files:
+  - name: Whalm-Pio_v2_CNC-parts.dxf
+    sha256: 4905170aa3b14a9510186634a208a1b50fb186f0a5e1834332f2148cb16c234d
+    format: dxf
+    size_mb: 1.86
+  - name: WHALM-Pio_bouwkundig_Dutch.pdf
+    sha256: 9210c85eb24d92748cb99e00490d0238c4d761821ee3e48a5ac39637845708f4
+    format: pdf
+    size_mb: 4.82
+  units: millimetres
+  building_type: house (timber WikiHouse)
+  notes: CC BY-SA 4.0 stated in the README; DXF is CNC cutting parts, not plans.
+  processed:
+    seconds: 3.3
+    elements: {}
+    notes: []
+    sheets: 46
+    facts: 0
+    skipped:
+    - '1 x dxf: 1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (bedroom windows) (e.g. Whalm-Pio_v2_CNC-parts.dxf:
+      1 room-name text(s) not inside a wall-enclosed area or room boundary: not read as rooms (bedroom windows))'
+- slug: commons-farmhouse-drawing-set
+  title: Farmhouse Drawing Set V-001 (25 sheets)
+  url: https://commons.wikimedia.org/wiki/File:Farmhouse%20Drawing%20Set%20V-001.pdf
+  licence: CC BY-SA 3.0
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/
+  files:
+  - name: Farmhouse Drawing Set V-001.pdf
+    sha256: 5d3c5552f4fc5710e1bef0b92c6c5f35f460da47b22e7a80e9e4183b56dbfdbf
+    format: pdf
+    size_mb: 2.66
+  building_type: house (farmhouse)
+  notes: Vector drawing set with sheet index, plans, schedules; by Amatect.
+  processed:
+    seconds: 24.1
+    elements: {}
+    notes: []
+    sheets: 25
+    facts: 0
+    skipped:
+    - '3 x drawings: riser height: no stair named on the sheet to attach it to (e.g. 3RISERS @7.5" (Farmhouse Drawing Set V-001.pdf))'
+- slug: commons-level-11-floor-plan
+  title: LEVEL 11 FLOOR PLAN (museum/office floor)
+  url: https://commons.wikimedia.org/wiki/File:LEVEL%2011%20FLOOR%20PLAN.pdf
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: LEVEL 11 FLOOR PLAN.pdf
+    sha256: 5e6ae2e8ad4f7d3301e52a7f6b6405a13a3221eaca0d6fadf053a2a0cb100709
+    format: pdf
+    size_mb: 0.39
+  building_type: office / public building floor
+  notes: Single vector sheet with room labels; by Vivianwwj.
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 1
+    facts: 0
+    skipped: []
+- slug: commons-747-villa-floor-plan
+  title: 747 villa floor plan
+  url: https://commons.wikimedia.org/wiki/File:747%20villa%20Floor%20plan.pdf
+  licence: CC BY-SA 3.0
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/
+  files:
+  - name: 747 villa Floor plan.pdf
+    sha256: 25d13edf0ec6afc4f4285265ba888897bbf7439d2139bd4118b08decfb3d5551
+    format: pdf
+    size_mb: 0.85
+  building_type: house (villa)
+  notes: Single sheet, room names only.
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 1
+    facts: 0
+    skipped: []
+- slug: commons-padiglione-del-soggiorno
+  title: Padiglione del Soggiorno (plans and elevation, 1:200)
+  url: https://commons.wikimedia.org/wiki/File:Pianta%20Soggiorno%20Padiglione%20del%20Soggiorno.pdf
+  licence: CC BY-SA 3.0
+  licence_url: https://creativecommons.org/licenses/by-sa/3.0/
+  files:
+  - name: Pianta Soggiorno Padiglione del Soggiorno.pdf
+    sha256: 36fec5539085f42884ec93d3c49fc80df24b468838a2a94f26fcb1aa4a073db3
+    format: pdf
+    size_mb: 2.0
+  - name: Pianta Servizi Padiglione del Soggiorno.pdf
+    sha256: 4a13d63ad1780fce48ca48e74c3fdb2ba9dd2ede4f8065b084669f95275f180a
+    format: pdf
+    size_mb: 0.81
+  - name: Pianta Copertura Padiglione del Soggiorno.pdf
+    sha256: 775404eeb8121ef8650516a2c0c3e647c42831694050fff9c677f43728434ea8
+    format: pdf
+    size_mb: 1.49
+  - name: Prospetto Padiglione del Soggiorno.pdf
+    sha256: 743e0ee7a5baf4e6bd55f06e5acd5c0fa683e2b1cd2c94e7aa5c92ebee877b40
+    format: pdf
+    size_mb: 0.49
+  building_type: pavilion (exhibition)
+  notes: Vector sheets with almost no text (scale label only); by Elisa Invernizzi.
+  processed:
+    seconds: 0.2
+    elements: {}
+    notes: []
+    sheets: 4
+    facts: 0
+    skipped:
+    - '2 x drawings: low-confidence OCR (< 0.85): not read for facts (e.g. 2 of 4 tokens (Pianta Servizi Padiglione del Soggiorno.pdf))'
+- slug: commons-usda-4-bedroom-farmhouse
+  title: 'USDA cooperative farm building plan: 4-bedroom farmhouse with basement (1964)'
+  url: https://commons.wikimedia.org/wiki/File:4-bedroom_farmhouse_with_basement_(IA_4bedroomfarmhous973unit).pdf
+  licence: Public domain (US federal government work)
+  licence_url: https://commons.wikimedia.org/wiki/File:4-bedroom_farmhouse_with_basement_(IA_4bedroomfarmhous973unit).pdf
+  files:
+  - name: 4-bedroom farmhouse with basement (IA 4bedroomfarmhous973unit).pdf
+    sha256: 56ef5239100355389073a22e1bf8bc6bc1e1b5398184844117969ea8cb622f4d
+    format: pdf
+    size_mb: 0.32
+  building_type: house (farmhouse)
+  notes: Internet Archive scan with an OCR text layer on 2 of 4 pages; imperial.
+  processed:
+    seconds: 0.3
+    elements: {}
+    notes: []
+    sheets: 4
+    facts: 0
+    skipped:
+    - '2 x drawings: page has no text layer and OCR found no text (e.g.  (4-bedroom farmhouse with basement (IA 4bedroomfarmhous973unit).pdf))'
+- slug: commons-plantegning-1948
+  title: Plantegning innendørs (Norwegian interior floor plan, 1948)
+  url: https://commons.wikimedia.org/wiki/File:Plantegning%20innend%C3%B8rs.pdf
+  licence: CC BY-SA 4.0
+  licence_url: https://creativecommons.org/licenses/by-sa/4.0/
+  files:
+  - name: Plantegning innendørs.pdf
+    sha256: 7dfb8fafa33a29f8bf249af315cfce396c08f230719de92d3a642a6d795023d5
+    format: pdf
+    size_mb: 2.16
+  building_type: house (interior plan)
+  notes: Page 1 has no text layer (OCR path), page 2 has text.
+  processed:
+    seconds: 0.5
+    elements: {}
+    notes: []
+    sheets: 2
+    facts: 0
+    skipped:
+    - '1 x drawings: low-confidence OCR (< 0.85): not read for facts (e.g. 14 of 25 tokens (Plantegning innendørs.pdf))'

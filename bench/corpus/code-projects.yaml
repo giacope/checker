@@ -1,0 +1,1013 @@
+# Open-source code repositories pinned to commits, for stress-testing repository compliance scans.
+# files / size_mb: working tree (excluding .git) of `git clone --depth 1 --filter=blob:limit=5m` at `commit`, measured 2026-11-16.
+# licence: SPDX id of the repository LICENSE file. commit: default-branch HEAD verified with `git ls-remote`.
+- slug: "digininja-dvwa"
+  url: "https://github.com/digininja/DVWA"
+  commit: "a1978a2fed195acd093010af6395f86a281537ca"
+  licence: "GPL-3.0"
+  languages: ["php", "javascript"]
+  frameworks: ["none"]
+  kind: vulnerable
+  files: 252
+  size_mb: 1.71
+  notes: "Damn Vulnerable Web Application; plain PHP + MySQL, SQLi/XSS/CSRF/file-upload labs; licence file is COPYING.txt"
+- slug: "webgoat-webgoat"
+  url: "https://github.com/WebGoat/WebGoat"
+  commit: "4e98f1cbbf896fdd06edcc9930515ebe0ade7c69"
+  licence: "GPL-2.0-or-later"
+  languages: ["java", "javascript"]
+  frameworks: ["spring-boot"]
+  kind: vulnerable
+  files: 1391
+  size_mb: 20.62
+  notes: "OWASP WebGoat lessons; LICENSE.txt carries SPDX-License-Identifier GPL-2.0-or-later (GitHub reports NOASSERTION)"
+- slug: "owasp-crapi"
+  url: "https://github.com/OWASP/crAPI"
+  commit: "b5fc307f3e5f875809b095b771108ef342a33724"
+  licence: "Apache-2.0"
+  languages: ["go", "java", "python", "typescript"]
+  frameworks: ["spring-boot", "django", "react", "docker-compose", "helm"]
+  kind: vulnerable
+  files: 1062
+  size_mb: 8.44
+  notes: "Completely Ridiculous API: microservices monorepo (identity Java, community Go, workshop Django, React UI) with OWASP API Top 10 flaws; licence file LICENSE.md"
+- slug: "erev0s-vampi"
+  url: "https://github.com/erev0s/VAmPI"
+  commit: "f16052dce83f05847133ec98f01c5193a41de7d8"
+  licence: "MIT"
+  languages: ["python"]
+  frameworks: ["flask", "openapi"]
+  kind: vulnerable
+  files: 22
+  size_mb: 0.07
+  notes: "Vulnerable REST API (BOLA, mass assignment, SQLi, JWT issues) with an OpenAPI spec; very small"
+- slug: "dolevf-damn-vulnerable-graphql-application"
+  url: "https://github.com/dolevf/Damn-Vulnerable-GraphQL-Application"
+  commit: "a961308c02d1fb462b192681c336b0739e432da7"
+  licence: "MIT"
+  languages: ["python", "javascript"]
+  frameworks: ["flask", "graphene", "graphql"]
+  kind: vulnerable
+  files: 129
+  size_mb: 8.03
+  notes: "DVGA: GraphQL API with injection, DoS, auth bypass and information-disclosure scenarios"
+- slug: "appsecco-dvna"
+  url: "https://github.com/appsecco/dvna"
+  commit: "9ba473add536f66ac9007966acb2a775dd31277a"
+  licence: "MIT"
+  languages: ["javascript"]
+  frameworks: ["express", "sequelize", "ejs"]
+  kind: vulnerable
+  files: 151
+  size_mb: 3.81
+  notes: "Damn Vulnerable NodeJS Application covering the OWASP Top 10"
+- slug: "webpwnized-mutillidae"
+  url: "https://github.com/webpwnized/mutillidae"
+  commit: "126a1fdb4ff977f87e980d018f0def477afc3d5d"
+  licence: "GPL-3.0"
+  languages: ["php", "javascript"]
+  frameworks: ["none", "docker"]
+  kind: vulnerable
+  files: 417
+  size_mb: 4.07
+  notes: "OWASP Mutillidae II; large plain-PHP vulnerable app with many .inc files"
+- slug: "bridgecrewio-terragoat"
+  url: "https://github.com/bridgecrewio/terragoat"
+  commit: "729f8da62c6a85ce4af5ad3d123de97776d954c4"
+  licence: "Apache-2.0"
+  languages: ["hcl"]
+  frameworks: ["terraform"]
+  kind: vulnerable
+  files: 72
+  size_mb: 1.46
+  notes: "Vulnerable-by-design Terraform for AWS, Azure and GCP (public buckets, open security groups, hard-coded secrets)"
+- slug: "payatu-diva-android"
+  url: "https://github.com/payatu/diva-android"
+  commit: "2bb63b531ba66c22563ac0911973389e2a0cb723"
+  licence: "GPL-3.0"
+  languages: ["java", "c"]
+  frameworks: ["android"]
+  kind: vulnerable
+  files: 81
+  size_mb: 0.27
+  notes: "Damn Insecure and Vulnerable App for Android (insecure storage, hard-coded secrets, input validation, JNI)"
+- slug: "dineshshetty-android-insecurebankv2"
+  url: "https://github.com/dineshshetty/Android-InsecureBankv2"
+  commit: "3c8cc3a3ce45ed56d0f58f236b541b41f992e51f"
+  licence: "MIT"
+  languages: ["java", "python"]
+  frameworks: ["android", "flask"]
+  kind: vulnerable
+  files: 177
+  size_mb: 27.96
+  notes: "Vulnerable Android banking app plus Python back-end; contains docx walkthroughs and an APK"
+- slug: "snoopysecurity-dvws-node"
+  url: "https://github.com/snoopysecurity/dvws-node"
+  commit: "4221c04f132960a0ccca4bf5aa5f3a9f53172778"
+  licence: "GPL-3.0"
+  languages: ["javascript", "typescript"]
+  frameworks: ["express", "graphql", "svelte", "soap"]
+  kind: vulnerable
+  files: 133
+  size_mb: 1.06
+  notes: "Damn Vulnerable Web Services: REST, SOAP, GraphQL and XML-RPC vulnerabilities"
+- slug: "stamparm-dsvw"
+  url: "https://github.com/stamparm/DSVW"
+  commit: "9ca3c9acf3defa0a6148d40e5f5cebeb5dcbb908"
+  licence: "Unlicense"
+  languages: ["python"]
+  frameworks: ["none"]
+  kind: vulnerable
+  files: 12
+  size_mb: 0.08
+  notes: "Damn Small Vulnerable Web: a single ~100-line Python file with many vulnerability classes"
+- slug: "nvisium-django.nv"
+  url: "https://github.com/nVisium/django.nV"
+  commit: "a48901f106da4888417339b7b44b8ed56b64c63f"
+  licence: "GPL-2.0"
+  languages: ["python", "javascript"]
+  frameworks: ["django"]
+  kind: vulnerable
+  files: 190
+  size_mb: 2.65
+  notes: "Intentionally vulnerable Django todo app; repository is archived (licence file LICENSE.md)"
+- slug: "cr0hn-vulnerable-node"
+  url: "https://github.com/cr0hn/vulnerable-node"
+  commit: "d68f2a3c9277ece2c2feb9976052033bdecd7fbe"
+  licence: "BSD-3-Clause"
+  languages: ["javascript"]
+  frameworks: ["express", "ejs", "docker-compose"]
+  kind: vulnerable
+  files: 136
+  size_mb: 1.58
+  notes: "Vulnerable Node.js shop; LICENSE is the 3-clause BSD text (GitHub reports NOASSERTION because of the custom header)"
+- slug: "appsecco-dvcsharp-api"
+  url: "https://github.com/appsecco/dvcsharp-api"
+  commit: "76c1de3c9d8d9c2e8ec0b50abe3b198a4330d7fc"
+  licence: "MIT"
+  languages: ["csharp"]
+  frameworks: ["aspnet-core", "entity-framework"]
+  kind: vulnerable
+  files: 53
+  size_mb: 0.09
+  notes: "Damn Vulnerable C# API (.NET Core); licence file is MIT-LICENSE"
+- slug: "oversecured-ovaa"
+  url: "https://github.com/oversecured/ovaa"
+  commit: "e5d5a8baef62117d93b1314c1f6b30aefd38bd68"
+  licence: "BSD-2-Clause"
+  languages: ["java"]
+  frameworks: ["android"]
+  kind: vulnerable
+  files: 57
+  size_mb: 0.18
+  notes: "Oversecured Vulnerable Android App: intent redirection, insecure WebView, path traversal"
+- slug: "rewanthtammana-damn-vulnerable-bank"
+  url: "https://github.com/rewanthtammana/Damn-Vulnerable-Bank"
+  commit: "5136c3484c704dc74e8837e324ac24b1452a1e31"
+  licence: "MIT"
+  languages: ["java", "javascript"]
+  frameworks: ["android", "express"]
+  kind: vulnerable
+  files: 253
+  size_mb: 17.44
+  notes: "Vulnerable Android banking app with Node/Express back-end; anti-debug and root-detection challenges"
+- slug: "anxolerd-dvpwa"
+  url: "https://github.com/anxolerd/dvpwa"
+  commit: "4a8f4a43fafcc1b304f1b97d0f0a8dea755a7756"
+  licence: "MIT"
+  languages: ["python"]
+  frameworks: ["aiohttp", "jinja2"]
+  kind: vulnerable
+  files: 58
+  size_mb: 1.7
+  notes: "Damn Vulnerable Python Web App (aiohttp + PostgreSQL + Redis)"
+- slug: "snyk-labs-nodejs-goof"
+  url: "https://github.com/snyk-labs/nodejs-goof"
+  commit: "add14ba59e98240d9e00a235dd7d42cd61ae9912"
+  licence: "Apache-2.0"
+  languages: ["javascript"]
+  frameworks: ["express", "mongoose"]
+  kind: vulnerable
+  files: 60
+  size_mb: 1.44
+  notes: "Snyk Goof todo app with vulnerable npm dependencies and code-level flaws"
+- slug: "owasp-serverless-goat"
+  url: "https://github.com/OWASP/Serverless-Goat"
+  commit: "39410bc3df8963d6544f98b50e8738ce3de1a188"
+  licence: "AGPL-3.0"
+  languages: ["javascript"]
+  frameworks: ["aws-lambda", "aws-sam"]
+  kind: vulnerable
+  files: 71
+  size_mb: 0.9
+  notes: "Vulnerable serverless (AWS Lambda/SAM) app; mostly a SAM template and word-list data"
+- slug: "owasp-dvsa"
+  url: "https://github.com/OWASP/DVSA"
+  commit: "c04e0a536ac54db8f732144be92b5f208169f8c4"
+  licence: "GPL-3.0"
+  languages: ["javascript", "python"]
+  frameworks: ["aws-lambda", "serverless-framework", "react"]
+  kind: vulnerable
+  files: 171
+  size_mb: 14.86
+  notes: "Damn Vulnerable Serverless Application: e-commerce on AWS Lambda, API Gateway, DynamoDB"
+- slug: "nccgroup-sadcloud"
+  url: "https://github.com/nccgroup/sadcloud"
+  commit: "f538652921a7f3e8e25c0afaecad2d4382f8b21e"
+  licence: "AGPL-3.0"
+  languages: ["hcl"]
+  frameworks: ["terraform"]
+  kind: vulnerable
+  files: 82
+  size_mb: 0.1
+  notes: "Terraform that deploys deliberately insecure AWS infrastructure; includes test PEM keys"
+- slug: "rhinosecuritylabs-cloudgoat"
+  url: "https://github.com/RhinoSecurityLabs/cloudgoat"
+  commit: "63c65bd26edc6919499adfa20b176c450e35c33c"
+  licence: "BSD-3-Clause"
+  languages: ["hcl", "python"]
+  frameworks: ["terraform"]
+  kind: vulnerable
+  files: 1954
+  size_mb: 9.27
+  notes: "Vulnerable-by-design AWS scenarios (Terraform) with a Python CLI"
+- slug: "owasp-mastg-hacking-playground"
+  url: "https://github.com/OWASP/MASTG-Hacking-Playground"
+  commit: "db219a1011e6735cf0c6c08ba929a27ef40e1873"
+  licence: "GPL-3.0"
+  languages: ["java", "kotlin", "swift", "c", "javascript"]
+  frameworks: ["android", "ios"]
+  kind: vulnerable
+  files: 410
+  size_mb: 49.46
+  notes: "OWASP MASTG mobile security playground: vulnerable Android and iOS (Swift) apps"
+- slug: "optiv-insecureshop"
+  url: "https://github.com/optiv/InsecureShop"
+  commit: "b7db35458d67c0c5dde19c77c3cbce80adc2ab13"
+  licence: "MIT"
+  languages: ["kotlin"]
+  frameworks: ["android"]
+  kind: vulnerable
+  files: 91
+  size_mb: 0.86
+  notes: "Intentionally vulnerable Android shop app in Kotlin; repository is archived"
+- slug: "cookiecutter-cookiecutter-django"
+  url: "https://github.com/cookiecutter/cookiecutter-django"
+  commit: "1150d217fbfea84032a53d4067ea121e55127e38"
+  licence: "BSD-3-Clause"
+  languages: ["python", "html"]
+  frameworks: ["django", "celery", "docker-compose", "cookiecutter"]
+  kind: template
+  files: 283
+  size_mb: 3.01
+  notes: "Production-ready Django project generator (Jinja-templated paths, Docker, CI configs)"
+- slug: "healthchecks-healthchecks"
+  url: "https://github.com/healthchecks/healthchecks"
+  commit: "6c05a7adf266efb70f9517727bef9ea8b2bbf52f"
+  licence: "BSD-3-Clause"
+  languages: ["python", "javascript"]
+  frameworks: ["django"]
+  kind: production-app
+  files: 1275
+  size_mb: 9.47
+  notes: "Cron/heartbeat monitoring service (healthchecks.io); mature Django app with many integrations"
+- slug: "sissbruecker-linkding"
+  url: "https://github.com/sissbruecker/linkding"
+  commit: "27b7303baf41bb28babc610ac8eaa486e1ddfab5"
+  licence: "MIT"
+  languages: ["python", "javascript"]
+  frameworks: ["django"]
+  kind: production-app
+  files: 442
+  size_mb: 5.14
+  notes: "Self-hosted bookmark manager; licence file LICENSE.txt"
+- slug: "miguelgrinberg-microblog"
+  url: "https://github.com/miguelgrinberg/microblog"
+  commit: "a975ef64864354867c88e0ed3a17ba7d17dca752"
+  licence: "MIT"
+  languages: ["python", "html"]
+  frameworks: ["flask", "sqlalchemy"]
+  kind: template
+  files: 73
+  size_mb: 0.1
+  notes: "Flask Mega-Tutorial reference app (auth, i18n, search, background jobs)"
+- slug: "cookiecutter-flask-cookiecutter-flask"
+  url: "https://github.com/cookiecutter-flask/cookiecutter-flask"
+  commit: "e5666c23a633b5b6fcb0dc2cfda2441d7f885727"
+  licence: "MIT"
+  languages: ["python", "javascript"]
+  frameworks: ["flask", "cookiecutter", "webpack"]
+  kind: template
+  files: 88
+  size_mb: 0.15
+  notes: "Flask project generator with Bootstrap, SQLAlchemy and Docker"
+- slug: "nsidnev-fastapi-realworld-example-app"
+  url: "https://github.com/nsidnev/fastapi-realworld-example-app"
+  commit: "029eb7781c60d5f563ee8990a0cbfb79b244538c"
+  licence: "MIT"
+  languages: ["python"]
+  frameworks: ["fastapi", "asyncpg"]
+  kind: template
+  files: 125
+  size_mb: 0.36
+  notes: "RealWorld (Conduit) API in FastAPI; repository is archived"
+- slug: "mealie-recipes-mealie"
+  url: "https://github.com/mealie-recipes/mealie"
+  commit: "3d639dd5ea8eca729da641f1ddb2f18500d7323a"
+  licence: "AGPL-3.0"
+  languages: ["python", "typescript", "vue"]
+  frameworks: ["fastapi", "nuxt", "sqlalchemy"]
+  kind: production-app
+  files: 1784
+  size_mb: 32.38
+  notes: "Self-hosted recipe manager: FastAPI back-end with Nuxt/Vue front-end"
+- slug: "hagopj13-node-express-boilerplate"
+  url: "https://github.com/hagopj13/node-express-boilerplate"
+  commit: "179ae84efec61b14206d0305d941daed6c6d07f9"
+  licence: "MIT"
+  languages: ["javascript"]
+  frameworks: ["express", "mongoose", "jest"]
+  kind: template
+  files: 78
+  size_mb: 0.44
+  notes: "Express + MongoDB REST API boilerplate (JWT auth, validation, Docker)"
+- slug: "brocoders-nestjs-boilerplate"
+  url: "https://github.com/brocoders/nestjs-boilerplate"
+  commit: "9620f159eefe38f47747d02ab162852367c5472c"
+  licence: "MIT"
+  languages: ["typescript"]
+  frameworks: ["nestjs", "typeorm", "mongoose"]
+  kind: template
+  files: 489
+  size_mb: 1.23
+  notes: "NestJS REST API boilerplate (auth, i18n, file upload, Docker); many .t template files"
+- slug: "vercel-nextjs-subscription-payments"
+  url: "https://github.com/vercel/nextjs-subscription-payments"
+  commit: "bdd0813206e47e6b218d42f15a7976c8a0d3c3eb"
+  licence: "MIT"
+  languages: ["typescript"]
+  frameworks: ["nextjs", "react", "supabase", "stripe"]
+  kind: template
+  files: 90
+  size_mb: 0.87
+  notes: "Next.js SaaS starter with Stripe and Supabase; repository is archived"
+- slug: "shadcn-ui-taxonomy"
+  url: "https://github.com/shadcn-ui/taxonomy"
+  commit: "298a8857c7128a0d121e7f699dfd729f23b3966d"
+  licence: "MIT"
+  languages: ["typescript"]
+  frameworks: ["nextjs", "react", "prisma", "tailwind"]
+  kind: template
+  files: 188
+  size_mb: 2.06
+  notes: "Next.js 13 App Router example app (auth, Stripe, MDX); licence file LICENSE.md"
+- slug: "umami-software-umami"
+  url: "https://github.com/umami-software/umami"
+  commit: "b18d5144dfe7342edeeca6f61d13ba3baabed9ad"
+  licence: "MIT"
+  languages: ["typescript", "javascript"]
+  frameworks: ["nextjs", "react", "prisma"]
+  kind: production-app
+  files: 2164
+  size_mb: 9.72
+  notes: "Privacy-focused web analytics (Next.js + Prisma + PostgreSQL/MySQL)"
+- slug: "gothinkster-react-redux-realworld-example-app"
+  url: "https://github.com/gothinkster/react-redux-realworld-example-app"
+  commit: "ee72eba4056392c95a27bc48d385d3f54ba38a18"
+  licence: "MIT"
+  languages: ["javascript"]
+  frameworks: ["react", "redux"]
+  kind: template
+  files: 45
+  size_mb: 0.16
+  notes: "RealWorld (Conduit) React + Redux single-page app; repository is archived"
+- slug: "saleor-saleor-dashboard"
+  url: "https://github.com/saleor/saleor-dashboard"
+  commit: "74dbb3d42d06cfbb90e2a4f50ef462e63f84f5cd"
+  licence: "BSD-3-Clause"
+  languages: ["typescript"]
+  frameworks: ["react", "apollo-graphql", "vite"]
+  kind: production-app
+  files: 6557
+  size_mb: 39.95
+  notes: "Saleor commerce admin dashboard SPA; largest JS/TS entry (~6.5k files)"
+- slug: "spring-projects-spring-petclinic"
+  url: "https://github.com/spring-projects/spring-petclinic"
+  commit: "500158f732419217507c7656904b8e6aa1bcc0d6"
+  licence: "Apache-2.0"
+  languages: ["java"]
+  frameworks: ["spring-boot", "thymeleaf", "spring-data-jpa"]
+  kind: template
+  files: 132
+  size_mb: 1.34
+  notes: "Canonical Spring Boot sample app; licence file LICENSE.txt"
+- slug: "gothinkster-spring-boot-realworld-example-app"
+  url: "https://github.com/gothinkster/spring-boot-realworld-example-app"
+  commit: "ee17e31aafe733d98c4853c8b9a74d7f2f6c924a"
+  licence: "MIT"
+  languages: ["java"]
+  frameworks: ["spring-boot", "mybatis", "graphql"]
+  kind: template
+  files: 142
+  size_mb: 0.62
+  notes: "RealWorld (Conduit) API in Spring Boot with REST and GraphQL"
+- slug: "ktorio-ktor-samples"
+  url: "https://github.com/ktorio/ktor-samples"
+  commit: "e9763d69954723094da05c3d57b34755b9a1359a"
+  licence: "Apache-2.0"
+  languages: ["kotlin"]
+  frameworks: ["ktor", "gradle"]
+  kind: template
+  files: 518
+  size_mb: 46.41
+  notes: "Official Ktor server/client samples (many small Gradle projects, includes gradle-wrapper jars)"
+- slug: "android-nowinandroid"
+  url: "https://github.com/android/nowinandroid"
+  commit: "2982e63cb691ad49cd009aab43dc206fee6699c2"
+  licence: "Apache-2.0"
+  languages: ["kotlin"]
+  frameworks: ["android", "jetpack-compose", "hilt", "gradle"]
+  kind: mobile
+  files: 714
+  size_mb: 32.76
+  notes: "Google reference Android app (multi-module Compose app)"
+- slug: "android-sunflower"
+  url: "https://github.com/android/sunflower"
+  commit: "2a357a31551bb53f3fe80382a9ce6d30bcc8b960"
+  licence: "Apache-2.0"
+  languages: ["kotlin"]
+  frameworks: ["android", "jetpack-compose", "room"]
+  kind: mobile
+  files: 162
+  size_mb: 5.33
+  notes: "Android Jetpack gardening sample; repository is archived"
+- slug: "miniflux-v2"
+  url: "https://github.com/miniflux/v2"
+  commit: "fb043227ef6ad98569c848e8cdade0d237dab87e"
+  licence: "Apache-2.0"
+  languages: ["go"]
+  frameworks: ["net/http", "postgresql"]
+  kind: production-app
+  files: 677
+  size_mb: 4.87
+  notes: "Minimalist self-hosted feed reader in Go"
+- slug: "go-shiori-shiori"
+  url: "https://github.com/go-shiori/shiori"
+  commit: "aebb4021a56048eed4c8feb325399be5f46e5470"
+  licence: "MIT"
+  languages: ["go", "typescript", "vue"]
+  frameworks: ["gin", "vue"]
+  kind: production-app
+  files: 538
+  size_mb: 11.27
+  notes: "Self-hosted bookmark manager (Go back-end, Vue front-end)"
+- slug: "knadh-listmonk"
+  url: "https://github.com/knadh/listmonk"
+  commit: "e735e0b23421192a4c1b18b6221f4708b872fcd5"
+  licence: "AGPL-3.0"
+  languages: ["go", "javascript", "vue"]
+  frameworks: ["echo", "vue", "postgresql"]
+  kind: production-app
+  files: 474
+  size_mb: 7.72
+  notes: "Self-hosted newsletter and mailing-list manager"
+- slug: "writefreely-writefreely"
+  url: "https://github.com/writefreely/writefreely"
+  commit: "b7331aaa0901fdc1a63cbb9c214b3f3b29a59718"
+  licence: "AGPL-3.0"
+  languages: ["go", "javascript"]
+  frameworks: ["gorilla-mux", "activitypub"]
+  kind: production-app
+  files: 525
+  size_mb: 7.55
+  notes: "Federated blogging platform (ActivityPub)"
+- slug: "junegunn-fzf"
+  url: "https://github.com/junegunn/fzf"
+  commit: "4499615fe9c06c0651aa5650e5d0d0a5face99a8"
+  licence: "MIT"
+  languages: ["go", "shell", "ruby"]
+  frameworks: ["none"]
+  kind: cli
+  files: 164
+  size_mb: 1.81
+  notes: "Command-line fuzzy finder"
+- slug: "charmbracelet-glow"
+  url: "https://github.com/charmbracelet/glow"
+  commit: "8b0600fa445535b9c53194c0d4f7fe3cf700ef3e"
+  licence: "MIT"
+  languages: ["go"]
+  frameworks: ["cobra", "bubbletea"]
+  kind: cli
+  files: 54
+  size_mb: 0.63
+  notes: "Terminal Markdown reader"
+- slug: "codetriage-codetriage"
+  url: "https://github.com/codetriage/CodeTriage"
+  commit: "d1868f8634e97a111a7fca49d58cc776d206007e"
+  licence: "MIT"
+  languages: ["ruby", "javascript"]
+  frameworks: ["rails", "sidekiq"]
+  kind: production-app
+  files: 477
+  size_mb: 9.14
+  notes: "Rails app that emails open-source issues to volunteers; licence file LICENSE.txt"
+- slug: "rubyforgood-human-essentials"
+  url: "https://github.com/rubyforgood/human-essentials"
+  commit: "9ea9c849e185a52d3e38850ff2bdd5de3ef79b7b"
+  licence: "MIT"
+  languages: ["ruby", "javascript"]
+  frameworks: ["rails", "devise", "hotwire"]
+  kind: production-app
+  files: 2162
+  size_mb: 46.59
+  notes: "Inventory system for diaper banks (Ruby for Good); large Rails app"
+- slug: "bookstackapp-bookstack"
+  url: "https://github.com/BookStackApp/BookStack"
+  commit: "0b6b667e0d84ebb3406de6de9fadbf4230c29c0b"
+  licence: "MIT"
+  languages: ["php", "typescript"]
+  frameworks: ["laravel"]
+  kind: production-app
+  files: 2623
+  size_mb: 15.56
+  notes: "Self-hosted wiki/documentation platform built on Laravel"
+- slug: "kanboard-kanboard"
+  url: "https://github.com/kanboard/kanboard"
+  commit: "51d6e6f72d3f967ecbcbfff8ed38012613bb96ea"
+  licence: "MIT"
+  languages: ["php", "javascript"]
+  frameworks: ["none"]
+  kind: production-app
+  files: 2323
+  size_mb: 16.3
+  notes: "Kanban project-management app; framework-less PHP with plugin system"
+- slug: "shlinkio-shlink"
+  url: "https://github.com/shlinkio/shlink"
+  commit: "2aae1740043c3ab9c53f76467273883ac1a32be8"
+  licence: "MIT"
+  languages: ["php"]
+  frameworks: ["mezzio", "doctrine"]
+  kind: production-app
+  files: 788
+  size_mb: 2.13
+  notes: "Self-hosted URL shortener (PHP 8, Mezzio/Laminas, Doctrine)"
+- slug: "symfony-demo"
+  url: "https://github.com/symfony/demo"
+  commit: "f42980c690b4bf335fa41bbafdb075bb67b719c2"
+  licence: "MIT"
+  languages: ["php", "javascript"]
+  frameworks: ["symfony", "doctrine", "twig"]
+  kind: template
+  files: 244
+  size_mb: 1.83
+  notes: "Official Symfony demo blog application"
+- slug: "johnbillion-query-monitor"
+  url: "https://github.com/johnbillion/query-monitor"
+  commit: "ad06646acc42c29a30b656d3abc8500dfd489121"
+  licence: "GPL-2.0"
+  languages: ["php", "typescript"]
+  frameworks: ["wordpress-plugin", "preact"]
+  kind: production-app
+  files: 430
+  size_mb: 6.03
+  notes: "Query Monitor developer-tools WordPress plugin"
+- slug: "wordpress-health-check"
+  url: "https://github.com/WordPress/health-check"
+  commit: "3b0e2edb81145699e1ffb2a4721ebdfde93de87d"
+  licence: "GPL-2.0"
+  languages: ["php", "javascript"]
+  frameworks: ["wordpress-plugin"]
+  kind: production-app
+  files: 91
+  size_mb: 1.53
+  notes: "Official WordPress Health Check & Troubleshooting plugin"
+- slug: "dotnet-architecture-eshoponweb"
+  url: "https://github.com/dotnet-architecture/eShopOnWeb"
+  commit: "4da8212117e87d808d4bbc7da6286fd2147ce606"
+  licence: "MIT"
+  languages: ["csharp"]
+  frameworks: ["aspnet-core", "blazor", "entity-framework"]
+  kind: template
+  files: 459
+  size_mb: 4.51
+  notes: "Microsoft reference ASP.NET Core monolith (MVC + Blazor admin); repository is archived"
+- slug: "jasontaylordev-cleanarchitecture"
+  url: "https://github.com/jasontaylordev/CleanArchitecture"
+  commit: "516acf4e8faf09eb6e2858decfd729aa1452b21d"
+  licence: "MIT"
+  languages: ["csharp", "typescript"]
+  frameworks: ["aspnet-core", "entity-framework", "angular", "react"]
+  kind: template
+  files: 257
+  size_mb: 0.71
+  notes: "Clean Architecture solution template for ASP.NET Core (dotnet new template)"
+- slug: "dani-garcia-vaultwarden"
+  url: "https://github.com/dani-garcia/vaultwarden"
+  commit: "4051a4d3a64d8d9f6e019c8c1646fbed54384d15"
+  licence: "AGPL-3.0"
+  languages: ["rust"]
+  frameworks: ["rocket", "diesel"]
+  kind: production-app
+  files: 616
+  size_mb: 3.31
+  notes: "Bitwarden-compatible password-manager server (Rust web service); licence file LICENSE.txt"
+- slug: "lldap-lldap"
+  url: "https://github.com/lldap/lldap"
+  commit: "99c510a7a603df1cdaca00a9ffff95ec73b296eb"
+  licence: "GPL-3.0"
+  languages: ["rust"]
+  frameworks: ["actix-web", "juniper-graphql", "yew"]
+  kind: production-app
+  files: 379
+  size_mb: 2.73
+  notes: "Lightweight LDAP server with web admin UI (Rust back-end and Wasm front-end)"
+- slug: "burntsushi-ripgrep"
+  url: "https://github.com/BurntSushi/ripgrep"
+  commit: "178cc027e283fd965cb72d0a7395b219eada170c"
+  licence: "Unlicense OR MIT"
+  languages: ["rust"]
+  frameworks: ["clap"]
+  kind: cli
+  files: 225
+  size_mb: 3.09
+  notes: "Recursive regex search CLI; dual Unlicense/MIT (COPYING, UNLICENSE, LICENSE-MIT)"
+- slug: "sharkdp-fd"
+  url: "https://github.com/sharkdp/fd"
+  commit: "6cf330283cfdcd1b8a6100beec7375bbb58975a3"
+  licence: "MIT OR Apache-2.0"
+  languages: ["rust"]
+  frameworks: ["clap"]
+  kind: cli
+  files: 61
+  size_mb: 0.58
+  notes: "Fast alternative to find; dual MIT/Apache-2.0 (LICENSE-MIT, LICENSE-APACHE)"
+- slug: "plausible-analytics"
+  url: "https://github.com/plausible/analytics"
+  commit: "aa48a053e7387acde2d2d58aba358e54031250fd"
+  licence: "AGPL-3.0"
+  languages: ["elixir", "typescript"]
+  frameworks: ["phoenix", "ecto", "react"]
+  kind: production-app
+  files: 2153
+  size_mb: 21.41
+  notes: "Privacy-friendly web analytics (Phoenix + ClickHouse + PostgreSQL); licence file LICENSE.md"
+- slug: "fly-apps-live_beats"
+  url: "https://github.com/fly-apps/live_beats"
+  commit: "ac9780472e7019af274110a1cf71250a8d40c986"
+  licence: "MIT"
+  languages: ["elixir", "javascript"]
+  frameworks: ["phoenix", "liveview"]
+  kind: template
+  files: 104
+  size_mb: 0.33
+  notes: "Phoenix LiveView showcase app (social music listening); licence file LICENSE.md"
+- slug: "phoenixframework-phoenix_live_dashboard"
+  url: "https://github.com/phoenixframework/phoenix_live_dashboard"
+  commit: "83a0bd137ed3e4c66b8037b140a2744803a48e13"
+  licence: "MIT"
+  languages: ["elixir"]
+  frameworks: ["phoenix", "liveview"]
+  kind: library
+  files: 134
+  size_mb: 2.01
+  notes: "Phoenix LiveView real-time dashboard library; licence file LICENSE.md"
+- slug: "ranchero-software-netnewswire"
+  url: "https://github.com/Ranchero-Software/NetNewsWire"
+  commit: "a5cec78e2aaca287144bcd45fa6ff2f1141518e7"
+  licence: "MIT"
+  languages: ["swift"]
+  frameworks: ["uikit", "appkit", "xcode"]
+  kind: mobile
+  files: 1378
+  size_mb: 47.1
+  notes: "RSS reader for iOS and macOS (Xcode project, multiple frameworks)"
+- slug: "artsy-eidolon"
+  url: "https://github.com/artsy/eidolon"
+  commit: "44486ed9149f16b3eb3a5e687f99ae078309f4fe"
+  licence: "MIT"
+  languages: ["swift"]
+  frameworks: ["uikit", "rxswift", "cocoapods"]
+  kind: mobile
+  files: 328
+  size_mb: 25.4
+  notes: "Artsy auction kiosk iOS app; repository is archived"
+- slug: "troglobit-uftpd"
+  url: "https://github.com/troglobit/uftpd"
+  commit: "54e08e73f17b4665413cce4388d37440d6d87797"
+  licence: "ISC"
+  languages: ["c"]
+  frameworks: ["autotools", "libuev"]
+  kind: production-app
+  files: 60
+  size_mb: 0.18
+  notes: "Tiny FTP/TFTP server daemon in C"
+- slug: "yhirose-cpp-httplib"
+  url: "https://github.com/yhirose/cpp-httplib"
+  commit: "546e821c65a8bd8426c351d7e3171a99231b6456"
+  licence: "MIT"
+  languages: ["cpp"]
+  frameworks: ["none"]
+  kind: library
+  files: 359
+  size_mb: 10.52
+  notes: "Header-only C++ HTTP/HTTPS server and client library"
+- slug: "troglobit-inadyn"
+  url: "https://github.com/troglobit/inadyn"
+  commit: "98e43d7db4b9c8e0989a790dda435075f4f78770"
+  licence: "GPL-2.0"
+  languages: ["c"]
+  frameworks: ["autotools"]
+  kind: production-app
+  files: 135
+  size_mb: 0.53
+  notes: "Dynamic DNS client daemon in C; repository is archived; licence file COPYING"
+- slug: "softwaremill-bootzooka"
+  url: "https://github.com/softwaremill/bootzooka"
+  commit: "c8a7e3b6717bc00757f7af5417e62c50b402eb06"
+  licence: "Apache-2.0"
+  languages: ["scala", "typescript"]
+  frameworks: ["tapir", "doobie", "react"]
+  kind: template
+  files: 203
+  size_mb: 0.94
+  notes: "Scala 3 + React web-app starter (Tapir, Doobie, PostgreSQL)"
+- slug: "seancorfield-usermanager-example"
+  url: "https://github.com/seancorfield/usermanager-example"
+  commit: "3554bd6f4e26c9fef0dfd8835cd52c1f95bc3c48"
+  licence: "Apache-2.0"
+  languages: ["clojure"]
+  frameworks: ["ring", "compojure", "component"]
+  kind: template
+  files: 30
+  size_mb: 0.07
+  notes: "Small Clojure web app example (Ring, Component, Selmer); LICENSE is Apache-2.0 text with a custom header (GitHub reports NOASSERTION)"
+- slug: "terraform-aws-modules-terraform-aws-vpc"
+  url: "https://github.com/terraform-aws-modules/terraform-aws-vpc"
+  commit: "b3abd6df2ecf052451a361ed55b8f06f8742a795"
+  licence: "Apache-2.0"
+  languages: ["hcl"]
+  frameworks: ["terraform"]
+  kind: iac
+  files: 111
+  size_mb: 0.89
+  notes: "Widely used Terraform AWS VPC module with examples"
+- slug: "kubernetes-examples"
+  url: "https://github.com/kubernetes/examples"
+  commit: "22934a040acbb0c0aa103023ccbd871507bf17f6"
+  licence: "Apache-2.0"
+  languages: ["yaml", "shell", "go"]
+  frameworks: ["kubernetes"]
+  kind: iac
+  files: 457
+  size_mb: 0.93
+  notes: "Official Kubernetes example manifests"
+- slug: "prometheus-community-helm-charts"
+  url: "https://github.com/prometheus-community/helm-charts"
+  commit: "813b2263d58e2a869521ac3b058b6294aca31822"
+  licence: "Apache-2.0"
+  languages: ["yaml"]
+  frameworks: ["helm", "kubernetes"]
+  kind: iac
+  files: 1234
+  size_mb: 12.82
+  notes: "Prometheus community Helm charts (~40 charts, Go templates)"
+- slug: "geerlingguy-ansible-role-docker"
+  url: "https://github.com/geerlingguy/ansible-role-docker"
+  commit: "5daab495728fb2b6fa35613039bd26b4034cf414"
+  licence: "MIT"
+  languages: ["yaml"]
+  frameworks: ["ansible", "molecule"]
+  kind: iac
+  files: 27
+  size_mb: 0.03
+  notes: "Ansible role that installs Docker; tiny YAML-only repository"
+- slug: "geerlingguy-mac-dev-playbook"
+  url: "https://github.com/geerlingguy/mac-dev-playbook"
+  commit: "b5895f79852201de9737655f2165f660dc146556"
+  licence: "MIT"
+  languages: ["yaml"]
+  frameworks: ["ansible"]
+  kind: iac
+  files: 31
+  size_mb: 0.05
+  notes: "Ansible playbook for macOS developer setup; LICENSE is MIT text (GitHub reports NOASSERTION)"
+- slug: "jessfraz-dockerfiles"
+  url: "https://github.com/jessfraz/dockerfiles"
+  commit: "8ff991327fd1c68369c2fb576215d0eabffca0e1"
+  licence: "MIT"
+  languages: ["dockerfile", "shell"]
+  frameworks: ["docker"]
+  kind: iac
+  files: 319
+  size_mb: 5.23
+  notes: "Hundreds of Dockerfiles for desktop and server apps"
+- slug: "actions-starter-workflows"
+  url: "https://github.com/actions/starter-workflows"
+  commit: "e3c451d60f119b71caebf13c98ac45da6e15b4b7"
+  licence: "MIT"
+  languages: ["yaml", "typescript"]
+  frameworks: ["github-actions"]
+  kind: iac
+  files: 505
+  size_mb: 1.38
+  notes: "GitHub Actions starter workflow templates (CI, deployments, code scanning); LICENSE is MIT text (GitHub reports NOASSERTION)"
+- slug: "actions-checkout"
+  url: "https://github.com/actions/checkout"
+  commit: "f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a"
+  licence: "MIT"
+  languages: ["typescript"]
+  frameworks: ["github-actions", "node"]
+  kind: library
+  files: 101
+  size_mb: 1.99
+  notes: "The actions/checkout GitHub Action; heavy .github/workflows usage"
+- slug: "googlecloudplatform-microservices-demo"
+  url: "https://github.com/GoogleCloudPlatform/microservices-demo"
+  commit: "c7cb6d5bfd6ea3aed768634ebbcb98cb7a523712"
+  licence: "Apache-2.0"
+  languages: ["go", "csharp", "python", "java", "javascript"]
+  frameworks: ["kubernetes", "helm", "kustomize", "terraform", "grpc"]
+  kind: template
+  files: 364
+  size_mb: 12.15
+  notes: "Online Boutique: 11-service polyglot monorepo with Kubernetes, Helm, Kustomize and Terraform"
+- slug: "drivendata-cookiecutter-data-science"
+  url: "https://github.com/drivendata/cookiecutter-data-science"
+  commit: "17c991b0b03668f6e36503a4416202900196f501"
+  licence: "MIT"
+  languages: ["python"]
+  frameworks: ["cookiecutter", "jupyter"]
+  kind: data
+  files: 82
+  size_mb: 0.53
+  notes: "Standard data-science project template (data/, models/, notebooks/ layout)"
+- slug: "dbt-labs-jaffle_shop"
+  url: "https://github.com/dbt-labs/jaffle_shop"
+  commit: "fd7bfacae4f497ff044a6a0275268676bf1b64c3"
+  licence: "Apache-2.0"
+  languages: ["sql"]
+  frameworks: ["dbt"]
+  kind: data
+  files: 19
+  size_mb: 0.08
+  notes: "Classic dbt demo project (SQL models, seeds as CSV); repository is archived"
+- slug: "kedro-org-kedro-starters"
+  url: "https://github.com/kedro-org/kedro-starters"
+  commit: "c4707f1c1f2a1629e0366e4890b6c71182388ed8"
+  licence: "Apache-2.0"
+  languages: ["python"]
+  frameworks: ["kedro", "pyspark"]
+  kind: data
+  files: 255
+  size_mb: 4.18
+  notes: "Kedro data/ML pipeline starter templates (Spark, Databricks, Airflow variants)"
+- slug: "aws-samples-aws-serverless-shopping-cart"
+  url: "https://github.com/aws-samples/aws-serverless-shopping-cart"
+  commit: "66a863f1b7a2a7f319adddce6a55e090ce9f6734"
+  licence: "MIT-0"
+  languages: ["python", "javascript", "vue"]
+  frameworks: ["aws-lambda", "aws-sam", "vue"]
+  kind: production-app
+  files: 63
+  size_mb: 0.64
+  notes: "Serverless shopping cart on AWS SAM (Lambda, DynamoDB, Cognito, Amplify front-end); repository is archived"
+- slug: "serverless-examples"
+  url: "https://github.com/serverless/examples"
+  commit: "424fe6f7737bd45aeea4e5b40d7beda3422ffa54"
+  licence: "MIT"
+  languages: ["javascript", "python", "go", "java", "csharp"]
+  frameworks: ["serverless-framework", "aws-lambda"]
+  kind: template
+  files: 1150
+  size_mb: 6.56
+  notes: "Serverless Framework examples across runtimes and clouds; LICENSE.txt is MIT with a third-party notice (GitHub reports NOASSERTION)"
+- slug: "psf-requests"
+  url: "https://github.com/psf/requests"
+  commit: "3c7baaa05ab4aa49cc819ce3a819d260de19c157"
+  licence: "Apache-2.0"
+  languages: ["python"]
+  frameworks: ["none"]
+  kind: library
+  files: 128
+  size_mb: 4.25
+  notes: "Python HTTP library; no application code"
+- slug: "pallets-click"
+  url: "https://github.com/pallets/click"
+  commit: "e38188e9e205005d5af5f9e59df51904c984586a"
+  licence: "BSD-3-Clause"
+  languages: ["python"]
+  frameworks: ["none"]
+  kind: library
+  files: 179
+  size_mb: 1.58
+  notes: "Python CLI-building library; licence file LICENSE.txt"
+- slug: "google-gson"
+  url: "https://github.com/google/gson"
+  commit: "56283e334359a7c9b14d608a44aeceefcd7d5fc2"
+  licence: "Apache-2.0"
+  languages: ["java"]
+  frameworks: ["maven"]
+  kind: library
+  files: 317
+  size_mb: 2.29
+  notes: "Java JSON serialisation library"
+- slug: "sindresorhus-ky"
+  url: "https://github.com/sindresorhus/ky"
+  commit: "3541888878c4d303a8bc2ad61815f4e048f55a5d"
+  licence: "MIT"
+  languages: ["typescript"]
+  frameworks: ["none"]
+  kind: library
+  files: 115
+  size_mb: 1.31
+  notes: "Tiny fetch-based HTTP client for browsers and Node; licence file is lower-case `license`"
+- slug: "mmistakes-minimal-mistakes"
+  url: "https://github.com/mmistakes/minimal-mistakes"
+  commit: "411699970e028cd5545d40fbcd3e2159275f72c2"
+  licence: "MIT"
+  languages: ["html", "scss", "javascript"]
+  frameworks: ["jekyll"]
+  kind: template
+  files: 759
+  size_mb: 27.29
+  notes: "Jekyll theme with full docs site (static site; many images)"
+- slug: "jekyll-minima"
+  url: "https://github.com/jekyll/minima"
+  commit: "4de322363fca5927e6f4012cb94f6dad69ab5e6c"
+  licence: "MIT"
+  languages: ["html", "scss"]
+  frameworks: ["jekyll"]
+  kind: template
+  files: 52
+  size_mb: 0.21
+  notes: "Default Jekyll theme; small static-site codebase; licence file LICENSE.txt"
+- slug: "gitlab-pages-hugo"
+  url: "https://gitlab.com/pages/hugo"
+  commit: "cdd4719e09711935b797da89fd51998cd4f606a5"
+  licence: "MIT"
+  languages: ["toml", "html"]
+  frameworks: ["hugo", "gitlab-ci"]
+  kind: template
+  files: 41
+  size_mb: 0.62
+  notes: "GitLab Pages Hugo example site (hosted on GitLab; .gitlab-ci.yml); licence MIT per LICENSE and the GitLab API"
+- slug: "gitlab-fdroid-fdroidserver"
+  url: "https://gitlab.com/fdroid/fdroidserver"
+  commit: "fc2c86473e66a44fc641f403c338a8b2cccfad88"
+  licence: "AGPL-3.0"
+  languages: ["python"]
+  frameworks: ["none"]
+  kind: cli
+  files: 1080
+  size_mb: 15.69
+  notes: "F-Droid repository server tooling (Python CLI, hosted on GitLab); contains test APKs; licence AGPL-3.0 per LICENSE and the GitLab API"
+- slug: "t3-oss-create-t3-turbo"
+  url: "https://github.com/t3-oss/create-t3-turbo"
+  commit: "8f945b7bb3bfb3ca8358d48b1ff0214079bc11ee"
+  licence: "MIT"
+  languages: ["typescript"]
+  frameworks: ["turborepo", "nextjs", "expo", "trpc", "drizzle"]
+  kind: template
+  files: 141
+  size_mb: 1.02
+  notes: "pnpm/Turborepo monorepo (Next.js web, Expo mobile, shared packages)"
+- slug: "owasp-cheatsheetseries"
+  url: "https://github.com/OWASP/CheatSheetSeries"
+  commit: "31f5b8f5ad2995371f3a645349dd3f9e5af3a558"
+  licence: "CC-BY-SA-4.0"
+  languages: ["markdown"]
+  frameworks: ["mkdocs"]
+  kind: docs
+  files: 396
+  size_mb: 22.98
+  notes: "OWASP Cheat Sheet Series; almost entirely Markdown documentation; licence file LICENSE.md"
+- slug: "google-eng-practices"
+  url: "https://github.com/google/eng-practices"
+  commit: "3bb3ec25b3b0199f4940b1aa75f0ac5c5753301c"
+  licence: "CC-BY-3.0"
+  languages: ["markdown"]
+  frameworks: ["none"]
+  kind: docs
+  files: 17
+  size_mb: 0.09
+  notes: "Google engineering practices (code-review guide); docs only; LICENSE is CC BY 3.0 Unported (GitHub reports NOASSERTION); repository is archived"
+- slug: "github-gitignore"
+  url: "https://github.com/github/gitignore"
+  commit: "b71db924d35085e481ad7c7ad8a7435b8d8b3016"
+  licence: "CC0-1.0"
+  languages: ["none"]
+  frameworks: ["none"]
+  kind: minimal
+  files: 321
+  size_mb: 0.19
+  notes: "Collection of .gitignore templates; no executable code"
+- slug: "kelseyhightower-nocode"
+  url: "https://github.com/kelseyhightower/nocode"
+  commit: "6c073b08f7987018cbb2cb9a5747c84913b3608e"
+  licence: "Apache-2.0"
+  languages: ["none"]
+  frameworks: ["none"]
+  kind: minimal
+  files: 5
+  size_mb: 0.01
+  notes: "Joke repository with no code at all (README, LICENSE, CONTRIBUTING only)"
