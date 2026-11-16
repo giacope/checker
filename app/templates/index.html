@@ -17,7 +17,11 @@
       {% for sid, (pack, label) in standards.items() %}
       <label><input type="checkbox" name="standards" value="{{ sid }}" {% if sid in ("asvs", "nist", "gdpr") %}checked{% endif %}> {{ label }}</label>
       {% endfor %}
+      {% for r in regulations %}
+      <label><input type="checkbox" name="standards" value="reg:{{ r.id }}"> {{ r.name }} <span class="muted small">your regulation · {{ r.checks }} checks</span></label>
+      {% endfor %}
     </div>
+    <p class="small muted"><a href="/regulations">Add your own regulation</a>: upload a policy or standard and it is turned into checks.</p>
     <p class="small muted">Languages read by static analysis: Python, JavaScript/TypeScript, Ruby, Elixir. Dependencies: Gemfile.lock, mix.lock, npm, Python lock files, checked against OSV.
       {% if reader %}Model reader: <b>{{ reader }}</b> (reads any language and settles judged facts).{% else %}<b>No model reader is configured</b>, so judged facts stay open and other languages are not read.{% endif %}
       {% if not private %}Public repositories only.{% endif %}</p>

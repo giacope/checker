@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block head %}{% if st.state not in ("done", "error") %}<meta http-equiv="refresh" content="3">{% endif %}
+<style>
+.clause { display:grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap:16px; padding:14px 0; border-bottom:1px solid var(--line); }
+.clause:target { background:#f2f6ff; box-shadow: 0 0 0 8px #f2f6ff; border-radius:4px; }
+.clause .text { white-space:pre-wrap; font-size:14px; }
+.clause.info .text { color:var(--muted); }
+.chk { border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-bottom:8px; background:#fff; }
+.chk.off { opacity:.55; }
+.chk .head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.chk .head label { display:flex; gap:6px; align-items:center; margin:0; font-weight:600; }
+.chk .head select { width:auto; padding:3px 6px; font-size:13px; font-weight:700; border-color:transparent; }
+.k-computed { color:#1d4ed8; background:#e7eefc; } .k-assessed { color:#6d28d9; background:#efe9fc; } .k-attested { color:#0f766e; background:#e3f4f1; }
+.sticky { position:sticky; bottom:0; background:var(--card); border-top:1px solid var(--line); padding:12px 0; display:flex; gap:12px; align-items:center; }
+@media (max-width: 760px) { .clause { grid-template-columns: 1fr; } }
+</style>{% endblock %}
+{% block sub %}{{ req.name }}{% endblock %}
+{% block body %}
+<div class="card">
+  <p class="small"><a href="/regulations">← Regulations</a></p>
+  <h1>{{ req.name }}</h1>
+  <p class="muted">{{ "Code repositories" if req.domain == "code" else "Building drawings and models" }} · {{ req.files | join(", ") }} · added {{ req.created }}</p>
+  {% if st.state == "error" %}
+    <div class="note"><b>Compiling failed.</b> {{ st.error }}</div>
+  {% elif st.state != "done" %}
+    <p><b>{{ st.step or "Queued" }}</b>…</p>
+    <ul class="small muted">{% for m in (st.log or [])[:-1] %}<li>{{ m }}</li>{% endfor %}</ul>
+    <p class="small muted">This page refreshes itself.</p>
+  {% else %}
+    {% set on = reg.checks | selectattr("enabled") | list %}
+    <div class="grid g4">
+      <div class="stat"><div class="n">{{ reg.clauses | selectattr("requirement") | list | length }}</div><div class="muted small">requirements in {{ reg.clauses | length }} clauses</div></div>
+      {% for k in kinds %}<div class="stat"><div class="n">{{ on | selectattr("kind", "equalto", k) | list | length }}</div><div class="muted small"><span class="pill k-{{ k }}">{{ k }}</span> checks</div></div>{% endfor %}
+    </div>
+    <p class="small muted">Compiled in {{ reg.seconds }} s. Each requirement is shown next to the checks made from it. Switch off a check that misreads the clause, or change its kind: <b>computed</b> runs a rule over extracted facts, <b>assessed</b> asks the model to judge it from the {{ "code" if req.domain == "code" else "drawings and models" }} and cite what it read, <b>attested</b> asks you.
+    {% if req.domain == "code" %}<a href="/">Scan a repository</a> and tick this regulation to check against it.{% else %}<a href="/buildings">Check a building</a> and tick this regulation to check against it.{% endif %}</p>
+  {% endif %}
+</div>
+{% if reg %}
+<form method="post" action="/regulations/{{ rid }}/checks" id="checks" class="card">
+  <h2>Clauses and checks</h2>
+  {% for c in reg.clauses %}{% set ks = by_clause.get(c.id, []) %}
+  <div class="clause{% if not c.requirement %} info{% endif %}" id="{{ c.id }}">
+    <div>
+      <div class="small"><a class="sec" href="#{{ c.id }}">{{ c.ref or c.id }}</a>{% if c.title %} {{ c.title }}{% endif %}
+        <span class="muted">{% if c.file %}· {{ c.file }}{% endif %}{% if c.pages %} p. {{ c.pages[0] }}{% if c.pages[1] != c.pages[0] %}–{{ c.pages[1] }}{% endif %}{% endif %}{% if not c.requirement %} · not a requirement{% endif %}</span></div>
+      <div class="text">{{ c.text }}</div>
+    </div>
+    <div>
+      {% for k in ks %}
+      <div class="chk{% if not k.enabled %} off{% endif %}">
+        <div class="head">
+          <input type="hidden" name="seen::{{ k.id }}" value="1">
+          <label><input type="checkbox" name="enabled::{{ k.id }}" {% if k.enabled %}checked{% endif %}> On</label>
+          <select class="k-{{ k.kind }}" name="kind::{{ k.id }}" aria-label="Kind of check {{ k.id }}">
+            {% for kd in kinds %}<option value="{{ kd }}" {% if kd == k.kind %}selected{% endif %} {% if kd == "computed" and "require" not in k %}disabled{% endif %}>{{ kd }}</option>{% endfor %}
+          </select>
+          <span class="muted small kv">{{ k.id }}</span>{% if k.edited %}<span class="muted small">edited</span>{% endif %}
+        </div>
+        <div style="margin-top:6px">{{ k.summary }}</div>
+        {% if k.kind == "computed" and rules[k.id] %}<div class="small muted">Rule: {{ rules[k.id] }}</div>{% endif %}
+        {% if k.kind == "assessed" and k.search %}<div class="small muted">Looks for: {% for w in k.search %}<span class="kv">{{ w }}</span> {% endfor %}</div>{% endif %}
+        {% if k.kind == "attested" and k.question %}<div class="small muted">Asks: {{ k.question }}</div>{% endif %}
+        {% if k.why %}<div class="small muted">Why {{ k.kind }}: {{ k.why }}</div>{% endif %}
+        {% if k.demoted %}<div class="small muted">Not computed: {{ k.demoted }}</div>{% endif %}
+      </div>
+      {% else %}{% if c.requirement %}<p class="small muted">No check was made from this requirement.</p>{% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+  <div class="sticky"><button type="submit">Save checks</button><span class="small muted">Saving rebuilds the regulation's checks; scans started after it use them.</span></div>
+</form>
+{% endif %}
+{% endblock %}

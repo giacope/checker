@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ r.repo.owner }}/{{ r.repo.name }} — compliance report{% endblock %}
-{% macro code(s) %}{% if s %}<pre class="code">{% for n, t in s.lines %}<span class="row{% if n == s.line %} hl{% endif %}"><span class="ln">{{ n }}</span>{{ t }}</span>{% endfor %}</pre>{% endif %}{% endmacro %}
+{% macro code(s) %}{% if s %}<pre class="code">{% for n, t in s.lines %}<span class="row{% if s.line <= n <= (s.end or s.line) %} hl{% endif %}"><span class="ln">{{ n }}</span>{{ t }}</span>{% endfor %}</pre>{% endif %}{% endmacro %}
 {% macro pill(v) %}<span class="pill v-{{ v }}">{{ VERDICT[v] }}</span>{% endmacro %}
 {% block body %}
 <div class="card">
@@ -8,7 +8,7 @@
     <div>
       <h1><a href="{{ r.repo.url }}">{{ r.repo.owner }}/{{ r.repo.name }}</a></h1>
       <div class="muted small">Commit <a href="{{ r.repo.url }}/tree/{{ r.repo.commit }}"><span class="kv">{{ r.repo.commit | short }}</span></a>{% if r.repo.branch %} · branch {{ r.repo.branch }}{% endif %}
-        · {{ req.created }} · scanned in {{ r.seconds }} s · ASVS L{{ r.asvs_level }}</div>
+        · {{ req.created }} · scanned in {{ r.seconds }} s{% if r.standards | selectattr("id", "equalto", "asvs") | list %} · ASVS L{{ r.asvs_level }}{% endif %}</div>
       <div class="muted small">Languages: {% for k, v in r.languages.items() %}{{ k }} ({{ v }}){% if not loop.last %}, {% endif %}{% else %}none recognised{% endfor %}</div>
     </div>
     <div><a class="btn secondary" href="/scans/{{ sid }}/report.md">Download Markdown</a> <a class="btn secondary" href="/scans/{{ sid }}/report.json">JSON</a></div>
@@ -30,7 +30,7 @@
 {% for s in r.standards %}
 <div class="card" id="{{ s.id }}">
   <h2>{{ s.label }}</h2>
-  <p class="small muted">{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (licence){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
+  <p class="small muted">{% if s.id.startswith("reg:") %}Your regulation, compiled from {{ s.title }}: <a href="/regulations/{{ s.id[4:] }}">review its checks</a>{% else %}{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% endif %}{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (licence){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
   {% if s.coverage %}
     {% set c = s.coverage %}
     <p class="small">Automatically checked: <b>{{ c.checked }}</b> of the {{ c.total }} ASVS 5.0 requirements at L{{ c.level }}. The rest need review by a person or a deployed-system test:</p>
@@ -55,7 +55,8 @@
         </div>
         {% for a in f.at[:1] %}{{ code(a.snippet) }}{% endfor %}
         {% if f.deciding %}<div class="small">Sources disagree: {% for k, vs in f.deciding.items() %}<b>{{ k }}</b> is {% for d in vs %}{{ d.value }} <span class="muted">({{ d.sources[:2] | join(", ") }})</span>{% if not loop.last %} or {% endif %}{% endfor %}{% endfor %} — the verdict differs between them.</div>{% endif %}
-        {% if f.open %}<div class="small">Not decidable from the code: {% for o in f.open %}<span class="kv">{{ o }}</span> {% endfor %}— see <a href="#questions">questions</a>.</div>{% endif %}
+        {% for n in f.notes %}<div class="small"><span class="muted">{{ n.source or "reader" }}:</span> {{ n.note }}</div>{% endfor %}
+        {% if f.open %}<div class="small">Not decidable from the code: {% for o in f.open_labels %}<span class="kv">{{ o }}</span> {% endfor %}— see <a href="#questions">questions</a>.</div>{% endif %}
       </div>
       {% endfor %}
       {% if e.findings | length > 30 %}<p class="small muted">… and {{ e.findings | length - 30 }} more in the JSON and Markdown exports.</p>{% endif %}

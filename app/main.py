@@ -25,6 +25,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, Red
 from fastapi.templating import Jinja2Templates
 
 from . import buildings
+from . import regulations as regs
 from . import report as report_mod
 from .scan import STANDARDS, ScanError, evaluate, parse_repo_url, scan
 
@@ -94,7 +95,8 @@ def _run(sid: str) -> None:
         _status(d, state="running", step=msg, log=log[-30:])
     try:
         progress("Queued")
-        data = scan(req["url"], work, req.get("branch") or None, progress=progress)
+        own = [x[4:] for x in req["standards"] if x.startswith("reg:")]
+        data = scan(req["url"], work, req.get("branch") or None, progress=progress, requirements=regs.assessed(own))
         _write(d, "scan.json", data)
         _status(d, state="done", step="Done", seconds=data["seconds"])
     except ScanError as e:
@@ -125,7 +127,7 @@ def index(request: Request):
     from adapters.code_llm import provider_from_env
     p = provider_from_env()
     return templates.TemplateResponse(request, "index.html", {
-        "standards": STANDARDS, "recent": recent, "reader": f"{p[0]} {p[1]}" if p else None,
+        "standards": STANDARDS, "recent": recent, "regulations": [r for r in regs.regulations("code") if r["state"] == "done"], "reader": " ".join(x for x in p[:2] if x) if p else None,
         "private": bool(os.environ.get("GITHUB_TOKEN"))})
 
 
@@ -135,7 +137,7 @@ def create(url: str = Form(...), branch: str = Form(""), asvs_level: int = Form(
         parse_repo_url(url)
     except ScanError as e:
         raise HTTPException(400, str(e)) from e
-    standards = [s for s in standards if s in STANDARDS] or ["asvs", "nist", "gdpr"]
+    standards = [s for s in standards if s in STANDARDS or (s.startswith("reg:") and regs.ready(s[4:], "code"))] or ["asvs", "nist", "gdpr"]
     if "gdpr" in standards and "uk-gdpr" in standards:
         standards.remove("gdpr")  # UK GDPR extends the EU pack: one report section, not two
     sid = secrets.token_hex(6)
@@ -223,6 +225,78 @@ def report_json(sid: str):
     if _read(d, "status.json", {}).get("state") != "done":
         raise HTTPException(409, "The scan has not finished")
     return JSONResponse(json.loads(json.dumps(_report(d), default=str)))
+
+
+# ---------------------------------------------------------------- customer regulations
+
+def _reg(rid: str) -> Path:
+    try:
+        return regs.reg_dir(rid)
+    except regs.RegulationNotFound:
+        raise HTTPException(404, "No such regulation") from None
+
+
+@app.get("/regulations", response_class=HTMLResponse)
+def regulations_index(request: Request):
+    return templates.TemplateResponse(request, "regulations.html", {"regs": regs.regulations(), "suffixes": sorted(regs.SUFFIXES),
+                                                                    "max_mb": regs.MAX_FILE // 1_000_000})
+
+
+@app.post("/regulations")
+async def create_regulation(name: str = Form(""), domain: str = Form("code"), files: list[UploadFile] = File(...)):
+    got = []
+    for f in files:
+        if not f.filename:
+            continue
+        data = await f.read(regs.MAX_FILE + 1)
+        got.append((f.filename, data))
+    try:
+        rid = regs.create(name, domain, got)
+    except ValueError as e:
+        raise HTTPException(400, str(e)) from e
+    POOL.submit(regs.compile_regulation, rid)
+    return RedirectResponse(f"/regulations/{rid}", status_code=303)
+
+
+@app.get("/regulations/{rid}", response_class=HTMLResponse)
+def show_regulation(request: Request, rid: str):
+    d = _reg(rid)
+    req, st = _read(d, "request.json"), regs.status(d)
+    reg = regs.load_reg(rid) if st.get("state") == "done" else None
+    clauses = {c["id"]: c for c in (reg or {}).get("clauses") or []}
+    by_clause: dict[str, list] = {}
+    for k in (reg or {}).get("checks") or []:
+        by_clause.setdefault(k["clause"], []).append(k)
+    voc = regs.vocab(req["domain"]) if reg else {}
+    rules = {k["id"]: regs.rule_text(k, voc) for k in (reg or {}).get("checks") or []}
+    return templates.TemplateResponse(request, "regulation.html", {"rid": rid, "req": req, "st": st, "reg": reg, "clauses": clauses,
+                                                                   "by_clause": by_clause, "kinds": regs.KINDS, "rules": rules})
+
+
+@app.get("/regulations/{rid}/status")
+def regulation_status(rid: str):
+    return regs.status(_reg(rid))
+
+
+@app.post("/regulations/{rid}/checks")
+async def regulation_checks(request: Request, rid: str):
+    d = _reg(rid)
+    if regs.status(d).get("state") != "done":
+        raise HTTPException(409, "The regulation is still being compiled")
+    form = await request.form()
+    changes: dict[str, dict] = {}
+    for key, value in form.multi_items():
+        field, _, cid = key.partition("::")
+        if field == "seen":
+            changes.setdefault(cid, {})["enabled"] = False
+        elif field == "kind":
+            changes.setdefault(cid, {})["kind"] = str(value)
+    for key in form.keys():
+        field, _, cid = key.partition("::")
+        if field == "enabled":
+            changes.setdefault(cid, {})["enabled"] = True
+    regs.update_checks(rid, changes)
+    return RedirectResponse(f"/regulations/{rid}#checks", status_code=303)
 
 
 # ---------------------------------------------------------------- building projects

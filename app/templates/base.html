@@ -62,7 +62,7 @@ footer { color:var(--muted); font-size:12.5px; text-align:center; padding:24px; 
 {% block head %}{% endblock %}
 </head>
 <body>
-<header class="top"><a href="/">Compliance check</a><nav class="topnav"><a href="/" class="{{ 'on' if not (request.url.path.startswith('/buildings') or request.url.path.startswith('/projects')) }}">Code repositories</a><a href="/buildings" class="{{ 'on' if request.url.path.startswith('/buildings') or request.url.path.startswith('/projects') }}">Building drawings</a></nav><span class="sub">{% block sub %}OWASP ASVS 5.0 · NIST SP 800-63B-4 · GDPR — verdicts with citations, from the code{% endblock %}</span></header>
+<header class="top"><a href="/">Compliance check</a><nav class="topnav"><a href="/" class="{{ 'on' if not (request.url.path.startswith('/buildings') or request.url.path.startswith('/projects') or request.url.path.startswith('/regulations')) }}">Code repositories</a><a href="/buildings" class="{{ 'on' if request.url.path.startswith('/buildings') or request.url.path.startswith('/projects') }}">Building drawings</a><a href="/regulations" class="{{ 'on' if request.url.path.startswith('/regulations') }}">Your regulations</a></nav><span class="sub">{% block sub %}OWASP ASVS 5.0 · NIST SP 800-63B-4 · GDPR — verdicts with citations, from the code{% endblock %}</span></header>
 <main>{% block body %}{% endblock %}</main>
 <footer>Automated assessment from rule packs drafted from the published texts. Not legal advice or a certification.</footer>
 </body>

@@ -4,7 +4,7 @@
       -> adapters, one evidence document each:
            code_static (Python, JS/TS), code_ruby, code_elixir   deterministic, per language present
            deps                                                  lock files + OSV advisories
-           code_llm                                              any language, when a model key is configured
+           code_llm                                              any language, when a model key or Codex sign-in is configured
       -> reconcile (engine/normir/evidence.py): elements matched by file and line; where sources disagree the model
          reader's value is used and the static value is kept as a reported conflict (reader-first precedence: it
          scored highest of the combinations in bench/code_check.py)
@@ -118,8 +118,11 @@ def _adapter(module: str):
         return None
 
 
-def collect(root: Path, name: str, models: list[Path] = (), use_reader: bool = True, offline: bool = False, progress=lambda m: None) -> tuple[list[dict], list[str]]:
-    """Evidence documents from every adapter that applies, and notes on what could not run."""
+def collect(root: Path, name: str, models: list[Path] = (), use_reader: bool = True, offline: bool = False, progress=lambda m: None,
+            requirements: list[dict] = ()) -> tuple[list[dict], list[str]]:
+    """Evidence documents from every adapter that applies, and notes on what could not run. `requirements` are the
+    assessed checks of the customer regulations being checked (app.regulations.assessed): the model judges each one
+    from the code, citing the lines it read."""
     from adapters.code_static.files import discover
     kinds = Counter(f.kind for f in discover(root))
     docs, notes = [], []
@@ -152,9 +155,20 @@ def collect(root: Path, name: str, models: list[Path] = (), use_reader: bool = T
         except Exception as e:  # noqa: BLE001
             notes.append(f"Model reader failed: {e}. The report rests on static analysis only.")
     elif use_reader:
-        notes.append("No model reader is configured (ANTHROPIC_API_KEY or OPENAI_API_KEY on the server). "
+        notes.append("No model reader is configured (ANTHROPIC_API_KEY or OPENAI_API_KEY on the server, or a `codex login`). "
                      "Judged facts such as whether a secret is a test fixture stay open, and languages without a "
                      "static adapter are not read.")
+    if requirements:
+        if llm is not None and llm.provider_from_env() is not None:
+            from adapters.assess import CodeCorpus, assess
+            progress(f"Assessing {len(requirements)} requirements of your regulations")
+            try:
+                docs.append(assess(list(requirements), CodeCorpus(root, name), progress=progress))
+            except Exception as e:  # noqa: BLE001
+                notes.append(f"Assessing your regulations' requirements failed: {e}. Those checks stay open.")
+        else:
+            notes.append(f"{len(requirements)} requirements of your regulations are judged by a model, and none is configured: "
+                         "they stay open as questions.")
     return docs, notes
 
 
@@ -169,7 +183,8 @@ def snippets(root: Path, docs: list[dict], context: int = 2) -> dict[str, dict]:
     out = {}
     for at in ats:
         path, _, line = str(at).rpartition(":")
-        if not line.isdigit():
+        m = re.fullmatch(r"(\d+)(?:-(\d+))?", line)  # path:line, or path:a-b from a model's citation
+        if not path or not m:
             continue
         if path not in cache:
             p = (root / path).resolve()
@@ -178,8 +193,9 @@ def snippets(root: Path, docs: list[dict], context: int = 2) -> dict[str, dict]:
         rows = cache[path]
         if not rows:
             continue
-        n = int(line)
-        lo, hi = max(1, n - context), min(len(rows), n + context)
+        n = int(m[1])
+        end = max(n, min(int(m[2] or n), n + 29))
+        lo, hi = max(1, n - context), min(len(rows), end + context)
         lines = []
         for i in range(lo, hi + 1):
             text = rows[i - 1][:240]
@@ -187,7 +203,7 @@ def snippets(root: Path, docs: list[dict], context: int = 2) -> dict[str, dict]:
                 text = re.sub(r"(['\"])(?:(?!\1).){4,}\1", r"\1•••\1", text)
                 text = re.sub(r"(-----BEGIN[^-]*-----).*", r"\1 •••", text)
             lines.append([i, text])
-        out[at] = {"path": path, "line": n, "lines": lines}
+        out[at] = {"path": path, "line": n, "end": end, "lines": lines}
     return out
 
 
@@ -205,7 +221,7 @@ def advisory_details(docs: list[dict], offline: bool = False) -> dict:
 
 
 def scan(url: str, workdir: Path, branch: str | None = None, models: list[Path] = (), use_reader: bool = True,
-         offline: bool = False, progress=lambda m: None) -> dict:
+         offline: bool = False, progress=lambda m: None, requirements: list[dict] = ()) -> dict:
     """Clone, run the adapters, and return {repo, evidence docs, snippets, notes}. The clone is deleted after."""
     owner, repo = parse_repo_url(url)
     dest = workdir / "checkout"
@@ -217,7 +233,7 @@ def scan(url: str, workdir: Path, branch: str | None = None, models: list[Path] 
     try:
         commit = git_commit(dest)
         langs = languages(dest)
-        docs, notes = collect(dest, f"{owner}/{repo}", list(models), use_reader, offline, progress)
+        docs, notes = collect(dest, f"{owner}/{repo}", list(models), use_reader, offline, progress, requirements)
         snips = snippets(dest, docs)
         advisories = advisory_details(docs, offline)
     finally:
@@ -232,10 +248,18 @@ def evaluate(docs: list[dict], standards: list[str], asvs_level: int = 2, answer
     answers = answers or {}
     out = {}
     for sid in standards:
-        pack_dir, label = STANDARDS[sid]
-        rs = load(ROOT / "packs" / pack_dir)
+        if sid.startswith("reg:"):  # a customer regulation (app.regulations): its compiled pack
+            from . import regulations
+            req = regulations.ready(sid[4:], "code")
+            if req is None:
+                continue
+            pack_dir, label = f"regulations/{sid[4:]}", req["name"]  # shown in reports: not the server path
+            rs = load(regulations.pack_dir(sid[4:]))
+        else:
+            pack_dir, label = STANDARDS[sid]
+            rs = load(ROOT / "packs" / pack_dir)
         profile = {**(answers.get("subject") or {}), "elements": answers.get("elements") or {}}
         if sid == "asvs":
             profile["norms"] = [n for (k, n), el in rs.elements.items() if k == "norm" and int(el.data.get("level", 1)) <= asvs_level]
-        out[sid] = {"pack": pack_dir, "label": label, "rs": rs, "norms": profile.get("norms"), "rows": run(rs, ev, profile)}
+        out[sid] = {"pack": pack_dir, "label": label, "short": label if sid.startswith("reg:") else None, "rs": rs, "norms": profile.get("norms"), "rows": run(rs, ev, profile)}
     return {"evidence": ev, "results": out}

@@ -10,6 +10,7 @@ from pathlib import Path
 import yaml
 
 from normir.evidence import conflicts
+from normir.model import walk
 
 ROOT = Path(__file__).resolve().parents[1]
 ASVS_INVENTORY = yaml.safe_load((Path(__file__).parent / "asvs-inventory.yaml").read_text())
@@ -41,9 +42,10 @@ def _predicate(rs, name: str) -> dict:
 def link(repo: dict, at: str) -> str | None:
     # Dependency elements are located as "lockfile#L<n>" (the engine merges "path:line" neighbours).
     path, _, line = str(at).rpartition("#L" if "#L" in str(at) else ":")
-    if not path or not line.isdigit() or not repo.get("commit"):
+    m = re.fullmatch(r"(\d+)(?:-(\d+))?", line)
+    if not path or not m or not repo.get("commit"):
         return None
-    return f"{repo['url']}/blob/{repo['commit']}/{path}#L{line}"
+    return f"{repo['url']}/blob/{repo['commit']}/{path}#L{m[1]}" + (f"-L{m[2]}" if m[2] else "")
 
 
 def _verdict(rows: list[dict]) -> str:
@@ -62,6 +64,16 @@ def _facts_of(ev, element_id: str) -> dict:
     if e is None:
         return {}
     return {k: [str(v) for v in f.values()] for k, f in e.facts.items()}
+
+
+def _notes(ev, require) -> list[dict]:
+    out = []
+    for attr in dict.fromkeys(n["fact"].rpartition(".")[2] for n in walk(require or {}) if "fact" in n):
+        f = ev.facts.get(attr)
+        for o in (f.observations if f else []):
+            if o.get("note") and not any(x["note"] == o["note"] for x in out):
+                out.append({"note": str(o["note"])[:500], "source": o.get("source"), "value": o.get("value")})
+    return out[:3]
 
 
 def _asvs_id(norm: str) -> str | None:
@@ -118,17 +130,19 @@ def sections(evaluation: dict, locate, coverage=lambda sid, names: None, by_type
             interp = el.get("interpretation") or {}
             findings, passes = [], []
             for r in sorted(nrows, key=lambda r: (ORDER[r["verdict"]], str(r.get("at")))):
-                if r["verdict"] == "pass":
-                    if r.get("type"):   # listed with what it was read from, no crop: the record of what was checked
-                        passes.append({"element": r["element"], "type": r["type"], "at": [locate(a) for a in (r.get("at") or [])[:1]],
-                                       "facts": _facts_of(ev, r["element"])})
+                if r["verdict"] == "pass" and r.get("type"):   # listed with what it was read from: the record of what was checked
+                    passes.append({"element": r["element"], "type": r["type"], "at": [locate(a) for a in (r.get("at") or [])[:1]],
+                                   "facts": _facts_of(ev, r["element"])})
                     continue
                 ats = r.get("at") or []
                 f = {"element": r["element"], "type": r.get("type"), "verdict": r["verdict"],
                      "at": [locate(a) for a in ats[:3]], "more_at": max(0, len(ats) - 3),
                      "facts": _facts_of(ev, r["element"]) if r.get("type") else {},
                      "seen_by": r.get("seen_by", []),
-                     "deciding": r.get("deciding") or {}, "open": r.get("open") or []}
+                     "deciding": r.get("deciding") or {}, "open": r.get("open") or [],
+                     "open_labels": [_predicate(rs, o).get("label") or o for o in r.get("open") or []],
+                     # a system-level verdict: the reasons the sources gave for the facts it reads (a model's judgement)
+                     "notes": [] if r.get("type") else _notes(ev, el.get("require"))}
                 findings.append(f)
                 for fact in f["open"] + list(f["deciding"]):
                     root, _, attr = fact.rpartition(".") if "." in fact else ("system", "", fact)
@@ -147,7 +161,7 @@ def sections(evaluation: dict, locate, coverage=lambda sid, names: None, by_type
                         "candidates": [d["value"] for d in f["deciding"].get(fact, [])] if fact in f["deciding"] else [],
                         "decides": [], "answer": None})
                     section = cite.get("section") or name
-                    short = STANDARD_SHORT.get(sid, sid)
+                    short = res.get("short") or STANDARD_SHORT.get(sid, sid)
                     tag = section if section.startswith(short) else f"{short} {section}"
                     if tag not in q["decides"]:
                         q["decides"].append(tag)
