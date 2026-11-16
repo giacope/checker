@@ -123,7 +123,7 @@
 {% if r.conflicts %}
 <div class="card">
   <h2>Where the sources disagree ({{ r.conflicts | length }})</h2>
-  <p class="small muted">Static analysis and the model reader read the same code differently here. The model reader's value is used; check these first if a verdict looks wrong.</p>
+  <p class="small muted">Static analysis and the model reader read the same code differently here. Static analysis decides measured facts unless it only found nothing; the model decides judged ones. Check these first if a verdict looks wrong.</p>
   <table>{% for c in r.conflicts[:40] %}<tr><td class="small"><span class="kv">{{ c.element }}</span></td><td class="small">{{ c.fact }}</td>
     <td class="small">{% for v in c["values"] %}{{ v.value }} <span class="muted">({{ v.sources[:1] | join(", ") }})</span><br>{% endfor %}{% for v in c.overridden or [] %}<s>{{ v.value }}</s> <span class="muted">({{ v.sources[:1] | join(", ") }})</span><br>{% endfor %}</td></tr>{% endfor %}</table>
 </div>

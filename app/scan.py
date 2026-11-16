@@ -5,9 +5,8 @@
            code_static (Python, JS/TS), code_ruby, code_elixir   deterministic, per language present
            deps                                                  lock files + OSV advisories
            code_llm                                              any language, when a model key or Codex sign-in is configured
-      -> reconcile (engine/normir/evidence.py): elements matched by file and line; where sources disagree the model
-         reader's value is used and the static value is kept as a reported conflict (reader-first precedence: it
-         scored highest of the combinations in bench/code_check.py)
+      -> reconcile (engine/normir/evidence.py): elements matched by file and line across sources; where sources
+         disagree, SOURCES below decides and the other value is kept as a reported conflict
       -> evaluate each selected pack with the user's answers as the profile
       -> report data (app/report.py renders it)
 

@@ -76,6 +76,28 @@ def _notes(ev, require) -> list[dict]:
     return out[:3]
 
 
+def source_limits(docs: list[dict]) -> list[str]:
+    """What each source did not read or could not settle, in words: a verdict resting on it is only as complete."""
+    return [f"{s.get('id')}: {line}" for d in docs for s in d.get("sources", []) for line in _limits(s)]
+
+
+def _limits(src: dict) -> list[str]:
+    out = []
+    if src.get("failed_batches"):
+        out.append(f"{src['failed_batches']} of {src.get('batches')} reading calls failed: what those files hold was not "
+                   "read, so requirements about it can show as not applicable")
+    if src.get("files_not_sent"):
+        out.append(f"{src['files_not_sent']} files were not read by the model: its budget ran out")
+    if src.get("failed"):
+        out.append(f"{len(src['failed'])} requirements stay open because their model call failed")
+    if src.get("kind") == "model_assessment" and src.get("not_sent"):
+        out.append(f"{len(src['not_sent'])} requirements were never sent to the model: the run's budget ran out")
+    if src.get("requirement_chars"):
+        out.append(f"each requirement was shown at most {src['requirement_chars']:,} characters, best matches first, "
+                   "so that every requirement fits the run's budget")
+    return out
+
+
 def _asvs_id(norm: str) -> str | None:
     m = re.match(r"V?(\d+\.\d+\.\d+)", norm)
     return m.group(1) if m else None
@@ -94,7 +116,8 @@ def build(scan_data: dict, evaluation: dict, asvs_level: int = 2, answers: dict 
             q["answer"] = v
     answered = [q for q in _answered_questions(answers, questions)]
     return {
-        "repo": repo, "languages": scan_data.get("languages", {}), "notes": scan_data.get("notes", []),
+        "repo": repo, "languages": scan_data.get("languages", {}),
+        "notes": source_limits(scan_data["docs"]) + scan_data.get("notes", []),
         "seconds": scan_data.get("seconds"), "asvs_level": asvs_level,
         "sources": [{k: v for k, v in s.items() if k not in {"not_sent"}} for d in scan_data["docs"] for s in d.get("sources", [])],
         "standards": standards,
@@ -347,7 +370,8 @@ def markdown(rep: dict) -> str:
         bits = [f"{k}: {v}" for k, v in s.items() if k in {"adapter", "adapter_version", "model", "files_analysed", "files_sent", "lockfiles"} and v]
         out.append(f"- {s.get('id')}: " + "; ".join(map(str, bits)))
     out += ["", "Facts come from deterministic static analysis and, where configured, a language model reading the code. "
-            "Where they disagree the model reader's value is used and the disagreement is listed. Rule packs are drafts "
+            "Where they disagree, static analysis decides measured facts unless it only found nothing, the model decides "
+            "judged ones, and the disagreement is listed. Rule packs are drafts "
             "written from the published texts; their interpretations are stated with each requirement. This is an "
             "automated assessment, not legal advice or a certification."]
     return "\n".join(out) + "\n"

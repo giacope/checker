@@ -234,7 +234,8 @@ def test_report_separates_doesnt_apply_and_nothing_found(tmp_path, monkeypatch):
     reg = {"id": rid, "name": "Acme", "domain": "code", "clauses": clauses, "checks": checks}
     monkeypatch.setattr(regs, "ready", lambda r, domain: {"name": "Acme"})
     monkeypatch.setattr(regs, "pack_dir", lambda r: build_pack(reg, regs.vocab("code"), tmp_path / "pack"))
-    doc = {"subject": {"kind": "system", "id": "shop"}, "sources": [{"id": "llm:m", "kind": "model_assessment"}], "facts": {
+    src = {"id": "llm:m", "kind": "model_assessment", "not_sent": ["req_a", "req_b"], "failed": ["req_c"], "requirement_chars": 9000}
+    doc = {"subject": {"kind": "system", "id": "shop"}, "sources": [src], "facts": {
         fact_attr(rid, "k1-1"): [{"value": "not_applicable", "basis": "absence", "note": "nothing is uploaded", "source": "llm:m"}],
         fact_attr(rid, "k2-1"): [{"value": "not_met", "basis": "absence", "note": "searched 4 excerpts: no throttle", "source": "llm:m"}],
         fact_attr(rid, "k3-1"): [{"value": "met", "basis": "evidence", "at": "app/errors.rb:3", "note": "generic page", "source": "llm:m"}]}}
@@ -246,6 +247,12 @@ def test_report_separates_doesnt_apply_and_nothing_found(tmp_path, monkeypatch):
     assert e["k3-1"]["rests_on"] == "evidence" and rep["totals"] == {"not_applicable": 1, "fail": 1, "pass": 1}
     md = report.markdown(rep)
     assert "### Fails (nothing found in the code searched): 2.1" in md
+    # what the model was never shown or could not answer is a stated limit, not a silent gap
+    assert rep["notes"] == ["llm:m: 1 requirements stay open because their model call failed",
+                            "llm:m: 2 requirements were never sent to the model: the run's budget ran out",
+                            "llm:m: each requirement was shown at most 9,000 characters, best matches first, so that every "
+                            "requirement fits the run's budget"]
+    assert "- llm:m: 2 requirements were never sent to the model" in md
     assert "Judged not to apply: 1.1 Uploads are scanned for malware. nothing is uploaded (llm:m, nothing found in the code searched)" in md
 
 

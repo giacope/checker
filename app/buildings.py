@@ -410,7 +410,8 @@ def build(pid: str, project: dict, data: dict, evaluation: dict, answers: dict |
                                          for k, vs in values.items()},
                       "at": list(seen.values())[:4]})
     return {
-        "project": project, "files": data.get("files", []), "sheets": data.get("sheets", []), "notes": data.get("notes", []),
+        "project": project, "files": data.get("files", []), "sheets": data.get("sheets", []),
+        "notes": report_mod.source_limits(data["docs"]) + data.get("notes", []),
         "skipped": skipped_summary(data["docs"]),
         "checks": dict(Counter(r["verdict"] for res in evaluation["results"].values() for r in res["rows"])),
         "seconds": data.get("seconds"),
