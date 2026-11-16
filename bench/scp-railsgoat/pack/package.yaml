@@ -1,9 +1,0 @@
-package: reg-rfe5181cd6e
-version: '1'
-title: OWASP Secure Coding Practices v2.0
-subject: system
-text_policy: public
-source:
-  kind: customer
-  files:
-  - OWASP_SCP_Quick_Reference_Guide_v2.pdf

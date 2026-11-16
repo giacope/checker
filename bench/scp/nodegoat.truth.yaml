@@ -1,0 +1,243 @@
+artifact: {repo: OWASP/NodeGoat, commit: c5cb68a7084e4ae7dcc60e6a98768720a81841e8}
+regulation: {id: rfe5181cd6e, name: OWASP Secure Coding Practices v2.0}
+method: >-
+  Each enabled computed or assessed check was judged against its clause text by reading the NodeGoat source at the pinned commit
+  (server.js, config/, app/routes, app/data, app/views, Dockerfile, docker-compose.yml, app.json, artifacts/), treating commented-out
+  "Fix for ..." blocks as absent and the shipped default configuration as the behaviour under test. Checks about deployment, database
+  administration or infrastructure not configured in the repo are undecidable; checks about features the app lacks (file upload,
+  password reset, native memory management) are not_applicable.
+labels:
+  k16-1: {truth: fail, confidence: medium, at: [app/routes/profile.js:2, app/routes/profile.js:28, app/routes/session.js:138-187], why: "node-esapi is used only once (with the wrong context) and validation/encoding is written inline per handler rather than through a reusable security library."}
+  k29-1: {truth: pass, confidence: medium, at: [app/routes/session.js:138-187, app/routes/contributions.js:46-63, app/routes/profile.js:59-63], why: "The validation that exists runs server-side in route handlers, not in client scripts."}
+  k30-1: {truth: undecidable, confidence: medium, at: [], why: "Classification of data sources as trusted or untrusted is a design/process artefact not recorded in the repo."}
+  k30-2: {truth: fail, confidence: high, at: [app/routes/research.js:14-27, app/views/memos.html:28-34], why: "The response body fetched from an arbitrary URL and memo text read back from MongoDB are emitted to the client without validation."}
+  k31-1: {truth: fail, confidence: high, at: [app/routes/session.js:138-187, app/routes/contributions.js:46-63, app/routes/profile.js:59-63], why: "There is no central validation routine; each handler validates (or not) ad hoc."}
+  k32-1: {truth: pass, confidence: medium, at: [app/views/layout.html:5, app/views/login.html:5, app/views/signup.html:5, server.js:71-75], why: "Pages that host the input forms declare UTF-8 and body-parser decodes form/JSON input as UTF-8."}
+  k33-1: {truth: fail, confidence: medium, at: [app/routes/session.js:138-187, app/routes/profile.js:59-61], why: "Input is validated with regexes directly with no canonicalisation step."}
+  k34-1: {truth: pass, confidence: medium, at: [app/routes/session.js:159-185, app/routes/session.js:247-252, app/routes/contributions.js:49-63, app/routes/profile.js:63-76], why: "Where validation exists, a failure re-renders the form with an error and the input is not processed."}
+  k35-1: {truth: pass, confidence: medium, at: [server.js:71-75, app/routes/session.js:206], why: "body-parser decodes request bodies before the route handlers run their validation."}
+  k36-1: {truth: fail, confidence: high, at: [app/routes/memos.js:13, app/routes/benefits.js:29-35, app/data/allocations-dao.js:77-79, app/routes/index.js:70-73, app/routes/research.js:14-16], why: "Memo text, benefit start dates, the threshold query, the redirect url and the research url are all used without validation."}
+  k37-1: {truth: undecidable, confidence: medium, at: [], why: "The app performs no header character checks of its own; whether non-ASCII headers are rejected depends on Node/Express runtime behaviour."}
+  k38-1: {truth: fail, confidence: medium, at: [app/routes/session.js:117, app/routes/index.js:55-56], why: "Login routes admins to /benefits, but /benefits itself only checks login, so requests sent directly to the redirect target bypass the admin decision."}
+  k39-1: {truth: fail, confidence: high, at: [app/routes/contributions.js:32-34, app/data/allocations-dao.js:77-79, app/routes/benefits.js:30-35], why: "Contribution values are eval'd rather than type-checked, threshold and benefitStartDate are never type-validated."}
+  k40-1: {truth: fail, confidence: medium, at: [app/data/allocations-dao.js:63-79, app/routes/benefits.js:30-35], why: "Contribution percentages are range-checked, but the threshold range check is commented out and benefit dates have no range check."}
+  k41-1: {truth: fail, confidence: medium, at: [app/routes/session.js:140-144, app/routes/profile.js:42-50, app/routes/memos.js:13], why: "Only signup fields have length limits; profile fields and memos are accepted at any length."}
+  k42-1: {truth: fail, confidence: high, at: [app/routes/session.js:140-144, app/routes/profile.js:59], why: "Signup regexes accept any character (.{1,n}) and the bankRouting pattern is unanchored, so no allowlist of characters is applied."}
+  k43-1: {truth: fail, confidence: high, at: [server.js:134-142, app/views/memos.html:31, app/routes/research.js:24-26], why: "Hazardous characters are accepted while template auto-escaping is disabled and external HTML is written raw."}
+  k44-1: {truth: fail, confidence: high, at: [app/routes/session.js:64-80, app/routes/session.js:138-187], why: "No checks for null bytes, CR/LF or path traversal exist; the CRLF log-injection fix is left commented out."}
+  k46-1: {truth: pass, confidence: medium, at: [app/routes/profile.js:28, server.js:126-129], why: "The encoding that is performed (ESAPI encodeForHTML, marked sanitize) runs on the server."}
+  k47-1: {truth: fail, confidence: medium, at: [server.js:134-142, app/routes/profile.js:24-31, app/views/profile.html:76-78], why: "Swig auto-escaping is turned off and URL-context output has no URL encoder (HTML encoder used instead), so not every outbound context has a standard routine."}
+  k48-1: {truth: fail, confidence: high, at: [server.js:134-142, app/views/profile.html:78, app/routes/research.js:24-26, app/views/error-template.html:11], why: "Autoescape is disabled, so user and external data is rendered without contextual encoding."}
+  k49-1: {truth: fail, confidence: high, at: [server.js:134-142, app/views/layout.html:75], why: "With autoescape false, characters are emitted unencoded by default rather than encoded unless known safe."}
+  k50-1: {truth: fail, confidence: medium, at: [app/data/allocations-dao.js:77-79], why: "The user-supplied threshold is interpolated into a MongoDB $where JavaScript query string without sanitisation (NoSQL analogue of SQL injection)."}
+  k51-1: {truth: not_applicable, confidence: medium, at: [], why: "The application runtime never invokes operating-system commands; only the Gruntfile dev task shells out with no user input."}
+  k53-1: {truth: pass, confidence: high, at: [app/routes/index.js:44-76, app/routes/session.js:36-42, app/routes/session.js:259-262], why: "All non-public routes are guarded by isLoggedIn; only login, signup, tutorial pages and static assets are public by design."}
+  k54-1: {truth: pass, confidence: high, at: [app/routes/session.js:36-42, app/data/user-dao.js:57-94], why: "Credential checking and the login guard run in server-side middleware and DAO code."}
+  k55-1: {truth: fail, confidence: medium, at: [app/data/user-dao.js:57-94], why: "Authentication is a hand-rolled plaintext comparison instead of a standard tested authentication service or library."}
+  k56-1: {truth: pass, confidence: medium, at: [app/routes/session.js:36-42, app/routes/index.js:23-24], why: "Authentication enforcement is a single SessionHandler middleware reused across routes."}
+  k57-1: {truth: pass, confidence: medium, at: [app/routes/session.js:36-42, app/routes/session.js:117], why: "Auth is enforced by separate middleware that redirects unauthenticated requests to the /login control, which redirects back into the app after login."}
+  k58-1: {truth: pass, confidence: medium, at: [app/routes/session.js:58-102, app/routes/session.js:25-42, app/data/user-dao.js:70-89], why: "Any lookup error or missing session results in an error page or redirect to login, never in an authenticated session."}
+  k59-1: {truth: fail, confidence: high, at: [app/routes/index.js:55-60, app/routes/benefits.js:29-35], why: "The admin benefits functions are reachable by any logged-in user because the isAdmin check is commented out."}
+  k60-1: {truth: fail, confidence: high, at: [app/data/user-dao.js:20-31, app/data/user-dao.js:60-66, artifacts/db-reset.js:12-37], why: "Passwords are stored in plaintext with no salt; bcrypt hashing is commented out."}
+  k60-2: {truth: fail, confidence: high, at: [app/data/user-dao.js:20-31], why: "No one-way hashing is applied to stored passwords."}
+  k60-3: {truth: undecidable, confidence: medium, at: [config/env/all.js:3], why: "Write permissions on the MongoDB users collection depend on the database deployment supplied through MONGODB_URI."}
+  k61-1: {truth: fail, confidence: high, at: [app/data/user-dao.js:25-30, app/data/user-dao.js:60-66], why: "Passwords are not hashed anywhere, so no trusted-system hashing takes place."}
+  k62-1: {truth: pass, confidence: high, at: [app/routes/session.js:53-58, app/views/login.html:107-127], why: "Login is a single-step form and username and password are validated together after both are submitted."}
+  k63-1: {truth: fail, confidence: high, at: [app/routes/session.js:59-98], why: "Distinct Invalid username vs Invalid password messages are returned; the identical-message fix is commented out."}
+  k64-1: {truth: undecidable, confidence: medium, at: [config/env/all.js:3, README.md:61], why: "MongoDB authentication comes from the deployment-supplied MONGODB_URI; the local default has no credentials while the documented Atlas URI does."}
+  k65-1: {truth: fail, confidence: medium, at: [config/env/development.js:6, config/env/test.js:6], why: "The ZAP API key for an external service is hard-coded in plaintext in source-controlled config."}
+  k66-1: {truth: pass, confidence: high, at: [app/routes/index.js:34, app/routes/index.js:38, app/views/login.html:107, app/views/signup.html:72], why: "Login and signup forms submit credentials by POST and only POST handlers process them."}
+  k67-1: {truth: fail, confidence: high, at: [server.js:144-155], why: "The server listens over plain HTTP and the HTTPS server is commented out, so passwords travel unencrypted."}
+  k68-1: {truth: fail, confidence: high, at: [app/routes/session.js:144-149], why: "PASS_RE accepts any 1-20 characters; the complexity regex is commented out."}
+  k69-1: {truth: fail, confidence: high, at: [app/routes/session.js:144], why: "A one-character password is accepted (minimum length 1)."}
+  k70-1: {truth: pass, confidence: high, at: [app/views/login.html:115, app/views/signup.html:91, app/views/signup.html:96], why: "Password inputs use type=password."}
+  k71-1: {truth: fail, confidence: high, at: [app/routes/session.js:53-119, app/routes/index.js:34], why: "Nothing limits or counts failed login attempts."}
+  k71-2: {truth: fail, confidence: high, at: [app/routes/session.js:53-119, app/data/user-dao.js:57-94], why: "There is no lockout or account disabling after repeated invalid logins."}
+  k72-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no password reset or password change function (profile update does not touch the password)."}
+  k73-1: {truth: not_applicable, confidence: high, at: [], why: "There is no password reset or security-question feature."}
+  k74-1: {truth: not_applicable, confidence: high, at: [], why: "There is no email-based password reset."}
+  k75-1: {truth: not_applicable, confidence: high, at: [], why: "No temporary passwords or reset links are issued."}
+  k76-1: {truth: not_applicable, confidence: high, at: [], why: "No temporary passwords are issued."}
+  k77-1: {truth: not_applicable, confidence: high, at: [], why: "There is no password reset to notify about."}
+  k78-1: {truth: not_applicable, confidence: medium, at: [], why: "Users cannot change passwords, so there is no change flow in which reuse could be prevented."}
+  k79-1: {truth: not_applicable, confidence: medium, at: [], why: "There is no password change feature to apply a minimum age to."}
+  k80-1: {truth: fail, confidence: medium, at: [app/data/user-dao.js:17-31, app/data/profile-dao.js:42-66], why: "Password-based accounts exist but there is no expiry or forced-change mechanism at all."}
+  k80-2: {truth: fail, confidence: medium, at: [config/env/all.js:5-13], why: "No administratively controlled password reset interval exists in configuration or code."}
+  k81-1: {truth: pass, confidence: medium, at: [app/views/login.html:107-127], why: "The login form offers no remember-me option and sessions are non-persistent."}
+  k82-1: {truth: fail, confidence: high, at: [app/routes/session.js:116-117, app/routes/session.js:256-274], why: "No last-login or last-failed-attempt data is recorded or shown after login."}
+  k83-1: {truth: fail, confidence: medium, at: [app/routes/session.js:62-98], why: "Failed-password attempts are not even logged, so password-spraying across accounts cannot be detected."}
+  k84-1: {truth: fail, confidence: high, at: [artifacts/db-reset.js:12-37, app.json:12-14, docker-compose.yml:9, README.md:22], why: "Deployment seeds well-known default accounts (admin/Admin_123, user1, user2) with published passwords."}
+  k85-1: {truth: fail, confidence: high, at: [app/routes/index.js:48, app/routes/profile.js:40-107, app/routes/index.js:52], why: "Changing bank account/routing details and contribution percentages requires only an existing session, no reauthentication."}
+  k86-1: {truth: fail, confidence: high, at: [app/routes/session.js:53-119], why: "The retirement-savings accounts use single-factor password login only."}
+  k89-1: {truth: pass, confidence: high, at: [server.js:77-102, app/routes/session.js:226-233], why: "express-session manages sessions and the custom session cookie code is commented out."}
+  k90-1: {truth: pass, confidence: high, at: [server.js:77-85], why: "Session identifiers are created server-side by express-session (custom genid commented out)."}
+  k91-1: {truth: pass, confidence: medium, at: [server.js:77-85], why: "The app relies on express-session's default uid-safe (crypto) generator and does not override genid."}
+  k92-1: {truth: pass, confidence: medium, at: [server.js:77-102], why: "No cookie domain is set, so the session cookie is host-only with path /, which is appropriately restricted for a single-site app."}
+  k93-1: {truth: pass, confidence: high, at: [app/routes/session.js:121-123], why: "Logout destroys the server-side session."}
+  k94-1: {truth: pass, confidence: high, at: [app/views/layout.html:67, app/views/layout.html:82], why: "The shared layout extended by every protected page contains logout links."}
+  k95-1: {truth: fail, confidence: high, at: [server.js:77-102], why: "No maxAge, rolling expiry or store TTL is configured (the maxAge TODO is commented out), so sessions never time out server-side."}
+  k96-1: {truth: pass, confidence: medium, at: [server.js:77-102, app/views/login.html:107-127], why: "The session cookie has no maxAge (browser-session cookie) and there is no remember-me login."}
+  k96-2: {truth: fail, confidence: high, at: [server.js:77-102], why: "No absolute session lifetime is enforced."}
+  k96-3: {truth: fail, confidence: medium, at: [server.js:77-102], why: "There is no periodic session termination and therefore no advance notification to users."}
+  k97-1: {truth: fail, confidence: high, at: [app/routes/session.js:104-117, server.js:84], why: "Login reuses the pre-login session (saveUninitialized creates one) without regenerate; the fix is commented out."}
+  k98-1: {truth: fail, confidence: high, at: [app/routes/session.js:112-116], why: "Re-authentication via /login keeps the same session id."}
+  k99-1: {truth: fail, confidence: high, at: [app/routes/session.js:116-117], why: "Nothing tracks or rejects concurrent sessions for the same user."}
+  k100-1: {truth: pass, confidence: medium, at: [server.js:77-102, app/routes/error.js:3-13], why: "Session ids travel only in the express-session cookie and are not placed in URLs, error pages or log statements."}
+  k101-1: {truth: undecidable, confidence: medium, at: [server.js:77-102], why: "Sessions use the default in-process MemoryStore; protection from other server users depends on host process isolation."}
+  k102-1: {truth: fail, confidence: medium, at: [server.js:77-102], why: "No periodic session id rotation is implemented."}
+  k103-1: {truth: not_applicable, confidence: medium, at: [server.js:144-147], why: "The app never serves HTTPS, so no HTTP-to-HTTPS transition occurs within it."}
+  k103-2: {truth: fail, confidence: high, at: [server.js:144-155], why: "The app runs on plain HTTP and the HTTPS listener is commented out."}
+  k104-1: {truth: fail, confidence: high, at: [server.js:104-113, app/views/contributions.html:89-92], why: "CSRF middleware and token fields are commented out, so sensitive POSTs carry no per-session token."}
+  k105-1: {truth: fail, confidence: high, at: [server.js:104-113, app/routes/index.js:48-56], why: "No per-request tokens protect critical operations such as profile, contributions or benefits updates."}
+  k106-1: {truth: fail, confidence: medium, at: [server.js:92-100], why: "The session cookie secure flag is commented out, so it would be sent without Secure even behind TLS."}
+  k107-1: {truth: pass, confidence: medium, at: [server.js:77-102], why: "The only cookie is the express-session cookie, whose default is HttpOnly; no override disables it."}
+  k109-1: {truth: fail, confidence: high, at: [app/routes/allocations.js:12-23], why: "Allocations access uses the userId from the URL instead of the session (session-based fix commented out)."}
+  k110-1: {truth: fail, confidence: medium, at: [app/routes/index.js:23-60, app/routes/benefits.js:19-24], why: "There is no single authorization component; the isAdmin middleware is unused and handlers hard-code isAdmin."}
+  k111-1: {truth: pass, confidence: medium, at: [app/routes/session.js:25-42], why: "Guards redirect to login whenever the session or admin lookup is missing or fails."}
+  k112-1: {truth: pass, confidence: medium, at: [config/config.js:7-10, server.js:30-35], why: "If configuration files cannot be loaded or the DB is unreachable the process throws or exits rather than serving requests."}
+  k113-1: {truth: fail, confidence: high, at: [app/routes/index.js:55-63, app/routes/allocations.js:16-23], why: "Benefits requests and per-user allocations are served without an authorization check beyond login."}
+  k114-1: {truth: pass, confidence: medium, at: [app/routes/benefits.js:1-57, app/data/benefits-dao.js:1-43], why: "Admin benefits logic lives in its own handler and DAO modules separate from user functions."}
+  k115-1: {truth: fail, confidence: medium, at: [app/routes/research.js:14-16], why: "Any logged-in user can make the server fetch an arbitrary URL (SSRF), reaching resources outside the app's control."}
+  k116-1: {truth: fail, confidence: high, at: [app/routes/index.js:55-60], why: "The admin-only /benefits URL is reachable by every authenticated user."}
+  k117-1: {truth: fail, confidence: high, at: [app/routes/index.js:56, app/routes/benefits.js:29-35], why: "Any user can POST benefit start-date changes for any userId."}
+  k118-1: {truth: fail, confidence: high, at: [app/routes/allocations.js:16-23, app/routes/index.js:63], why: "/allocations/:userId returns any user's allocations without an ownership check."}
+  k119-1: {truth: fail, confidence: medium, at: [app/routes/index.js:55-56, app/routes/research.js:14-16], why: "Admin services and the server-side fetch service are available to all authenticated users."}
+  k120-1: {truth: fail, confidence: high, at: [app/routes/allocations.js:16-23, app/data/memos-dao.js:26-35, app/routes/benefits.js:13-26], why: "Users can read others' allocations, all memos and the full user list via unrestricted routes."}
+  k121-1: {truth: pass, confidence: medium, at: [app/data/profile-dao.js:42-82, app/data/benefits-dao.js:23-29], why: "The isAdmin attribute is kept server-side and update paths only write enumerated non-privileged fields."}
+  k122-1: {truth: fail, confidence: medium, at: [config/env/all.js:8-9, config/config.js:12-13, artifacts/cert/server.key:1], why: "Cookie secret, crypto key and TLS private key are committed in source and the full config is printed to the logs."}
+  k123-1: {truth: fail, confidence: high, at: [app/views/layout.html:48-66, app/routes/index.js:55-56], why: "The menu shows Benefits only to admins while the server allows any logged-in user."}
+  k124-1: {truth: fail, confidence: medium, at: [app/views/research.html:17, app/views/benefits.html:56], why: "State such as the research base URL and target userId is kept in plain hidden form fields."}
+  k124-2: {truth: fail, confidence: medium, at: [app/routes/research.js:15, app/routes/benefits.js:30-35], why: "The server trusts the hidden-field state without any integrity check."}
+  k125-1: {truth: pass, confidence: medium, at: [app/routes/contributions.js:46-63], why: "The contribution business rules (non-negative, total at most 30%) are enforced server-side before update."}
+  k126-1: {truth: fail, confidence: medium, at: [server.js:67-75, app/routes/index.js:29-82], why: "No rate limiting middleware or per-user transaction limits are configured."}
+  k127-1: {truth: not_applicable, confidence: high, at: [], why: "The app never reads the Referer header."}
+  k128-1: {truth: fail, confidence: medium, at: [app/routes/session.js:36-42, server.js:77-102], why: "Sessions never expire and nothing revalidates privileges or logs users out when they change."}
+  k129-2: {truth: fail, confidence: medium, at: [app/data/user-dao.js:17-31, app/data/user-dao.js:57-94], why: "There is no account status, inactivity tracking or disabling of unused accounts."}
+  k130-1: {truth: fail, confidence: high, at: [app/data/user-dao.js:57-94], why: "User records have no disabled flag and login never checks account status."}
+  k130-2: {truth: fail, confidence: high, at: [app/routes/session.js:36-42], why: "There is no way to terminate another user's sessions; the guard checks only that a userId exists in the session."}
+  k131-1: {truth: undecidable, confidence: medium, at: [config/env/all.js:3], why: "The privileges of the MongoDB account come from the deployment-supplied MONGODB_URI."}
+  k134-1: {truth: not_applicable, confidence: medium, at: [app/data/profile-dao.js:15-40], why: "No cryptographic functions run in the shipped code (the encryption helpers are commented out), so there is nothing whose placement can be judged."}
+  k135-1: {truth: fail, confidence: high, at: [config/env/all.js:8-9, config/config.js:12-13], why: "The cookie secret and crypto key are hard-coded in committed config and dumped to the console at startup."}
+  k136-1: {truth: not_applicable, confidence: medium, at: [app/data/profile-dao.js:15-40], why: "No cryptographic module is invoked at runtime; the crypto code is commented out."}
+  k137-1: {truth: pass, confidence: medium, at: [server.js:77-85, app/data/user-dao.js:49-55, app/routes/session.js:14-18], why: "The only unguessable value (session id) comes from express-session's crypto generator; Math.random is used only for demo allocations and dates."}
+  k138-1: {truth: undecidable, confidence: medium, at: [], why: "FIPS 140-2 compliance depends on the Node/OpenSSL build used in deployment."}
+  k141-1: {truth: fail, confidence: medium, at: [app/routes/error.js:9-12, app/views/error-template.html:11, app/routes/session.js:59-98], why: "The raw error object (database or eval error messages) is rendered to the user, and login errors reveal whether an account exists."}
+  k142-1: {truth: undecidable, confidence: medium, at: [config/config.js:5, config/env/development.js:9-13, config/env/production.js:1, app.json:20-23], why: "Production config adds no debug features, but NODE_ENV defaults to development (livereload script) when unset, so the outcome depends on how the deployment sets NODE_ENV."}
+  k142-2: {truth: pass, confidence: medium, at: [app/routes/error.js:7-12, app/views/error-template.html:11], why: "The custom error handler logs the stack to the console and renders only the error, not its stack trace."}
+  k143-1: {truth: fail, confidence: medium, at: [app/views/error-template.html:11, app/routes/session.js:59-61], why: "Error pages show the specific error message instead of a generic message, and login failures are specific."}
+  k143-2: {truth: pass, confidence: medium, at: [app/routes/error.js:9-12, app/routes/index.js:81-82, app/views/error-template.html:1-14], why: "Application errors are rendered through a custom error template (no custom 404 page, though)."}
+  k144-1: {truth: pass, confidence: medium, at: [app/routes/index.js:81-82, app/routes/error.js:3-13], why: "The app registers its own error-handling middleware rather than relying on server defaults."}
+  k145-1: {truth: not_applicable, confidence: high, at: [], why: "JavaScript code with garbage collection; there is no manual memory allocation."}
+  k146-1: {truth: pass, confidence: medium, at: [app/routes/session.js:25-42], why: "The auth and admin guards redirect to login whenever the lookup errors or yields no user."}
+  k147-1: {truth: pass, confidence: medium, at: [app/routes/session.js:64, app/routes/error.js:7-8], why: "All logging is done server-side via console."}
+  k148-1: {truth: fail, confidence: medium, at: [app/routes/session.js:62-117], why: "Only unknown-username failures are logged; successful logins and wrong-password failures are not."}
+  k149-1: {truth: fail, confidence: medium, at: [app/routes/session.js:31, app/routes/session.js:40, app/data/benefits-dao.js:33], why: "Log lines carry no timestamp, user, source address or target (e.g. 'redirecting to login', 'Updated benefits')."}
+  k150-1: {truth: fail, confidence: medium, at: [app/routes/session.js:64-80], why: "The raw username is written to the log unencoded; the encoding fix is commented out."}
+  k151-1: {truth: undecidable, confidence: medium, at: [], why: "Logs go to stdout; access to them is governed by the hosting environment."}
+  k152-1: {truth: fail, confidence: high, at: [app/routes/session.js:64, app/routes/error.js:7-8, app/data/benefits-dao.js:33], why: "Logging is ad hoc console.log/console.error calls with no shared logging routine."}
+  k153-1: {truth: fail, confidence: high, at: [artifacts/db-reset.js:97-99, config/config.js:12-13], why: "The seed script logs user records including passwords, and startup dumps the config containing the cookie secret and crypto key."}
+  k153-2: {truth: fail, confidence: medium, at: [config/config.js:12-13, config/env/development.js:6], why: "The full configuration, including secrets, API key and DB URI, is written to the log at startup."}
+  k154-1: {truth: undecidable, confidence: medium, at: [], why: "No log analysis tooling is in the repo; any mechanism would be part of the deployment."}
+  k155-1: {truth: fail, confidence: high, at: [app/routes/contributions.js:49-63, app/routes/profile.js:63-76], why: "Contribution and profile validation failures are not logged (only a bare signup message at session.js:248)."}
+  k156-1: {truth: fail, confidence: high, at: [app/routes/session.js:62-117], why: "Successful logins and wrong-password attempts are not logged."}
+  k157-1: {truth: pass, confidence: medium, at: [app/routes/session.js:36-42, app/routes/session.js:259-262], why: "Every access-control denial the mounted guards make is logged ('redirecting to login'); the unlogged admin branch is never mounted."}
+  k158-1: {truth: fail, confidence: medium, at: [app/routes/benefits.js:29-35, app/routes/allocations.js:16-23], why: "Tampered hidden fields or URL userIds are neither detected nor logged."}
+  k159-1: {truth: fail, confidence: medium, at: [server.js:77-85, app/routes/session.js:36-42], why: "Unknown or expired session cookies silently get a new session; nothing logs the invalid token."}
+  k160-1: {truth: fail, confidence: medium, at: [app/data/benefits-dao.js:15-20, app/routes/research.js:16-27], why: "Errors routed to next() are logged, but the benefits query discards its error and fetch errors in research are ignored."}
+  k161-1: {truth: fail, confidence: medium, at: [app/routes/benefits.js:13-27, app/data/benefits-dao.js:31-35], why: "Viewing all users is not logged and benefit changes log only 'Updated benefits' with no actor or target."}
+  k162-1: {truth: fail, confidence: medium, at: [app/routes/research.js:16-27], why: "Failures of the outbound needle fetch (an HTTPS backend by default) are silently ignored."}
+  k163-1: {truth: not_applicable, confidence: medium, at: [], why: "No cryptographic module runs in the shipped code."}
+  k164-1: {truth: undecidable, confidence: medium, at: [], why: "Logs go to stdout; integrity protection would be applied by the deployment's log pipeline."}
+  k166-1: {truth: fail, confidence: high, at: [app/routes/index.js:55-63], why: "Ordinary users can reach admin benefits functions and other users' allocations."}
+  k167-1: {truth: not_applicable, confidence: medium, at: [], why: "The app creates no cached or temporary copies of sensitive data on the server."}
+  k167-2: {truth: not_applicable, confidence: medium, at: [], why: "The app writes no temporary working files."}
+  k168-1: {truth: fail, confidence: high, at: [app/data/user-dao.js:20-31, artifacts/db-reset.js:18], why: "Passwords are stored in plaintext."}
+  k168-2: {truth: fail, confidence: high, at: [app/data/profile-dao.js:58-76], why: "SSN, DOB and bank details are stored in plaintext; encryption is commented out."}
+  k169-1: {truth: pass, confidence: high, at: [server.js:121], why: "Only app/assets (client JS, CSS, images) is served statically; server code is outside the static root."}
+  k170-1: {truth: pass, confidence: medium, at: [app/views/login.html:115, server.js:77-102], why: "No passwords or connection strings are stored on the client; the only cookie is the opaque session id."}
+  k171-1: {truth: fail, confidence: high, at: [app/views/allocations.html:17-21, app/views/profile.html:76-77], why: "HTML comments sent to the browser describe the NoSQL-injection fix in allocations-dao.js and the unescaped template variable."}
+  k172-1: {truth: fail, confidence: medium, at: [Dockerfile:13, .dockerignore:1-6], why: "The image copies the whole repo (README, tests, artifacts) because .dockerignore excludes none of it."}
+  k173-1: {truth: pass, confidence: medium, at: [app/routes/index.js:34, app/routes/index.js:48, app/views/profile.html:38], why: "Credentials and profile data are sent by POST; GET parameters carry only ids, thresholds and URLs."}
+  k174-1: {truth: fail, confidence: high, at: [app/views/login.html:107-116, app/views/profile.html:38-66], why: "No autocomplete=off on login, signup or the SSN/bank profile form."}
+  k175-1: {truth: fail, confidence: high, at: [server.js:47-48], why: "The no-cache header middleware is commented out and no Cache-Control is set on sensitive pages."}
+  k176-1: {truth: fail, confidence: medium, at: [app/data/profile-dao.js:46-66], why: "Profile updates ignore empty values, so SSN or bank details cannot be removed, and there is no account deletion."}
+  k177-1: {truth: undecidable, confidence: medium, at: [], why: "Access controls on server-stored data in MongoDB and the host depend on the deployment."}
+  k179-1: {truth: fail, confidence: high, at: [server.js:144-155], why: "Sensitive data is served over plain HTTP; the HTTPS server is commented out."}
+  k180-1: {truth: undecidable, confidence: medium, at: [artifacts/cert/server.crt:1-13, server.js:149-155], why: "The app serves no TLS (the bundled self-signed cert expired in 2016 and is unused), so the certificate in use depends on the deployment's TLS terminator."}
+  k181-1: {truth: undecidable, confidence: medium, at: [config/env/all.js:3], why: "There is no TLS client fallback logic; whether DB connections use TLS depends on the deployment's MONGODB_URI."}
+  k182-1: {truth: fail, confidence: high, at: [server.js:144-155], why: "Authenticated pages are served over plain HTTP."}
+  k183-1: {truth: undecidable, confidence: medium, at: [config/env/all.js:3, docker-compose.yml:8], why: "The default MongoDB URIs are local/in-network without TLS; any external DB's TLS setting comes from the deployment-supplied URI."}
+  k184-1: {truth: undecidable, confidence: medium, at: [server.js:144-155], why: "The app terminates no TLS itself; the TLS implementation and its configuration belong to the hosting front end."}
+  k185-1: {truth: fail, confidence: medium, at: [app/routes/research.js:18-20], why: "The research response sets Content-Type text/html with no charset (rendered views get Express's utf-8 default)."}
+  k186-1: {truth: pass, confidence: medium, at: [app/views/login.html:34, app/views/layout.html:62], why: "Pages that link externally carry no sensitive parameters in their URLs, so the Referer leaks none."}
+  k188-1: {truth: fail, confidence: high, at: [package.json:8-22, Dockerfile:1], why: "It pins outdated or abandoned components (marked 0.3.5, needle 2.2.4, node-esapi 0.0.1, bcrypt-nodejs, helmet ^2) on EOL node:12."}
+  k189-1: {truth: fail, confidence: high, at: [package.json:17, package.json:19], why: "marked is pinned to 0.3.5 and needle to 2.2.4, missing later security patches in those lines."}
+  k190-1: {truth: pass, confidence: high, at: [server.js:121], why: "Static files are served by express.static with no serve-index, so directories are not listed."}
+  k191-1: {truth: pass, confidence: medium, at: [Dockerfile:8-17, docker-compose.yml:15], why: "The container runs the app as the unprivileged node user and Mongo as mongodb (extra chmod hardening is commented out)."}
+  k192-1: {truth: fail, confidence: medium, at: [app/routes/error.js:9-12, app/data/benefits-dao.js:15-20, app/routes/research.js:16-27], why: "Errors are shown to users, the benefits query swallows its error, and fetch errors still produce a response."}
+  k193-1: {truth: fail, confidence: medium, at: [Dockerfile:13, .dockerignore:1-6, app/data/research-dao.js:13-24], why: "The image ships tests, a private key, Grunt tooling and dead code such as the unused ResearchDAO."}
+  k194-1: {truth: undecidable, confidence: medium, at: [config/config.js:5, config/env/development.js:9-13, config/env/production.js:1], why: "Dev features (livereload script) are loaded only when NODE_ENV is development or unset, which the deployment decides."}
+  k194-2: {truth: fail, confidence: medium, at: [Dockerfile:13, .dockerignore:1-6], why: "COPY . puts test/ and the dev/test config with the ZAP key into the production image."}
+  k195-1: {truth: not_applicable, confidence: medium, at: [], why: "The app has no robots.txt."}
+  k196-1: {truth: pass, confidence: high, at: [app/routes/index.js:29-79], why: "Each route is declared with an explicit GET or POST method."}
+  k197-1: {truth: pass, confidence: medium, at: [app/routes/index.js:29-79], why: "Only GET/POST handlers are registered; Express rejects other methods and there is no WebDAV."}
+  k197-2: {truth: not_applicable, confidence: high, at: [], why: "No extended file-handling HTTP methods are supported."}
+  k199-1: {truth: fail, confidence: high, at: [server.js:38-42], why: "app.disable('x-powered-by') is commented out, so X-Powered-By: Express is sent."}
+  k200-1: {truth: pass, confidence: medium, at: [config/config.js:10-13, config/env/all.js:5-13], why: "Configuration is plain JS and is printed in human-readable form at startup."}
+  k202-1: {truth: undecidable, confidence: high, at: [], why: "Network isolation of development environments is infrastructure, not visible in the repo."}
+  k202-2: {truth: undecidable, confidence: high, at: [], why: "Access to development environments is an organisational control."}
+  k205-1: {truth: fail, confidence: high, at: [app/data/allocations-dao.js:77-79], why: "The allocations query builds a $where JavaScript string by interpolating user input."}
+  k205-2: {truth: fail, confidence: high, at: [app/data/allocations-dao.js:77-79, app/data/contributions-dao.js:28-30], why: "The threshold is string-interpolated, and the contributions update filters on an un-coerced session userId."}
+  k206-1: {truth: fail, confidence: high, at: [app/data/allocations-dao.js:62-79], why: "The threshold is neither validated nor encoded before execution; the validation fix is commented out."}
+  k207-1: {truth: fail, confidence: medium, at: [app/routes/contributions.js:32-34, app/routes/profile.js:42-50, app/routes/profile.js:95-96], why: "Request values are used with whatever runtime type they arrive as (eval results, possibly arrays via HPP) without type enforcement."}
+  k208-1: {truth: undecidable, confidence: medium, at: [config/env/all.js:3], why: "DB account privileges come from the deployment-supplied MONGODB_URI."}
+  k209-1: {truth: undecidable, confidence: medium, at: [config/env/all.js:3, docker-compose.yml:8], why: "Default URIs carry no credentials; production credentials are supplied by the deployment."}
+  k210-1: {truth: fail, confidence: medium, at: [config/env/all.js:3], why: "A fallback MongoDB connection string is hard-coded in application config."}
+  k210-2: {truth: pass, confidence: medium, at: [config/env/all.js:3, app.json:16-19], why: "The connection string is read from the MONGODB_URI environment variable via a separate config module."}
+  k210-3: {truth: fail, confidence: medium, at: [config/env/all.js:3], why: "The connection string is used as plaintext with no decryption step."}
+  k211-1: {truth: not_applicable, confidence: medium, at: [], why: "MongoDB is used; stored-procedure data access does not apply."}
+  k212-1: {truth: pass, confidence: medium, at: [server.js:30, server.js:132], why: "A single pooled driver connection is opened once and shared; no per-request connections are leaked."}
+  k213-1: {truth: undecidable, confidence: medium, at: [docker-compose.yml:13-17], why: "Database admin accounts are configured in the deployed MongoDB, not in the repo (compose runs Mongo without auth for local use)."}
+  k213-2: {truth: undecidable, confidence: medium, at: [docker-compose.yml:13-17], why: "Strength of DB admin authentication depends on the deployed database."}
+  k214-1: {truth: undecidable, confidence: medium, at: [app/data/allocations-dao.js:77-79], why: "MongoDB server options are not in the repo (the app even relies on server-side JavaScript via $where)."}
+  k215-1: {truth: undecidable, confidence: medium, at: [], why: "Default vendor content in the database depends on the deployed instance."}
+  k216-1: {truth: undecidable, confidence: medium, at: [], why: "Default DB accounts depend on the deployed instance."}
+  k217-1: {truth: fail, confidence: medium, at: [server.js:30, config/env/all.js:3], why: "One DB connection with one credential serves users, admins and anonymous requests alike."}
+  k219-1: {truth: pass, confidence: high, at: [app/routes/tutorial.js:15-37], why: "Templates are rendered only from a hard-coded list of page names; no user data reaches res.render's view name."}
+  k220-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k221-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k222-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k223-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k224-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k225-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k226-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k227-1: {truth: not_applicable, confidence: medium, at: [app/routes/tutorial.js:15-37], why: "No request parameter references a server file; tutorial pages are fixed routes."}
+  k228-1: {truth: fail, confidence: high, at: [app/routes/index.js:70-73], why: "/learn redirects to an unvalidated, absolute user-supplied URL."}
+  k229-1: {truth: not_applicable, confidence: medium, at: [app/routes/tutorial.js:15-37], why: "No file or directory paths are passed in requests."}
+  k230-1: {truth: pass, confidence: medium, at: [app/routes/error.js:7-12], why: "Stack traces (with absolute paths) are only logged; responses do not include server file paths."}
+  k231-1: {truth: fail, confidence: medium, at: [Dockerfile:12-17], why: "App files are chowned to the runtime node user, so they are writable; the read-only hardening line is commented out."}
+  k232-1: {truth: not_applicable, confidence: high, at: [], why: "The app has no file upload feature."}
+  k234-1: {truth: fail, confidence: high, at: [server.js:134-142, app/routes/memos.js:13, app/routes/research.js:24-26], why: "Untrusted input is stored and echoed with autoescaping disabled and no input validation."}
+  k235-1: {truth: not_applicable, confidence: high, at: [], why: "JavaScript has no manually sized buffers in this code."}
+  k236-1: {truth: not_applicable, confidence: high, at: [], why: "No C-style bounded string copies exist."}
+  k237-1: {truth: not_applicable, confidence: high, at: [], why: "No manual buffer writes exist."}
+  k238-1: {truth: not_applicable, confidence: medium, at: [], why: "No native copy or concatenate functions with fixed buffers are used."}
+  k239-1: {truth: pass, confidence: medium, at: [server.js:30, app/routes/research.js:27], why: "The long-lived DB pool is intentional and HTTP responses are explicitly ended; no resources are left to GC."}
+  k240-1: {truth: not_applicable, confidence: medium, at: [], why: "Stack executability is a platform/runtime property, not something the Node app controls."}
+  k241-1: {truth: not_applicable, confidence: high, at: [], why: "No C library functions such as printf, strcat or strcpy are used."}
+  k242-1: {truth: not_applicable, confidence: high, at: [], why: "Garbage-collected JavaScript; there is no manual memory freeing."}
+  k244-1: {truth: pass, confidence: medium, at: [package.json:7-24], why: "The app is written entirely in managed JavaScript with no native addons."}
+  k245-1: {truth: pass, confidence: medium, at: [Gruntfile.js:165-167], why: "The application issues no OS commands; the only exec is in the Grunt dev task, which is not part of the running app."}
+  k245-2: {truth: not_applicable, confidence: medium, at: [], why: "The application performs no operating-system tasks."}
+  k246-1: {truth: pass, confidence: medium, at: [package-lock.json:55, .github/workflows/e2e-test.yml:35], why: "Dependencies are pinned with integrity hashes in package-lock.json and installed with npm ci (config files are not checksummed)."}
+  k247-1: {truth: fail, confidence: medium, at: [app/routes/session.js:208-220], why: "Signup checks the username and then inserts it with no lock or unique index, so concurrent signups can create duplicates (only id generation is atomic)."}
+  k248-1: {truth: pass, confidence: medium, at: [app/data/user-dao.js:109-120], why: "No mutable module-level state is shared across requests in the active code, and the id counter uses atomic findAndModify."}
+  k249-1: {truth: pass, confidence: medium, at: [app/data/contributions-dao.js:63-68, app/routes/session.js:257-264], why: "Variables are declared with values or assigned before first use, and missing records get defaults."}
+  k250-1: {truth: not_applicable, confidence: medium, at: [Dockerfile:17], why: "The app never raises privileges; it runs as an unprivileged user throughout."}
+  k251-1: {truth: fail, confidence: medium, at: [app/data/user-dao.js:49-55], why: "The date arithmetic produces month 00 and day 00 values (modulo without +1), yielding invalid benefit start dates."}
+  k252-1: {truth: pass, confidence: medium, at: [], why: "No OS command-execution call receives user data; the app has no command execution."}
+  k252-2: {truth: fail, confidence: high, at: [app/routes/contributions.js:30-34, app/data/allocations-dao.js:77-79], why: "Request values are passed to eval() and into a MongoDB $where JavaScript expression."}
+  k253-1: {truth: fail, confidence: high, at: [app/routes/contributions.js:30-34], why: "eval of request fields lets any user run arbitrary server-side code."}
+  k255-1: {truth: not_applicable, confidence: medium, at: [], why: "The app has no update mechanism of its own."}
+  k255-2: {truth: not_applicable, confidence: high, at: [], why: "No automatic updates are used."}
+  k255-3: {truth: not_applicable, confidence: medium, at: [], why: "The app does not transfer update code."}

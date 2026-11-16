@@ -1,0 +1,388 @@
+{
+ "fastapi-template": {
+  "labels": {
+   "checks": 234,
+   "confusion": {
+    "fail vs fail": 28,
+    "fail vs pass": 16,
+    "fail vs undecidable": 1,
+    "not_applicable vs not_applicable": 16,
+    "not_applicable vs pass": 4,
+    "open vs fail": 31,
+    "open vs not_applicable": 14,
+    "open vs pass": 73,
+    "open vs undecidable": 12,
+    "pass vs fail": 2,
+    "pass vs not_applicable": 1,
+    "pass vs pass": 36
+   },
+   "fail": {
+    "said": 45,
+    "right": 28,
+    "labelled": 61,
+    "found": 28,
+    "precision": 0.622,
+    "recall": 0.459
+   },
+   "pass": {
+    "said": 39,
+    "right": 36,
+    "labelled": 129,
+    "found": 36,
+    "precision": 0.923,
+    "recall": 0.279
+   },
+   "not_applicable": {
+    "said": 20,
+    "right": 16,
+    "labelled": 31,
+    "found": 16,
+    "precision": 0.8,
+    "recall": 0.516
+   },
+   "fail_on_evidence": {
+    "said": 23,
+    "right": 14,
+    "contradicts_a_labelled_pass": 9
+   },
+   "fail_on_absence": {
+    "said": 20,
+    "right": 13,
+    "contradicts_a_labelled_pass": 6
+   },
+   "decisive": 84,
+   "decisive_right": 64,
+   "open": 130,
+   "wrong_pass": [
+    "k156-1",
+    "k157-1"
+   ],
+   "wrong_fail": [
+    "k30-1",
+    "k30-2",
+    "k33-1",
+    "k36-1",
+    "k42-1",
+    "k66-1",
+    "k100-1",
+    "k124-2",
+    "k128-1",
+    "k154-1",
+    "k179-1",
+    "k194-2",
+    "k207-1",
+    "k210-2",
+    "k245-1",
+    "k247-1"
+   ]
+  }
+ },
+ "nodegoat": {
+  "labels": {
+   "checks": 234,
+   "confusion": {
+    "fail vs fail": 68,
+    "fail vs not_applicable": 3,
+    "fail vs pass": 9,
+    "fail vs undecidable": 3,
+    "not_applicable vs fail": 1,
+    "not_applicable vs not_applicable": 14,
+    "open vs fail": 38,
+    "open vs not_applicable": 24,
+    "open vs pass": 28,
+    "open vs undecidable": 23,
+    "pass vs fail": 4,
+    "pass vs not_applicable": 1,
+    "pass vs pass": 18
+   },
+   "fail": {
+    "said": 83,
+    "right": 68,
+    "labelled": 111,
+    "found": 68,
+    "precision": 0.819,
+    "recall": 0.613
+   },
+   "pass": {
+    "said": 23,
+    "right": 18,
+    "labelled": 55,
+    "found": 18,
+    "precision": 0.783,
+    "recall": 0.327
+   },
+   "not_applicable": {
+    "said": 15,
+    "right": 14,
+    "labelled": 42,
+    "found": 14,
+    "precision": 0.933,
+    "recall": 0.333
+   },
+   "fail_on_evidence": {
+    "said": 64,
+    "right": 52,
+    "contradicts_a_labelled_pass": 7
+   },
+   "fail_on_absence": {
+    "said": 13,
+    "right": 11,
+    "contradicts_a_labelled_pass": 1
+   },
+   "decisive": 106,
+   "decisive_right": 86,
+   "open": 113,
+   "wrong_pass": [
+    "k16-1",
+    "k59-1",
+    "k110-1",
+    "k210-1"
+   ],
+   "wrong_fail": [
+    "k29-1",
+    "k58-1",
+    "k125-1",
+    "k146-1",
+    "k210-2",
+    "k239-1",
+    "k245-1",
+    "k246-1",
+    "k248-1"
+   ]
+  }
+ },
+ "railsgoat": {
+  "labels": {
+   "checks": 234,
+   "confusion": {
+    "fail vs fail": 93,
+    "fail vs not_applicable": 1,
+    "fail vs pass": 9,
+    "fail vs undecidable": 4,
+    "not_applicable vs fail": 1,
+    "not_applicable vs not_applicable": 6,
+    "not_applicable vs pass": 1,
+    "not_applicable vs undecidable": 1,
+    "open vs fail": 57,
+    "open vs not_applicable": 9,
+    "open vs pass": 8,
+    "open vs undecidable": 27,
+    "pass vs fail": 4,
+    "pass vs pass": 12,
+    "pass vs undecidable": 1
+   },
+   "fail": {
+    "said": 107,
+    "right": 93,
+    "labelled": 155,
+    "found": 93,
+    "precision": 0.869,
+    "recall": 0.6
+   },
+   "pass": {
+    "said": 17,
+    "right": 12,
+    "labelled": 30,
+    "found": 12,
+    "precision": 0.706,
+    "recall": 0.4
+   },
+   "not_applicable": {
+    "said": 9,
+    "right": 6,
+    "labelled": 16,
+    "found": 6,
+    "precision": 0.667,
+    "recall": 0.375
+   },
+   "fail_on_evidence": {
+    "said": 78,
+    "right": 72,
+    "contradicts_a_labelled_pass": 5
+   },
+   "fail_on_absence": {
+    "said": 24,
+    "right": 16,
+    "contradicts_a_labelled_pass": 4
+   },
+   "decisive": 124,
+   "decisive_right": 105,
+   "open": 101,
+   "wrong_pass": [
+    "k153-1",
+    "k168-1",
+    "k194-1",
+    "k219-1"
+   ],
+   "wrong_fail": [
+    "k32-1",
+    "k57-1",
+    "k62-1",
+    "k66-1",
+    "k130-2",
+    "k146-1",
+    "k185-1",
+    "k200-1",
+    "k210-2"
+   ]
+  },
+  "labellers": {
+   "checks": 234,
+   "agree": 214,
+   "kappa": 0.84,
+   "pairs": {
+    "fail / not_applicable": 2,
+    "fail / pass": 6,
+    "fail / undecidable": 2,
+    "not_applicable / undecidable": 1,
+    "pass / fail": 1,
+    "pass / undecidable": 1,
+    "undecidable / fail": 3,
+    "undecidable / not_applicable": 1,
+    "undecidable / pass": 3
+   }
+  },
+  "second_labels": {
+   "checks": 234,
+   "confusion": {
+    "fail vs fail": 91,
+    "fail vs not_applicable": 1,
+    "fail vs pass": 10,
+    "fail vs undecidable": 5,
+    "not_applicable vs fail": 1,
+    "not_applicable vs not_applicable": 6,
+    "not_applicable vs pass": 1,
+    "not_applicable vs undecidable": 1,
+    "open vs fail": 55,
+    "open vs not_applicable": 11,
+    "open vs pass": 11,
+    "open vs undecidable": 24,
+    "pass vs fail": 2,
+    "pass vs pass": 15
+   },
+   "fail": {
+    "said": 107,
+    "right": 91,
+    "labelled": 149,
+    "found": 91,
+    "precision": 0.85,
+    "recall": 0.611
+   },
+   "pass": {
+    "said": 17,
+    "right": 15,
+    "labelled": 37,
+    "found": 15,
+    "precision": 0.882,
+    "recall": 0.405
+   },
+   "not_applicable": {
+    "said": 9,
+    "right": 6,
+    "labelled": 18,
+    "found": 6,
+    "precision": 0.667,
+    "recall": 0.333
+   },
+   "fail_on_evidence": {
+    "said": 78,
+    "right": 71,
+    "contradicts_a_labelled_pass": 6
+   },
+   "fail_on_absence": {
+    "said": 24,
+    "right": 15,
+    "contradicts_a_labelled_pass": 4
+   },
+   "decisive": 124,
+   "decisive_right": 106,
+   "open": 101,
+   "wrong_pass": [
+    "k16-1",
+    "k219-1"
+   ],
+   "wrong_fail": [
+    "k32-1",
+    "k57-1",
+    "k62-1",
+    "k66-1",
+    "k130-2",
+    "k146-1",
+    "k185-1",
+    "k200-1",
+    "k210-2",
+    "k239-1"
+   ]
+  },
+  "both_agree": {
+   "checks": 214,
+   "confusion": {
+    "fail vs fail": 91,
+    "fail vs not_applicable": 1,
+    "fail vs pass": 9,
+    "fail vs undecidable": 4,
+    "not_applicable vs fail": 1,
+    "not_applicable vs not_applicable": 6,
+    "not_applicable vs pass": 1,
+    "not_applicable vs undecidable": 1,
+    "open vs fail": 52,
+    "open vs not_applicable": 8,
+    "open vs pass": 6,
+    "open vs undecidable": 21,
+    "pass vs fail": 1,
+    "pass vs pass": 12
+   },
+   "fail": {
+    "said": 105,
+    "right": 91,
+    "labelled": 145,
+    "found": 91,
+    "precision": 0.867,
+    "recall": 0.628
+   },
+   "pass": {
+    "said": 13,
+    "right": 12,
+    "labelled": 28,
+    "found": 12,
+    "precision": 0.923,
+    "recall": 0.429
+   },
+   "not_applicable": {
+    "said": 9,
+    "right": 6,
+    "labelled": 15,
+    "found": 6,
+    "precision": 0.667,
+    "recall": 0.4
+   },
+   "fail_on_evidence": {
+    "said": 77,
+    "right": 71,
+    "contradicts_a_labelled_pass": 5
+   },
+   "fail_on_absence": {
+    "said": 23,
+    "right": 15,
+    "contradicts_a_labelled_pass": 4
+   },
+   "decisive": 118,
+   "decisive_right": 103,
+   "open": 87,
+   "wrong_pass": [
+    "k219-1"
+   ],
+   "wrong_fail": [
+    "k32-1",
+    "k57-1",
+    "k62-1",
+    "k66-1",
+    "k130-2",
+    "k146-1",
+    "k185-1",
+    "k200-1",
+    "k210-2"
+   ]
+  }
+ }
+}
