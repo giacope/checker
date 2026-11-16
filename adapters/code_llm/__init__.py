@@ -15,7 +15,8 @@ agreed with the truth labels on 94.4% of checks, against 62.5% on the static ada
     4. Verify: every locator must name an existing file and line; an element whose locator does not, or whose
        facts use values outside the vocabulary, is dropped and counted.
 
-Providers: Anthropic (ANTHROPIC_API_KEY) or OpenAI (OPENAI_API_KEY); NORMIR_LLM_MODEL overrides the model.
+Providers: Anthropic (ANTHROPIC_API_KEY), OpenAI (OPENAI_API_KEY), or the Codex CLI on its own sign-in (`codex login`,
+run as `codex exec`); NORMIR_LLM_PROVIDER picks one and NORMIR_LLM_MODEL overrides the model.
 The repository's text is untrusted: the prompt says so, the reply is parsed as JSON only, and nothing it says is
 executed. What leaves the machine is the selected files' text, sent to the configured provider.
 """
@@ -26,6 +27,9 @@ import concurrent.futures as cf
 import json
 import os
 import re
+import shutil
+import subprocess
+import tempfile
 import time
 from pathlib import Path
 
@@ -40,7 +44,7 @@ VOCAB_PATH = Path(__file__).resolve().parents[2] / "vocab" / "code.yaml"
 BATCH_CHARS = 120_000          # about 30k tokens of source per call
 MAX_CHARS = 900_000            # total source sent per repository
 MAX_FILE_CHARS = 60_000        # a longer file is sent in line windows around its relevant lines
-DEFAULT_MODELS = {"anthropic": "claude-opus-5-5", "openai": "gpt-6.1-sol"}
+DEFAULT_MODELS = {"anthropic": "claude-opus-5-5", "openai": "gpt-6.1-sol", "codex": "gpt-6.1-sol"}
 TERMS = re.compile(
     r"passw|bcrypt|argon|pbkdf|scrypt|digest|md5|sha1|sha256|hash|salt|sql|query|execute|select |where\(|find_by|repo\.|"
     r"cookie|session|jwt|token|decode|verify|secret|api_?key|private|credential|log(ger)?\.|logger|puts |inspect|"
@@ -64,18 +68,60 @@ class ReaderError(RuntimeError):
 
 # ---------------------------------------------------------------- provider
 
+def codex_logged_in() -> bool:
+    """The Codex CLI is installed and has credentials (`codex login`, a ChatGPT sign-in or an API key)."""
+    home = Path(os.environ.get("CODEX_HOME") or Path.home() / ".codex")
+    return shutil.which("codex") is not None and (home / "auth.json").is_file()
+
+
 def provider_from_env() -> tuple[str, str, str] | None:
-    """(provider, model, key) from the environment, or None when no key is configured."""
+    """(provider, model, key) from the environment, or None when no model is configured.
+
+    NORMIR_LLM_PROVIDER (anthropic, openai, codex) picks one; otherwise an Anthropic or OpenAI key, then a
+    signed-in Codex CLI. For codex the key is empty; the model is always passed, so the evidence names it."""
     model = os.environ.get("NORMIR_LLM_MODEL")
-    if os.environ.get("ANTHROPIC_API_KEY"):
+    want = os.environ.get("NORMIR_LLM_PROVIDER", "").lower()
+    if os.environ.get("ANTHROPIC_API_KEY") and want in ("", "anthropic"):
         return "anthropic", model or DEFAULT_MODELS["anthropic"], os.environ["ANTHROPIC_API_KEY"]
-    if os.environ.get("OPENAI_API_KEY"):
+    if os.environ.get("OPENAI_API_KEY") and want in ("", "openai"):
         return "openai", model or DEFAULT_MODELS["openai"], os.environ["OPENAI_API_KEY"]
+    if want in ("", "codex") and codex_logged_in():
+        return "codex", model or DEFAULT_MODELS["codex"], ""
     return None
+
+
+CODEX_NOTE = ("You are used as a reader only. Do not run commands, read files or browse: everything you need is in this "
+              "message. Reply with the JSON object only.\n\n")
+
+
+def codex_complete(model: str, system: str, user: str, timeout: float = 900) -> str:
+    """One `codex exec` call on the CLI's own sign-in. It runs in an empty directory with a read-only sandbox,
+    without the user's config (no MCP servers or rules) and without saving the session; the reply is its last
+    message. Codex has no separate system prompt, so the instructions go first."""
+    for attempt in range(3):
+        with tempfile.TemporaryDirectory(prefix="normir-codex-") as d:
+            out = Path(d) / "reply.txt"
+            cmd = ["codex", "exec", "--ephemeral", "--skip-git-repo-check", "--ignore-user-config", "--ignore-rules",
+                   "--sandbox", "read-only", "--color", "never", "-C", d, "-o", str(out)] + (["-m", model] if model else []) + ["-"]
+            try:
+                r = subprocess.run(cmd, input=CODEX_NOTE + system + "\n\n" + user, capture_output=True, text=True,
+                                   timeout=timeout, cwd=d)
+            except subprocess.TimeoutExpired as e:
+                raise ReaderError(f"codex: no reply in {timeout:.0f} s") from e
+            text = out.read_text() if out.is_file() else ""
+            if r.returncode == 0 and text.strip():
+                return text
+            err = (r.stderr or r.stdout).strip().splitlines()[-3:]
+            if attempt == 2 or re.search(r"(?i)not logged in|login|unauthori[sz]ed|401|403", " ".join(err)):
+                raise ReaderError(f"codex exited {r.returncode}: {' / '.join(err)[:300]}")
+        time.sleep(2 ** attempt * 5)
+    raise ReaderError("codex: gave up after retries")
 
 
 def complete(provider: str, model: str, key: str, system: str, user: str, client: httpx.Client) -> str:
     """One model call; returns the reply text. Retries rate limits and server errors."""
+    if provider == "codex":
+        return codex_complete(model, system, user)
     for attempt in range(5):
         if provider == "anthropic":
             r = client.post("https://api.anthropic.com/v1/messages",
@@ -259,7 +305,7 @@ def analyse(repo: str | Path, describes: str | None = None, provider: tuple[str,
     root = Path(repo).resolve()
     provider = provider or provider_from_env()
     if provider is None:
-        raise ReaderError("no model provider configured: set ANTHROPIC_API_KEY or OPENAI_API_KEY")
+        raise ReaderError("no model provider configured: set ANTHROPIC_API_KEY or OPENAI_API_KEY, or sign in with `codex login`")
     name, model, key = provider
     source = f"llm:{model}"
     vocab = yaml.safe_load(VOCAB_PATH.read_text())

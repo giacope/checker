@@ -5,7 +5,7 @@ import json
 import httpx
 import pytest
 
-from adapters.code_llm import ReaderError, analyse, parse_json
+from adapters.code_llm import ReaderError, analyse, parse_json, provider_from_env
 from normir.evidence import load_evidence
 
 APP = {
@@ -75,8 +75,63 @@ def test_every_failed_call_is_an_error(tmp_path):
 def test_no_provider_is_an_error(tmp_path, monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.setenv("CODEX_HOME", str(tmp_path / "no-codex"))
     with pytest.raises(ReaderError, match="no model provider"):
         analyse(write(tmp_path / "repo", APP))
+
+
+FAKE_CODEX = """#!/usr/bin/env python3
+import json, os, sys
+args = sys.argv[1:]
+stdin = sys.stdin.read()
+log = os.environ["FAKE_CODEX_LOG"]
+calls = json.load(open(log)) if os.path.exists(log) else []
+calls.append({"args": args, "cwd": os.getcwd(), "stdin": stdin})
+json.dump(calls, open(log, "w"))
+replies = json.load(open(os.environ["FAKE_CODEX_REPLIES"]))
+open(args[args.index("-o") + 1], "w").write(replies[min(len(calls), len(replies)) - 1])
+"""
+
+
+def test_codex_cli_reader_on_its_own_sign_in(tmp_path, monkeypatch):
+    """Without API keys, a signed-in Codex CLI is the provider: each call is a `codex exec` in an empty directory
+    with a read-only sandbox and nothing saved, the instructions and source text on stdin, the reply read from -o."""
+    root = write(tmp_path / "repo", APP)
+    bin_ = tmp_path / "bin"
+    bin_.mkdir()
+    (bin_ / "codex").write_text(FAKE_CODEX)
+    (bin_ / "codex").chmod(0o755)
+    home = tmp_path / "codex-home"
+    home.mkdir()
+    (home / "auth.json").write_text("{}")
+    read = json.dumps({"elements": [{"type": "Query", "at": "app/controllers/sessions_controller.rb:3",
+                                     "facts": {"construction": "interpolated"}}],
+                       "system": [{"fact": "tls_enforced", "value": True, "at": ["config/environments/production.rb:2"]}]})
+    settled = json.dumps({"system": [{"fact": "tls_enforced", "value": True, "at": ["config/environments/production.rb:2"]}]})
+    (tmp_path / "replies.json").write_text(json.dumps([read, settled]))
+    for k, v in {"PATH": f"{bin_}:{__import__('os').environ['PATH']}", "CODEX_HOME": str(home),
+                 "FAKE_CODEX_LOG": str(tmp_path / "calls.json"), "FAKE_CODEX_REPLIES": str(tmp_path / "replies.json")}.items():
+        monkeypatch.setenv(k, v)
+    monkeypatch.setenv("OPENAI_API_KEY", "sk-test")
+    monkeypatch.setenv("NORMIR_LLM_PROVIDER", "codex")   # chosen over a key that is also set
+    monkeypatch.delenv("NORMIR_LLM_MODEL", raising=False)
+    assert provider_from_env() == ("codex", "gpt-6.1-sol", "")
+    doc = analyse(root, "demo", workers=1)
+    assert [(e["type"], e["at"]) for e in doc["elements"]] == [("Query", "app/controllers/sessions_controller.rb:3")]
+    assert doc["facts"]["tls_enforced"][0]["source"] == "llm:gpt-6.1-sol"
+    calls = json.loads((tmp_path / "calls.json").read_text())
+    assert len(calls) == 2
+    for c in calls:
+        a = c["args"]
+        assert a[0] == "exec" and a[-1] == "-" and "--ephemeral" in a and "--ignore-user-config" in a
+        assert a[a.index("--sandbox") + 1] == "read-only" and a[a.index("-m") + 1] == "gpt-6.1-sol"
+        assert a[a.index("-C") + 1] == c["cwd"] and str(root) not in c["cwd"]   # an empty directory, not the repository
+    assert "    3      User.where" in calls[0]["stdin"] and calls[0]["stdin"].startswith("You are used as a reader only")
+    monkeypatch.delenv("NORMIR_LLM_PROVIDER")
+    assert provider_from_env()[0] == "openai"   # a key wins when no provider is named
+    monkeypatch.delenv("OPENAI_API_KEY")
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    assert provider_from_env()[0] == "codex"    # the sign-in alone is enough
 
 
 def test_parse_json_takes_fenced_or_bare_objects():
