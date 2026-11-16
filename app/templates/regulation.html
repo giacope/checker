@@ -37,6 +37,7 @@
   {% endif %}
 </div>
 {% if reg %}
+{% if ask %}{% include "_ask.html" %}{% endif %}
 <form method="post" action="/regulations/{{ rid }}/checks" id="checks" class="card">
   <h2>Clauses and checks</h2>
   {% for c in reg.clauses %}{% set ks = by_clause.get(c.id, []) %}

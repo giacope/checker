@@ -26,8 +26,9 @@
   {% if r.notes or r.skipped %}<div class="note" style="margin-top:14px"><b>Limits of this check</b><ul style="margin:6px 0 0">{% for n in r.notes[:8] %}<li>{{ n }}</li>{% endfor %}</ul>
     {% if r.skipped %}<details class="small" style="margin-top:6px"><summary>Read but not used ({{ r.skipped | sum(attribute="count") }} items, {{ r.skipped | length }} reasons)</summary><ul>{% for g in r.skipped[:20] %}<li><b>{{ g.count }}</b> × {{ g.reason }} <span class="muted">— e.g. {{ g.examples[:2] | join("; ") }}</span></li>{% endfor %}</ul></details>{% endif %}</div>{% endif %}
   {% if r.questions %}<p style="margin-bottom:0"><a href="#questions"><b>{{ r.questions | length }} question{{ "s" if r.questions | length != 1 }}</b></a> about the project would settle open verdicts — answer them to update the report.</p>{% endif %}
-  <nav class="toc small" style="margin-top:10px">{% for s in r.standards %}<a href="#{{ s.id }}">{{ s.label.split(":")[0] }}</a>{% endfor %}<a href="#questions">Questions</a><a href="#facts">What the drawings say</a>{% if r.conflicts %}<a href="#conflicts">Disagreements</a>{% endif %}<a href="#sheets">Sheets</a><a href="#method">Method</a></nav>
+  <nav class="toc small" style="margin-top:10px">{% for s in r.standards %}<a href="#{{ s.id }}">{{ s.label.split(":")[0] }}</a>{% endfor %}{% if ask %}<a href="#ask">Ask</a>{% endif %}<a href="#questions">Questions</a><a href="#facts">What the drawings say</a>{% if r.conflicts %}<a href="#conflicts">Disagreements</a>{% endif %}<a href="#sheets">Sheets</a><a href="#method">Method</a></nav>
 </div>
+{% if ask %}{% include "_ask.html" %}{% endif %}
 
 {% for s in r.standards %}
 <div class="card" id="{{ s.id }}">

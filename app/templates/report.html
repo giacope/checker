@@ -24,9 +24,10 @@
   </table>
   {% if r.notes %}<div class="note" style="margin-top:14px"><b>Limits of this scan</b><ul style="margin:6px 0 0">{% for n in r.notes %}<li>{{ n }}</li>{% endfor %}</ul></div>{% endif %}
   {% if r.questions %}<p style="margin-bottom:0"><a href="#questions"><b>{{ r.questions | length }} question{{ "s" if r.questions | length != 1 }}</b></a> would settle open verdicts — answer them to update the report.</p>{% endif %}
-  <nav class="toc small" style="margin-top:10px">{% for s in r.standards %}<a href="#{{ s.id }}">{{ s.label }}</a>{% endfor %}{% if r.dependencies.total %}<a href="#deps">Dependencies</a>{% endif %}<a href="#questions">Questions</a><a href="#method">Method</a></nav>
+  <nav class="toc small" style="margin-top:10px">{% for s in r.standards %}<a href="#{{ s.id }}">{{ s.label }}</a>{% endfor %}{% if r.dependencies.total %}<a href="#deps">Dependencies</a>{% endif %}{% if ask %}<a href="#ask">Ask</a>{% endif %}<a href="#questions">Questions</a><a href="#method">Method</a></nav>
 </div>
 
+{% if ask %}{% include "_ask.html" %}{% endif %}
 {% for s in r.standards %}
 <div class="card" id="{{ s.id }}">
   <h2>{{ s.label }}</h2>

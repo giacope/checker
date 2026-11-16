@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{{ req.question[:80] }}{% endblock %}
+{% block head %}{% if st.state not in ("done", "error") %}<meta http-equiv="refresh" content="2">{% endif %}{% endblock %}
+{% block sub %}{{ "Deep research" if req.mode == "deep" else "Quick answer" }} — every claim cites what it rests on{% endblock %}
+{% block body %}
+<div class="card">
+  <p class="small">{% for t, p in parts.items() %}<a href="{{ p.href }}">{{ "← " if loop.first }}{{ p.name }}</a>{% if not loop.last %} + {% endif %}{% endfor %}</p>
+  <h1 class="question">{{ req.question }}</h1>
+  <p class="muted small">{{ "Deep research" if req.mode == "deep" else "Quick answer" }} · asked {{ req.created }}{% for t, p in parts.items() if t %} · <span class="kv">{{ t }}</span> {{ p.name }}{% endfor %}</p>
+  {% if st.state == "error" %}
+    <div class="note"><b>The question could not be answered.</b> {{ st.error }}</div>
+  {% elif st.state != "done" %}
+    <p><b>{{ st.step or "Queued" }}</b>…</p>
+    <ul class="small muted">{% for m in (st.log or [])[:-1] %}<li>{{ m }}</li>{% endfor %}</ul>
+    <p class="small muted">This page refreshes itself.{% if req.mode == "deep" %} Deep research reads everything and takes a few minutes.{% endif %}</p>
+  {% else %}
+    {% set labels = {"answered": ("Answered", "v-pass"), "partial": ("Partly answered", "v-unknown"), "not_found": ("Not found in the material", "v-not_applicable"), "unsupported": ("No answer held up", "v-fail")} %}
+    <p><span class="pill {{ labels[a.status][1] }}">{{ labels[a.status][0] }}</span>
+      <span class="muted small">read {{ a.coverage.excerpts_read }} of {{ a.coverage.excerpts_total }} excerpts{% if a.coverage.chars_total %} ({{ (100 * a.coverage.chars_read / a.coverage.chars_total) | round | int }}% of the text){% endif %} · {{ a.stats.claims }} cited claim{{ "s" if a.stats.claims != 1 }} · {{ a.stats.calls }} model call{{ "s" if a.stats.calls != 1 }} · {{ a.stats.seconds }} s</span></p>
+    {% if a.answer %}<div class="answer">{{ a.answer }}</div>{% endif %}
+    {% if a.status == "unsupported" %}<div class="note small">The model answered, but none of the lines it cited were among those it was shown, so its answer is not repeated here.</div>{% endif %}
+    {% for s in a.sections if s.claims %}
+      {% if s.heading %}<h3 style="margin-top:18px">{{ s.heading }}</h3>{% endif %}
+      <ul class="claims">{% for c in s.claims %}<li><span>{{ c.text }}</span>
+        {% if c.basis == "absence" %}<span class="pill v-unknown" title="{{ c.note }}">not found</span> <span class="muted small">{{ c.note }}</span>{% endif %}
+        {% for loc in c.at %}<a class="cite" href="#sources" data-at="{{ loc }}">{{ cites[loc].label }}</a>{% endfor %}</li>{% endfor %}</ul>
+    {% endfor %}
+    {% if a.conflicts %}<div class="note small" style="margin-top:12px"><b>Disagreements in the material</b><ul style="margin:4px 0 0">{% for x in a.conflicts %}<li>{{ x }}</li>{% endfor %}</ul></div>{% endif %}
+    {% if a.open %}<p class="small"><b>Left open:</b> {{ a.open }}</p>{% endif %}
+  {% endif %}
+</div>
+{% if a and cites %}
+<div class="card" id="sources">
+  <h2>What it cites</h2>
+  <p class="small muted">The text each claim cites, exactly as the material has it. A citation is kept only when it names text that exists and that the model was shown when it made the claim.</p>
+  {% for loc, c in cites.items() %}
+  <div class="src" id="src-{{ loop.index }}" data-at="{{ loc }}">
+    <div class="small"><b>{% if c.href %}<a href="{{ c.href }}" target="_blank" rel="noopener">{{ c.label }}</a>{% else %}{{ c.label }}{% endif %}</b>{% if c.part %} <span class="muted">· {{ c.part }}</span>{% endif %}</div>
+    {% if c.lines %}<pre class="code">{% for n, t in c.lines %}<span class="row"><span class="ln">{{ n }}</span>{{ t }}</span>{% endfor %}</pre>
+    {% elif c.img %}<a href="{{ c.img }}" target="_blank" rel="noopener"><img class="crop" loading="lazy" src="{{ c.img }}" alt="{{ c.label }}"></a>{% if c.text %}<div class="small muted">{{ c.text }}</div>{% endif %}
+    {% else %}<blockquote class="small" style="white-space:pre-wrap">{{ c.text }}</blockquote>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+<script>
+// a citation chip scrolls to and highlights its source
+const ids = {}; document.querySelectorAll('.src').forEach(e => ids[e.dataset.at] = e.id);
+document.querySelectorAll('a.cite').forEach(a => { const id = ids[a.dataset.at]; if (id) a.href = '#' + id; });
+</script>
+{% endif %}
+{% endblock %}

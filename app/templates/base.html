@@ -56,6 +56,15 @@ blockquote { margin:8px 0; padding:8px 12px; border-left:3px solid #c9ced6; back
 .bar { height:8px; background:#eceef1; border-radius:4px; overflow:hidden; } .bar > span { display:block; height:100%; background:var(--accent); }
 nav.toc a { display:inline-block; margin-right:14px; }
 .q { display:grid; grid-template-columns: 1fr 220px; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); align-items:center; }
+textarea { width:100%; padding:10px 12px; border:1px solid #c9ced6; border-radius:8px; font:inherit; resize:vertical; }
+.ask-row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:8px; flex-wrap:wrap; }
+.ask .modes { display:flex; gap:18px; flex-wrap:wrap; } .ask .modes label { display:flex; gap:6px; align-items:baseline; font-weight:400; margin:0; }
+ul.qlist { margin:4px 0 0; padding-left:18px; } ul.qlist li { margin:2px 0; }
+h1.question { font-size:22px; line-height:1.3; }
+.answer { font-size:16.5px; line-height:1.6; background:#f6f8fc; border:1px solid #dfe6f3; border-radius:9px; padding:14px 16px; margin:10px 0; }
+ul.claims { padding-left:20px; margin:6px 0; } ul.claims li { margin:7px 0; }
+a.cite { display:inline-block; font:12px ui-monospace, Menlo, monospace; background:#eef2fb; color:#2348a8; border-radius:5px; padding:0 6px; margin-left:5px; }
+.src { padding:10px 0; border-bottom:1px solid var(--line); } .src:target { background:#f2f6ff; box-shadow:0 0 0 8px #f2f6ff; border-radius:4px; }
 footer { color:var(--muted); font-size:12.5px; text-align:center; padding:24px; }
 @media (max-width: 760px) { .g4, .g2 { grid-template-columns: 1fr 1fr; } .q { grid-template-columns: 1fr; } }
 </style>

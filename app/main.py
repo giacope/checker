@@ -27,6 +27,7 @@ from fastapi.templating import Jinja2Templates
 from adapters.regulation import ANSWER_LABELS
 
 from . import buildings
+from . import questions as qs
 from . import regulations as regs
 from . import report as report_mod
 from .scan import STANDARDS, ScanError, evaluate, parse_repo_url, scan
@@ -99,7 +100,7 @@ def _run(sid: str) -> None:
     try:
         progress("Queued")
         own = [x[4:] for x in req["standards"] if x.startswith("reg:")]
-        data = scan(req["url"], work, req.get("branch") or None, progress=progress, requirements=regs.assessed(own))
+        data = scan(req["url"], work, req.get("branch") or None, progress=progress, requirements=regs.assessed(own), keep=d / "source")
         _write(d, "scan.json", data)
         _status(d, state="done", step="Done", seconds=data["seconds"])
     except ScanError as e:
@@ -161,7 +162,10 @@ def show(request: Request, sid: str):
     if st.get("state") != "done":
         return templates.TemplateResponse(request, "progress.html", {"sid": sid, "req": req, "st": st})
     rep = _report(d)
-    return templates.TemplateResponse(request, "report.html", {"sid": sid, "req": req, "r": rep,
+    own = [x[4:] for x in req["standards"] if x.startswith("reg:")]
+    ask = _ask({"kind": "scan", "id": sid}, "code", own, hint="e.g. How are passwords stored? or: Find every place user input reaches a query") \
+        if (d / "source").is_dir() else None
+    return templates.TemplateResponse(request, "report.html", {"sid": sid, "req": req, "r": rep, "ask": ask,
                                                                "VERDICT": report_mod.VERDICT_LABEL, "TYPE": report_mod.TYPE_LABEL})
 
 
@@ -272,8 +276,10 @@ def show_regulation(request: Request, rid: str):
         by_clause.setdefault(k["clause"], []).append(k)
     voc = regs.vocab(req["domain"]) if reg else {}
     rules = {k["id"]: regs.rule_text(k, voc) for k in (reg or {}).get("checks") or []}
+    ask = _ask(None, req["domain"], [rid], fixed=rid, title="Ask the regulation",
+               hint="e.g. What does it require for session identifiers? or: List every logging requirement") if reg else None
     return templates.TemplateResponse(request, "regulation.html", {"rid": rid, "req": req, "st": st, "reg": reg, "clauses": clauses,
-                                                                   "by_clause": by_clause, "kinds": regs.KINDS, "rules": rules})
+                                                                   "by_clause": by_clause, "kinds": regs.KINDS, "rules": rules, "ask": ask})
 
 
 @app.get("/regulations/{rid}/status")
@@ -407,8 +413,10 @@ def show_project(request: Request, pid: str):
         codes = {**buildings.CODES, **{c: (None, (regs.ready(c[4:], "building") or {}).get("name", c), "your regulation")
                                          for c in req["codes"] if c.startswith("reg:")}}
         return templates.TemplateResponse(request, "project_progress.html", {"pid": pid, "req": req, "st": st, "codes": codes})
+    own = [c[4:] for c in req["codes"] if c.startswith("reg:")]
+    ask = _ask({"kind": "project", "id": pid}, "building", own, hint="e.g. What are the stair riser heights? or: Summarise every fire-safety provision shown")
     return templates.TemplateResponse(request, "project_report.html", {
-        "pid": pid, "req": req, "r": _project_report(pid, d), "VERDICT": report_mod.VERDICT_LABEL, "TYPE": buildings.TYPE_LABEL})
+        "pid": pid, "req": req, "r": _project_report(pid, d), "VERDICT": report_mod.VERDICT_LABEL, "TYPE": buildings.TYPE_LABEL, "ask": ask})
 
 
 @app.get("/projects/{pid}/status")
@@ -481,6 +489,47 @@ def project_json(pid: str):
     if _read(d, "status.json", {}).get("state") != "done":
         raise HTTPException(409, "The project has not finished processing")
     return JSONResponse(json.loads(json.dumps(_project_report(pid, d), default=str)))
+
+
+# ---------------------------------------------------------------- questions
+
+def _ask(artifact: dict | None, domain: str, own: list[str] = (), fixed: str | None = None, title: str | None = None,
+         hint: str | None = None) -> dict:
+    """The ask form's context: the regulations of the domain it can read with, the ones in use checked."""
+    rs = [{"id": r["id"], "name": r["name"], "checked": r["id"] in own, "fixed": r["id"] == fixed}
+          for r in regs.regulations(domain) if r["state"] == "done"]
+    return {"artifact": artifact, "regs": [] if fixed and len(rs) == 1 else rs, "title": title, "hint": hint,
+            "recent": qs.recent(artifact=artifact, regulation=None if artifact else fixed)}
+
+
+@app.post("/ask")
+def ask_question(question: str = Form(...), mode: str = Form("quick"), artifact_kind: str = Form(""), artifact_id: str = Form(""),
+                 regulations: list[str] = Form([])):
+    artifact = {"kind": artifact_kind, "id": artifact_id} if artifact_kind else None
+    try:
+        qid = qs.create(question, mode, artifact, regulations)
+    except qs.QuestionError as e:
+        raise HTTPException(400, str(e)) from e
+    POOL.submit(qs.run, qid)
+    return RedirectResponse(f"/questions/{qid}", status_code=303)
+
+
+@app.get("/questions/{qid}", response_class=HTMLResponse)
+def show_question(request: Request, qid: str):
+    try:
+        ctx = qs.page(qid)
+    except qs.QuestionError as e:
+        raise HTTPException(404, str(e)) from e
+    return templates.TemplateResponse(request, "question.html", ctx)
+
+
+@app.get("/questions/{qid}/answer.json")
+def question_json(qid: str):
+    try:
+        d = qs.qdir(qid)
+    except qs.QuestionError as e:
+        raise HTTPException(404, str(e)) from e
+    return {"request": _read(d, "request.json"), "status": _read(d, "status.json", {}), "answer": _read(d, "answer.json")}
 
 
 @app.get("/healthz")

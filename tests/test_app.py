@@ -11,6 +11,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
+import adapters.research  # noqa: F401 - loaded before the compiler fixture stands in for adapters.regulation
 from adapters.code_static import analyse
 
 REPO = {
@@ -43,6 +44,8 @@ def client(tmp_path, monkeypatch):
 
     def fake_scan(url, work, branch=None, progress=lambda m: None, **kw):
         calls.append(kw)
+        if kw.get("keep"):
+            scan_mod.keep_source(src, kw["keep"])
         progress("Static analysis")
         docs = [analyse(src, "acme/shop")]
         return {"repo": {"url": "https://github.com/acme/shop", "owner": "acme", "name": "shop", "branch": None, "commit": "a" * 40},
@@ -244,3 +247,54 @@ def test_report_separates_doesnt_apply_and_nothing_found(tmp_path, monkeypatch):
     md = report.markdown(rep)
     assert "### Fails (nothing found in the code searched): 2.1" in md
     assert "Judged not to apply: 1.1 Uploads are scanned for malware. nothing is uploaded (llm:m, nothing found in the code searched)" in md
+
+
+def test_questions_about_a_scan_with_its_regulation(client, compiler, monkeypatch):
+    """Ask from the scan page: the code kept from the scan and the regulation are read together, the page shows
+    the answer with each citation's own text, and the form rejects what it cannot answer."""
+    research = adapters.research
+    r = client.post("/regulations", data={"name": "Acme standard", "domain": "code"},
+                    files=[("files", ("acme.md", b"2.1 Passwords must be hashed.\n", "text/markdown"))], follow_redirects=False)
+    rid = r.headers["location"].rsplit("/", 1)[1]
+    assert wait_reg(client, rid)["state"] == "done"
+    sid = client.post("/scans", data={"url": "https://github.com/acme/shop", "standards": [f"reg:{rid}"]},
+                      follow_redirects=False).headers["location"].rsplit("/", 1)[1]
+    assert wait(client, sid)["state"] == "done"
+    page = client.get(f"/scans/{sid}").text
+    assert 'action="/ask"' in page and f'name="regulations" value="{rid}" checked' in page
+
+    seen = []
+
+    def complete(pname, model, key, system, user, client_):
+        seen.append(user)
+        return json.dumps({"status": "answered", "answer": "No: MD5, against 2.1.", "claims": [
+            {"text": "Passwords are hashed with MD5.", "at": ["A|server/routes.js:6"]},
+            {"text": "2.1 requires a slow salted hash.", "at": ["R1|c2"]},
+            {"text": "An invented line.", "at": ["A|server/routes.js:60"]}]})
+    monkeypatch.setattr(research, "complete", complete)
+    monkeypatch.setattr(research, "provider_from_env", lambda: ("anthropic", "test-model", "k"))
+    r = client.post("/ask", data={"question": "Does password hashing meet the standard?", "mode": "quick", "artifact_kind": "scan",
+                                  "artifact_id": sid, "regulations": [rid]}, follow_redirects=False)
+    assert r.status_code == 303
+    qid = r.headers["location"].rsplit("/", 1)[1]
+    for _ in range(100):
+        got = client.get(f"/questions/{qid}/answer.json").json()
+        if got["status"].get("state") in ("done", "error"):
+            break
+        time.sleep(0.05)
+    assert got["status"]["state"] == "done", got["status"]
+    assert "[A] server/routes.js" in seen[0] and "[R1] clause c2" in seen[0]
+    a = got["answer"]
+    assert [c["at"] for c in a["sections"][0]["claims"]] == [["A|server/routes.js:6"], ["R1|c2"]]
+    html = client.get(f"/questions/{qid}").text
+    assert "No: MD5, against 2.1." in html and "An invented line." not in html
+    assert 'href="https://github.com/acme/shop/blob/' + "a" * 40 + '/server/routes.js#L6"' in html
+    assert 'createHash(&#34;md5&#34;)' in html                       # the cited line itself, from the kept source
+    assert f'href="/regulations/{rid}#c2"' in html and "Passwords must be hashed with a slow, salted hash." in html
+    assert f'/questions/{qid}' in client.get(f"/scans/{sid}").text  # listed under "asked before"
+    # what it cannot answer
+    assert client.post("/ask", data={"question": "hi there", "artifact_kind": "scan", "artifact_id": "zzzzzzzzzzzz"}).status_code == 400
+    assert client.post("/ask", data={"question": "hi there", "regulations": ["rzzzzzzzzzz"]}).status_code == 400
+    assert client.post("/ask", data={"question": "hi there", "mode": "forever", "regulations": [rid]}).status_code == 400
+    assert client.post("/ask", data={"question": "hi there"}).status_code == 400
+    assert client.get("/questions/../../etc").status_code == 404

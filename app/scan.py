@@ -181,6 +181,15 @@ def collect(root: Path, name: str, models: list[Path] = (), use_reader: bool = T
     return docs, notes
 
 
+def mask(text: str, secret: bool = False) -> str:
+    """A source line with its string literals masked when it holds a secret or looks like it might."""
+    if secret or re.search(r"(secret|passw|token|api_?key|private)", text, re.I):
+        # literals left to right, short ones too, so the code between two literals is never taken for one
+        text = re.sub(r"(['\"])((?:\\.|(?!\1).)*)\1", lambda m: m[0] if len(m[2]) < 4 else f"{m[1]}•••{m[1]}", text)
+        text = re.sub(r"(-----BEGIN[^-]*-----).*", r"\1 •••", text)
+    return text
+
+
 def snippets(root: Path, docs: list[dict], context: int = 2) -> dict[str, dict]:
     """Source lines around every locator, for the report. String literals on Secret lines are masked."""
     def ats_of(e):  # an element's "at" is one locator or a list of them
@@ -207,11 +216,7 @@ def snippets(root: Path, docs: list[dict], context: int = 2) -> dict[str, dict]:
         lo, hi = max(1, n - context), min(len(rows), end + context)
         lines = []
         for i in range(lo, hi + 1):
-            text = rows[i - 1][:240]
-            if at in secret_at or re.search(r"(secret|passw|token|api_?key|private)", text, re.I):
-                text = re.sub(r"(['\"])(?:(?!\1).){4,}\1", r"\1•••\1", text)
-                text = re.sub(r"(-----BEGIN[^-]*-----).*", r"\1 •••", text)
-            lines.append([i, text])
+            lines.append([i, mask(rows[i - 1][:240], at in secret_at)])
         out[at] = {"path": path, "line": n, "end": end, "lines": lines}
     return out
 
@@ -229,9 +234,22 @@ def advisory_details(docs: list[dict], offline: bool = False) -> dict:
         return {}
 
 
+def keep_source(root: Path, dest: Path) -> int:
+    """Copy the files a CodeCorpus of `root` reads to `dest`, so questions can be asked of the code as it was scanned
+    after the clone is gone. Returns the number of files."""
+    from adapters.assess import CodeCorpus
+    paths = CodeCorpus(root).paths()
+    for rel in paths:
+        out = dest / rel
+        out.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(root / rel, out)
+    return len(paths)
+
+
 def scan(url: str, workdir: Path, branch: str | None = None, models: list[Path] = (), use_reader: bool = True,
-         offline: bool = False, progress=lambda m: None, requirements: list[dict] = ()) -> dict:
-    """Clone, run the adapters, and return {repo, evidence docs, snippets, notes}. The clone is deleted after."""
+         offline: bool = False, progress=lambda m: None, requirements: list[dict] = (), keep: Path | None = None) -> dict:
+    """Clone, run the adapters, and return {repo, evidence docs, snippets, notes}. The clone is deleted after; with
+    `keep`, the text files it read are copied there first (keep_source)."""
     owner, repo = parse_repo_url(url)
     dest = workdir / "checkout"
     if dest.exists():
@@ -245,6 +263,8 @@ def scan(url: str, workdir: Path, branch: str | None = None, models: list[Path] 
         docs, notes = collect(dest, f"{owner}/{repo}", list(models), use_reader, offline, progress, requirements)
         snips = snippets(dest, docs)
         advisories = advisory_details(docs, offline)
+        if keep is not None:
+            keep_source(dest, keep)
     finally:
         shutil.rmtree(dest, ignore_errors=True)
     return {"repo": {"url": f"https://github.com/{owner}/{repo}", "owner": owner, "name": repo, "branch": branch, "commit": commit},

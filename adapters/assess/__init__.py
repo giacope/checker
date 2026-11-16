@@ -135,6 +135,10 @@ class CodeCorpus:
                     used += size
         return out
 
+    def paths(self) -> list[str]:
+        """The files the corpus reads, relative to the root."""
+        return sorted(self._index())
+
     def everything(self) -> list[tuple[str, str]]:
         files = self._index()
         order = sorted(files, key=lambda rel: (0 if ALWAYS.search(rel) else 1, rel))

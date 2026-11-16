@@ -57,7 +57,9 @@ class RegulationCorpus:
 
     prompt_notes = ("The material is a regulation, standard or policy, split into clauses. Each excerpt is one clause, "
                     "headed `clause c<n>` with its printed number, title, file and page. Cite a clause as `c<n>`. "
-                    "Quote the clause's own numbers and conditions; say when a provision applies only to some cases.")
+                    "Quote the clause's own numbers and conditions; say when a provision applies only to some cases. In "
+                    "the answer and claim text, name a clause by its printed number or title, never by its c<n> id, "
+                    "which is only for citing.")
 
     def __init__(self, reg: dict):
         self.name = str(reg.get("name") or reg.get("id") or "regulation")
