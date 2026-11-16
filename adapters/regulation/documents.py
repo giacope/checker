@@ -9,6 +9,7 @@ file's bytes.
 from __future__ import annotations
 
 import hashlib
+import html as html_mod
 import re
 import unicodedata
 import zipfile
@@ -19,7 +20,7 @@ from xml.etree import ElementTree as ET
 
 MAX_BYTES = 50_000_000
 KINDS = {".pdf": "pdf", ".docx": "docx", ".html": "html", ".htm": "html", ".xhtml": "html",
-         ".md": "md", ".markdown": "md", ".txt": "txt", ".text": "txt"}
+         ".md": "md", ".markdown": "md", ".txt": "txt", ".text": "txt", ".rst": "txt"}
 LEGACY = {".doc": "save it as .docx", ".rtf": "save it as .docx or PDF", ".odt": "save it as .docx or PDF",
           ".pages": "export it as PDF", ".xls": "export it as PDF", ".xlsx": "export it as PDF"}
 OLE_MAGIC = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"   # an encrypted .docx is an OLE container, as is a legacy .doc
@@ -74,14 +75,18 @@ def _decode(data: bytes, rel: str, html: bool = False) -> str:
     try:
         text = data.decode("utf-8")
     except UnicodeDecodeError:
-        enc = "cp1252"
         m = re.search(rb"""<meta[^>]+charset=["']?([\w-]+)""", data[:4096], re.I) if html else None
-        if m:
-            enc = m.group(1).decode("ascii", "replace")
+        enc = m.group(1).decode("ascii", "replace") if m else None
+        if enc is None:   # undeclared: detect it (Shift_JIS, GB18030, cp1252...) rather than assume Western European
+            from charset_normalizer import from_bytes
+            best = from_bytes(data).best()
+            enc = best.encoding if best is not None else "cp1252"
         try:
             text = data.decode(enc, errors="replace")
         except LookupError:
             text = data.decode("cp1252", errors="replace")
+        if text.count("\ufffd") > max(3, len(text) // 200):
+            raise RegulationError(f"{rel}: the text encoding could not be recognised; save it as UTF-8")
     if "\x00" in text:
         raise RegulationError(f"{rel} does not look like a text file (it contains binary data)")
     return text
@@ -103,7 +108,7 @@ def _pdf(path: Path, rel: str) -> tuple[list[tuple[int | None, str]], int]:
     try:
         with pdf:
             for page in pdf.pages:
-                pages.append((page.extract_text() or "").split("\n"))
+                pages.append(_page_text(page))
     except Exception as e:
         name = type(e).__name__
         if "Password" in name or "Encrypt" in name:
@@ -114,6 +119,37 @@ def _pdf(path: Path, rel: str) -> tuple[list[tuple[int | None, str]], int]:
     repeated = _running_heads(pages)
     rows = [(i + 1, t) for i, p in enumerate(pages) for t in p if _shape(t) not in repeated]
     return rows, len(pages)
+
+
+RUN = re.compile(r"[A-Za-z,.;:()'’-]{22,}")
+LONE = re.compile(r"[b-hj-zB-HJ-Z]")
+
+
+def _malformed(lines: list[str]) -> int:
+    """Tokens that are not words: letters run together with no spaces, or a word split into single letters."""
+    words = [w for t in lines for w in t.split()]
+    return sum(1 for w in words if (RUN.fullmatch(w) and not re.search(r"https?|www\.|\.(gov|org|com|net)", w)) or LONE.fullmatch(w))
+
+
+def _page_text(page) -> list[str]:
+    """A page's lines. Where most of the page is upright, rotated text (a margin note running up the side, a
+    diagonal watermark) is left out. Words are split at gaps wider than a fixed 3 points; when that reading has
+    malformed tokens, readings with glyphs drawn twice in one place (fake bold) counted once, and with gaps judged
+    against 15% of the font size (PDFs that set spaces as narrow gaps), are tried too, and the one with the fewest
+    malformed tokens is kept."""
+    chars = page.chars
+    if chars and sum(1 for c in chars if c.get("upright", True)) >= 0.5 * len(chars):
+        page = page.filter(lambda o: o.get("object_type") != "char" or o.get("upright", True))
+    best = (page.extract_text() or "").split("\n")
+    bad = _malformed(best)
+    if bad:
+        once = page.dedupe_chars()
+        for kw_page, kw in ((once, {}), (once, {"x_tolerance_ratio": 0.15})):
+            lines = (kw_page.extract_text(**kw) or "").split("\n")
+            n = _malformed(lines)
+            if n < bad:
+                best, bad = lines, n
+    return best
 
 
 def _shape(text: str) -> str:
@@ -252,12 +288,14 @@ def _docx_blocks(parent: ET.Element, numbering: _Numbering, out: list[str]) -> N
         if el.tag == W + "p":
             out.extend(_paragraph(el, numbering))
         elif el.tag == W + "tbl":
-            for tr in el.iter(W + "tr"):
+            for tr in el.iter(W + "tr"):   # a row is one line, its cells joined by " | ", as in HTML
+                cells = []
                 for tc in tr.findall(W + "tc"):
                     cell: list[str] = []
                     for p in tc.iter(W + "p"):
                         cell.extend(_paragraph(p, numbering))
-                    out.append(" ".join(cell))
+                    cells.append(" ".join(c.strip() for c in cell if c.strip()))
+                out.append(" | ".join(cells))
         elif el.tag in (W + "sdt", W + "sdtContent", W + "customXml", W + "ins"):
             _docx_blocks(el, numbering, out)
 
@@ -297,7 +335,15 @@ SKIP = {"script", "style", "noscript", "template", "svg", "head", "nav", "iframe
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 
 
+LANDMARKS = {"navigation", "banner", "contentinfo", "search", "menu", "menubar", "toolbar"}
+CELLS = {"td", "th"}
+
+
 class _Html(HTMLParser):
+    """Text in reading order, a block element per line. A table row is one line with its cells joined by " | ", so a
+    row's label stays with its values. Site furniture (role navigation, banner, contentinfo or search; <footer>;
+    aria-hidden) is left out."""
+
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.rows: list[str] = []
@@ -306,6 +352,10 @@ class _Html(HTMLParser):
         self.pre = 0
         self.lists: list[int | None] = []   # an ordered list's next number, None for a bullet list
         self.label = ""                      # a list item's number, written before its first text
+        self.open: list[tuple[str, bool]] = []   # open elements: (tag, starts site furniture)
+        self.furniture = 0
+        self.cells: list[int] = []           # per open table row: cells started so far
+        self.incell = 0
 
     def flush(self) -> None:
         text = "".join(self.buf)
@@ -313,17 +363,38 @@ class _Html(HTMLParser):
         self.rows.extend(text.split("\n") if self.pre else [text])
 
     def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
         if tag in SKIP:
             self.skip += tag not in VOID
             return
-        if self.skip:
+        if tag not in VOID:
+            starts = not self.furniture and (tag == "footer" or (a.get("role") or "").lower() in LANDMARKS
+                                             or (a.get("aria-hidden") or "").lower() == "true")
+            self.open.append((tag, starts))
+            self.furniture += starts
+        if self.skip or self.furniture:
             return
-        if tag in BLOCK:
+        if tag == "tr":
             self.flush()
+            self.cells.append(0)
+            return
+        if tag in CELLS and self.cells:
+            if self.cells[-1]:
+                self.buf.append(" | ")
+            self.cells[-1] += 1
+            self.incell += 1
+            return
+        if tag == "sup":
+            self.buf.append(" ")
+        if tag in BLOCK:
+            if self.incell and tag != "pre":
+                self.buf.append(" ")   # a paragraph or line break inside a cell stays in the row
+            else:
+                self.flush()
         if tag == "pre":
             self.pre += 1
         if tag in ("ol", "ul"):
-            start = dict(attrs).get("start")
+            start = a.get("start")
             self.lists.append((int(start) if start and start.isdigit() else 1) if tag == "ol" else None)
         if tag == "li":
             if self.lists and self.lists[-1] is not None:
@@ -336,17 +407,38 @@ class _Html(HTMLParser):
         if tag in SKIP:
             self.skip = max(0, self.skip - 1)
             return
-        if self.skip:
+        if any(t == tag for t, _ in self.open):     # close it and anything left open inside it
+            while self.open:
+                t, starts = self.open.pop()
+                self.furniture -= starts
+                if t == tag:
+                    break
+        if self.skip or self.furniture:
             return
-        if tag in BLOCK:
+        if tag == "tr" and self.cells:
+            self.cells.pop()
+            self.incell = 0
             self.flush()
+            return
+        if tag in CELLS and self.incell:
+            self.incell -= 1
+            return
+        if tag == "sup":
+            self.buf.append(" ")
+        if tag in BLOCK:
+            if self.incell and tag != "pre":
+                self.buf.append(" ")
+            else:
+                self.flush()
         if tag == "pre":
             self.pre = max(0, self.pre - 1)
         if tag in ("ol", "ul") and self.lists:
             self.lists.pop()
+        if tag == "table":
+            self.cells, self.incell = [], 0
 
     def handle_data(self, data):
-        if self.skip:
+        if self.skip or self.furniture:
             return
         if self.label and data.strip():
             self.buf.append(self.label)
@@ -360,6 +452,36 @@ def _html(text: str) -> list[tuple[int | None, str]]:
     p.close()
     p.flush()
     return [(None, t) for t in p.rows]
+
+
+# ---------------------------------------------------------------- Markdown
+
+TEMPLATE = re.compile(r"\{%-?.*?-?%\}|\{\{[<%].*?[>%]\}\}", re.S)   # Liquid/Jinja tags, Hugo shortcodes
+HTML_LINE = re.compile(r"^\s*</?[A-Za-z][\w-]*(\s[^>]*)?/?>")
+
+
+def _markdown(text: str) -> list[tuple[int | None, str]]:
+    """Markdown as lines. Comments and template directives are dropped; a run of lines that are HTML (a table
+    written as HTML) is read as HTML, so its rows stay rows; other inline tags are dropped, their text kept."""
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    text = TEMPLATE.sub("", text)
+    out: list[tuple[int | None, str]] = []
+    block: list[str] = []
+    depth = 0
+    for row in text.splitlines():
+        opens = len(re.findall(r"<(table|ul|ol|dl|div|details)\b", row, re.I))
+        closes = len(re.findall(r"</(table|ul|ol|dl|div|details)>", row, re.I))
+        if depth or HTML_LINE.match(row):
+            block.append(row)
+            depth = max(0, depth + opens - closes)
+            if not depth:
+                out += _html("\n".join(block))
+                block = []
+            continue
+        out.append((None, html_mod.unescape(re.sub(r"</?[A-Za-z][\w-]*(\s[^>]*)?/?>", "", row))))
+    if block:
+        out += _html("\n".join(block))
+    return out
 
 
 # ---------------------------------------------------------------- entry point
@@ -390,6 +512,8 @@ def read(path: Path, rel: str) -> Document:
         rows = _docx(path, rel)
     elif kind == "html":
         rows = _html(_decode(data, rel, html=True))
+    elif kind == "md":
+        rows = _markdown(_decode(data, rel))
     else:
         rows = [(None, t) for t in _decode(data, rel).splitlines()]
     lines = _number(rows)

@@ -41,18 +41,19 @@ def transport(answer):
 
 # ---------------------------------------------------------------- fixtures
 
-def make_pdf(pages: list[list[str]]) -> bytes:
-    """A minimal PDF with one Helvetica text line per string, written by hand (no PDF writer is installed)."""
+def make_pdf(pages: list[list[str] | bytes]) -> bytes:
+    """A minimal PDF with one Helvetica text line per string, written by hand (no PDF writer is installed). A page
+    given as bytes is its content stream as it is."""
     n = len(pages)
     objs = [b"<< /Type /Catalog /Pages 2 0 R >>",
             f"<< /Type /Pages /Kids [{' '.join(f'{4 + 2 * i} 0 R' for i in range(n))}] /Count {n} >>".encode(),
             b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"]
     for i, lines in enumerate(pages):
         ops = []
-        for j, t in enumerate(lines):
+        for j, t in enumerate(lines if isinstance(lines, list) else []):
             esc = t.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)")
             ops.append(f"({esc}) Tj" if j == 0 else f"0 -18 Td ({esc}) Tj")
-        stream = ("BT /F1 12 Tf 72 720 Td " + " ".join(ops) + " ET").encode() if lines else b""
+        stream = lines if isinstance(lines, bytes) else ("BT /F1 12 Tf 72 720 Td " + " ".join(ops) + " ET").encode() if lines else b""
         objs.append(f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> "
                     f"/Contents {5 + 2 * i} 0 R >>".encode())
         objs.append(b"<< /Length %d >>\nstream\n" % len(stream) + stream + b"\nendstream")
@@ -147,14 +148,13 @@ def test_read_docx_paragraphs_numbering_and_cells(tmp_path):
         "1.2 Sessions expire after 15 minutes.",
         "First half",
         "second half",
-        "REQ-7",
-        "Cookies are Secure.",
+        "REQ-7 | Cookies are Secure.",          # a table row is one line, its cells joined
         "2. Logging",
         "2.1 Never log tokens.",
         "• Use the shared logger.",
         "Kept text",
     ]
-    assert [ln.no for ln in doc.lines] == list(range(1, 13))
+    assert [ln.no for ln in doc.lines] == list(range(1, 12))
 
 
 def test_read_html_blocks_lists_and_no_scripts(tmp_path):
@@ -167,7 +167,7 @@ def test_read_html_blocks_lists_and_no_scripts(tmp_path):
 line b</pre><script>alert(1)</script><p>After&nbsp;script<br>new line</p></body></html>""")
     doc = read(p, "std.html")
     assert texts(doc) == ["Policy & Rules", "Intro text over two lines.", "3. Third item", "4. Fourth item", "• Bullet",
-                          "REQ-1", "Use TLS", "line a", "line b", "After script", "new line"]
+                          "REQ-1 | Use TLS", "line a", "line b", "After script", "new line"]
 
 
 def test_read_markdown_drops_blank_lines_and_numbers_kept_ones(tmp_path):
@@ -176,6 +176,38 @@ def test_read_markdown_drops_blank_lines_and_numbers_kept_ones(tmp_path):
     doc = read(p, "std.md")
     assert (doc.kind, [(ln.no, ln.page, ln.text) for ln in doc.lines]) == ("md", [(1, None, "# Title"), (2, None, "Line with spaces"), (3, None, "- item")])
 
+
+
+def test_html_rows_stay_rows_and_site_furniture_is_left_out(tmp_path):
+    p = tmp_path / "std.html"
+    p.write_text("""<body><header role="banner"><a>Skip to content</a></header><div role="navigation"><ul><li>Home</li></ul></div>
+      <h2>Table 3</h2><table><tr><th>Zone</th><th>Min R-value</th></tr><tr><td><p>1</p></td><td>2.7<br>(roof)</td></tr></table>
+      <p><sup>1</sup>Treppen sind zu sichern.<sup>2</sup>Sie müssen</p><footer>Copyright</footer><p>Last</p></body>""")
+    assert texts(read(p, "std.html")) == ["Table 3", "Zone | Min R-value", "1 | 2.7 (roof)", "1 Treppen sind zu sichern. 2 Sie müssen", "Last"]
+
+
+def test_markdown_tables_written_as_html_comments_and_template_tags(tmp_path):
+    p = tmp_path / "std.md"
+    p.write_text("# Pod Security\n<!-- the English original -->\n{% ifversion ghes %}Only on servers{% endif %}\n"
+                 "Set <code>runAsNonRoot</code>.\n<table>\n<tr><td><strong>Privileged</strong></td>\n"
+                 "<td><p>Must be <code>false</code>.</p></td></tr>\n</table>\nAfter.\n")
+    assert texts(read(p, "std.md")) == ["# Pod Security", "Only on servers", "Set runAsNonRoot.", "Privileged | Must be false.", "After."]
+
+
+def test_undeclared_encoding_is_detected_not_assumed(tmp_path):
+    p = tmp_path / "std.txt"
+    p.write_bytes("第1条 階段の幅は75センチメートル以上とすること。\n第2条 手すりを設けること。\n".encode("shift_jis"))
+    assert texts(read(p, "std.txt")) == ["第1条 階段の幅は75センチメートル以上とすること。", "第2条 手すりを設けること。"]
+
+
+def test_pdf_words_set_with_narrow_gaps_and_margin_text_running_up_the_page(tmp_path):
+    # word spacing -0.9 leaves gaps of about 2.2 pt at 11 pt, under a fixed 3 pt tolerance; the margin note runs upwards
+    said = ["Logs must never record session identifiers.", "Access to logs is limited to named staff.", "Log entries are hashed daily."]
+    page = lambda t: (b"BT /F1 11 Tf -0.9 Tw 72 700 Td (%s) Tj ET " % t.encode()  # noqa: E731
+                      + b"BT /F1 9 Tf 0 1 -1 0 30 200 Tm (Available free of charge) Tj ET")
+    p = tmp_path / "std.pdf"
+    p.write_bytes(make_pdf([page(t) for t in said]))
+    assert texts(read(p, "std.pdf")) == said
 
 @pytest.mark.parametrize("name, data, message", [
     ("std.doc", b"\xd0\xcf\x11\xe0", "unsupported file type '.doc'; save it as .docx"),
