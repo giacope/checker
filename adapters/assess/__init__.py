@@ -15,8 +15,10 @@ with one boolean fact per requirement, and the rule packs decide.
        is kept without locators, its note saying what was searched. null is left out, so the fact stays open and the
        engine asks the user.
 
-Cost is bounded: at most REQUIREMENT_CHARS of artifact text per requirement, CALL_CHARS per call, MAX_CHARS per run
-(batches beyond it are not sent and their requirements stay open). The artifact text and the customer's clause text
+Cost is bounded: at most REQUIREMENT_CHARS of artifact text per requirement, CALL_CHARS per call, MAX_CHARS per run.
+When the first round would exceed FIRST_ROUND_SHARE of MAX_CHARS, every requirement's excerpts are cut to one smaller
+shared cap (best first, never below MIN_REQUIREMENT_CHARS), so a long regulation's later clauses are not the ones
+left out; batches that still do not fit are not sent and their requirements stay open. The artifact text and the customer's clause text
 are untrusted: they go to the model inside a per-call random boundary as data, the prompt says never to follow
 instructions in them, the reply is parsed as JSON only, and every value and locator is checked. What leaves the
 machine is the selected excerpts and the requirement text, sent to the configured provider.
@@ -45,6 +47,8 @@ MAX_PER_CALL = 8               # requirements per call
 CALL_CHARS = 100_000           # artifact text per call (about 25k tokens)
 REQUIREMENT_CHARS = 40_000     # artifact text retrieved per requirement
 MAX_CHARS = 2_000_000          # artifact text per run
+FIRST_ROUND_SHARE = 0.9        # of MAX_CHARS for the first round; the rest is for second looks
+MIN_REQUIREMENT_CHARS = 8_000  # the smallest per-requirement share the run budget is spread to
 MAX_LOCATORS = 8
 ALL = 10 ** 12                 # a search budget nothing exceeds: every match
 CONTROL = re.compile(r"[\x00-\x1f\x7f]")
@@ -338,7 +342,7 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
     more: dict[str, list[str]] = {}  # attr -> what the model would need to see to settle a null
     failed, errors = [], []
     ncalls = 0
-    second = {"asked": 0, "answered": 0}
+    second = {"asked": 0, "answered": 0, "skipped": 0}   # skipped: second looks the run's budget had no room for
 
     def prompt(members, excerpts):
         token = secrets.token_hex(8)
@@ -381,14 +385,31 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
                 tmp.replace(hit)
             return reply["answers"], body
 
-        asked = list(reqs)
-        for rnd in (1, 2):
-            calls = []
-            for members in group(asked, found):
+        def plan(attrs):
+            out = []
+            for members in group(attrs, found):
                 excerpts = list({h: (h, t) for a in members for h, t in found[a]}.values())
-                size = sum(_size(h, t) for h, t in excerpts)
+                out.append((members, excerpts, sum(_size(h, t) for h, t in excerpts)))
+            return out
+
+        asked = list(reqs)
+        cap = REQUIREMENT_CHARS
+        for rnd in (1, 2):
+            jobs = plan(asked)
+            target = MAX_CHARS * FIRST_ROUND_SHARE
+            while rnd == 1 and cap > MIN_REQUIREMENT_CHARS and (need := sum(j[2] for j in jobs)) > target:
+                # Spread the budget over every requirement instead of spending it in the regulation's order.
+                cap = max(MIN_REQUIREMENT_CHARS, int(cap * min(0.9, target / need)))
+                for a in found:
+                    found[a] = _trim(found[a], cap)
+                jobs = plan(asked)
+            calls = []
+            for members, excerpts, size in jobs:
                 if total + size > MAX_CHARS:
-                    not_sent += members
+                    if rnd == 1:
+                        not_sent += members
+                    else:
+                        second["skipped"] += len(members)
                     continue
                 total += size
                 calls.append((members, excerpts))
@@ -423,10 +444,10 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
                 if a in facts or not terms:
                     continue
                 have = {h for h, _ in found[a]}
-                new = [(h, t) for h, t in corpus.search(terms, REQUIREMENT_CHARS) if h not in have]
+                new = [(h, t) for h, t in corpus.search(terms, cap) if h not in have]
                 if not new:
                     continue
-                found[a] = _trim(new + found[a], REQUIREMENT_CHARS * 3 // 2)
+                found[a] = _trim(new + found[a], cap * 3 // 2)
                 reqs[a]["search"] = list(dict.fromkeys(reqs[a]["search"] + terms))
                 matching[a] = len(corpus.search(reqs[a]["search"], ALL))
                 asked.append(a)
@@ -447,6 +468,8 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
         src["errors"] = [e[:300] for e in errors[:5]]
     if not_sent:
         src["not_sent"] = sorted(not_sent)
+    if cap < REQUIREMENT_CHARS:
+        src["requirement_chars"] = cap   # the shared cap the run budget was spread to
     return {"subject": subject or {"kind": "system", "id": corpus.name}, "sources": [src],
             "facts": {a: facts[a] for a in reqs if a in facts}}
 

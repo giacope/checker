@@ -277,7 +277,7 @@ def test_cached_answers_repeat_for_the_same_excerpts_and_a_changed_excerpt_is_re
     assert [o["at"] for o in changed["facts"]["req_ssl"]] == ["config/environments/production.rb:3"]
 
 
-def test_an_open_answer_gets_a_second_look_at_what_the_model_asked_for(corpus):
+def test_an_open_answer_gets_a_second_look_at_what_the_model_asked_for(corpus, monkeypatch):
     def answers(user):
         if "force_ssl" in user:  # the second look shows production.rb, which the first search missed
             return {"attr": "req_tls", "value": "met", "basis": "evidence", "at": ["config/environments/production.rb:2"], "note": "force_ssl"}
@@ -287,8 +287,14 @@ def test_an_open_answer_gets_a_second_look_at_what_the_model_asked_for(corpus):
     assert len(sent) == 2 and "Answer these requirements: req_tls" in sent[1][1]     # only the one with search_more is asked again
     assert doc["facts"]["req_tls"][0]["at"] == "config/environments/production.rb:2"
     src = doc["sources"][0]
-    assert src["second_look"] == {"asked": 1, "answered": 1} and src["calls"] == 2
+    assert src["second_look"] == {"asked": 1, "answered": 1, "skipped": 0} and src["calls"] == 2
     assert src["unsettled"] == {"req_auth": "x"}
+    # a budget the first round fills: the second look is skipped and counted as such, not as a requirement never sent
+    monkeypatch.setattr(assess_mod, "MAX_CHARS", src["excerpt_chars"] - 1)
+    monkeypatch.setattr(assess_mod, "FIRST_ROUND_SHARE", 1.0)
+    transport, sent = fake({"req_tls": lambda u: answers(u), "req_auth": {"attr": "req_auth", "value": None, "note": "x"}})
+    src = assess([req("req_tls", "before_action"), req("req_auth", "before_action")], corpus, provider=PROVIDER, transport=transport)["sources"][0]
+    assert len(sent) == 1 and src["second_look"] == {"asked": 1, "answered": 0, "skipped": 1} and "not_sent" not in src
 
 
 def test_second_look_batches_do_not_depend_on_the_order_replies_arrive(corpus, monkeypatch):
@@ -302,6 +308,20 @@ def test_second_look_batches_do_not_depend_on_the_order_replies_arrive(corpus, m
         assess(reqs, corpus, provider=PROVIDER, transport=transport, workers=1)
         prompts.append(sorted(re.sub(r"[0-9a-f]{16}", "", u) for _, u in sent))
     assert len(prompts[0]) == 4 and prompts[0] == prompts[1]   # 10 open, 8 per call, asked twice
+
+
+def test_a_short_run_budget_is_spread_over_every_requirement_not_spent_in_clause_order(tmp_path, monkeypatch):
+    monkeypatch.setattr(assess_mod, "MAX_CHARS", 12_000)
+    monkeypatch.setattr(assess_mod, "MIN_REQUIREMENT_CHARS", 500)
+    files = {f"app/t{n}_{k}.rb": f"# topic{n}\n" + "z = 1  # padding padding padding\n" * 16 for n in range(12) for k in range(4)}
+    c = CodeCorpus(write(tmp_path / "r", files), "r")
+    cite = lambda n: lambda user: {"attr": f"r{n}", "value": "met", "at": [re.search(rf"=== (app/t{n}_\d\.rb)\n", user).group(1) + ":1"]}  # noqa: E731
+    transport, sent = fake({f"r{n}": cite(n) for n in range(12)})
+    reqs = [req(f"r{n}", f"topic{n}") for n in range(12)]   # about 2.4k of excerpts each, 29k together
+    src = assess(reqs, c, PROVIDER, transport)["sources"][0]
+    assert "not_sent" not in src and src["answered"] == 12   # the last clauses are assessed too
+    assert src["requirement_chars"] < 2400 and src["excerpt_chars"] <= 12_000
+    assert all(len(excerpt_part(u)) <= src["requirement_chars"] + 100 for _, u in sent)
 
 
 def test_absence_needs_every_match_shown(tmp_path, monkeypatch):

@@ -92,6 +92,8 @@ def _limits(src: dict) -> list[str]:
         out.append(f"{len(src['failed'])} requirements stay open because their model call failed")
     if src.get("kind") == "model_assessment" and src.get("not_sent"):
         out.append(f"{len(src['not_sent'])} requirements were never sent to the model: the run's budget ran out")
+    if (src.get("second_look") or {}).get("skipped"):
+        out.append(f"{src['second_look']['skipped']} requirements the model left open got no second look: the run's budget ran out")
     if src.get("requirement_chars"):
         out.append(f"each requirement was shown at most {src['requirement_chars']:,} characters, best matches first, "
                    "so that every requirement fits the run's budget")
