@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.1,
+ "seconds": 0.2,
  "notes": [
   "Shell (2 files): no static analyser; not read, since no model is configured."
  ],
@@ -15,7 +15,7 @@
   "static",
   "deps"
  ],
- "locators": 188,
+ "locators": 192,
  "verdicts": {
   "pass": 49,
   "fail": 24,

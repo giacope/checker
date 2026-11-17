@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 2.1,
+ "seconds": 2.5,
  "notes": [
   "Shell (1 file): no static analyser; not read, since no model is configured."
  ],
@@ -26,5 +26,5 @@
  "examples": {},
  "kind": "code",
  "slug": "gitlab-fdroid-fdroidserver",
- "wall_seconds": 4.4
+ "wall_seconds": 5.3
 }

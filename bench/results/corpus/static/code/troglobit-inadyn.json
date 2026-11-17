@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.0,
+ "seconds": 0.1,
  "notes": [
   "C (68 files), Shell (2 files): no static analyser; not read, since no model is configured."
  ],
@@ -28,5 +28,5 @@
  "examples": {},
  "kind": "code",
  "slug": "troglobit-inadyn",
- "wall_seconds": 0.3
+ "wall_seconds": 0.6
 }

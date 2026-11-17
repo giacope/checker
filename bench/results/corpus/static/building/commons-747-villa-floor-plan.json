@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "seconds": 0.3,
+ "seconds": 0.4,
  "second_run_seconds": 0.1,
  "notes": [],
  "elements": {},
@@ -12,5 +12,5 @@
  "examples": {},
  "kind": "building",
  "slug": "commons-747-villa-floor-plan",
- "wall_seconds": 0.9
+ "wall_seconds": 1.1
 }

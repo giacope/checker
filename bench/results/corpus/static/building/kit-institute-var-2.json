@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "seconds": 2.3,
- "second_run_seconds": 1.7,
+ "second_run_seconds": 2.2,
  "notes": [],
  "elements": {
   "Door": 77,
@@ -23,5 +23,5 @@
  "examples": {},
  "kind": "building",
  "slug": "kit-institute-var-2",
- "wall_seconds": 5.3
+ "wall_seconds": 5.7
 }

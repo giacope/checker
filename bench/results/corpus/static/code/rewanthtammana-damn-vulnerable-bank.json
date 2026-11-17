@@ -16,7 +16,7 @@
   "static",
   "deps"
  ],
- "locators": 1259,
+ "locators": 1264,
  "verdicts": {
   "pass": 22,
   "fail": 15,
@@ -33,5 +33,5 @@
  "examples": {},
  "kind": "code",
  "slug": "rewanthtammana-damn-vulnerable-bank",
- "wall_seconds": 0.6
+ "wall_seconds": 0.7
 }

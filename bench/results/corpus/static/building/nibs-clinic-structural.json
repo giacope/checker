@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "seconds": 1.1,
+ "seconds": 1.3,
  "second_run_seconds": 1.2,
  "notes": [],
  "elements": {
@@ -19,5 +19,5 @@
  "examples": {},
  "kind": "building",
  "slug": "nibs-clinic-structural",
- "wall_seconds": 3.0
+ "wall_seconds": 3.3
 }

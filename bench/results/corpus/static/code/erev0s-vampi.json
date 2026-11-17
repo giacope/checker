@@ -14,16 +14,16 @@
   "static",
   "deps"
  ],
- "locators": 75,
+ "locators": 78,
  "verdicts": {
-  "pass": 8,
-  "fail": 30,
+  "pass": 9,
+  "fail": 29,
   "unknown": 19
  },
  "report_totals": {
-  "fail": 10,
+  "fail": 9,
   "unknown": 12,
-  "pass": 8,
+  "pass": 9,
   "not_applicable": 10
  },
  "violations": {},
@@ -31,5 +31,5 @@
  "examples": {},
  "kind": "code",
  "slug": "erev0s-vampi",
- "wall_seconds": 0.4
+ "wall_seconds": 0.5
 }

@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 6.9,
- "second_run_seconds": 6.8,
+ "seconds": 7.8,
+ "second_run_seconds": 8.0,
  "notes": [],
  "elements": {
   "Door": 205,
@@ -23,5 +23,5 @@
  "examples": {},
  "kind": "building",
  "slug": "schependomlaan-design-model",
- "wall_seconds": 15.3
+ "wall_seconds": 17.6
 }

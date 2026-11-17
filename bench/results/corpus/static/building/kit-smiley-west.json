@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 3.2,
- "second_run_seconds": 2.9,
+ "seconds": 3.5,
+ "second_run_seconds": 4.1,
  "notes": [],
  "elements": {
   "Door": 170,
@@ -24,5 +24,5 @@
  "examples": {},
  "kind": "building",
  "slug": "kit-smiley-west",
- "wall_seconds": 7.9
+ "wall_seconds": 9.4
 }

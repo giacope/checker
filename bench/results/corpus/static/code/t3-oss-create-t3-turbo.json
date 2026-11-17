@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.8,
+ "seconds": 0.9,
  "notes": [],
  "elements": {
   "Secret": 1,
@@ -26,5 +26,5 @@
  "examples": {},
  "kind": "code",
  "slug": "t3-oss-create-t3-turbo",
- "wall_seconds": 2.0
+ "wall_seconds": 2.3
 }

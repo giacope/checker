@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 2.2,
+ "seconds": 2.7,
  "notes": [
   "Go (28 files), C# (19 files), Shell (4 files), Java (3 files): no static analyser; not read, since no model is configured."
  ],
@@ -33,5 +33,5 @@
  "examples": {},
  "kind": "code",
  "slug": "serverless-examples",
- "wall_seconds": 5.0
+ "wall_seconds": 6.0
 }

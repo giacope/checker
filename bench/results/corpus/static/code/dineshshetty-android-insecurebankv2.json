@@ -10,7 +10,7 @@
   "static",
   "deps"
  ],
- "locators": 5,
+ "locators": 9,
  "verdicts": {
   "unknown": 20,
   "fail": 1
@@ -25,5 +25,5 @@
  "examples": {},
  "kind": "code",
  "slug": "dineshshetty-android-insecurebankv2",
- "wall_seconds": 0.3
+ "wall_seconds": 0.4
 }

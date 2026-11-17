@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.6,
+ "seconds": 0.7,
  "notes": [],
  "elements": {
   "Query": 4,
@@ -12,7 +12,7 @@
   "static",
   "deps"
  ],
- "locators": 3965,
+ "locators": 3966,
  "verdicts": {
   "pass": 5,
   "unknown": 1008
@@ -27,5 +27,5 @@
  "examples": {},
  "kind": "code",
  "slug": "shadcn-ui-taxonomy",
- "wall_seconds": 1.5
+ "wall_seconds": 1.8
 }

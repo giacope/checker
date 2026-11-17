@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 0.3,
- "second_run_seconds": 0.0,
+ "seconds": 0.4,
+ "second_run_seconds": 0.1,
  "notes": [],
  "elements": {
   "Door": 5
@@ -16,5 +16,5 @@
  "examples": {},
  "kind": "building",
  "slug": "cadcraft-sample-house",
- "wall_seconds": 0.9
+ "wall_seconds": 1.1
 }

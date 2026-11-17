@@ -6,11 +6,13 @@
  "elements": {},
  "sheets": 4,
  "locators": 0,
- "verdicts": {},
+ "verdicts": {
+  "unknown": 37
+ },
  "violations": {},
  "info": {},
  "examples": {},
  "kind": "building",
  "slug": "commons-usda-4-bedroom-farmhouse",
- "wall_seconds": 0.9
+ "wall_seconds": 1.0
 }

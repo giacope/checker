@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 4.5,
- "second_run_seconds": 6.0,
+ "seconds": 5.0,
+ "second_run_seconds": 5.8,
  "notes": [],
  "elements": {
   "Door": 211,
@@ -23,5 +23,5 @@
  "examples": {},
  "kind": "building",
  "slug": "esplan-esplanades-architecture",
- "wall_seconds": 12.7
+ "wall_seconds": 13.0
 }

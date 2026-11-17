@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "seconds": 1.1,
+ "seconds": 1.2,
  "second_run_seconds": 0.9,
  "notes": [],
  "elements": {
@@ -17,5 +17,5 @@
  "examples": {},
  "kind": "building",
  "slug": "bimcompiler-duplex-dxf-set",
- "wall_seconds": 2.6
+ "wall_seconds": 2.7
 }

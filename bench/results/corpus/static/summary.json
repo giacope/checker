@@ -5,15 +5,15 @@
    "ok": 45
   },
   "seconds": {
-   "total": 130.2,
-   "median": 1.0,
-   "max": 34.8
+   "total": 149.2,
+   "median": 1.1,
+   "max": 41.9
   },
   "items_with_violations": 0,
   "violations": {},
   "not_ok": {},
   "verdicts": {
-   "unknown": 9277,
+   "unknown": 9507,
    "pass": 1466,
    "fail": 64
   }
@@ -24,17 +24,17 @@
    "ok": 101
   },
   "seconds": {
-   "total": 188.5,
-   "median": 0.5,
-   "max": 42.5
+   "total": 230.0,
+   "median": 0.6,
+   "max": 52.1
   },
   "items_with_violations": 0,
   "violations": {},
   "not_ok": {},
   "verdicts": {
-   "unknown": 30410,
-   "pass": 1429,
-   "fail": 613,
+   "unknown": 30407,
+   "pass": 1462,
+   "fail": 611,
    "uncertain": 2
   }
  },

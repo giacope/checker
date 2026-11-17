@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.0,
+ "seconds": 0.1,
  "notes": [
   "Terraform (47 files): no static analyser; not read, since no model is configured."
  ],
@@ -24,5 +24,5 @@
  "examples": {},
  "kind": "code",
  "slug": "bridgecrewio-terragoat",
- "wall_seconds": 0.5
+ "wall_seconds": 0.7
 }

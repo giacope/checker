@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 0.4,
- "second_run_seconds": 0.0,
+ "seconds": 0.5,
+ "second_run_seconds": 0.1,
  "notes": [],
  "elements": {},
  "sheets": 1,
@@ -12,5 +12,5 @@
  "examples": {},
  "kind": "building",
  "slug": "kestrelcad-courtyard",
- "wall_seconds": 1.0
+ "wall_seconds": 1.1
 }

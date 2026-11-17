@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 0.4,
- "second_run_seconds": 0.0,
+ "seconds": 0.5,
+ "second_run_seconds": 0.1,
  "notes": [],
  "elements": {
   "Door": 8

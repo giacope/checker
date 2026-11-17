@@ -15,7 +15,7 @@
   "static",
   "deps"
  ],
- "locators": 78,
+ "locators": 82,
  "verdicts": {
   "fail": 12,
   "pass": 36,

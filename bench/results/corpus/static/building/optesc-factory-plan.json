@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "seconds": 0.7,
+ "seconds": 0.8,
  "second_run_seconds": 0.3,
  "notes": [],
  "elements": {
@@ -11,7 +11,7 @@
  "sheets": 2,
  "locators": 110,
  "verdicts": {
-  "unknown": 113,
+  "unknown": 121,
   "pass": 12
  },
  "violations": {},
@@ -19,5 +19,5 @@
  "examples": {},
  "kind": "building",
  "slug": "optesc-factory-plan",
- "wall_seconds": 1.6
+ "wall_seconds": 1.8
 }

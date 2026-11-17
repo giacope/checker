@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.5,
+ "seconds": 0.3,
  "notes": [
   "Java (359 files), SQL (15 files), Shell (2 files): no static analyser; not read, since no model is configured."
  ],
@@ -25,5 +25,5 @@
  "examples": {},
  "kind": "code",
  "slug": "webgoat-webgoat",
- "wall_seconds": 0.9
+ "wall_seconds": 0.8
 }

@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 0.7,
- "second_run_seconds": 0.5,
+ "seconds": 0.8,
+ "second_run_seconds": 0.6,
  "notes": [],
  "elements": {
   "Door": 5,
@@ -23,5 +23,5 @@
  "examples": {},
  "kind": "building",
  "slug": "kit-fzk-haus",
- "wall_seconds": 1.8
+ "wall_seconds": 2.2
 }

@@ -1,16 +1,18 @@
 {
  "status": "ok",
- "seconds": 0.4,
+ "seconds": 0.6,
  "second_run_seconds": 0.1,
  "notes": [],
  "elements": {},
  "sheets": 3,
  "locators": 0,
- "verdicts": {},
+ "verdicts": {
+  "unknown": 37
+ },
  "violations": {},
  "info": {},
  "examples": {},
  "kind": "building",
  "slug": "bimcraft-kitchen-count",
- "wall_seconds": 1.1
+ "wall_seconds": 1.3
 }

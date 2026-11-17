@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "seconds": 0.2,
+ "seconds": 0.3,
  "second_run_seconds": 0.0,
  "notes": [
   "KIT-Simple-Road-Test-Web-IFC4x3_RC2.ifc: schema IFC4X3_RC2 is not supported; read as IFC4X3_ADD2, which superseded it",
@@ -15,5 +15,5 @@
  "examples": {},
  "kind": "building",
  "slug": "kit-simple-road-ifc4x3-rc2",
- "wall_seconds": 0.8
+ "wall_seconds": 0.9
 }

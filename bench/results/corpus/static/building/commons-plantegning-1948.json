@@ -1,16 +1,18 @@
 {
  "status": "ok",
  "seconds": 0.4,
- "second_run_seconds": 0.1,
+ "second_run_seconds": 0.2,
  "notes": [],
  "elements": {},
  "sheets": 2,
  "locators": 0,
- "verdicts": {},
+ "verdicts": {
+  "unknown": 37
+ },
  "violations": {},
  "info": {},
  "examples": {},
  "kind": "building",
  "slug": "commons-plantegning-1948",
- "wall_seconds": 1.1
+ "wall_seconds": 1.2
 }

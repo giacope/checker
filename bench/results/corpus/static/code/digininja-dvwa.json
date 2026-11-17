@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.1,
+ "seconds": 0.2,
  "notes": [
   "PHP (167 files), SQL (5 files): no static analyser; not read, since no model is configured."
  ],
@@ -23,5 +23,5 @@
  "examples": {},
  "kind": "code",
  "slug": "digininja-dvwa",
- "wall_seconds": 0.4
+ "wall_seconds": 0.5
 }

@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 4.0,
+ "seconds": 5.0,
  "notes": [
   "Terraform (253 files), Shell (11 files), Go (1 file), SQL (1 file): no static analyser; not read, since no model is configured."
  ],
@@ -33,5 +33,5 @@
  "examples": {},
  "kind": "code",
  "slug": "rhinosecuritylabs-cloudgoat",
- "wall_seconds": 8.1
+ "wall_seconds": 10.3
 }

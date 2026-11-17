@@ -1,12 +1,12 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.8,
+ "seconds": 0.9,
  "notes": [
   "Shell (7 files): no static analyser; not read, since no model is configured."
  ],
  "elements": {
-  "PasswordStore": 8,
+  "PasswordStore": 12,
   "Query": 12,
   "Secret": 9,
   "Transfer": 4,
@@ -16,9 +16,9 @@
   "static",
   "deps"
  ],
- "locators": 5084,
+ "locators": 5096,
  "verdicts": {
-  "pass": 42,
+  "pass": 58,
   "fail": 13,
   "unknown": 1242
  },
@@ -33,5 +33,5 @@
  "examples": {},
  "kind": "code",
  "slug": "brocoders-nestjs-boilerplate",
- "wall_seconds": 1.9
+ "wall_seconds": 2.3
 }

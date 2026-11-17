@@ -1,7 +1,7 @@
 {
  "status": "ok",
- "seconds": 0.4,
- "second_run_seconds": 0.3,
+ "seconds": 0.5,
+ "second_run_seconds": 0.4,
  "notes": [],
  "elements": {
   "Space": 37,
@@ -18,5 +18,5 @@
  "examples": {},
  "kind": "building",
  "slug": "nibs-duplex-mechanical-rooms-spaces",
- "wall_seconds": 1.5
+ "wall_seconds": 1.7
 }

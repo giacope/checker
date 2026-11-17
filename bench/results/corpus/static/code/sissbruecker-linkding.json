@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 1.2,
+ "seconds": 1.4,
  "notes": [
   "Shell (10 files): no static analyser; not read, since no model is configured."
  ],
@@ -16,7 +16,7 @@
   "static",
   "deps"
  ],
- "locators": 598,
+ "locators": 605,
  "verdicts": {
   "pass": 72,
   "unknown": 125,
@@ -33,5 +33,5 @@
  "examples": {},
  "kind": "code",
  "slug": "sissbruecker-linkding",
- "wall_seconds": 2.5
+ "wall_seconds": 3.0
 }

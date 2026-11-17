@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.7,
+ "seconds": 0.8,
  "notes": [
   "PHP (167 files): no static analyser; not read, since no model is configured."
  ],
@@ -23,5 +23,5 @@
  "examples": {},
  "kind": "code",
  "slug": "webpwnized-mutillidae",
- "wall_seconds": 1.6
+ "wall_seconds": 1.8
 }

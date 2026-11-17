@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 0.5,
+ "seconds": 0.6,
  "notes": [
   "Shell (1 file): no static analyser; not read, since no model is configured."
  ],
@@ -31,5 +31,5 @@
  "examples": {},
  "kind": "code",
  "slug": "owasp-dvsa",
- "wall_seconds": 1.4
+ "wall_seconds": 1.7
 }

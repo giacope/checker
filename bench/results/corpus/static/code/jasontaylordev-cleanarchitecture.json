@@ -13,12 +13,14 @@
   "static",
   "deps"
  ],
- "locators": 2257,
+ "locators": 2262,
  "verdicts": {
-  "unknown": 563
+  "unknown": 561,
+  "pass": 2
  },
  "report_totals": {
-  "unknown": 23,
+  "unknown": 21,
+  "pass": 2,
   "not_applicable": 17
  },
  "violations": {},
@@ -26,5 +28,5 @@
  "examples": {},
  "kind": "code",
  "slug": "jasontaylordev-cleanarchitecture",
- "wall_seconds": 0.6
+ "wall_seconds": 0.7
 }

@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 3.6,
+ "seconds": 4.1,
  "notes": [
   "Shell (1 file), SQL (1 file): no static analyser; not read, since no model is configured."
  ],
@@ -39,5 +39,5 @@
  "examples": {},
  "kind": "code",
  "slug": "rubyforgood-human-essentials",
- "wall_seconds": 7.3
+ "wall_seconds": 8.6
 }

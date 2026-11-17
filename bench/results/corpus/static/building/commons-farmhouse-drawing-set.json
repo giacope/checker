@@ -1,16 +1,18 @@
 {
  "status": "ok",
- "seconds": 17.1,
- "second_run_seconds": 17.1,
+ "seconds": 20.6,
+ "second_run_seconds": 20.7,
  "notes": [],
  "elements": {},
  "sheets": 25,
  "locators": 0,
- "verdicts": {},
+ "verdicts": {
+  "unknown": 37
+ },
  "violations": {},
  "info": {},
  "examples": {},
  "kind": "building",
  "slug": "commons-farmhouse-drawing-set",
- "wall_seconds": 34.8
+ "wall_seconds": 41.9
 }

@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "seconds": 0.2,
+ "seconds": 0.3,
  "second_run_seconds": 0.1,
  "notes": [],
  "elements": {
@@ -22,5 +22,5 @@
  "examples": {},
  "kind": "building",
  "slug": "testsimulator-duplex-ifc",
- "wall_seconds": 0.9
+ "wall_seconds": 1.0
 }

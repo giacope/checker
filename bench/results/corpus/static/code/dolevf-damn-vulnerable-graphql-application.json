@@ -14,7 +14,7 @@
   "static",
   "deps"
  ],
- "locators": 204,
+ "locators": 205,
  "verdicts": {
   "fail": 7,
   "unknown": 72
@@ -29,5 +29,5 @@
  "examples": {},
  "kind": "code",
  "slug": "dolevf-damn-vulnerable-graphql-application",
- "wall_seconds": 0.5
+ "wall_seconds": 0.6
 }

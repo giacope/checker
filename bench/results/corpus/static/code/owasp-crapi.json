@@ -18,7 +18,7 @@
   "static",
   "deps"
  ],
- "locators": 7247,
+ "locators": 7253,
  "verdicts": {
   "pass": 79,
   "fail": 132,
@@ -35,5 +35,5 @@
  "examples": {},
  "kind": "code",
  "slug": "owasp-crapi",
- "wall_seconds": 3.4
+ "wall_seconds": 3.7
 }

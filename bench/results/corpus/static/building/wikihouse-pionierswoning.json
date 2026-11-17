@@ -1,16 +1,18 @@
 {
  "status": "ok",
- "seconds": 2.6,
- "second_run_seconds": 2.1,
+ "seconds": 2.8,
+ "second_run_seconds": 2.5,
  "notes": [],
  "elements": {},
  "sheets": 46,
  "locators": 0,
- "verdicts": {},
+ "verdicts": {
+  "unknown": 37
+ },
  "violations": {},
  "info": {},
  "examples": {},
  "kind": "building",
  "slug": "wikihouse-pionierswoning",
- "wall_seconds": 5.2
+ "wall_seconds": 6.0
 }

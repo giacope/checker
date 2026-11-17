@@ -1,6 +1,6 @@
 {
  "status": "ok",
- "seconds": 0.2,
+ "seconds": 0.3,
  "second_run_seconds": 0.0,
  "notes": [],
  "elements": {
@@ -18,5 +18,5 @@
  "examples": {},
  "kind": "building",
  "slug": "bsi-simple-scene-architecture-ifc4",
- "wall_seconds": 0.8
+ "wall_seconds": 1.0
 }

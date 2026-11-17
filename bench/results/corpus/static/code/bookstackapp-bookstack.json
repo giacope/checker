@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 3.2,
+ "seconds": 3.5,
  "notes": [
   "PHP (879 files), Shell (3 files), SQL (1 file): no static analyser; not read, since no model is configured."
  ],
@@ -27,5 +27,5 @@
  "examples": {},
  "kind": "code",
  "slug": "bookstackapp-bookstack",
- "wall_seconds": 6.5
+ "wall_seconds": 7.4
 }

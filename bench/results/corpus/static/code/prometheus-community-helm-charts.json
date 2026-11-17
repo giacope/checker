@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 4.8,
+ "seconds": 6.0,
  "notes": [
   "Shell (11 files): no static analyser; not read, since no model is configured."
  ],
@@ -26,5 +26,5 @@
  "examples": {},
  "kind": "code",
  "slug": "prometheus-community-helm-charts",
- "wall_seconds": 9.7
+ "wall_seconds": 11.7
 }

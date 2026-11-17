@@ -1,7 +1,7 @@
 {
  "status": "ok",
  "fetch_seconds": 0.0,
- "seconds": 4.9,
+ "seconds": 6.0,
  "notes": [
   "Shell (2 files): no static analyser; not read, since no model is configured.",
   "Python and JavaScript/TypeScript static analysis failed: IndexError: list index out of range"
@@ -25,5 +25,5 @@
  "examples": {},
  "kind": "code",
  "slug": "healthchecks-healthchecks",
- "wall_seconds": 9.9
+ "wall_seconds": 12.1
 }

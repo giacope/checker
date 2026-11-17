@@ -15,16 +15,16 @@
   "static",
   "deps"
  ],
- "locators": 3971,
+ "locators": 3975,
  "verdicts": {
-  "fail": 8,
-  "pass": 17,
+  "fail": 7,
+  "pass": 18,
   "unknown": 1000
  },
  "report_totals": {
-  "fail": 4,
+  "fail": 3,
   "unknown": 20,
-  "pass": 7,
+  "pass": 8,
   "not_applicable": 9
  },
  "violations": {},
@@ -32,5 +32,5 @@
  "examples": {},
  "kind": "code",
  "slug": "hagopj13-node-express-boilerplate",
- "wall_seconds": 0.7
+ "wall_seconds": 0.8
 }
