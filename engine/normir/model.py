@@ -13,6 +13,124 @@ from .quantity import DIMENSIONS, Quantity
 KINDS = {"predicates": "predicate", "tables": "table", "terms": "term", "norms": "norm"}
 COMPARISONS = {"eq", "ne", "lt", "le", "gt", "ge"}
 STATUSES = {"draft", "reviewed"}
+MAX_EXTENDS = 16  # packages in one extends chain
+
+
+# ---------------------------------------------------------------- YAML from files nobody vouches for
+
+MAX_YAML_DEPTH = 100           # nesting levels, aliases expanded: the packs reach 22, evidence documents 7
+MAX_YAML_ALIAS_NODES = 10_000  # nodes that aliases may add by repeating an anchored part (no pack uses one)
+
+
+class YAMLInputError(ValueError):
+    """Bytes that are not the YAML they should be: not UTF-8, not valid YAML (or a tag other than YAML's own),
+    nested deeper than MAX_YAML_DEPTH, or aliases that repeat more than MAX_YAML_ALIAS_NODES nodes or refer to a
+    node that contains them. The message says which, and where."""
+
+
+def _yaml_children(node: yaml.Node) -> list:
+    if isinstance(node, yaml.MappingNode):
+        return [x for pair in node.value for x in pair]
+    return list(node.value) if isinstance(node, yaml.SequenceNode) else []
+
+
+def _check_expansion(root: yaml.Node | None) -> None:
+    """Refuse a document whose aliases, expanded, nest deeper than MAX_YAML_DEPTH, add more than
+    MAX_YAML_ALIAS_NODES nodes, or never end (an alias inside the node it names). Linear in the composed nodes:
+    an anchored part is measured once however often it is repeated."""
+    if root is None:
+        return
+    done: dict[int, tuple[int, int]] = {}  # id(node) -> (nodes, levels) once expanded
+    open_: set[int] = set()
+    stack: list[tuple[yaml.Node, bool]] = [(root, False)]
+    while stack:
+        node, measured = stack.pop()
+        key = id(node)
+        if measured:
+            kids = [done[id(k)] for k in _yaml_children(node)]
+            done[key] = (1 + sum(k[0] for k in kids), 1 + max((k[1] for k in kids), default=0))
+            open_.discard(key)
+            continue
+        if key in done:
+            continue
+        if key in open_:
+            raise YAMLInputError(f"an alias at line {node.start_mark.line + 1} refers to a node that contains it")
+        open_.add(key)
+        stack.append((node, True))
+        stack.extend((k, False) for k in _yaml_children(node))
+    nodes, levels = done[id(root)]
+    if levels > MAX_YAML_DEPTH:
+        raise YAMLInputError(f"aliases nest the document deeper than {MAX_YAML_DEPTH} levels")
+    if nodes - len(done) > MAX_YAML_ALIAS_NODES:
+        raise YAMLInputError(f"aliases repeat {nodes - len(done)} nodes, more than {MAX_YAML_ALIAS_NODES}")
+
+
+class _BoundedLoader(yaml.SafeLoader):
+    """SafeLoader that stops at MAX_YAML_DEPTH levels while composing (the composer recurses, so it must stop
+    before the stack runs out) and checks every document's aliases before anything is built from it."""
+
+    _depth = 0
+
+    def compose_node(self, parent, index):
+        self._depth += 1
+        try:
+            if self._depth > MAX_YAML_DEPTH:
+                raise YAMLInputError(f"nested deeper than {MAX_YAML_DEPTH} levels at line {self.peek_event().start_mark.line + 1}")
+            return super().compose_node(parent, index)
+        finally:
+            self._depth -= 1
+
+    def compose_document(self):
+        node = super().compose_document()
+        _check_expansion(node)
+        return node
+
+
+def read_yaml(data: bytes | str, compose: bool = False) -> Any:
+    """Read YAML (or JSON) from an untrusted file: UTF-8 only, YAML's own tags only, nesting and aliases bounded.
+    Returns the data of the file's one document, or with `compose` the node graph of every document (for
+    readers that keep line numbers). Raises YAMLInputError."""
+    if isinstance(data, bytes):
+        try:
+            data = data.decode("utf-8")
+        except UnicodeDecodeError as e:
+            line = e.object.count(b"\n", 0, e.start) + 1
+            raise YAMLInputError(f"not UTF-8 text: byte 0x{e.object[e.start]:02x} at line {line}") from None
+    loader = None
+    try:
+        loader = _BoundedLoader(data)  # the reader refuses control characters here
+        if compose:
+            docs = []
+            while loader.check_node():
+                docs.append(loader.get_node())
+            return docs
+        return loader.get_single_data()
+    except yaml.YAMLError as e:
+        mark = getattr(e, "problem_mark", None)
+        what = " ".join(str(getattr(e, "problem", None) or e).split())
+        raise YAMLInputError(f"not valid YAML: {what}" + (f" at line {mark.line + 1}" if mark else "")) from None
+    finally:
+        if loader is not None:
+            loader.dispose()
+
+
+def _what(v: Any) -> str:
+    """What a value is, in the words of an error message."""
+    if v is None:
+        return "null"
+    if isinstance(v, bool):
+        return "true/false"
+    if isinstance(v, (int, float)):
+        return "a number"
+    if isinstance(v, str):
+        return "text"
+    return {dict: "a mapping", list: "a list"}.get(type(v), type(v).__name__)
+
+
+class PackError(ValueError):
+    """A package that cannot be read at all: its package.yaml is missing, unreadable, or names no package, or
+    its `extends` chain loops, runs past MAX_EXTENDS, or names something other than a sibling package directory.
+    What a readable package gets wrong (a malformed file, item, patch, or field) is in `Ruleset.errors`."""
 
 
 @dataclass
@@ -59,19 +177,89 @@ class Ruleset:
         return [p for p in self.chain if p.meta.get("adoption")]
 
 
+def _meta_errors(meta: dict, name: str) -> list[str]:
+    """What is malformed in package.yaml's fields; each malformed field is removed from `meta`, so the loader and
+    validate() only ever see fields of the right shape."""
+    errors: list[str] = []
+
+    def drop(key: str, msg: str) -> None:
+        errors.append(f"{name}: package.yaml '{key}' {msg}")
+        meta.pop(key, None)
+
+    text = lambda v: isinstance(v, str) and bool(v)  # noqa: E731
+    for key in ("extends", "subject", "text_policy"):
+        if key in meta and meta[key] is not None and not text(meta[key]):
+            drop(key, f"takes a name, got {_what(meta[key])}")
+    patches = meta.get("patches")
+    if patches is not None:
+        if not isinstance(patches, list):
+            drop("patches", f"takes a list of {{op, kind, name}}, got {_what(patches)}")
+        else:
+            bad = [i for i, p in enumerate(patches) if not isinstance(p, dict) or not all(text(p.get(k)) for k in ("op", "kind", "name"))]
+            for i in bad:
+                errors.append(f"{name}: package.yaml patches[{i}] needs 'op', 'kind' and 'name' (text)")
+            meta["patches"] = [p for i, p in enumerate(patches) if i not in bad]
+    adoption = meta.get("adoption")
+    if adoption and not (isinstance(adoption, dict) and text(adoption.get("instrument"))):
+        drop("adoption", "needs 'instrument' (the adopting law's name)")
+    deleted = meta.get("deleted")
+    if deleted is not None and not (isinstance(deleted, list) and all(
+            text(d) and (not d.startswith("Chapter ") or d[len("Chapter "):].isdigit()) for d in deleted)):
+        drop("deleted", "takes a list of sections ('1011.2', '103+', 'Table 1004.5', 'Chapter 9')")
+    redirects = meta.get("redirects")
+    if redirects is not None and not (isinstance(redirects, list) and all(
+            isinstance(r, dict) and text(r.get("from")) and text(r.get("to")) for r in redirects)):
+        drop("redirects", "takes a list of {from, to}")
+    return errors
+
+
 def _read_package(path: Path) -> tuple[Package, list[str]]:
     errors: list[str] = []
-    meta = yaml.safe_load((path / "package.yaml").read_text())
+    try:
+        data = (path / "package.yaml").read_bytes()
+    except OSError as e:
+        raise PackError(f"{path.name}: no readable package.yaml ({e.strerror or e})") from None
+    try:
+        meta = read_yaml(data)
+    except YAMLInputError as e:
+        raise PackError(f"{path.name}/package.yaml: {e}") from None
+    if not isinstance(meta, dict):
+        got = "empty" if meta is None else _what(meta)
+        raise PackError(f"{path.name}/package.yaml: is {got}, not a mapping with the package's name under 'package'")
+    if not isinstance(meta.get("package"), str) or not meta["package"]:
+        got = "missing" if meta.get("package") is None else _what(meta["package"])
+        raise PackError(f"{path.name}/package.yaml: 'package' takes the package's name, got {got}")
+    errors += _meta_errors(meta, meta["package"])
     pkg = Package(name=meta["package"], meta=meta, path=path)
     for file in sorted(path.glob("*.yaml")):
         if file.name == "package.yaml":
             continue
-        doc = yaml.safe_load(file.read_text()) or {}
+        try:
+            doc = read_yaml(file.read_bytes())
+        except OSError as e:
+            errors.append(f"{file.name}: cannot be read ({e.strerror or e})")
+            continue
+        except YAMLInputError as e:
+            errors.append(f"{file.name}: {e}")
+            continue
+        if doc is None:
+            continue
+        if not isinstance(doc, dict):
+            errors.append(f"{file.name}: maps sections ({', '.join(KINDS)}) to lists of items, got {_what(doc)}")
+            continue
         for section, items in doc.items():
             if section not in KINDS:
                 errors.append(f"{file.name}: unknown section '{section}'")
                 continue
-            for item in items:
+            if not isinstance(items, list):
+                if items is not None:
+                    errors.append(f"{file.name}: {section} takes a list of items, got {_what(items)}")
+                continue
+            for i, item in enumerate(items):
+                if not isinstance(item, dict) or not isinstance(item.get("name"), str) or not item["name"]:
+                    errors.append(f"{file.name}: {section}[{i}] needs a 'name' (text)"
+                                  + ("" if isinstance(item, dict) else f"; it is {_what(item)}, not a mapping"))
+                    continue
                 key = (KINDS[section], item["name"])
                 if key in pkg.elements:
                     errors.append(f"{pkg.name}: {key[0]} '{key[1]}' is defined twice")
@@ -80,15 +268,26 @@ def _read_package(path: Path) -> tuple[Package, list[str]]:
 
 
 def load(path: str | Path) -> Ruleset:
-    path = Path(path).resolve()
+    """A package and the packages it extends. Raises PackError for a package that cannot be read at all;
+    everything else it finds wrong is in `errors` (see validate())."""
+    return _load(Path(path).resolve(), ())
+
+
+def _load(path: Path, below: tuple[Path, ...]) -> Ruleset:
+    if path in below:
+        raise PackError(f"extends loops: {' -> '.join(p.name for p in (*below, path))}")
+    if len(below) >= MAX_EXTENDS:
+        raise PackError(f"{below[0].name}: extends more than {MAX_EXTENDS} packages deep")
     pkg, errors = _read_package(path)
     base_name = pkg.meta.get("extends")
     if not base_name:
         return Ruleset([pkg], dict(pkg.elements), errors)
-    base = load(path.parent / base_name)
+    if base_name in (".", "..") or "/" in base_name or "\\" in base_name:
+        raise PackError(f"{pkg.name}: extends '{base_name}', which is not the name of a package next to it")
+    base = _load((path.parent / base_name).resolve(), (*below, path))
     errors = base.errors + errors
     merged = dict(base.elements)
-    replaced = {(p["kind"], p["name"]) for p in pkg.meta.get("patches", []) if p["op"] == "replace"}
+    replaced = {(p["kind"], p["name"]) for p in pkg.meta.get("patches") or [] if p["op"] == "replace"}
     for key in replaced:
         if key not in merged:
             errors.append(f"{pkg.name}: patch replaces {key[0]} '{key[1]}', which {base_name} does not define")
@@ -359,12 +558,86 @@ def _has_key(obj: Any, key: str) -> bool:
     return any(key in node for node in walk(obj))
 
 
+def _expr_nodes(expr: Any) -> Iterator[dict]:
+    """The nodes of an expression that passed shape_errors, in walk() order, without the cases rows' `cite`
+    (whose values are text, so they hold no operators)."""
+    stack = [expr]
+    while stack:
+        e = stack.pop()
+        if isinstance(e, list):
+            stack.extend(reversed(e))
+        elif isinstance(e, dict):
+            yield e
+            stack.extend(reversed([v for k, v in e.items() if k != "cite"]))
+
+
+def _scalar(v: Any) -> bool:
+    return isinstance(v, (str, int, float, bool))
+
+
+def _element_errors(el: Element) -> list[str]:
+    """How an element departs from the shape of its kind: the fields that validate() and the evaluator read,
+    and the grammar of every expression it holds. validate() checks nothing more of an element that has any, and
+    treats references to it as already reported, so no later check meets a malformed element."""
+    where = f"{el.package}: {el.kind} '{el.name}'"
+    d = el.data
+    out: list[str] = []
+    scope = d.get("for") or {}
+    if not isinstance(scope, dict) or len(scope) > 1 or not all(isinstance(k, str) and isinstance(v, str) for k, v in scope.items()):
+        out.append(f"{where}: 'for' binds one variable to a type name")
+    if el.kind == "predicate":
+        if "type" in d and not isinstance(d["type"], str):
+            out.append(f"{where}: 'type' takes a type name ({', '.join(PRED_TYPE)}), got {_what(d['type'])}")
+        if "values" in d and not (isinstance(d["values"], list) and all(_scalar(v) for v in d["values"])):
+            out.append(f"{where}: 'values' takes a list of values, got {_what(d['values'])}")
+        vocab = d.get("vocab")
+        if vocab is not None and not (isinstance(vocab, str) and vocab.count(".") == 1 and all(vocab.split("."))):
+            out.append(f"{where}: 'vocab' takes a vocabulary attribute like Type.attr, got {str(vocab)[:60]}")
+    if el.kind in ("term", "norm"):
+        body = "value" if el.kind == "term" else "require"
+        out += shape_errors(d[body], where) if body in d else [f"{where}: needs '{body}'"]
+    if el.kind == "norm":
+        # applies: when the norm is about the subject or element at all; when_none: what it requires of the
+        # subject when no element of its `for` type was found (otherwise that is not applicable).
+        if "applies" in d:
+            out += shape_errors(d["applies"], f"{where} applies")
+        if "when_none" in d:
+            wn = d["when_none"]
+            if not scope:
+                out.append(f"{where}: 'when_none' needs 'for'")
+            elif not isinstance(wn, dict) or "require" not in wn or not set(wn) <= {"applies", "require"}:
+                out.append(f"{where}: 'when_none' takes 'require' and optionally 'applies'")
+            else:
+                for k in ("applies", "require"):
+                    if k in wn:
+                        out += shape_errors(wn[k], f"{where} when_none {k}")
+    if el.kind == "table":
+        if not isinstance(d.get("key"), str):
+            out.append(f"{where}: 'key' takes the name of an enum predicate, got {_what(d.get('key'))}")
+        if not (isinstance(d.get("columns"), list) and all(isinstance(c, str) for c in d["columns"])):
+            out.append(f"{where}: 'columns' takes a list of column names")
+        rows = d.get("rows")
+        if not isinstance(rows, list):
+            out.append(f"{where}: 'rows' takes a list of rows, got {_what(rows)}")
+        else:
+            out += [f"{where}: rows[{i}] needs a 'key' (a value of the key predicate)"
+                    for i, row in enumerate(rows) if not isinstance(row, dict) or not _scalar(row.get("key"))]
+    return out
+
+
 def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
     errors = list(rs.errors)
     warnings: list[str] = []
     if not rs.chain[0].meta.get("subject"):
         errors.append("package declares no subject (the root name of facts about the whole thing checked: building, system, ...)")
-    preds = {name: el for (kind, name), el in rs.elements.items() if kind == "predicate"}
+    broken: set[tuple[str, str]] = set()  # elements with shape errors, reported once, checked no further
+    for key, el in sorted(rs.elements.items(), key=lambda kv: kv[0]):
+        shape = _element_errors(el)
+        if shape:
+            broken.add(key)
+            errors += shape
+    ok = Ruleset(rs.chain, {k: el for k, el in rs.elements.items() if k not in broken}, [])
+    preds = {name: el for (kind, name), el in ok.elements.items() if kind == "predicate"}
 
     def fact_key(path: str, scope: dict[str, str], where: str) -> str | None:
         root, _, attr = path.partition(".")
@@ -372,7 +645,8 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
         if key is None:
             errors.append(f"{where}: fact '{path}' uses unknown variable '{root}'")
         elif key not in preds:
-            errors.append(f"{where}: fact '{path}' resolves to undeclared predicate '{key}'")
+            if ("predicate", key) not in broken:
+                errors.append(f"{where}: fact '{path}' resolves to undeclared predicate '{key}'")
             key = None
         return key
 
@@ -387,23 +661,25 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
             errors.append(f"{where}: '{lit}' is not a value of the compared fact ({', '.join(map(str, values))})")
 
     def check_expr(expr: Any, scope: dict[str, str], where: str) -> None:
-        for node in walk(expr):
+        for node in _expr_nodes(expr):
             if "fact" in node:
                 fact_key(node["fact"], scope, where)
             if "term" in node:
-                if not rs.has("term", node["term"]):
-                    errors.append(f"{where}: unknown term '{node['term']}'")
+                if not ok.has("term", node["term"]):
+                    if ("term", node["term"]) not in broken:
+                        errors.append(f"{where}: unknown term '{node['term']}'")
                     continue
-                target_for = rs.get("term", node["term"]).data.get("for") or {}
+                target_for = ok.get("term", node["term"]).data.get("for") or {}
                 of = node.get("of")
                 if target_for and (of not in scope or scope[of] != next(iter(target_for.values()))):
                     errors.append(f"{where}: term '{node['term']}' needs 'of' bound to a {next(iter(target_for.values()))}")
                 if not target_for and of:
                     errors.append(f"{where}: term '{node['term']}' is subject-level and takes no 'of'")
             if "lookup" in node:
-                if not rs.has("table", node["lookup"]):
-                    errors.append(f"{where}: unknown table '{node['lookup']}'")
-                elif node.get("column") not in rs.get("table", node["lookup"]).data["columns"]:
+                if not ok.has("table", node["lookup"]):
+                    if ("table", node["lookup"]) not in broken:
+                        errors.append(f"{where}: unknown table '{node['lookup']}'")
+                elif node.get("column") not in ok.get("table", node["lookup"]).data["columns"]:
                     errors.append(f"{where}: table '{node['lookup']}' has no column '{node.get('column')}'")
             for op in COMPARISONS & node.keys():
                 a, b = node[op]
@@ -419,68 +695,51 @@ def validate(rs: Ruleset) -> tuple[list[str], list[str]]:
                 if "else" not in node["cases"][-1]:
                     warnings.append(f"{where}: cases has no 'else' row; unmatched inputs stay unknown")
 
-    for (kind, name), el in sorted(rs.elements.items()):
+    for (kind, name), el in sorted(rs.elements.items(), key=lambda kv: kv[0]):
         where = f"{el.package}: {kind} '{name}'"
         d = el.data
-        if d.get("status", "draft") not in STATUSES:
+        status = d.get("status", "draft")
+        if not isinstance(status, str) or status not in STATUSES:
             errors.append(f"{where}: status must be one of {sorted(STATUSES)}")
         if kind != "predicate":
-            cite = d.get("cite") or {}
+            cite = d.get("cite") if isinstance(d.get("cite"), dict) else {}
             url = str(cite.get("url") or "")
             # A customer's own document has no public URL: it is cited by `at` (file and lines), with at most a
             # path in the app that shows it.
             customer = bool(cite.get("at")) and (not url or (url.startswith("/") and not url.startswith("//")))
-            if not cite.get("section") or not (url.startswith("https://") or customer):
+            if not cite.get("section") or not isinstance(cite["section"], str) or not (url.startswith("https://") or customer):
                 errors.append(f"{where}: needs cite.section and an https cite.url (or cite.at for a customer document)")
-        scope = d.get("for") or {}
-        if not isinstance(scope, dict) or len(scope) > 1 or not all(isinstance(k, str) and isinstance(v, str) for k, v in scope.items()):
-            errors.append(f"{where}: 'for' binds one variable to a type name")
+        if (kind, name) in broken:
             continue
-        scope = dict(scope)
+        scope = dict(d.get("for") or {})
         if kind in ("term", "norm"):
-            body = d.get("value" if kind == "term" else "require", ...)
-            shape = shape_errors(body, where) if body is not ... else [f"{where}: needs '{'value' if kind == 'term' else 'require'}'"]
-            if shape:
-                errors += shape
-                continue
+            body = d["value" if kind == "term" else "require"]
             check_expr(body, scope, where)
-            errors += type_errors(rs, body, scope, where, boolean=kind == "norm")
+            errors += type_errors(ok, body, scope, where, boolean=kind == "norm")
         if kind == "norm":
-            # applies: when the norm is about the subject or element at all; when_none: what it requires of the
-            # subject when no element of its `for` type was found (otherwise that is not applicable).
             parts = [("applies", d["applies"], scope)] if "applies" in d else []
             if "when_none" in d:
-                wn = d["when_none"]
-                if not scope:
-                    errors.append(f"{where}: 'when_none' needs 'for'")
-                elif not isinstance(wn, dict) or "require" not in wn or not set(wn) <= {"applies", "require"}:
-                    errors.append(f"{where}: 'when_none' takes 'require' and optionally 'applies'")
-                else:
-                    parts += [(f"when_none {k}", wn[k], {}) for k in ("applies", "require") if k in wn]
+                parts += [(f"when_none {k}", d["when_none"][k], {}) for k in ("applies", "require") if k in d["when_none"]]
             for field, expr, sc in parts:
-                shape = shape_errors(expr, f"{where} {field}")
-                if shape:
-                    errors += shape
-                    continue
                 check_expr(expr, sc, f"{where} {field}")
-                errors += type_errors(rs, expr, sc, f"{where} {field}", boolean=True)
+                errors += type_errors(ok, expr, sc, f"{where} {field}", boolean=True)
         if kind == "table":
             key_pred = preds.get(d["key"])
             if key_pred is None or key_pred.data.get("type") != "enum":
                 errors.append(f"{where}: key '{d['key']}' must be a declared enum predicate")
+            values = (key_pred.data.get("values") or []) if key_pred else []
             seen = set()
             for row in d["rows"]:
                 if row["key"] in seen:
                     errors.append(f"{where}: row key '{row['key']}' appears twice")
                 seen.add(row["key"])
-                if key_pred and row["key"] not in key_pred.data.get("values", []):
+                if key_pred and row["key"] not in values:
                     errors.append(f"{where}: row key '{row['key']}' is not a value of {d['key']}")
                 if "row" not in row:
                     errors.append(f"{where}: row '{row['key']}' needs its 'row' label as printed")
-            if key_pred:
-                missing = [v for v in key_pred.data["values"] if v not in seen]
-                if missing:
-                    warnings.append(f"{where}: no row for {', '.join(missing)}; lookups fall back to the authority having jurisdiction")
+            missing = [v for v in values if v not in seen]
+            if missing:
+                warnings.append(f"{where}: no row for {', '.join(map(str, missing))}; lookups fall back to the authority having jurisdiction")
 
     for pkg in rs.chain:
         if pkg.meta.get("text_policy") == "link-only" and any(_has_key(el.data, "quote") for el in pkg.elements.values()):

@@ -4,6 +4,7 @@ import pytest
 import yaml
 
 from normir import Evaluator, Quantity, Residual, amendment_status, ask, load, validate
+from normir.model import PackError
 
 ROOT = Path(__file__).resolve().parents[1]
 IBC = ROOT / "packs" / "ibc-2024"
@@ -217,3 +218,95 @@ def test_validator_accepts_customer_document_citations(tmp_path, cite, ok):
     }))
     errors, _ = validate(load(tmp_path))
     assert (errors == []) is ok, errors
+
+
+# ---------------------------------------------------------------- packages of the wrong shape
+
+GOOD_RULES = """predicates:
+  - {name: building.sprinklered, type: bool}
+  - {name: building.group, type: enum, values: [B, E]}
+terms:
+  - name: wide
+    cite: {section: "1", url: "https://example.com/1"}
+    value: {cases: [{when: {fact: building.sprinklered}, then: 44 in, cite: {row: a}}, {else: 36 in, cite: {row: b}}]}
+norms:
+  - {name: n1, cite: {section: "2", url: "https://example.com/2"}, require: {ge: [{term: wide}, 36 in]}}
+"""
+
+
+def _pack_with(tmp_path, extra: bytes | str, meta: str = "package: p\nversion: '1'\nsubject: building\n"):
+    pack = tmp_path / "p"
+    pack.mkdir()
+    (pack / "package.yaml").write_text(meta)
+    (pack / "rules.yaml").write_text(GOOD_RULES)
+    (pack / "extra.yaml").write_bytes(extra if isinstance(extra, bytes) else extra.encode())
+    return pack
+
+
+DEEP = "norms:\n  - name: X1\n    cite: {section: '1', url: 'https://example.com'}\n    require: " + "{all: [" * 3000 + "true" + "]}" * 3000 + "\n"
+LAUGHS = ("terms:\n  - name: l0\n    cite: {section: '1', url: 'https://example.com'}\n    value: &a0 {all: [true, true, true, true, true, true, true, true, true, true]}\n"
+          + "".join(f"  - name: l{i}\n    cite: {{section: '1', url: 'https://example.com'}}\n    value: &a{i} {{all: [{', '.join(['*a' + str(i - 1)] * 10)}]}}\n"
+                    for i in range(1, 9)))
+
+
+@pytest.mark.parametrize("extra, error", [
+    ("- norms\n", "extra.yaml: maps sections (predicates, tables, terms, norms) to lists of items, got a list"),
+    ("norms: {a: 1}\n", "extra.yaml: norms takes a list of items, got a mapping"),
+    ("norms: 5\n", "extra.yaml: norms takes a list of items, got a number"),
+    ("norms: [a]\n", "extra.yaml: norms[0] needs a 'name' (text); it is text, not a mapping"),
+    ("norms: [{title: x}]\n", "extra.yaml: norms[0] needs a 'name' (text)"),
+    ("predicates: [{name: [a, b]}]\n", "extra.yaml: predicates[0] needs a 'name' (text)"),
+    ("predicates: [{name: building.x, type: [bool]}]\n", "p: predicate 'building.x': 'type' takes a type name"),
+    ("predicates: [{name: building.x, type: enum, values: 5}]\n", "p: predicate 'building.x': 'values' takes a list of values"),
+    ("norms: [{name: X1, cite: '1', require: true}]\n", "p: norm 'X1': needs cite.section and an https cite.url"),
+    ("norms: [{name: X1, status: {a: 1}, cite: {section: '1', url: 'https://e.com'}, require: true}]\n", "p: norm 'X1': status must be one of"),
+    ("tables: [{name: T1, key: building.group, columns: [w], rows: [{row: a, w: 1}]}]\n", "p: table 'T1': rows[0] needs a 'key'"),
+    # a malformed term is reported once; the norm that uses it is not checked against it
+    (("terms: [{name: t1, cite: {section: '1', url: 'https://e.com'}, value: {not: {fact: [building, sprinklered]}}}]\n"
+      "norms: [{name: X1, cite: {section: '1', url: 'https://e.com'}, require: {term: t1}}]\n"), "p: term 't1': 'fact' takes a name like var.attr"),
+    (("terms: [{name: t1, cite: {section: '1', url: 'https://e.com'}, value: {all: [{}]}}]\n"
+      "norms: [{name: X1, cite: {section: '1', url: 'https://e.com'}, require: {term: t1}}]\n"), "p: term 't1': not an expression: {}"),
+    (b"norms: [{name: caf\xe9}]\n", "extra.yaml: not UTF-8 text: byte 0xe9 at line 1"),
+    ("norms: !!python/object/apply:os.system ['echo pwned']\n", "extra.yaml: not valid YAML"),
+    (DEEP, "extra.yaml: nested deeper than 100 levels at line 4"),
+    (LAUGHS, "extra.yaml: aliases repeat"),
+])
+def test_validator_reports_malformed_files_and_items(tmp_path, extra, error):
+    errors, _ = validate(load(_pack_with(tmp_path, extra)))
+    assert any(e.startswith(error) for e in errors), errors
+    assert not any("'X1'" in e and "term 't1'" in e for e in errors)  # no second error about the malformed term
+
+
+@pytest.mark.parametrize("meta, error", [
+    ("", "p/package.yaml: is empty, not a mapping"),
+    ("- a\n", "p/package.yaml: is a list, not a mapping"),
+    ("title: x\n", "p/package.yaml: 'package' takes the package's name, got missing"),
+    ("package: [p]\n", "p/package.yaml: 'package' takes the package's name, got a list"),
+    ("package: p\nextends: p\n", "extends loops: p -> p"),
+    ("package: p\nextends: ../../../etc\n", "p: extends '../../../etc', which is not the name of a package next to it"),
+    ("package: p\nextends: nope\n", "nope: no readable package.yaml"),
+])
+def test_a_package_that_cannot_be_read_raises_pack_error(tmp_path, meta, error):
+    with pytest.raises(PackError) as e:
+        load(_pack_with(tmp_path, "", meta))
+    assert str(e.value).startswith(error), e.value
+
+
+def test_a_package_without_package_yaml_or_with_bytes_that_are_not_utf8_raises_pack_error(tmp_path):
+    pack = _pack_with(tmp_path, "")
+    (pack / "package.yaml").write_bytes(b"package: p\ntitle: caf\xe9\n")
+    with pytest.raises(PackError, match="p/package.yaml: not UTF-8 text: byte 0xe9 at line 2"):
+        load(pack)
+    (pack / "package.yaml").unlink()
+    with pytest.raises(PackError, match="p: no readable package.yaml"):
+        load(pack)
+
+
+def test_malformed_patches_are_errors_of_the_extending_package(tmp_path):
+    _pack_with(tmp_path, "")
+    top = tmp_path / "top"
+    top.mkdir()
+    (top / "package.yaml").write_text("package: top\nextends: p\npatches: [{kind: norm, name: n1}, 5]\n")
+    errors, _ = validate(load(top))
+    assert "top: package.yaml patches[0] needs 'op', 'kind' and 'name' (text)" in errors
+    assert "top: package.yaml patches[1] needs 'op', 'kind' and 'name' (text)" in errors
