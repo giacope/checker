@@ -6,6 +6,7 @@ import json
 import re
 
 import yaml
+from normir.model import YAMLInputError, read_yaml
 
 from .common import (Collector, TRACKER_HOSTS, analyse_password_regex, literal_secret_kind, plausible_secret_value,
                      secret_kind_for_name)
@@ -39,8 +40,8 @@ def scan_config(sf: SourceFile, text: str, out: Collector):
     low = sf.rel.rsplit("/", 1)[-1].lower()
     if low.endswith((".yml", ".yaml", ".json")):
         try:
-            docs = list(yaml.compose_all(text, Loader=yaml.SafeLoader))
-        except yaml.YAMLError:
+            docs = read_yaml(text, compose=True)  # bounded: deep nesting or alias bombs are not configuration
+        except YAMLInputError:
             docs = None
         if docs is not None:
             for d in docs:
@@ -50,7 +51,7 @@ def scan_config(sf: SourceFile, text: str, out: Collector):
         if low.endswith(".json"):
             try:
                 json.loads(text)
-            except ValueError:
+            except (ValueError, RecursionError):
                 return
     # .env, .ini, .properties, .toml, .conf, and JSON that YAML cannot read: one key per line
     for i, line in enumerate(text.splitlines(), 1):

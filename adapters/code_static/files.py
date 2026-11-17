@@ -156,7 +156,7 @@ def read_text(f: SourceFile) -> str | None:
         return None
     if b"\0" in data[:4096]:
         return None
-    text = data.decode("utf-8", errors="replace")
+    text = data.decode("utf-8", errors="replace").removeprefix("\ufeff")  # a byte order mark is not code
     if f.kind in {"js", "ts", "tsx"} and any(len(line) > 3000 for line in text.splitlines()):
         return None  # minified or bundled
     return text

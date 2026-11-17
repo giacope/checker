@@ -26,68 +26,88 @@ ATTR_ORDER = ["algorithm", "salted", "construction", "untrusted_input", "is_sess
 TYPE_ORDER = ["PasswordStore", "Query", "Cookie", "TokenVerification", "Secret", "LogStatement", "Transfer"]
 
 
+MAX_GIT_FILE = 16_000_000        # bytes of .git/HEAD, a ref, or packed-refs read
+MAX_PACKAGE_JSON = 1_000_000
+MAX_PACKAGE_LOCK = 50_000_000
+COMMIT = re.compile(r"[0-9a-f]{40,64}")
+
+
+def _git_text(p: Path) -> str | None:
+    """A text file under .git, or None when it is missing, larger than MAX_GIT_FILE, or not UTF-8 text."""
+    try:
+        if not p.is_file() or p.stat().st_size > MAX_GIT_FILE:
+            return None
+        return p.read_bytes().decode("utf-8")
+    except (OSError, UnicodeDecodeError):
+        return None
+
+
 def git_commit(root: Path) -> str | None:
     """HEAD of the repository, read from .git files (git itself is not run)."""
     git = root / ".git"
     if git.is_file():  # worktree or submodule: "gitdir: <path>"
-        m = re.match(r"gitdir:\s*(.+)", git.read_text().strip())
+        m = re.match(r"gitdir:\s*(.+)", (_git_text(git) or "").strip())
         git = (root / m.group(1)).resolve() if m else git
-    head = git / "HEAD"
-    if not head.is_file():
-        return None
-    h = head.read_text().strip()
+    h = (_git_text(git / "HEAD") or "").strip()
     if not h.startswith("ref:"):
-        return h if re.fullmatch(r"[0-9a-f]{40,64}", h) else None
+        return h if COMMIT.fullmatch(h) else None
     ref = h[4:].strip()
     for base in (git, git / "commondir"):
-        f = base / ref
-        if f.is_file():
-            return f.read_text().strip()
-    packed = git / "packed-refs"
-    if packed.is_file():
-        for line in packed.read_text().splitlines():
-            parts = line.split()
-            if len(parts) == 2 and parts[1] == ref:
-                return parts[0]
+        sha = (_git_text(base / ref) or "").strip()
+        if sha:
+            return sha if COMMIT.fullmatch(sha) else None
+    for line in (_git_text(git / "packed-refs") or "").splitlines():
+        parts = line.split()
+        if len(parts) == 2 and parts[1] == ref:
+            return parts[0] if COMMIT.fullmatch(parts[0]) else None
     return None
 
 
+def _json_object(p: Path, max_bytes: int) -> dict:
+    """A JSON file holding an object, or {} when it is missing, too large, not JSON, or JSON of another kind."""
+    try:
+        if not p.is_file() or p.stat().st_size >= max_bytes:
+            return {}
+        data = json.loads(p.read_bytes())
+    except (OSError, ValueError, RecursionError):  # ValueError includes a file that is not UTF-8
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def _object(v) -> dict:
+    return v if isinstance(v, dict) else {}
+
+
 def npm_context(root: Path, files) -> dict:
-    """Declared npm dependencies of server-side packages, and versions nested under them in a lock file."""
+    """Declared npm dependencies of server-side packages, and versions nested under them in a lock file.
+    Manifests are read as found: a field of the wrong kind (a list for `dependencies`) is skipped."""
     deps: dict[str, str] = {}
     nested: dict[str, str] = {}
     candidates = sorted({f.abs.parent for f in files if f.kind in {"js", "ts"} and not f.client} | {root})
+    version = lambda info: info.get("version") if isinstance(info, dict) and isinstance(info.get("version"), str) else None  # noqa: E731
     for d in candidates:
         for parent in [d, *d.parents]:
             pj = parent / "package.json"
-            if pj.is_file() and pj.stat().st_size < 1_000_000:
-                try:
-                    data = json.loads(pj.read_text())
-                except ValueError:
-                    data = {}
-                for k, v in (data.get("dependencies") or {}).items():
+            if pj.is_file() and pj.stat().st_size < MAX_PACKAGE_JSON:
+                data = _json_object(pj, MAX_PACKAGE_JSON)
+                for k, v in _object(data.get("dependencies")).items():
                     if isinstance(v, str):
                         deps.setdefault(k, v)
-                lock = parent / "package-lock.json"
-                if lock.is_file() and lock.stat().st_size < 50_000_000:
-                    try:
-                        ld = json.loads(lock.read_text())
-                    except ValueError:
-                        ld = {}
-                    for key, info in (ld.get("packages") or {}).items():
-                        segs = key.split("node_modules/")[1:]
-                        segs = [s.rstrip("/") for s in segs]
-                        if isinstance(info, dict) and info.get("version"):
-                            if len(segs) == 1 and segs[0] in deps:
-                                deps[segs[0]] = info["version"]
-                            elif len(segs) == 2:
-                                nested[f"{segs[0]}/{segs[1]}"] = info["version"]
-                    for name, info in (ld.get("dependencies") or {}).items():  # lockfile v1
-                        if isinstance(info, dict) and info.get("version") and name in deps:
-                            deps[name] = info["version"]
-                        for sub, si in ((info or {}).get("dependencies") or {}).items():
-                            if isinstance(si, dict) and si.get("version"):
-                                nested[f"{name}/{sub}"] = si["version"]
+                ld = _json_object(parent / "package-lock.json", MAX_PACKAGE_LOCK)
+                for key, info in _object(ld.get("packages")).items():
+                    segs = key.split("node_modules/")[1:]
+                    segs = [s.rstrip("/") for s in segs]
+                    if version(info):
+                        if len(segs) == 1 and segs[0] in deps:
+                            deps[segs[0]] = version(info)
+                        elif len(segs) == 2:
+                            nested[f"{segs[0]}/{segs[1]}"] = version(info)
+                for name, info in _object(ld.get("dependencies")).items():  # lockfile v1
+                    if version(info) and name in deps:
+                        deps[name] = version(info)
+                    for sub, si in _object(_object(info).get("dependencies")).items():
+                        if version(si):
+                            nested[f"{name}/{sub}"] = version(si)
                 break
             if parent == root:
                 break

@@ -2,6 +2,7 @@
 
 import json
 import textwrap
+import time
 
 import pytest
 import yaml
@@ -591,3 +592,81 @@ def test_password_length_rule_in_javascript_follows_negation_and_the_branch(tmp_
         "  await User.create({ email: req.body.email, password: await bcrypt.hash(password, 10) });\n});\n")
     f = analyse(tmp_path, "t")["facts"]
     assert [o["value"] for o in f["password_min_length"]] == [16] and [o["value"] for o in f["password_max_length"]] == [64]
+
+
+# ---------------------------------------------------------------- inputs a repository may hold
+
+WEAK_PY = "import hashlib\ndef set_password(user, password):\n    user.pw = hashlib.md5(password.encode()).hexdigest()\n"
+QUERY_JS = "app.get('/u', (req, res) => {\n  db.query('SELECT * FROM u WHERE id=' + req.query.id);\n});\n"
+
+
+@pytest.mark.parametrize("files", [
+    {".git/HEAD": b"\xff\xfe\x00ref"},                                              # HEAD is not text
+    {".git/HEAD": b"ref: refs/heads/main\n", ".git/refs/heads/main": b"\xff\xfe"},  # nor is the ref it names
+])
+def test_binary_git_files_give_no_commit_and_lose_nothing(tmp_path, files):
+    for rel, data in {**files, "app.py": WEAK_PY.encode()}.items():
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_bytes(data)
+    doc = analyse(tmp_path)
+    assert doc["sources"][0]["commit"] is None
+    assert elements(doc, "PasswordStore") == {"app.py:3": {"algorithm": "md5", "salted": False}}
+
+
+@pytest.mark.parametrize("manifests", [
+    {"package.json": "[]"},
+    {"package.json": '"express"'},
+    {"package.json": '{"dependencies": ["express"]}'},
+    {"package.json": '{"dependencies": {"express": "4"}}', "package-lock.json": '{"packages": [1, 2]}'},
+    {"package.json": '{"dependencies": {"express": "4"}}', "package-lock.json": '{"dependencies": {"express": "4.17.1"}}'},
+    {"package.json": b'{"name": "\xff\xfe"}'},
+])
+def test_npm_manifests_of_another_shape_are_skipped_not_fatal(tmp_path, manifests):
+    for rel, data in {**manifests, "server.js": QUERY_JS}.items():
+        (tmp_path / rel).write_bytes(data if isinstance(data, bytes) else data.encode())
+    assert elements(analyse(tmp_path), "Query") == {"server.js:2": {"construction": "concatenated", "untrusted_input": True}}
+
+
+def test_config_nested_past_the_yaml_limit_is_read_line_by_line(tmp_path):
+    (tmp_path / "config").mkdir()
+    (tmp_path / "config" / "settings.json").write_text("[" * 50_000 + "]" * 50_000)
+    (tmp_path / "app.py").write_text(WEAK_PY)
+    assert elements(analyse(tmp_path), "PasswordStore") == {"app.py:3": {"algorithm": "md5", "salted": False}}
+
+
+def test_config_with_a_control_character_is_read_line_by_line(tmp_path):
+    (tmp_path / "config").mkdir()
+    (tmp_path / "config" / "settings.yml").write_bytes(b"debug: \x07\napi_key: sk_live_0123456789abcdefABCD\n")
+    assert elements(analyse(tmp_path), "Secret") == {"config/settings.yml:2": {"kind": "api_key"}}
+
+
+def test_config_whose_aliases_repeat_millions_of_nodes_is_read_in_bounded_time(tmp_path):
+    # nine scalars, each level nine aliases of the one before: 9**7 scalars once expanded
+    (tmp_path / "config").mkdir()
+    (tmp_path / "config" / "secrets.yml").write_text('a: &a ["x","x","x","x","x","x","x","x","x"]\n' + "".join(
+        f"{chr(98 + i)}: &{chr(98 + i)} [{','.join(['*' + chr(97 + i)] * 9)}]\n" for i in range(6))
+        + "api_key: sk_live_0123456789abcdefABCD\n")
+    t = time.perf_counter()
+    doc = analyse(tmp_path)
+    assert time.perf_counter() - t < 3
+    assert elements(doc, "Secret") == {"config/secrets.yml:8": {"kind": "api_key"}}
+
+
+def test_deeply_nested_javascript_calls_are_analysed_in_linear_time(tmp_path):
+    n = 600  # each call's arguments are checked for taint; walking every subtree, or up from every node, is not linear
+    (tmp_path / "app.js").write_text("app.get('/u', (req, res) => {\n  db.query('SELECT * FROM u WHERE id=' + "
+                                     + "f(\n" * n + "req.query.id" + ")\n" * n + ");\n});\n")
+    t = time.perf_counter()
+    doc = analyse(tmp_path)
+    assert time.perf_counter() - t < 3
+    assert elements(doc, "Query") == {"app.js:2": {"construction": "concatenated", "untrusted_input": True}}
+
+
+def test_a_byte_order_mark_changes_no_finding(tmp_path):
+    (tmp_path / "plain").mkdir()
+    (tmp_path / "bom").mkdir()
+    (tmp_path / "plain" / "auth.py").write_text(WEAK_PY)
+    (tmp_path / "bom" / "auth.py").write_bytes(b"\xef\xbb\xbf" + WEAK_PY.encode())
+    plain, bom = analyse(tmp_path / "plain"), analyse(tmp_path / "bom")
+    assert bom["sources"][0]["unparsed"] == []
+    assert elements(bom, "PasswordStore") == elements(plain, "PasswordStore") == {"auth.py:3": {"algorithm": "md5", "salted": False}}

@@ -18,6 +18,7 @@ LANGS = {"js": ts.Language(tsjs.language()), "ts": ts.Language(tsts.language_typ
          "tsx": ts.Language(tsts.language_tsx())}
 FUNC_TYPES = {"function_declaration", "function_expression", "function", "arrow_function", "method_definition",
               "generator_function_declaration", "generator_function"}
+OWNER_TYPES = FUNC_TYPES | {"class_declaration", "class"}  # what a node is inside of, for advisory()
 WRAPPERS = {"parenthesized_expression", "as_expression", "non_null_expression", "await_expression", "satisfies_expression",
             "type_assertion"}
 REQUEST_NAMES = {"req", "request"}
@@ -250,13 +251,12 @@ def advisory(jf, n) -> bool:
     fname = jf.sf.rel.rsplit("/", 1)[-1]
     if ADVISORY.search(fname) or (jf.sf.client and LOGIN_FORM.search(fname)):
         return True
-    p = n.parent
+    p = jf.owner_of(n)
     while p is not None:
-        if p.type in FUNC_TYPES | {"class_declaration", "class"}:
-            nm = p.child_by_field_name("name")
-            if nm is not None and (ADVISORY.search(T(nm)) or (jf.sf.client and LOGIN_FORM.search(T(nm)))):
-                return True
-        p = p.parent
+        nm = p.child_by_field_name("name")
+        if nm is not None and (ADVISORY.search(T(nm)) or (jf.sf.client and LOGIN_FORM.search(T(nm)))):
+            return True
+        p = jf.owner_of(p)
     return False
 
 
@@ -275,15 +275,28 @@ class JSFile:
         parser = ts.Parser(LANGS[sf.kind])
         self.tree = parser.parse(text.encode("utf-8"))
         self.root = self.tree.root_node
-        self.nodes = list(walk(self.root))
+        # walk(), recording each node's innermost enclosing function and function-or-class on the way down: a
+        # tree-sitter node finds its parent from the root, so walking up from every node of a deep tree is cubic
+        self.nodes = []
+        self._fn_cache: dict = {}  # node id -> innermost enclosing function node (None at module level)
+        self._owner: dict = {}     # node id -> innermost enclosing function or class node
+        stack = [(self.root, None, None)]
+        while stack:
+            x, fn, owner = stack.pop()
+            if x.type == "comment":
+                continue
+            self.nodes.append(x)
+            self._fn_cache[x.id], self._owner[x.id] = fn, owner
+            inner = (x if x.type in FUNC_TYPES else fn, x if x.type in OWNER_TYPES else owner)
+            stack.extend((c, *inner) for c in reversed(x.children))
         self.funcs = [n for n in self.nodes if n.type in FUNC_TYPES]
         self.aliases: dict[str, str] = {}
         self.alias_src: dict[str, tuple[str, list[str]]] = {}  # local name -> (module, members), for framework models
-        self._fn_cache: dict = {}
         self._rules: dict = {}
         self.decls: dict = {}   # scope id -> name -> [value nodes]
         self.bindings: dict = {}  # scope id -> [(names, value)]
         self.taint: dict = {}
+        self._tainted: dict = {}  # frozenset of tainted names -> node id -> tainted (see tainted)
         self._imports()
         self._bind()
 
@@ -369,6 +382,15 @@ class JSFile:
         return ".".join([head] + parts[1:])
 
     # ---------------------------------------------------------------- scopes
+    def owner_of(self, n):
+        """Innermost enclosing function or class node (None for module level)."""
+        if n.id in self._owner:
+            return self._owner[n.id]
+        p = n.parent
+        while p is not None and p.type not in OWNER_TYPES:
+            p = p.parent
+        return p
+
     def fn_of(self, n):
         """Innermost enclosing function node (None for module level)."""
         key = n.id
@@ -478,27 +500,40 @@ class JSFile:
         return False
 
     def tainted(self, expr, at=None) -> bool:
-        if expr is None:
+        """Request data reaches `expr`: a source or a tainted name in it, outside nested functions and sanitizer
+        calls. Whether a node is tainted depends only on its subtree and the tainted names in scope, so it is
+        kept per node for each set of names: checking every argument of 20,000 nested calls stays linear."""
+        if expr is None or expr.type == "comment":
             return False
-        names: set[str] = set()
-        for s in self.chain(at if at is not None else expr):
-            names |= self.taint.get(s, set())
-        stack = [expr]
+        names = frozenset().union(*(self.taint.get(s, ()) for s in self.chain(at if at is not None else expr)))
+        memo = self._tainted.setdefault(names, {})
+        if expr.id in memo:
+            return memo[expr.id]
+        # inside `expr`, comments and nested functions do not count; `expr` itself may be a function
+        inner = lambda x: [c for c in x.children if c.type != "comment" and c.type not in FUNC_TYPES]  # noqa: E731
+        stack = [(expr, False)]
         while stack:
-            x = stack.pop()
-            t = x.type
-            if t == "comment" or (t in FUNC_TYPES and x is not expr):
+            x, measured = stack.pop()
+            if measured:
+                memo[x.id] = any(memo[c.id] for c in inner(x))
                 continue
+            if x.id in memo:
+                continue
+            t = x.type
             if t == "call_expression" and self.rule(x, "sanitizer"):
-                continue  # its result is not controlled by the request
+                memo[x.id] = False  # its result is not controlled by the request
+                continue
             if t in ("identifier", "shorthand_property_identifier") and T(x) in names:
                 p = x.parent
                 if not (p is not None and p.type == "member_expression" and p.child_by_field_name("property") == x):
-                    return True
+                    memo[x.id] = True
+                    continue
             if self.is_source(x):
-                return True
-            stack.extend(x.children)
-        return False
+                memo[x.id] = True
+                continue
+            stack.append((x, True))
+            stack.extend((c, False) for c in inner(x))
+        return memo[expr.id]
 
     def compute_taint(self, seeds: dict):
         self.taint = {0: set()}
