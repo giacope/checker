@@ -2090,8 +2090,8 @@ def documented(target: str, e: BaseException, repo_frame) -> str | None:
         return f"ifcopenshell.open: {name}"
     if target == "dxf" and fname.endswith("dxf_render.py") and (mod.startswith("ezdxf") or isinstance(e, OSError)):
         return f"ezdxf: {name}"
-    if target in ("evidence", "pack") and mod.startswith("yaml"):
-        return f"yaml: {name}"
+    if target in ("evidence", "pack") and (mod.startswith("yaml") or name in ("EvidenceError", "PackError", "YAMLInputError")):
+        return f"{mod.split('.')[0]}: {name}"
     return None
 
 
@@ -2372,7 +2372,7 @@ def run_target(target: str, args) -> dict:
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
     with open(out / "cases.jsonl", "w") as f:
         for r in records:
-            f.write(json.dumps(r, default=str, ensure_ascii=False) + "\n")
+            f.write(json.dumps(r, default=str) + "\n")   # ASCII escapes: a label may hold a lone surrogate
     print(json.dumps(summary, indent=1))
     for p in problems:
         print(f"  {p['class']:8} {p['count']:4}x {p['what'][:70]:70} {p['frame']}  -> {p['repro']}")
