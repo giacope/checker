@@ -57,7 +57,7 @@ types:
   Query:
     description: A place where a database query (SQL, NoSQL, ORM raw query) is sent.
     attrs:
-      construction: {type: enum, kind: measured, values: [parameterized, orm, concatenated, interpolated, operator_object], label: how untrusted values reach the query (operator_object is a NoSQL filter object built from request data)}
+      construction: {type: enum, kind: measured, values: [parameterized, orm, concatenated, interpolated, operator_object], label: "how untrusted values reach the query. parameterized: bound in place, by placeholders or as values in a query or filter object whose structure the code fixes (a search DSL with the user's text as one value); operator_object: the request supplies the structure or operators of a filter object (a request body passed as the filter)"}
       untrusted_input: {type: bool, kind: measured, label: data from a request (body, query, params, headers, cookies) can reach the query text or filter}
 
   Cookie:
