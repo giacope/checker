@@ -205,6 +205,22 @@ def test_regulation_upload_rejects_unreadable_files(client, compiler):
     assert client.get("/regulations/../../etc").status_code == 404
 
 
+@pytest.mark.parametrize("fname, stored", [
+    ("..pdf", "document.pdf"),
+    ("....pdf", "document.pdf"),
+    ("a" * 300 + ".pdf", "a" * 196 + ".pdf"),       # cut by bytes, keeping the extension
+    ("建" * 100 + ".html", "建" * 65 + ".html"),     # 3 bytes a character: 100 of them were over the 255-byte limit
+])
+def test_uploaded_file_names_keep_their_extension_and_fit_the_file_system(tmp_path, monkeypatch, fname, stored):
+    import app.regulations as regs
+    monkeypatch.setattr(regs, "REGS", tmp_path)
+    rid = regs.create("", "code", [(fname, b"Stairs are 1 m wide."), (fname, b"Ramps are 1:12.")])
+    files = json.loads((tmp_path / rid / "request.json").read_text())["files"]
+    assert files == [stored, stored.replace(".", "-1.")]   # the second has the same name
+    assert [(tmp_path / rid / "files" / f).read_bytes() for f in files] == [b"Stairs are 1 m wide.", b"Ramps are 1:12."]
+    assert regs.safe_name(".pdf") == "document.pdf"
+
+
 def test_regulation_compile_error_is_shown(client, compiler, monkeypatch):
     def fail(*a, **kw):
         raise RegulationError("No requirements were found in the documents.")

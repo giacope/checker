@@ -77,10 +77,16 @@ def status(d: Path, **kw) -> dict:
         return st
 
 
+MAX_NAME_BYTES = 200   # a stored file name in UTF-8; file systems allow 255, and a duplicate gets "-N" added
+
+
 def safe_name(name: str) -> str:
-    base = Path(name.replace("\\", "/")).name
-    base = re.sub(r"[^\w.\- ()]+", "_", base).strip(" .") or "document"
-    return base[:120]
+    """The upload's name as stored: its last path part, characters other than word characters, '.', '-', ' ' and
+    parentheses replaced, the extension kept and the stem cut to fit MAX_NAME_BYTES."""
+    base = re.sub(r"[^\w.\- ()]+", "_", name.replace("\\", "/").rsplit("/", 1)[-1])
+    stem, ext = re.fullmatch(r"(.*?)(\.\w{1,10})?", base).groups("")
+    stem = stem.strip(" .").encode()[:MAX_NAME_BYTES - len(ext.encode())].decode(errors="ignore").rstrip(" .")
+    return (stem or "document") + ext
 
 
 def create(name: str, domain: str, files: list[tuple[str, bytes]]) -> str:
@@ -101,9 +107,11 @@ def create(name: str, domain: str, files: list[tuple[str, bytes]]) -> str:
     (d / "files").mkdir(parents=True)
     names = []
     for fname, data in files:
-        n = safe_name(fname)
-        while n in names:
-            n = f"{Path(n).stem}-{len(names)}{Path(n).suffix}"
+        base = n = safe_name(fname)
+        k = 0
+        while n in names:   # one "-N" on the stored name, which MAX_NAME_BYTES leaves room for
+            k += 1
+            n = f"{Path(base).stem}-{k}{Path(base).suffix}"
         (d / "files" / n).write_bytes(data)
         names.append(n)
     title = name.strip()[:160] or Path(names[0]).stem
