@@ -78,6 +78,7 @@ footer { color:var(--muted); font-size:12.5px; text-align:center; padding:24px; 
 .filter .chip[data-show="all"].on { color:var(--accent); }
 .filter .chip.v-fail { color:var(--fail); } .filter .chip.v-unknown { color:var(--unc); } .filter .chip.v-pass { color:var(--pass); }
 .filter .chip.on.v-fail { background:var(--fail-bg); } .filter .chip.on.v-unknown { background:var(--unc-bg); } .filter .chip.on.v-pass { background:var(--pass-bg); }
+.folder-pick { display:block; margin:-4px 0 10px; } .folder-pick input { width:auto; padding:4px; border:0; background:none; }
 .filter input[type=search] { flex:1; min-width:200px; padding:7px 11px; border:1px solid #c9ced6; border-radius:7px; font:inherit; font-size:14px; }
 @media (max-width: 1000px) { header.top .sub { display:none; } }
 @media (max-width: 760px) { main { padding:12px; } .sec { white-space:normal; } .card { padding:14px; } table { display:block; overflow-x:auto; }
@@ -90,5 +91,16 @@ footer { color:var(--muted); font-size:12.5px; text-align:center; padding:24px; 
 <header class="top"><a href="/">Compliance check</a><nav class="topnav"><a href="/" class="{{ 'on' if not request.url.path.startswith(('/buildings', '/projects', '/regulations', '/documents')) }}">Code repositories</a><a href="/buildings" class="{{ 'on' if request.url.path.startswith(('/buildings', '/projects')) }}">Building drawings</a><a href="/documents" class="{{ 'on' if request.url.path.startswith('/documents') }}">Documents</a><a href="/regulations" class="{{ 'on' if request.url.path.startswith('/regulations') }}">Your regulations</a></nav><span class="sub">{% block sub %}OWASP ASVS 5.0 · NIST SP 800-63B-4 · GDPR — verdicts with citations, from the code{% endblock %}</span></header>
 <main>{% block body %}{% endblock %}</main>
 <footer>Automated assessment from rule packs drafted from the published texts. Not legal advice or a certification.</footer>
+<script>
+// A chosen folder sends every file in it: keep only those the form reads (and no hidden files), folder paths intact.
+document.querySelectorAll("input[webkitdirectory][data-accept]").forEach(inp => inp.addEventListener("change", () => {
+  const ok = inp.dataset.accept.split(","), dt = new DataTransfer();
+  for (const f of inp.files) {
+    const path = f.webkitRelativePath || f.name;
+    if (!path.split("/").some(p => p.startsWith(".")) && ok.some(x => f.name.toLowerCase().endsWith(x))) dt.items.add(f);
+  }
+  inp.files = dt.files;
+}));
+</script>
 </body>
 </html>

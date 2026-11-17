@@ -362,3 +362,13 @@ def test_a_job_that_crashes_or_hangs_ends_in_an_error_and_the_server_lives(tmp_p
     d.mkdir()
     main.isolated(functools.partial(main._status, d, state="done", step="Done"), d)
     assert json.loads((d / "status.json").read_text())["state"] == "done"
+
+
+def test_regulation_uploads_keep_their_folders_and_a_folder_never_shadows_a_file(tmp_path, monkeypatch):
+    import app.regulations as regs
+    monkeypatch.setattr(regs, "REGS", tmp_path)
+    rid = regs.create("", "code", [("part-1/rules.md", b"one"), ("part-2/rules.md", b"two"), ("a.md", b"three"),
+                                   ("a.md/b.md", b"four")])
+    files = json.loads((tmp_path / rid / "request.json").read_text())["files"]
+    assert files == ["part-1/rules.md", "part-2/rules.md", "a.md", "a.md-1/b.md"]
+    assert [(tmp_path / rid / "files" / f).read_bytes() for f in files] == [b"one", b"two", b"three", b"four"]

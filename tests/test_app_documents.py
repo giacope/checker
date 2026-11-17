@@ -149,3 +149,17 @@ def test_an_upload_needs_a_documents_regulation_and_readable_files(client, monke
     assert r.status_code == 400 and "a.exe" in r.text
     _, st = upload(client, rid, [("empty.txt", b" \n", "text/plain")])
     assert st["state"] == "error" and "None of the uploaded files could be read" in st["error"]
+
+
+def test_uploaded_folders_are_kept_so_files_of_one_name_stay_apart(client, monkeypatch):
+    import adapters.code_llm as llm
+    rid = compile_hygiene(client, monkeypatch)
+    monkeypatch.setattr(llm, "provider_from_env", lambda: None)
+    did, st = upload(client, rid, [("site-a/plan.md", b"Cook to 75 \xc2\xb0C.\n", "text/markdown"),
+                                   ("site-b/plan.md", b"Chill below 5 \xc2\xb0C.\n", "text/markdown"),
+                                   ("site-b/plan.md", b"Second copy.\n", "text/markdown"),
+                                   ("../../etc/plan.md", b"Outside.\n", "text/markdown")])
+    assert st["state"] == "done", st
+    rep = client.get(f"/documents/{did}/report.json").json()
+    assert sorted(f["file"] for f in rep["files"]) == [
+        "etc/plan.md", "site-a/plan.md", "site-b/plan-1.md", "site-b/plan.md"]

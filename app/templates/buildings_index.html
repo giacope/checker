@@ -9,7 +9,8 @@
     <label for="name">Project name</label>
     <input id="name" name="name" type="text" placeholder="Riverside Medical Office">
     <label for="files">Drawings and models <span class="muted small">(IFC, DXF, PDF, PNG, JPEG, TIFF, or .zip; up to {{ max_mb }} MB)</span></label>
-    <input id="files" name="files" type="file" multiple required accept=".ifc,.dxf,.pdf,.png,.jpg,.jpeg,.tif,.tiff,.zip">
+    <input id="files" name="files" type="file" multiple accept=".ifc,.dxf,.pdf,.png,.jpg,.jpeg,.tif,.tiff,.zip">
+    <label class="small muted folder-pick">or a whole folder, its subfolders kept: <input name="files" type="file" webkitdirectory multiple data-accept=".ifc,.dxf,.pdf,.png,.jpg,.jpeg,.tif,.tiff,.zip"></label>
     <label>Codes</label>
     <div class="checks">
       {% for cid, (pack, label, covers) in codes.items() %}

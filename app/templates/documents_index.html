@@ -10,7 +10,8 @@
     <label for="name">Name <span class="muted small">(optional; the first file's name if empty)</span></label>
     <input id="name" name="name" type="text" placeholder="Harbour Café HACCP plan 2026">
     <label for="files">Documents <span class="muted small">(PDF, Word .docx, HTML, Markdown or text; up to {{ max_mb }} MB in all)</span></label>
-    <input id="files" name="files" type="file" multiple required accept="{{ suffixes | join(',') }}">
+    <input id="files" name="files" type="file" multiple accept="{{ suffixes | join(',') }}">
+    <label class="small muted folder-pick">or a whole folder, its subfolders kept: <input name="files" type="file" webkitdirectory multiple data-accept="{{ suffixes | join(',') }}"></label>
     <label>Regulations</label>
     <div class="checks">
       {% for r in regulations %}

@@ -78,16 +78,40 @@ def status(d: Path, **kw) -> dict:
         return st
 
 
+MAX_PATH_BYTES = 1024   # a stored path, folders included
 MAX_NAME_BYTES = 200   # a stored file name in UTF-8; file systems allow 255, and a duplicate gets "-N" added
 
 
 def safe_name(name: str) -> str:
-    """The upload's name as stored: its last path part, characters other than word characters, '.', '-', ' ' and
-    parentheses replaced, the extension kept and the stem cut to fit MAX_NAME_BYTES."""
-    base = re.sub(r"[^\w.\- ()]+", "_", name.replace("\\", "/").rsplit("/", 1)[-1])
-    stem, ext = re.fullmatch(r"(.*?)(\.\w{1,10})?", base).groups("")
+    """The upload's name as stored, folders kept (`contracts/2024/a.pdf`, as a browser sends a chosen folder's files):
+    each part with characters other than word characters, '.', '-', ' ' and parentheses replaced and cut to fit
+    MAX_NAME_BYTES, the file's extension kept, nothing above the upload's own folder, and leading folders dropped
+    past MAX_PATH_BYTES."""
+    parts = [re.sub(r"[^\w.\- ()]+", "_", x) for x in name.replace("\\", "/").split("/")]
+    stem, ext = re.fullmatch(r"(.*?)(\.\w{1,10})?", parts[-1]).groups("")
     stem = stem.strip(" .").encode()[:MAX_NAME_BYTES - len(ext.encode())].decode(errors="ignore").rstrip(" .")
-    return (stem or "document") + ext
+    dirs = [x.strip(" .").encode()[:MAX_NAME_BYTES].decode(errors="ignore").rstrip(" .") for x in parts[:-1]]
+    out = [x for x in dirs if x] + [(stem or "document") + ext]
+    while len(out) > 1 and len("/".join(out).encode()) > MAX_PATH_BYTES:
+        out.pop(0)
+    return "/".join(out)
+
+
+def free_name(rel: str, files: set[str], dirs: set[str]) -> str:
+    """rel, renamed where it is taken: a file of that path already stored becomes `a-1.pdf`, `a-2.pdf`; a folder
+    named like a stored file (or a file named like a stored folder) is numbered the same way. Records the result."""
+    parts = rel.split("/")
+    for k, part in enumerate(parts):
+        last = k == len(parts) - 1
+        n, at = 0, "/".join(parts[:k + 1])
+        while at in files or (last and at in dirs):
+            n += 1
+            parts[k] = f"{Path(part).stem}-{n}{Path(part).suffix}" if last else f"{part}-{n}"
+            at = "/".join(parts[:k + 1])
+        if not last:
+            dirs.add(at)
+    files.add(at)
+    return at
 
 
 def create(name: str, domain: str, files: list[tuple[str, bytes]]) -> str:
@@ -106,13 +130,10 @@ def create(name: str, domain: str, files: list[tuple[str, bytes]]) -> str:
     rid = "r" + secrets.token_hex(5)
     d = REGS / rid
     (d / "files").mkdir(parents=True)
-    names = []
+    names, taken, folders = [], set(), set()
     for fname, data in files:
-        base = n = safe_name(fname)
-        k = 0
-        while n in names:   # one "-N" on the stored name, which MAX_NAME_BYTES leaves room for
-            k += 1
-            n = f"{Path(base).stem}-{k}{Path(base).suffix}"
+        n = free_name(safe_name(fname), taken, folders)
+        (d / "files" / n).parent.mkdir(parents=True, exist_ok=True)
         (d / "files" / n).write_bytes(data)
         names.append(n)
     title = name.strip()[:160] or Path(names[0]).stem

@@ -14,7 +14,8 @@
       <label><input type="radio" name="domain" value="documents"> Documents <span class="muted small">— case files, plans, contracts, records</span></label>
     </div>
     <label for="files">Documents</label>
-    <input id="files" name="files" type="file" multiple required accept="{{ suffixes | join(',') }}">
+    <input id="files" name="files" type="file" multiple accept="{{ suffixes | join(',') }}">
+    <label class="small muted folder-pick">or a whole folder, its subfolders kept: <input name="files" type="file" webkitdirectory multiple data-accept="{{ suffixes | join(',') }}"></label>
     <p class="small muted">PDF, Word (.docx), HTML, Markdown or text, up to {{ max_mb }} MB each. Compiling takes a few minutes for a long document.</p>
     <button type="submit">Compile regulation</button>
   </form>

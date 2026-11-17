@@ -427,7 +427,7 @@ def buildings_index(request: Request):
 async def create_project(name: str = Form(""), codes: list[str] = Form([]), files: list[UploadFile] = File(...)):
     _check_choices(codes, buildings.CODES, "building")
     pid, d = new_project(name or (files[0].filename if files else ""), codes)
-    total = 0
+    total, taken, folders = 0, set(), set()
     try:
         for f in files:
             if not f.filename:
@@ -435,7 +435,7 @@ async def create_project(name: str = Form(""), codes: list[str] = Form([]), file
             rel = buildings.safe_name(f.filename)
             if Path(rel).suffix.lower() not in buildings.ACCEPTED:
                 raise HTTPException(400, f"{f.filename}: upload IFC, DXF, PDF, PNG, JPEG or TIFF files, or a .zip of them.")
-            dest = d / "files" / rel
+            dest = d / "files" / buildings._free(rel, taken, folders)   # two uploads of one path never overwrite
             dest.parent.mkdir(parents=True, exist_ok=True)
             with open(dest, "wb") as out:
                 while chunk := await f.read(1 << 20):
@@ -599,19 +599,17 @@ async def create_documents(name: str = Form(""), codes: list[str] = Form([]), fi
     did = secrets.token_hex(6)
     d = DOCSETS / did
     (d / "files").mkdir(parents=True)
-    names, total = [], 0
+    names, taken, folders, total = [], set(), set(), 0
     try:
         for f in files:
             if not f.filename:
                 continue
-            base = n = regs.safe_name(f.filename)
+            n = regs.safe_name(f.filename)
             if Path(n).suffix.lower() not in regs.SUFFIXES:
                 raise HTTPException(400, f"{f.filename}: upload PDF, Word (.docx), HTML, Markdown or text files.")
-            k = 0
-            while n in names:
-                k += 1
-                n = f"{Path(base).stem}-{k}{Path(base).suffix}"
+            n = regs.free_name(n, taken, folders)   # folders kept: a/plan.md and b/plan.md stay apart
             names.append(n)
+            (d / "files" / n).parent.mkdir(parents=True, exist_ok=True)
             with open(d / "files" / n, "wb") as out:
                 while chunk := await f.read(1 << 20):
                     total += len(chunk)
