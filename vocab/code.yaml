@@ -15,6 +15,7 @@ subject: system
 compile:
   artifact: the software system's source code and configuration
   search_space: code, configuration files, or dependency manifests
+  search_kinds: function, class, setting, header, or library names
   outside: >-
     an organisational or process requirement (training, reviews, approvals, policies and procedures, retention
     schedules, contracts, physical security, operations)

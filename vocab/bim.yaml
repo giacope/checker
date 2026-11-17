@@ -32,6 +32,7 @@ subject: building
 compile:
   artifact: the building's drawings and model (plans, sections, schedules, sheet notes, IFC properties)
   search_space: drawing notes, schedules, sheet titles, or model property names
+  search_kinds: "words printed on drawings: note phrases, schedule headings, room and element names, property names"
   outside: >-
     an organisational or process requirement (training, reviews, approvals, policies and procedures, retention
     schedules, contracts, physical security, operations)

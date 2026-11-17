@@ -345,7 +345,7 @@ requirement's, never a loosely related fact. When facts capture a necessary part
 customer, phrased so that "yes" means the requirement is met.
 - "why": a short reason for the kind.
 - "search": for every computed and assessed check, 3 to 10 literal strings likely to appear in {search_space} that \
-bear on the check (function, class, setting, header, or library names; lower case unless case matters).
+bear on the check ({search_kinds}; lower case unless case matters).
 
 Facts. The subject is `{subject}`; facts about it are written {{"fact": "{subject}.<attr>"}}. Element types \
 (attribute types or enum values in parentheses):
@@ -663,6 +663,7 @@ def compile_checks(clauses: list[dict], vocab: dict, provider=None, transport=No
     c = vocab.get("compile") or {}   # how the vocabulary's domain describes itself to the compiler
     system = COMPILE.format(artifact=c.get("artifact") or "the artifact under review",
                             search_space=c.get("search_space") or "the artifact's text",
+                            search_kinds=c.get("search_kinds") or "names and phrases the artifact would use",
                             outside=c.get("outside") or "an organisational or process requirement, such as training or reviews",
                             subject=vocab["subject"], vocab=vocab_text(vocab), examples=_examples(vocab),
                             partial=c.get("partial") or "one attribute the facts record")

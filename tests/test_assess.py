@@ -441,3 +441,11 @@ def test_a_requirement_whose_terms_find_nothing_is_searched_by_its_own_words(cor
     transport, sent = fake({"req_x": {"attr": "req_x", "value": None, "note": "x"}})
     assess(reqs, corpus, provider=PROVIDER, transport=transport, workers=1)
     assert "orders_controller.rb" in sent[0][1] and '"zzz-none",' in sent[0][1]   # both term sets are searched
+
+
+def test_document_locators_accept_the_ways_a_span_is_written():
+    from adapters.assess.documents import DocumentCorpus
+    from adapters.regulation.documents import Document, Line
+    docs = DocumentCorpus([Document("plan.md", "0" * 64, "md", None, [Line(i, None, f"line {i}") for i in range(1, 50)])], "p")
+    assert {docs.verify(x) for x in ("plan.md#L40-L41", "plan.md#L40–L41", "plan.md#L40 - L41", "plan.md#l40-41", "plan.md:40-41")} \
+        == {"plan.md#L40-L41"}

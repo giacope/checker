@@ -16,7 +16,7 @@ from . import rank
 
 WINDOW = 40
 MAX_SPAN = 30
-LOCATOR = re.compile(r"^(?P<file>.+?)(?:#L|:)(?P<a>\d{1,9})(?:-L?(?P<b>\d{1,9}))?$")
+LOCATOR = re.compile(r"^(?P<file>.+?)(?:#[Ll]|:)(?P<a>\d{1,9})(?:\s*[-\u2013\u2014]\s*[Ll]?(?P<b>\d{1,9}))?$")
 
 
 def _row(ln) -> str:

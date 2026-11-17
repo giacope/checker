@@ -581,7 +581,8 @@ def test_the_compiler_describes_the_artifact_in_the_vocabularys_own_words(vocab)
     t, sent = transport(lambda s, u: reply({"clauses": []}))
     compile_checks([clause(1, "A requirement.")], vocab, provider=PROVIDER, transport=t)
     c = vocab["compile"]
-    assert all(" ".join(c[k].split()) in " ".join(sent[0][0].split()) for k in ("artifact", "search_space", "outside"))
+    assert all(" ".join(c[k].split()) in " ".join(sent[0][0].split()) for k in ("artifact", "search_space", "search_kinds", "outside"))
+    assert ("library names" in sent[0][0]) == (vocab is CODE)
     assert ("policies and procedures" in sent[0][0]) == (vocab is not DOCS)
 
 
