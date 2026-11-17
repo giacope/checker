@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 90,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "cfr-21-part-11",
+ "wall_seconds": 0.1
+}

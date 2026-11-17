@@ -1,0 +1,22 @@
+{
+ "status": "ok",
+ "seconds": 0.4,
+ "second_run_seconds": 0.3,
+ "notes": [],
+ "elements": {
+  "Space": 37,
+  "Corridor": 3,
+  "Storey": 3
+ },
+ "sheets": 0,
+ "locators": 199,
+ "verdicts": {
+  "unknown": 283
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "nibs-duplex-mechanical-rooms-spaces",
+ "wall_seconds": 1.5
+}

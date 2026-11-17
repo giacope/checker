@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 719,
+ "read_seconds": 0.05,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "openssf-compiler-hardening-c-cpp",
+ "wall_seconds": 0.1
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 824,
+ "read_seconds": 3.14,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-sp-800-53r5-cm",
+ "wall_seconds": 3.2
+}

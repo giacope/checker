@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 339,
+ "read_seconds": 0.03,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "jp-barrier-free-ho-sekorei",
+ "wall_seconds": 0.1
+}

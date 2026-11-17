@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 282,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-cs-logging",
+ "wall_seconds": 0.1
+}

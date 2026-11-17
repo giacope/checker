@@ -1,0 +1,31 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.6,
+ "notes": [],
+ "elements": {
+  "Query": 4,
+  "Secret": 1,
+  "Dependency": 987
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 3965,
+ "verdicts": {
+  "pass": 5,
+  "unknown": 1008
+ },
+ "report_totals": {
+  "unknown": 22,
+  "pass": 2,
+  "not_applicable": 16
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "shadcn-ui-taxonomy",
+ "wall_seconds": 1.5
+}

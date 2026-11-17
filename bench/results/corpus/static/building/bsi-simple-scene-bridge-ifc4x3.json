@@ -1,0 +1,18 @@
+{
+ "status": "ok",
+ "seconds": 0.2,
+ "second_run_seconds": 0.0,
+ "notes": [
+  "Infra-Bridge.ifc: no building storeys (it models IfcBridge, IfcBridgePart); its storeys, spaces, doors, stairs and travel distances could not be read"
+ ],
+ "elements": {},
+ "sheets": 0,
+ "locators": 0,
+ "verdicts": {},
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "bsi-simple-scene-bridge-ifc4x3",
+ "wall_seconds": 0.8
+}

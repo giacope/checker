@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 437,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "django-security-policy",
+ "wall_seconds": 0.1
+}

@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [],
+ "elements": {
+  "Query": 5,
+  "LogStatement": 1
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 18,
+ "verdicts": {
+  "pass": 7,
+  "unknown": 21
+ },
+ "report_totals": {
+  "unknown": 21,
+  "pass": 3,
+  "not_applicable": 16
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "stamparm-dsvw",
+ "wall_seconds": 0.3
+}

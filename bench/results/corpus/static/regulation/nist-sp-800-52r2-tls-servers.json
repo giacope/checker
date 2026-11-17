@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 890,
+ "read_seconds": 2.88,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-sp-800-52r2-tls-servers",
+ "wall_seconds": 2.9
+}

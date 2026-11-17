@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 4.9,
+ "notes": [
+  "Shell (2 files): no static analyser; not read, since no model is configured.",
+  "Python and JavaScript/TypeScript static analysis failed: IndexError: list index out of range"
+ ],
+ "elements": {
+  "Dependency": 22
+ },
+ "sources": [
+  "deps"
+ ],
+ "locators": 88,
+ "verdicts": {
+  "unknown": 43
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "healthchecks-healthchecks",
+ "wall_seconds": 9.9
+}

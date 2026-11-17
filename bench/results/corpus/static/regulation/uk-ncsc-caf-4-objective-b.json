@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1172,
+ "read_seconds": 2.32,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "uk-ncsc-caf-4-objective-b",
+ "wall_seconds": 2.4
+}

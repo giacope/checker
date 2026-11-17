@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1120,
+ "read_seconds": 3.58,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "uk-scotland-non-domestic-2-9-escape",
+ "wall_seconds": 3.6
+}

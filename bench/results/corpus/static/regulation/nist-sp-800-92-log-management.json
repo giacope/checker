@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 827,
+ "read_seconds": 2.77,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-sp-800-92-log-management",
+ "wall_seconds": 2.8
+}

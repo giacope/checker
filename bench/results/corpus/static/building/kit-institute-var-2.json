@@ -1,0 +1,27 @@
+{
+ "status": "ok",
+ "seconds": 2.3,
+ "second_run_seconds": 1.7,
+ "notes": [],
+ "elements": {
+  "Door": 77,
+  "Stair": 4,
+  "Space": 82,
+  "Corridor": 9,
+  "Storey": 5
+ },
+ "sheets": 0,
+ "locators": 1233,
+ "verdicts": {
+  "unknown": 997,
+  "pass": 163
+ },
+ "violations": {},
+ "info": {
+  "derived facts citing a description": 3
+ },
+ "examples": {},
+ "kind": "building",
+ "slug": "kit-institute-var-2",
+ "wall_seconds": 5.3
+}

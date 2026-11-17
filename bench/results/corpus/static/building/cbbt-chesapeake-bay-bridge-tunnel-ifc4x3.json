@@ -1,0 +1,18 @@
+{
+ "status": "ok",
+ "seconds": 3.3,
+ "second_run_seconds": 2.7,
+ "notes": [
+  "chesapeake_bay_bridge_tunnel_4x3.ifc: no building storeys (it models IfcBridge, IfcBridgePart, IfcFacility, IfcFacilityPartCommon, IfcMarineFacility, IfcMarinePart, IfcRoad, IfcRoadPart); its storeys, spaces, doors, stairs and travel distances could not be read"
+ ],
+ "elements": {},
+ "sheets": 0,
+ "locators": 0,
+ "verdicts": {},
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "cbbt-chesapeake-bay-bridge-tunnel-ifc4x3",
+ "wall_seconds": 6.7
+}

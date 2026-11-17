@@ -1,0 +1,36 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [],
+ "elements": {
+  "PasswordStore": 3,
+  "Query": 6,
+  "TokenVerification": 1,
+  "Secret": 2,
+  "Transfer": 1,
+  "Dependency": 981
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 3971,
+ "verdicts": {
+  "fail": 8,
+  "pass": 17,
+  "unknown": 1000
+ },
+ "report_totals": {
+  "fail": 4,
+  "unknown": 20,
+  "pass": 7,
+  "not_applicable": 9
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "hagopj13-node-express-boilerplate",
+ "wall_seconds": 0.7
+}

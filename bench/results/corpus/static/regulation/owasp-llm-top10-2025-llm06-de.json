@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 59,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-llm-top10-2025-llm06-de",
+ "wall_seconds": 0.1
+}

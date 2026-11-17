@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 934,
+ "read_seconds": 4.42,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "uk-wales-ad-o-overheating",
+ "wall_seconds": 4.5
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 39,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "eu-gdpr-security-art25-32-34-es",
+ "wall_seconds": 0.1
+}

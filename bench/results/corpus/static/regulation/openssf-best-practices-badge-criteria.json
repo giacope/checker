@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 531,
+ "read_seconds": 0.04,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "openssf-best-practices-badge-criteria",
+ "wall_seconds": 0.1
+}

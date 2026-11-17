@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 742,
+ "read_seconds": 2.23,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-masvs-2-1",
+ "wall_seconds": 2.3
+}

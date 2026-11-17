@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 237,
+ "read_seconds": 0.03,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "cfr-36-1194-appendix-c-section-508",
+ "wall_seconds": 0.1
+}

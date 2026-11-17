@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 84,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-top10-2025-a03-supply-chain",
+ "wall_seconds": 0.1
+}

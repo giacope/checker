@@ -1,0 +1,37 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "Java (27 files), SQL (1 file), C (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 3,
+  "Query": 18,
+  "TokenVerification": 2,
+  "Secret": 2,
+  "Dependency": 282
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 1259,
+ "verdicts": {
+  "pass": 22,
+  "fail": 15,
+  "unknown": 302
+ },
+ "report_totals": {
+  "fail": 7,
+  "unknown": 20,
+  "pass": 3,
+  "not_applicable": 10
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "rewanthtammana-damn-vulnerable-bank",
+ "wall_seconds": 0.6
+}

@@ -1,0 +1,32 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "Shell (6 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 3,
+  "Dependency": 1179
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 4832,
+ "verdicts": {
+  "pass": 9,
+  "unknown": 1203
+ },
+ "report_totals": {
+  "unknown": 23,
+  "pass": 3,
+  "not_applicable": 14
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "cookiecutter-cookiecutter-django",
+ "wall_seconds": 0.8
+}

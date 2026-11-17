@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 444,
+ "read_seconds": 4.51,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nz-f4-safety-from-falling",
+ "wall_seconds": 4.6
+}

@@ -1,0 +1,33 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.4,
+ "notes": [],
+ "elements": {
+  "PasswordStore": 6,
+  "Cookie": 6,
+  "Dependency": 1
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 61,
+ "verdicts": {
+  "fail": 30,
+  "unknown": 29,
+  "pass": 5
+ },
+ "report_totals": {
+  "fail": 10,
+  "unknown": 14,
+  "pass": 5,
+  "not_applicable": 11
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "psf-requests",
+ "wall_seconds": 0.9
+}

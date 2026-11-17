@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 2255,
+ "read_seconds": 0.16,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "w3c-wcag-2-2",
+ "wall_seconds": 0.2
+}

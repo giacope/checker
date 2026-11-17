@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 32,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "eu-cra-annex-i-fr",
+ "wall_seconds": 0.1
+}

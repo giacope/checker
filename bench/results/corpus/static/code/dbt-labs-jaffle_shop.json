@@ -1,0 +1,26 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.0,
+ "notes": [
+  "SQL (5 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {},
+ "sources": [
+  "deps"
+ ],
+ "locators": 0,
+ "verdicts": {
+  "unknown": 21
+ },
+ "report_totals": {
+  "unknown": 21,
+  "not_applicable": 19
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "dbt-labs-jaffle_shop",
+ "wall_seconds": 0.2
+}

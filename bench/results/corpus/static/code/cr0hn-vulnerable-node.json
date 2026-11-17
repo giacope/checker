@@ -1,0 +1,40 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "Shell (2 files), SQL (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 5,
+  "Query": 32,
+  "Cookie": 1,
+  "TokenVerification": 1,
+  "Secret": 18,
+  "LogStatement": 3,
+  "Transfer": 3,
+  "Dependency": 124
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 684,
+ "verdicts": {
+  "pass": 37,
+  "fail": 31,
+  "unknown": 161
+ },
+ "report_totals": {
+  "fail": 12,
+  "unknown": 21,
+  "pass": 3,
+  "not_applicable": 4
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "cr0hn-vulnerable-node",
+ "wall_seconds": 0.6
+}

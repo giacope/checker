@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 191,
+ "read_seconds": 0.04,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "au-ncc-2025-housing-h11-2-stairway-ramp",
+ "wall_seconds": 0.1
+}

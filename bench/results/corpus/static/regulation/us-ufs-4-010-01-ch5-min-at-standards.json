@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 132,
+ "read_seconds": 0.39,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-ufs-4-010-01-ch5-min-at-standards",
+ "wall_seconds": 0.5
+}

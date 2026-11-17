@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 96,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "anssi-rust-guide-memoire-fr",
+ "wall_seconds": 0.1
+}

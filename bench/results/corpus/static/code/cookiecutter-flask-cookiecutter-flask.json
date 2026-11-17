@@ -1,0 +1,32 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Shell (3 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 1,
+  "Dependency": 32
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 133,
+ "verdicts": {
+  "unknown": 53,
+  "pass": 1
+ },
+ "report_totals": {
+  "unknown": 22,
+  "pass": 1,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "cookiecutter-flask-cookiecutter-flask",
+ "wall_seconds": 0.4
+}

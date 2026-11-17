@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 32,
+ "read_seconds": 0.0,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-cs-iac-security",
+ "wall_seconds": 0.1
+}

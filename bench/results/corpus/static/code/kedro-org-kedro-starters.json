@@ -1,0 +1,33 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [],
+ "elements": {
+  "Query": 14,
+  "Secret": 7,
+  "LogStatement": 4
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 69,
+ "verdicts": {
+  "pass": 14,
+  "unknown": 28,
+  "fail": 8
+ },
+ "report_totals": {
+  "fail": 2,
+  "unknown": 22,
+  "pass": 1,
+  "not_applicable": 15
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "kedro-org-kedro-starters",
+ "wall_seconds": 0.6
+}

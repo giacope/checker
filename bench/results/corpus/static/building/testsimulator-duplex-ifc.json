@@ -1,0 +1,26 @@
+{
+ "status": "ok",
+ "seconds": 0.2,
+ "second_run_seconds": 0.1,
+ "notes": [],
+ "elements": {
+  "Door": 7,
+  "Stair": 1,
+  "Space": 7,
+  "Storey": 2
+ },
+ "sheets": 0,
+ "locators": 103,
+ "verdicts": {
+  "unknown": 99,
+  "pass": 14
+ },
+ "violations": {},
+ "info": {
+  "derived facts citing a description": 3
+ },
+ "examples": {},
+ "kind": "building",
+ "slug": "testsimulator-duplex-ifc",
+ "wall_seconds": 0.9
+}

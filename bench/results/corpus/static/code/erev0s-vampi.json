@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [],
+ "elements": {
+  "PasswordStore": 6,
+  "Query": 1,
+  "TokenVerification": 1,
+  "Secret": 2,
+  "Dependency": 7
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 75,
+ "verdicts": {
+  "pass": 8,
+  "fail": 30,
+  "unknown": 19
+ },
+ "report_totals": {
+  "fail": 10,
+  "unknown": 12,
+  "pass": 8,
+  "not_applicable": 10
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "erev0s-vampi",
+ "wall_seconds": 0.4
+}

@@ -1,0 +1,34 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Rust (65 files), Shell (6 files), HCL (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 1,
+  "Secret": 1,
+  "LogStatement": 2
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 12,
+ "verdicts": {
+  "fail": 6,
+  "unknown": 22,
+  "pass": 2
+ },
+ "report_totals": {
+  "fail": 6,
+  "unknown": 22,
+  "not_applicable": 12
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "dani-garcia-vaultwarden",
+ "wall_seconds": 0.3
+}

@@ -1,0 +1,27 @@
+{
+ "status": "ok",
+ "seconds": 4.5,
+ "second_run_seconds": 6.0,
+ "notes": [],
+ "elements": {
+  "Door": 211,
+  "Stair": 4,
+  "Ramp": 6,
+  "Space": 285,
+  "Storey": 7
+ },
+ "sheets": 0,
+ "locators": 3811,
+ "verdicts": {
+  "pass": 477,
+  "unknown": 2929
+ },
+ "violations": {},
+ "info": {
+  "derived facts citing a description": 3
+ },
+ "examples": {},
+ "kind": "building",
+ "slug": "esplan-esplanades-architecture",
+ "wall_seconds": 12.7
+}

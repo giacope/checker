@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.8,
+ "notes": [],
+ "elements": {
+  "Secret": 1,
+  "Dependency": 1593
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 6375,
+ "verdicts": {
+  "unknown": 1614,
+  "pass": 1
+ },
+ "report_totals": {
+  "unknown": 22,
+  "pass": 1,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "t3-oss-create-t3-turbo",
+ "wall_seconds": 2.0
+}

@@ -1,0 +1,32 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "Scala (43 files), Shell (2 files), SQL (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 6,
+  "Dependency": 667
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2692,
+ "verdicts": {
+  "unknown": 692,
+  "pass": 2
+ },
+ "report_totals": {
+  "unknown": 21,
+  "pass": 2,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "softwaremill-bootzooka",
+ "wall_seconds": 0.6
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 61,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "ie-building-regulations-part-m-amendment-2010",
+ "wall_seconds": 0.1
+}

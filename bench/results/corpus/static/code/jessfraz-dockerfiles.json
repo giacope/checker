@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Shell (25 files), Go (2 files), C (1 file), Lua (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 1
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2,
+ "verdicts": {
+  "unknown": 22
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "jessfraz-dockerfiles",
+ "wall_seconds": 0.3
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 211,
+ "read_seconds": 0.05,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "eu-web-accessibility-directive-nl",
+ "wall_seconds": 0.1
+}

@@ -1,0 +1,37 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.5,
+ "notes": [
+  "Shell (9 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Query": 3,
+  "Cookie": 1,
+  "Secret": 5,
+  "LogStatement": 4,
+  "Dependency": 980
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 4259,
+ "verdicts": {
+  "fail": 8,
+  "pass": 9,
+  "unknown": 1003
+ },
+ "report_totals": {
+  "fail": 8,
+  "unknown": 20,
+  "pass": 1,
+  "not_applicable": 11
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "snyk-labs-nodejs-goof",
+ "wall_seconds": 1.3
+}

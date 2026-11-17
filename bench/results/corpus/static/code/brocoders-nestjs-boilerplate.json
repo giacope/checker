@@ -1,0 +1,37 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.8,
+ "notes": [
+  "Shell (7 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 8,
+  "Query": 12,
+  "Secret": 9,
+  "Transfer": 4,
+  "Dependency": 1219
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 5084,
+ "verdicts": {
+  "pass": 42,
+  "fail": 13,
+  "unknown": 1242
+ },
+ "report_totals": {
+  "fail": 6,
+  "unknown": 13,
+  "pass": 10,
+  "not_applicable": 11
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "brocoders-nestjs-boilerplate",
+ "wall_seconds": 1.9
+}

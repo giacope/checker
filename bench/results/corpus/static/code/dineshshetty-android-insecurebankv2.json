@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Java (18 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {},
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 5,
+ "verdicts": {
+  "unknown": 20,
+  "fail": 1
+ },
+ "report_totals": {
+  "unknown": 20,
+  "not_applicable": 19,
+  "fail": 1
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "dineshshetty-android-insecurebankv2",
+ "wall_seconds": 0.3
+}

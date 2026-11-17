@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Go (89 files), Shell (4 files), SQL (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Dependency": 644
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2799,
+ "verdicts": {
+  "unknown": 665
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "writefreely-writefreely",
+ "wall_seconds": 0.4
+}

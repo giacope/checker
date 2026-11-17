@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1199,
+ "read_seconds": 3.79,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-sp-800-131a-r2-crypto-transitions",
+ "wall_seconds": 3.9
+}

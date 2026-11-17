@@ -1,0 +1,21 @@
+{
+ "status": "ok",
+ "seconds": 1.1,
+ "second_run_seconds": 0.9,
+ "notes": [],
+ "elements": {
+  "Door": 12
+ },
+ "sheets": 8,
+ "locators": 66,
+ "verdicts": {
+  "unknown": 68,
+  "pass": 4
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "bimcompiler-duplex-dxf-set",
+ "wall_seconds": 2.6
+}

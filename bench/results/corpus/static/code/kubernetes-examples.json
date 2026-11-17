@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.3,
+ "notes": [
+  "Shell (35 files), Go (7 files), Java (2 files), SQL (1 file), PHP (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 17
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 34,
+ "verdicts": {
+  "unknown": 38
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "kubernetes-examples",
+ "wall_seconds": 0.8
+}

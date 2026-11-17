@@ -1,0 +1,32 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.4,
+ "notes": [
+  "Go (29 files), Shell (11 files), C# (8 files), Terraform (5 files), Java (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "LogStatement": 2,
+  "Dependency": 394
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 1913,
+ "verdicts": {
+  "unknown": 413,
+  "pass": 6
+ },
+ "report_totals": {
+  "unknown": 20,
+  "pass": 4,
+  "not_applicable": 16
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "googlecloudplatform-microservices-demo",
+ "wall_seconds": 1.0
+}

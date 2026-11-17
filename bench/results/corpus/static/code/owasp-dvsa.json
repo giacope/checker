@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.5,
+ "notes": [
+  "Shell (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Query": 2,
+  "Secret": 1,
+  "LogStatement": 7,
+  "Transfer": 5,
+  "Dependency": 1814
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 8060,
+ "verdicts": {
+  "pass": 16,
+  "unknown": 1841
+ },
+ "report_totals": {
+  "unknown": 24,
+  "pass": 3,
+  "not_applicable": 13
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "owasp-dvsa",
+ "wall_seconds": 1.4
+}

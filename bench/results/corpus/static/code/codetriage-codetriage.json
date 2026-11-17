@@ -1,0 +1,42 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.6,
+ "notes": [
+  "SQL (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 1,
+  "Query": 27,
+  "Cookie": 1,
+  "Secret": 6,
+  "LogStatement": 1,
+  "Transfer": 8,
+  "CommandExecution": 2,
+  "HtmlOutput": 7,
+  "MassAssignment": 4,
+  "Dependency": 223
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 1111,
+ "verdicts": {
+  "pass": 60,
+  "unknown": 238,
+  "fail": 9
+ },
+ "report_totals": {
+  "fail": 9,
+  "unknown": 7,
+  "pass": 21,
+  "not_applicable": 3
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "codetriage-codetriage",
+ "wall_seconds": 1.3
+}

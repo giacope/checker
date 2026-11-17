@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 124,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-aba-ch5-site-stairs",
+ "wall_seconds": 0.1
+}

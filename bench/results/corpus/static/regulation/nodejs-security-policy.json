@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 585,
+ "read_seconds": 0.02,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nodejs-security-policy",
+ "wall_seconds": 0.1
+}

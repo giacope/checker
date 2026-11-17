@@ -1,0 +1,28 @@
+{
+ "status": "ok",
+ "seconds": 3.2,
+ "second_run_seconds": 2.9,
+ "notes": [],
+ "elements": {
+  "Door": 170,
+  "Stair": 30,
+  "Space": 140,
+  "Corridor": 40,
+  "Storey": 5
+ },
+ "sheets": 0,
+ "locators": 2597,
+ "verdicts": {
+  "unknown": 2166,
+  "pass": 469,
+  "fail": 60
+ },
+ "violations": {},
+ "info": {
+  "derived facts citing a description": 3
+ },
+ "examples": {},
+ "kind": "building",
+ "slug": "kit-smiley-west",
+ "wall_seconds": 7.9
+}

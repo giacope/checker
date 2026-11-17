@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Go (81 files), SQL (11 files), Shell (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 5
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 12,
+ "verdicts": {
+  "unknown": 24,
+  "pass": 2
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "knadh-listmonk",
+ "wall_seconds": 0.4
+}

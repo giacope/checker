@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 480,
+ "read_seconds": 1.99,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "uk-scotland-domestic-3-14-ventilation",
+ "wall_seconds": 2.1
+}

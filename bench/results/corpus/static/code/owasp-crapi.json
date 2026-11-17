@@ -1,0 +1,39 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 1.6,
+ "notes": [
+  "Java (90 files), Shell (26 files), Go (19 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 5,
+  "Query": 37,
+  "Cookie": 2,
+  "TokenVerification": 1,
+  "Secret": 55,
+  "LogStatement": 67,
+  "Dependency": 1630
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 7247,
+ "verdicts": {
+  "pass": 79,
+  "fail": 132,
+  "unknown": 1694
+ },
+ "report_totals": {
+  "fail": 16,
+  "unknown": 13,
+  "pass": 6,
+  "not_applicable": 5
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "owasp-crapi",
+ "wall_seconds": 3.4
+}

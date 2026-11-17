@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.5,
+ "notes": [
+  "Java (359 files), SQL (15 files), Shell (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 2
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 4,
+ "verdicts": {
+  "unknown": 23
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "webgoat-webgoat",
+ "wall_seconds": 0.9
+}

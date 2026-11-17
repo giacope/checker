@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 417,
+ "read_seconds": 0.21,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-gsa-p100-2024-performance-matrix",
+ "wall_seconds": 0.3
+}

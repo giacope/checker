@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1491,
+ "read_seconds": 5.64,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-sp-800-218-ssdf",
+ "wall_seconds": 5.7
+}

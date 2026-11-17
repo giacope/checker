@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 135,
+ "read_seconds": 0.0,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-api-top10-2023-api4",
+ "wall_seconds": 0.1
+}

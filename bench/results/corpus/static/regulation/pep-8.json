@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1190,
+ "read_seconds": 0.02,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "pep-8",
+ "wall_seconds": 0.1
+}

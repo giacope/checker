@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 403,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "mdn-content-security-policy",
+ "wall_seconds": 0.1
+}

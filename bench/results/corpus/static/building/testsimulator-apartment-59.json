@@ -1,0 +1,20 @@
+{
+ "status": "ok",
+ "seconds": 0.4,
+ "second_run_seconds": 0.0,
+ "notes": [],
+ "elements": {
+  "Door": 8
+ },
+ "sheets": 4,
+ "locators": 40,
+ "verdicts": {
+  "unknown": 48
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "testsimulator-apartment-59",
+ "wall_seconds": 1.1
+}

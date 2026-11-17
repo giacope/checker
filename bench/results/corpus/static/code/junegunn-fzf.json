@@ -1,0 +1,28 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.0,
+ "notes": [
+  "Go (90 files), Shell (3 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Dependency": 15
+ },
+ "sources": [
+  "deps"
+ ],
+ "locators": 60,
+ "verdicts": {
+  "unknown": 36
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "junegunn-fzf",
+ "wall_seconds": 0.2
+}

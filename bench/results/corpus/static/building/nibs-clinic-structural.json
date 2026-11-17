@@ -1,0 +1,23 @@
+{
+ "status": "ok",
+ "seconds": 1.1,
+ "second_run_seconds": 1.2,
+ "notes": [],
+ "elements": {
+  "Stair": 1,
+  "Ramp": 1,
+  "Storey": 4
+ },
+ "sheets": 0,
+ "locators": 18,
+ "verdicts": {
+  "unknown": 29,
+  "pass": 9
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "nibs-clinic-structural",
+ "wall_seconds": 3.0
+}

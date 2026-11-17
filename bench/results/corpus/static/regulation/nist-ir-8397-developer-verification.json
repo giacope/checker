@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1081,
+ "read_seconds": 3.02,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-ir-8397-developer-verification",
+ "wall_seconds": 3.1
+}

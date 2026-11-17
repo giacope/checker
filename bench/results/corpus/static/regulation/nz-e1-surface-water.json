@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 2889,
+ "read_seconds": 18.2,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nz-e1-surface-water",
+ "wall_seconds": 18.3
+}

@@ -1,0 +1,36 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Shell (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 5,
+  "Query": 40,
+  "Secret": 6,
+  "Dependency": 1
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 188,
+ "verdicts": {
+  "pass": 49,
+  "fail": 24,
+  "unknown": 15
+ },
+ "report_totals": {
+  "fail": 12,
+  "unknown": 11,
+  "pass": 5,
+  "not_applicable": 12
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "nvisium-django.nv",
+ "wall_seconds": 0.5
+}

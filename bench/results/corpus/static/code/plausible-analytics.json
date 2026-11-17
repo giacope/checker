@@ -1,0 +1,44 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 10.1,
+ "notes": [
+  "Shell (9 files), SQL (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 67,
+  "PasswordStore": 4,
+  "Query": 101,
+  "Cookie": 6,
+  "TokenVerification": 5,
+  "LogStatement": 3,
+  "Transfer": 3,
+  "HtmlOutput": 4,
+  "MassAssignment": 21,
+  "Deserialization": 2,
+  "Dependency": 400
+ },
+ "sources": [
+  "static",
+  "static",
+  "deps"
+ ],
+ "locators": 2239,
+ "verdicts": {
+  "unknown": 440,
+  "pass": 187,
+  "fail": 13
+ },
+ "report_totals": {
+  "fail": 13,
+  "unknown": 6,
+  "pass": 20,
+  "not_applicable": 1
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "plausible-analytics",
+ "wall_seconds": 20.4
+}

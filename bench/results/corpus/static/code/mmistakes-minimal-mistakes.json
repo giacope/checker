@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [],
+ "elements": {
+  "Secret": 1,
+  "Transfer": 2,
+  "Dependency": 1
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 10,
+ "verdicts": {
+  "unknown": 25
+ },
+ "report_totals": {
+  "unknown": 24,
+  "not_applicable": 16
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "mmistakes-minimal-mistakes",
+ "wall_seconds": 0.5
+}

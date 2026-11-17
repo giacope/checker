@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "C# (78 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 1,
+  "Dependency": 541
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2257,
+ "verdicts": {
+  "unknown": 563
+ },
+ "report_totals": {
+  "unknown": 23,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "jasontaylordev-cleanarchitecture",
+ "wall_seconds": 0.6
+}

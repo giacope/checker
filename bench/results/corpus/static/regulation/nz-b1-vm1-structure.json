@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 754,
+ "read_seconds": 3.91,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nz-b1-vm1-structure",
+ "wall_seconds": 4.0
+}

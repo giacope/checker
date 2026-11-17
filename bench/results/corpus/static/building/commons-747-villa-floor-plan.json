@@ -1,0 +1,16 @@
+{
+ "status": "ok",
+ "seconds": 0.3,
+ "second_run_seconds": 0.1,
+ "notes": [],
+ "elements": {},
+ "sheets": 1,
+ "locators": 0,
+ "verdicts": {},
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "commons-747-villa-floor-plan",
+ "wall_seconds": 0.9
+}

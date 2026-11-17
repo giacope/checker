@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 656,
+ "read_seconds": 2.58,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nz-g4-as1-ventilation",
+ "wall_seconds": 2.6
+}

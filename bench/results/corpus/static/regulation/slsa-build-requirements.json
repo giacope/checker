@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 126,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "slsa-build-requirements",
+ "wall_seconds": 0.1
+}

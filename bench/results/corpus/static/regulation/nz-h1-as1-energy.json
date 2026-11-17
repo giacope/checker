@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 2236,
+ "read_seconds": 11.28,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nz-h1-as1-energy",
+ "wall_seconds": 11.3
+}

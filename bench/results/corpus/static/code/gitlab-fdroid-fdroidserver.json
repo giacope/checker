@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 2.1,
+ "notes": [
+  "Shell (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 1,
+  "Transfer": 3
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 8,
+ "verdicts": {
+  "unknown": 25
+ },
+ "report_totals": {
+  "unknown": 23,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "gitlab-fdroid-fdroidserver",
+ "wall_seconds": 4.4
+}

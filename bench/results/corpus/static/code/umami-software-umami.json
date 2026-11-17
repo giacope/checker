@@ -1,0 +1,39 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 7.6,
+ "notes": [
+  "SQL (3 files), Shell (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 16,
+  "Query": 35,
+  "TokenVerification": 2,
+  "Secret": 22,
+  "LogStatement": 2,
+  "Transfer": 1,
+  "Dependency": 1165
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 4904,
+ "verdicts": {
+  "pass": 84,
+  "unknown": 1206,
+  "fail": 26
+ },
+ "report_totals": {
+  "fail": 8,
+  "unknown": 14,
+  "pass": 11,
+  "not_applicable": 7
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "umami-software-umami",
+ "wall_seconds": 15.4
+}

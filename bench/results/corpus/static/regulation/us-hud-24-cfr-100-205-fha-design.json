@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 38,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-hud-24-cfr-100-205-fha-design",
+ "wall_seconds": 0.1
+}

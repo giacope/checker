@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.5,
+ "notes": [
+  "Swift (642 files), Shell (16 files), Objective-C (10 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 2
+ },
+ "sources": [
+  "static",
+  "static",
+  "deps"
+ ],
+ "locators": 4,
+ "verdicts": {
+  "unknown": 23
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "ranchero-software-netnewswire",
+ "wall_seconds": 1.1
+}

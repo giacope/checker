@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 2254,
+ "read_seconds": 0.06,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "google-python-style-guide",
+ "wall_seconds": 0.1
+}

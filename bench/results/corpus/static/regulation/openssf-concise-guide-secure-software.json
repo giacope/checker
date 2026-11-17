@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 38,
+ "read_seconds": 0.0,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "openssf-concise-guide-secure-software",
+ "wall_seconds": 0.1
+}

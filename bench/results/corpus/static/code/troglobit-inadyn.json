@@ -1,0 +1,32 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.0,
+ "notes": [
+  "C (68 files), Shell (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 10,
+  "CommandExecution": 4
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 42,
+ "verdicts": {
+  "pass": 14,
+  "unknown": 21
+ },
+ "report_totals": {
+  "unknown": 21,
+  "pass": 2,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "troglobit-inadyn",
+ "wall_seconds": 0.3
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 291,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "microsoft-graph-api-guidelines",
+ "wall_seconds": 0.1
+}

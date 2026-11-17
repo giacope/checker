@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 625,
+ "read_seconds": 1.74,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-ada-2010-ch6-plumbing",
+ "wall_seconds": 1.8
+}

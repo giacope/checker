@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 224,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-cs-http-headers",
+ "wall_seconds": 0.1
+}

@@ -1,0 +1,38 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Swift (33 files), Java (31 files), Kotlin (7 files), Shell (6 files), C (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 1,
+  "Query": 8,
+  "TokenVerification": 1,
+  "Secret": 2,
+  "MassAssignment": 5,
+  "Dependency": 62
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 320,
+ "verdicts": {
+  "pass": 29,
+  "fail": 13,
+  "unknown": 62
+ },
+ "report_totals": {
+  "fail": 13,
+  "unknown": 1,
+  "pass": 17,
+  "not_applicable": 9
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "owasp-mastg-hacking-playground",
+ "wall_seconds": 0.4
+}

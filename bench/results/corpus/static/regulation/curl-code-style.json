@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 349,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "curl-code-style",
+ "wall_seconds": 0.1
+}

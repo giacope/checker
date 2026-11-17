@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1966,
+ "read_seconds": 30.17,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nz-g13-foul-water",
+ "wall_seconds": 30.2
+}

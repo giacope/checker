@@ -1,0 +1,31 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 3.2,
+ "notes": [
+  "PHP (879 files), Shell (3 files), SQL (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 10,
+  "Dependency": 639
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2594,
+ "verdicts": {
+  "unknown": 665,
+  "pass": 5
+ },
+ "report_totals": {
+  "unknown": 23,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "bookstackapp-bookstack",
+ "wall_seconds": 6.5
+}

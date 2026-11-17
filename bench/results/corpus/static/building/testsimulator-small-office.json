@@ -1,0 +1,22 @@
+{
+ "status": "ok",
+ "seconds": 0.4,
+ "second_run_seconds": 0.1,
+ "notes": [],
+ "elements": {
+  "Door": 7,
+  "Space": 3
+ },
+ "sheets": 2,
+ "locators": 50,
+ "verdicts": {
+  "unknown": 61,
+  "pass": 2
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "testsimulator-small-office",
+ "wall_seconds": 1.0
+}

@@ -1,0 +1,33 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.3,
+ "notes": [
+  "Go (136 files), Vue (63 files), Shell (6 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Cookie": 1,
+  "Secret": 6,
+  "Dependency": 455
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 1857,
+ "verdicts": {
+  "unknown": 482,
+  "fail": 3
+ },
+ "report_totals": {
+  "fail": 3,
+  "unknown": 23,
+  "not_applicable": 14
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "go-shiori-shiori",
+ "wall_seconds": 0.7
+}

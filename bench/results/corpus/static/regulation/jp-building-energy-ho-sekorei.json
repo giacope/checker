@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 75,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "jp-building-energy-ho-sekorei",
+ "wall_seconds": 0.1
+}

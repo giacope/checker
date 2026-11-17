@@ -1,0 +1,36 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Shell (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 2,
+  "Query": 12,
+  "Secret": 2,
+  "Dependency": 20
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 129,
+ "verdicts": {
+  "pass": 12,
+  "fail": 10,
+  "unknown": 41
+ },
+ "report_totals": {
+  "fail": 6,
+  "unknown": 21,
+  "pass": 1,
+  "not_applicable": 12
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "anxolerd-dvpwa",
+ "wall_seconds": 0.4
+}

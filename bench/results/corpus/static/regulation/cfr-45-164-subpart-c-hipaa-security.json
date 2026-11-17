@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 222,
+ "read_seconds": 0.03,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "cfr-45-164-subpart-c-hipaa-security",
+ "wall_seconds": 0.1
+}

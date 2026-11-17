@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 90,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-cs-cicd-security",
+ "wall_seconds": 0.1
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 937,
+ "read_seconds": 0.02,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "google-shell-style-guide",
+ "wall_seconds": 0.1
+}

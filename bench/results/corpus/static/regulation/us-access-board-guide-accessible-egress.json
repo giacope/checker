@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 118,
+ "read_seconds": 0.02,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-access-board-guide-accessible-egress",
+ "wall_seconds": 0.1
+}

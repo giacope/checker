@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 387,
+ "read_seconds": 0.06,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "au-ncc-2025-vol1-c3-compartmentation",
+ "wall_seconds": 0.1
+}

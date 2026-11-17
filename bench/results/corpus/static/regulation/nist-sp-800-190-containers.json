@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 2072,
+ "read_seconds": 6.87,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-sp-800-190-containers",
+ "wall_seconds": 6.9
+}

@@ -1,0 +1,36 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.1,
+ "notes": [
+  "Shell (4 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 6,
+  "Query": 8,
+  "Cookie": 1,
+  "Secret": 1
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 78,
+ "verdicts": {
+  "fail": 12,
+  "pass": 36,
+  "unknown": 9
+ },
+ "report_totals": {
+  "fail": 12,
+  "unknown": 9,
+  "pass": 9,
+  "not_applicable": 10
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "appsecco-dvna",
+ "wall_seconds": 0.4
+}

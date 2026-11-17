@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.4,
+ "notes": [
+  "SQL (2 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 5,
+  "Dependency": 455
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 1832,
+ "verdicts": {
+  "unknown": 481
+ },
+ "report_totals": {
+  "unknown": 23,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "vercel-nextjs-subscription-payments",
+ "wall_seconds": 0.9
+}

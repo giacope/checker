@@ -1,0 +1,28 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.0,
+ "notes": [
+  "Terraform (47 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Dependency": 2057
+ },
+ "sources": [
+  "deps"
+ ],
+ "locators": 8830,
+ "verdicts": {
+  "unknown": 2078
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "bridgecrewio-terragoat",
+ "wall_seconds": 0.5
+}

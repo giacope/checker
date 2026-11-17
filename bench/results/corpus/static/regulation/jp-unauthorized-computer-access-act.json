@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 75,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "jp-unauthorized-computer-access-act",
+ "wall_seconds": 0.1
+}

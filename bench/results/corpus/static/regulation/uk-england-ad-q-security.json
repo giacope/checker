@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 583,
+ "read_seconds": 2.27,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "uk-england-ad-q-security",
+ "wall_seconds": 2.3
+}

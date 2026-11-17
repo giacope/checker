@@ -1,0 +1,38 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [],
+ "elements": {
+  "Query": 2,
+  "Cookie": 1,
+  "TokenVerification": 2,
+  "Secret": 2,
+  "CommandExecution": 1,
+  "HtmlOutput": 2,
+  "MassAssignment": 2,
+  "Dependency": 72
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 340,
+ "verdicts": {
+  "pass": 15,
+  "fail": 9,
+  "unknown": 85
+ },
+ "report_totals": {
+  "fail": 9,
+  "unknown": 14,
+  "pass": 9,
+  "not_applicable": 8
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "fly-apps-live_beats",
+ "wall_seconds": 0.6
+}

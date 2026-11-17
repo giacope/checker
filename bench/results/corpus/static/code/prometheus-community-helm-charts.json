@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 4.8,
+ "notes": [
+  "Shell (11 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 29,
+  "Dependency": 3
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 70,
+ "verdicts": {
+  "unknown": 53
+ },
+ "report_totals": {
+  "unknown": 23,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "prometheus-community-helm-charts",
+ "wall_seconds": 9.7
+}

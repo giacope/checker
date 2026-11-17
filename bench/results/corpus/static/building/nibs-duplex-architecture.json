@@ -1,0 +1,28 @@
+{
+ "status": "ok",
+ "seconds": 0.5,
+ "second_run_seconds": 0.4,
+ "notes": [],
+ "elements": {
+  "Door": 14,
+  "Stair": 2,
+  "Space": 21,
+  "Corridor": 2,
+  "Storey": 4
+ },
+ "sheets": 0,
+ "locators": 308,
+ "verdicts": {
+  "pass": 54,
+  "unknown": 227,
+  "fail": 4
+ },
+ "violations": {},
+ "info": {
+  "derived facts citing a description": 3
+ },
+ "examples": {},
+ "kind": "building",
+ "slug": "nibs-duplex-architecture",
+ "wall_seconds": 1.5
+}

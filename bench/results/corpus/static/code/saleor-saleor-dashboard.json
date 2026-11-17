@@ -1,0 +1,37 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 21.1,
+ "notes": [
+  "Shell (3 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 1,
+  "Secret": 15,
+  "LogStatement": 5,
+  "Transfer": 1,
+  "Dependency": 1836
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 7411,
+ "verdicts": {
+  "fail": 19,
+  "unknown": 1860,
+  "pass": 8
+ },
+ "report_totals": {
+  "fail": 11,
+  "unknown": 12,
+  "pass": 7,
+  "not_applicable": 10
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "saleor-saleor-dashboard",
+ "wall_seconds": 42.5
+}

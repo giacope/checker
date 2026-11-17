@@ -1,0 +1,19 @@
+{
+ "status": "ok",
+ "seconds": 0.8,
+ "second_run_seconds": 0.7,
+ "notes": [
+  "KIT-Bridge.ifc: schema IFC4X2 is not supported; read as IFC4X3_ADD2, which superseded it",
+  "KIT-Bridge.ifc: no building storeys (it models IfcBridge, IfcBridgePart); its storeys, spaces, doors, stairs and travel distances could not be read"
+ ],
+ "elements": {},
+ "sheets": 0,
+ "locators": 0,
+ "verdicts": {},
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "kit-bridge-ifc4x2",
+ "wall_seconds": 2.0
+}

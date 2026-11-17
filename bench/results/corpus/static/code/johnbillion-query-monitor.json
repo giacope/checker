@@ -1,0 +1,30 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.5,
+ "notes": [
+  "PHP (152 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 1,
+  "Dependency": 714
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2867,
+ "verdicts": {
+  "unknown": 736
+ },
+ "report_totals": {
+  "unknown": 23,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "johnbillion-query-monitor",
+ "wall_seconds": 1.3
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 178,
+ "read_seconds": 0.04,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "eu-dora-chapter-ii-it",
+ "wall_seconds": 0.1
+}

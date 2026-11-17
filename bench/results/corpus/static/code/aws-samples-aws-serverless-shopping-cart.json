@@ -1,0 +1,33 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "Vue (9 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "TokenVerification": 1,
+  "Secret": 1,
+  "Dependency": 1228
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 4917,
+ "verdicts": {
+  "unknown": 1250,
+  "pass": 2
+ },
+ "report_totals": {
+  "unknown": 23,
+  "pass": 2,
+  "not_applicable": 15
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "aws-samples-aws-serverless-shopping-cart",
+ "wall_seconds": 0.6
+}

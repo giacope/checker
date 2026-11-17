@@ -1,0 +1,24 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.0,
+ "notes": [],
+ "elements": {},
+ "sources": [
+  "deps"
+ ],
+ "locators": 0,
+ "verdicts": {
+  "unknown": 21
+ },
+ "report_totals": {
+  "unknown": 21,
+  "not_applicable": 19
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "android-sunflower",
+ "wall_seconds": 0.2
+}

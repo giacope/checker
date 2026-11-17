@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 193,
+ "read_seconds": 0.03,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-asvs-4-0-3-v2-v3-docx",
+ "wall_seconds": 0.1
+}

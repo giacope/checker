@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 163,
+ "read_seconds": 0.02,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-osha-1910-subpart-e-exit-routes",
+ "wall_seconds": 0.1
+}

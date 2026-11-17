@@ -1,0 +1,21 @@
+{
+ "status": "ok",
+ "seconds": 0.2,
+ "second_run_seconds": 0.0,
+ "notes": [],
+ "elements": {
+  "Door": 2,
+  "Storey": 1
+ },
+ "sheets": 0,
+ "locators": 16,
+ "verdicts": {
+  "unknown": 15
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "ifcopenshell-bonsai-tutorial-project0",
+ "wall_seconds": 0.8
+}

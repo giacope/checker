@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 125,
+ "read_seconds": 0.0,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "rust-api-guidelines-checklist",
+ "wall_seconds": 0.1
+}

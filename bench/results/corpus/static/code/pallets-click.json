@@ -1,0 +1,27 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.7,
+ "notes": [],
+ "elements": {
+  "Dependency": 73
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 292,
+ "verdicts": {
+  "unknown": 94
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "pallets-click",
+ "wall_seconds": 1.6
+}

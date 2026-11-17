@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1676,
+ "read_seconds": 34.94,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nz-d1-as1-access-routes",
+ "wall_seconds": 35.0
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 190,
+ "read_seconds": 0.03,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "jp-kenchiku-kijun-ho-sekorei-ch5-egress",
+ "wall_seconds": 0.1
+}

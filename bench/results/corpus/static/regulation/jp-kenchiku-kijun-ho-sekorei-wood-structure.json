@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 43,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "jp-kenchiku-kijun-ho-sekorei-wood-structure",
+ "wall_seconds": 0.1
+}

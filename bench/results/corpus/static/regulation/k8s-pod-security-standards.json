@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 125,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "k8s-pod-security-standards",
+ "wall_seconds": 0.1
+}

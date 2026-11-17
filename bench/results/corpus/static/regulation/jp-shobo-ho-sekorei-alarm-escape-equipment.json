@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 105,
+ "read_seconds": 0.02,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "jp-shobo-ho-sekorei-alarm-escape-equipment",
+ "wall_seconds": 0.1
+}

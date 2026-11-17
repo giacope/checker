@@ -1,0 +1,22 @@
+{
+ "status": "ok",
+ "seconds": 0.2,
+ "second_run_seconds": 0.0,
+ "notes": [],
+ "elements": {
+  "Space": 2,
+  "Corridor": 1,
+  "Storey": 1
+ },
+ "sheets": 0,
+ "locators": 13,
+ "verdicts": {
+  "unknown": 22
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "bsi-simple-scene-architecture-ifc4x3",
+ "wall_seconds": 0.8
+}

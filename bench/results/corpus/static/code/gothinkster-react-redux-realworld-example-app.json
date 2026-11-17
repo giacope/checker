@@ -1,0 +1,25 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [],
+ "elements": {},
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 1,
+ "verdicts": {
+  "unknown": 21
+ },
+ "report_totals": {
+  "unknown": 21,
+  "not_applicable": 19
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "gothinkster-react-redux-realworld-example-app",
+ "wall_seconds": 0.5
+}

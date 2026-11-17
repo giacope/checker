@@ -1,0 +1,21 @@
+{
+ "status": "ok",
+ "seconds": 0.4,
+ "second_run_seconds": 0.1,
+ "notes": [],
+ "elements": {
+  "Space": 7,
+  "Door": 12
+ },
+ "sheets": 1,
+ "locators": 110,
+ "verdicts": {
+  "unknown": 85
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "draftline-meridian-house",
+ "wall_seconds": 1.1
+}

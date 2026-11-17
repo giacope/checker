@@ -1,0 +1,29 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "Shell (18 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Dependency": 557
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2257,
+ "verdicts": {
+  "unknown": 578
+ },
+ "report_totals": {
+  "unknown": 22,
+  "not_applicable": 18
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "actions-checkout",
+ "wall_seconds": 0.7
+}

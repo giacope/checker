@@ -1,0 +1,43 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 3.6,
+ "notes": [
+  "Shell (1 file), SQL (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Secret": 16,
+  "PasswordStore": 1,
+  "Query": 197,
+  "Cookie": 1,
+  "TokenVerification": 1,
+  "Transfer": 13,
+  "CommandExecution": 13,
+  "HtmlOutput": 16,
+  "MassAssignment": 51,
+  "Dependency": 274
+ },
+ "sources": [
+  "static",
+  "static",
+  "deps"
+ ],
+ "locators": 2046,
+ "verdicts": {
+  "pass": 297,
+  "unknown": 300,
+  "fail": 10
+ },
+ "report_totals": {
+  "fail": 10,
+  "unknown": 6,
+  "pass": 21,
+  "not_applicable": 3
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "rubyforgood-human-essentials",
+ "wall_seconds": 7.3
+}

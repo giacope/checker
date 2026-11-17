@@ -1,0 +1,23 @@
+{
+ "status": "ok",
+ "seconds": 0.7,
+ "second_run_seconds": 0.3,
+ "notes": [],
+ "elements": {
+  "Space": 7,
+  "Stair": 1,
+  "Door": 10
+ },
+ "sheets": 2,
+ "locators": 110,
+ "verdicts": {
+  "unknown": 113,
+  "pass": 12
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "optesc-factory-plan",
+ "wall_seconds": 1.6
+}

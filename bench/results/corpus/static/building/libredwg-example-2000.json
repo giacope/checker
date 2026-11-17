@@ -1,0 +1,16 @@
+{
+ "status": "ok",
+ "seconds": 0.7,
+ "second_run_seconds": 0.3,
+ "notes": [],
+ "elements": {},
+ "sheets": 3,
+ "locators": 0,
+ "verdicts": {},
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "libredwg-example-2000",
+ "wall_seconds": 1.5
+}

@@ -1,0 +1,16 @@
+{
+ "status": "ok",
+ "seconds": 0.4,
+ "second_run_seconds": 0.0,
+ "notes": [],
+ "elements": {},
+ "sheets": 1,
+ "locators": 0,
+ "verdicts": {},
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "kestrelcad-courtyard",
+ "wall_seconds": 1.0
+}

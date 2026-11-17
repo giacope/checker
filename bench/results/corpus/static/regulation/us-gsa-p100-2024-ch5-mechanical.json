@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1078,
+ "read_seconds": 3.88,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-gsa-p100-2024-ch5-mechanical",
+ "wall_seconds": 4.0
+}

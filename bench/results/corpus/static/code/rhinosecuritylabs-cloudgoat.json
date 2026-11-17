@@ -1,0 +1,37 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 4.0,
+ "notes": [
+  "Terraform (253 files), Shell (11 files), Go (1 file), SQL (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "Query": 113,
+  "Secret": 4,
+  "LogStatement": 5,
+  "Transfer": 2,
+  "Dependency": 33
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 496,
+ "verdicts": {
+  "pass": 115,
+  "fail": 4,
+  "unknown": 64
+ },
+ "report_totals": {
+  "fail": 1,
+  "unknown": 24,
+  "pass": 2,
+  "not_applicable": 13
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "rhinosecuritylabs-cloudgoat",
+ "wall_seconds": 8.1
+}

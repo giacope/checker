@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 204,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "github-actions-secure-use",
+ "wall_seconds": 0.1
+}

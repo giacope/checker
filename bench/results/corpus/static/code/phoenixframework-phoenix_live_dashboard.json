@@ -1,0 +1,35 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.3,
+ "notes": [],
+ "elements": {
+  "Cookie": 1,
+  "TokenVerification": 1,
+  "Secret": 1,
+  "HtmlOutput": 2,
+  "Dependency": 50
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 218,
+ "verdicts": {
+  "unknown": 70,
+  "pass": 6,
+  "fail": 3
+ },
+ "report_totals": {
+  "fail": 3,
+  "unknown": 21,
+  "pass": 5,
+  "not_applicable": 11
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "phoenixframework-phoenix_live_dashboard",
+ "wall_seconds": 0.7
+}

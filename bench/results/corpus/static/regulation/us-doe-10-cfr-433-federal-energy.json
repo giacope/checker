@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 255,
+ "read_seconds": 0.03,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "us-doe-10-cfr-433-federal-energy",
+ "wall_seconds": 0.1
+}

@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1389,
+ "read_seconds": 0.15,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "au-ncc-2025-housing-13-2-building-fabric",
+ "wall_seconds": 0.2
+}

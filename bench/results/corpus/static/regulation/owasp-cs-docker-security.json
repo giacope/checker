@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 264,
+ "read_seconds": 0.01,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "owasp-cs-docker-security",
+ "wall_seconds": 0.1
+}

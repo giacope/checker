@@ -1,0 +1,37 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 2.2,
+ "notes": [
+  "Go (28 files), C# (19 files), Shell (4 files), Java (3 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "TokenVerification": 8,
+  "Secret": 30,
+  "LogStatement": 61,
+  "Transfer": 7,
+  "Dependency": 1707
+ },
+ "sources": [
+  "static",
+  "static",
+  "deps"
+ ],
+ "locators": 12475,
+ "verdicts": {
+  "unknown": 1751,
+  "pass": 30,
+  "fail": 111
+ },
+ "report_totals": {
+  "fail": 5,
+  "unknown": 23,
+  "not_applicable": 12
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "serverless-examples",
+ "wall_seconds": 5.0
+}

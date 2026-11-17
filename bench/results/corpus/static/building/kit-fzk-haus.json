@@ -1,0 +1,27 @@
+{
+ "status": "ok",
+ "seconds": 0.7,
+ "second_run_seconds": 0.5,
+ "notes": [],
+ "elements": {
+  "Door": 5,
+  "Stair": 1,
+  "Space": 7,
+  "Corridor": 1,
+  "Storey": 2
+ },
+ "sheets": 0,
+ "locators": 103,
+ "verdicts": {
+  "unknown": 98,
+  "pass": 8
+ },
+ "violations": {},
+ "info": {
+  "derived facts citing a description": 3
+ },
+ "examples": {},
+ "kind": "building",
+ "slug": "kit-fzk-haus",
+ "wall_seconds": 1.8
+}

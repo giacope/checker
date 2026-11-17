@@ -1,0 +1,33 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [],
+ "elements": {
+  "PasswordStore": 1,
+  "Cookie": 1,
+  "TokenVerification": 1,
+  "Secret": 3,
+  "Dependency": 46
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 204,
+ "verdicts": {
+  "fail": 7,
+  "unknown": 72
+ },
+ "report_totals": {
+  "fail": 7,
+  "unknown": 25,
+  "not_applicable": 8
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "dolevf-damn-vulnerable-graphql-application",
+ "wall_seconds": 0.5
+}

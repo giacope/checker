@@ -1,0 +1,37 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 1.2,
+ "notes": [
+  "Shell (10 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 2,
+  "Query": 62,
+  "Cookie": 1,
+  "Secret": 12,
+  "Dependency": 93
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 598,
+ "verdicts": {
+  "pass": 72,
+  "unknown": 125,
+  "fail": 2
+ },
+ "report_totals": {
+  "fail": 2,
+  "unknown": 21,
+  "pass": 8,
+  "not_applicable": 9
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "sissbruecker-linkding",
+ "wall_seconds": 2.5
+}

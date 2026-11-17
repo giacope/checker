@@ -1,0 +1,36 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "SQL (5 files), Shell (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 4,
+  "TokenVerification": 1,
+  "Secret": 2,
+  "Dependency": 99
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 434,
+ "verdicts": {
+  "pass": 19,
+  "unknown": 118,
+  "fail": 3
+ },
+ "report_totals": {
+  "fail": 3,
+  "unknown": 20,
+  "pass": 6,
+  "not_applicable": 11
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "nsidnev-fastapi-realworld-example-app",
+ "wall_seconds": 0.6
+}

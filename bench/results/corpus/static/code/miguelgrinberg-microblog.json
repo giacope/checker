@@ -1,0 +1,36 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.2,
+ "notes": [
+  "Shell (1 file): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 7,
+  "Query": 13,
+  "TokenVerification": 1,
+  "Dependency": 54
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 294,
+ "verdicts": {
+  "pass": 20,
+  "unknown": 90,
+  "fail": 8
+ },
+ "report_totals": {
+  "fail": 8,
+  "unknown": 13,
+  "pass": 8,
+  "not_applicable": 11
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "miguelgrinberg-microblog",
+ "wall_seconds": 0.6
+}

@@ -1,0 +1,23 @@
+{
+ "status": "ok",
+ "seconds": 0.4,
+ "second_run_seconds": 0.0,
+ "notes": [],
+ "elements": {
+  "Door": 4,
+  "Space": 2,
+  "Storey": 1
+ },
+ "sheets": 1,
+ "locators": 36,
+ "verdicts": {
+  "unknown": 25,
+  "pass": 16
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "store-mcp-sample-store",
+ "wall_seconds": 1.0
+}

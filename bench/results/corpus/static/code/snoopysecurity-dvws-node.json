@@ -1,0 +1,41 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.5,
+ "notes": [
+  "Svelte (25 files): no static analyser; not read, since no model is configured."
+ ],
+ "elements": {
+  "PasswordStore": 7,
+  "Query": 48,
+  "Cookie": 1,
+  "TokenVerification": 16,
+  "Secret": 7,
+  "LogStatement": 5,
+  "Dependency": 559
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 2565,
+ "verdicts": {
+  "pass": 85,
+  "fail": 45,
+  "unknown": 576,
+  "uncertain": 2
+ },
+ "report_totals": {
+  "fail": 8,
+  "uncertain": 2,
+  "unknown": 12,
+  "pass": 13,
+  "not_applicable": 5
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "snoopysecurity-dvws-node",
+ "wall_seconds": 1.1
+}

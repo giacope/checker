@@ -1,0 +1,28 @@
+{
+ "status": "ok",
+ "fetch_seconds": 0.0,
+ "seconds": 0.4,
+ "notes": [],
+ "elements": {
+  "Secret": 30,
+  "Dependency": 20
+ },
+ "sources": [
+  "static",
+  "deps"
+ ],
+ "locators": 155,
+ "verdicts": {
+  "unknown": 71
+ },
+ "report_totals": {
+  "unknown": 23,
+  "not_applicable": 17
+ },
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "code",
+ "slug": "actions-starter-workflows",
+ "wall_seconds": 1.1
+}

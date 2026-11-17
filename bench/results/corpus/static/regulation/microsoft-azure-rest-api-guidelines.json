@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 814,
+ "read_seconds": 0.04,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "microsoft-azure-rest-api-guidelines",
+ "wall_seconds": 0.1
+}

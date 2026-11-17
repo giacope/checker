@@ -1,0 +1,19 @@
+{
+ "status": "ok",
+ "seconds": 0.2,
+ "second_run_seconds": 0.0,
+ "notes": [
+  "KIT-Simple-Road-Test-Web-IFC4x3_RC2.ifc: schema IFC4X3_RC2 is not supported; read as IFC4X3_ADD2, which superseded it",
+  "KIT-Simple-Road-Test-Web-IFC4x3_RC2.ifc: no building storeys (it models IfcFacilityPart, IfcRoad); its storeys, spaces, doors, stairs and travel distances could not be read"
+ ],
+ "elements": {},
+ "sheets": 0,
+ "locators": 0,
+ "verdicts": {},
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "building",
+ "slug": "kit-simple-road-ifc4x3-rc2",
+ "wall_seconds": 0.8
+}

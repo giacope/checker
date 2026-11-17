@@ -1,0 +1,11 @@
+{
+ "status": "ok",
+ "lines": 1581,
+ "read_seconds": 5.57,
+ "violations": {},
+ "info": {},
+ "examples": {},
+ "kind": "regulation",
+ "slug": "nist-sp-800-204-microservices",
+ "wall_seconds": 5.6
+}
