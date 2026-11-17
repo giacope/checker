@@ -305,6 +305,54 @@ def test_fastapi_schema_lengths(tmp_path):
     assert fact(doc, "processes_personal_data")[0][0] is True
 
 
+@pytest.mark.parametrize("files, deps, cited", [
+    ({"pyproject.toml": "", "app/models.py": """\
+        from sqlalchemy import Column, Integer, String, DateTime
+        class Customer(Base):
+            __tablename__ = "customers"
+            id = Column(Integer, primary_key=True)
+            prenom = Column(String)
+            生年月日 = Column(String)
+            created_at = Column(DateTime)
+        class Order(Base):
+            reference = Column(String)
+            courriel = Column(EmailType)
+        """}, None, ["app/models.py:5", "app/models.py:6", "app/models.py:10"]),
+    ({"src/models.js": """\
+        const mongoose = require("mongoose");
+        const UserSchema = new mongoose.Schema({ prenom: String, createdAt: Date });
+        const Inscription = z.object({ correo: z.string().email(), plan: z.string() });
+        const ProductSchema = new mongoose.Schema({ titre: String, prix: Number });
+        """}, {"mongoose": "8.0.0", "zod": "3.0.0"}, ["src/models.js:2", "src/models.js:3"]),
+])
+def test_personal_data_is_read_from_the_record_and_the_type_not_the_field_name(tmp_path, files, deps, cited):
+    # field names in other languages: the record is a person's, or the type or validator says it is an email address
+    doc = repo(tmp_path, files, deps=deps)
+    assert fact(doc, "processes_personal_data") == sorted({(True, at) for at in cited}, key=str)
+
+
+@pytest.mark.parametrize("helper, erases", [("deleteUser", True), ("removeUserAccountById", True), ("deleteTeamUser", False),
+                                            ("deleteUserSession", False)])
+def test_a_request_handler_calling_a_helper_named_for_deleting_a_user_erases_the_account(tmp_path, helper, erases):
+    doc = repo(tmp_path, {"server.js": f"""\
+        const express = require("express");
+        const app = express();
+        const User = mongoose.model("User", new mongoose.Schema({{ email: String }}));
+        app.delete("/users/:id", async (req, res) => {{ await {helper}(req.params.id); res.end(); }});
+        """}, deps={"express": "4.0.0", "mongoose": "8.0.0"})
+    assert fact(doc, "account_erasure") == ([(True, "server.js:4")] if erases else [(False, "server.js:3")])
+
+
+def test_a_record_that_is_not_about_a_person_holds_no_personal_data(tmp_path):
+    doc = repo(tmp_path, {"pyproject.toml": "", "app/models.py": """\
+        from sqlalchemy import Column, Integer, String
+        class Product(Base):
+            id = Column(Integer, primary_key=True)
+            titre = Column(String)
+        """})
+    assert fact(doc, "processes_personal_data") == []
+
+
 def test_open_facts_are_left_out(tmp_path):
     doc = repo(tmp_path, {"util.js": "module.exports = (a, b) => a + b;\n"})
     assert doc["facts"] == {} and doc["elements"] == []

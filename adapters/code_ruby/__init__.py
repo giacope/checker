@@ -12,7 +12,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from adapters.code_static import git_commit
-from adapters.code_static.common import SOURCE, Collector, is_personal_name, is_user_object_name
+from adapters.code_static.common import SOURCE, Collector, is_personal_name, is_record_field, is_user_object_name
 from adapters.code_static.config import scan_template
 from adapters.code_static.facts import derive
 from adapters.code_static.files import discover, read_text
@@ -118,7 +118,7 @@ def _schema_signals(project: Project, out: Collector):
     for table in sorted(project.tables):
         owner = table[:-1] if table.endswith("s") else table
         for col, (_, at) in project.tables[table].items():
-            if is_personal_name(col, owner) or (col in {"name", "first_name", "last_name"} and is_user_object_name(owner)):
+            if is_personal_name(col, owner) or (is_user_object_name(owner) and is_record_field(col)):
                 out.signal("personal_field", at, model=True)
 
 

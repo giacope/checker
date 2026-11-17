@@ -665,3 +665,12 @@ def test_password_length_rule_follows_unless_negation_and_the_branch(tmp_path):
         end
         """})
     assert fact(doc, "password_min_length") == [16] and fact(doc, "password_max_length") == [40, 72]
+
+
+def test_any_column_of_a_person_table_is_personal_data_whatever_it_is_named(tmp_path):
+    schema = ('ActiveRecord::Schema[7.1].define(version: 1) do\n  create_table "%s" do |t|\n    t.string "prenom"\n'
+              '    t.datetime "created_at"\n  end\nend\n')
+    doc = repo(tmp_path, {"db/schema.rb": schema % "customers"})
+    assert [o["at"] for o in doc["facts"]["processes_personal_data"]] == ["db/schema.rb:3"]
+    doc = repo(tmp_path, {"db/schema.rb": schema % "products"})
+    assert "processes_personal_data" not in doc["facts"]

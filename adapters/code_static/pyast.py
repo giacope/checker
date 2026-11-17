@@ -5,8 +5,8 @@ from __future__ import annotations
 import ast
 import re
 
-from .common import (dedicated_hasher, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
-                     is_personal_name, is_stored_password_name, is_user_object_name, literal_secret_kind,
+from .common import (dedicated_hasher, deletes_a_person, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
+                     is_personal_name, is_record_field, is_stored_password_name, PERSONAL_TYPES, is_user_object_name, literal_secret_kind,
                      plausible_secret_value, secret_kind_for_name, words, length_bound, rejects_words)
 from .files import SourceFile
 from .models import Models, arg as model_arg
@@ -712,6 +712,9 @@ class PyAnalyser:
             if any(is_user_object_name(p) or p in {"User", "UserModel", "Users"} for p in recv[:2] + recv[-1:]) or (
                     recv and recv[-1] in {"session", "db"} and args and args[0] and is_user_object_name(args[0][-1])):
                 out.signal("user_delete", at)
+        elif deletes_a_person(last) and not ({x.lower() for x in pf.sf.rel.split("/")[:-1]} & SCRIPT_PARTS) \
+                and self.request_reachable(pf, c):
+            out.signal("user_delete", at)   # the repository's own helper: delete_user(user_id)
         if q.endswith("Limiter") and (kw(c, "default_limits") is not None or kw(c, "application_limits") is not None):
             out.signal("rate_limit", at, scope="global")
         rule = pf.rule(c, "rate_limit")
@@ -1201,6 +1204,7 @@ class PyAnalyser:
                                           "DeclarativeBase"} or b.endswith(("models.Model", "AbstractUser", "AbstractBaseUser")) for b in bases)
             schema = any(b.split(".")[-1].endswith(MODEL_BASES + ("Form", "Serializer", "Schema", "Base")) for b in bases)
             is_model = is_table or schema
+            person = is_user_object_name(cls.name)
             for st in cls.body:
                 tname = None
                 value = None
@@ -1211,7 +1215,11 @@ class PyAnalyser:
                     tname, value, ann = st.targets[0].id, st.value, None
                 else:
                     continue
-                if is_model and (is_personal_name(tname) or tname in {"name", "first_name", "last_name"} and is_user_object_name(cls.name)):
+                # its type or validator says what it holds (`EmailStr`, `models.EmailField()`, `validators=[Email()]`)
+                typed = {x.attr if isinstance(x, ast.Attribute) else x.id for part in (value, ann) if part is not None
+                         for x in ast.walk(part) if isinstance(x, (ast.Name, ast.Attribute))}
+                if is_model and not tname.startswith("__") and (
+                        is_personal_name(tname) or person and is_record_field(tname) or typed & (PERSONAL_TYPES - {"email"})):
                     out.signal("personal_field", pf.at(st), model=is_table)
                 if is_model and is_password_name(tname) and not any(w in {"current", "old"} for w in words(tname)):
                     for call in [x for x in ast.walk(st) if isinstance(x, ast.Call)]:

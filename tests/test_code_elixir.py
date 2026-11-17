@@ -560,3 +560,20 @@ def test_customer_model(tmp_path):
     e = elements(doc, "PasswordStore")["lib/a.ex:2"]
     assert e == {"algorithm": "argon2", "salted": True}
     assert doc["sources"][0]["models"][0]["model"] == "acme-crypto"
+
+
+def test_any_field_of_a_person_schema_is_personal_data_whatever_it_is_named(tmp_path):
+    module = """\
+        defmodule App.Shop.%s do
+          use Ecto.Schema
+          schema "%s" do
+            field :prenom, :string
+            timestamps()
+          end
+        end
+        """
+    (tmp_path / "a").mkdir(), (tmp_path / "b").mkdir()
+    doc = repo(tmp_path / "a", {"lib/app/shop/customer.ex": module % ("Customer", "customers")})
+    assert fact(doc, "processes_personal_data") == [(True, "lib/app/shop/customer.ex:4")]
+    doc = repo(tmp_path / "b", {"lib/app/shop/product.ex": module % ("Product", "products")})
+    assert fact(doc, "processes_personal_data") == []

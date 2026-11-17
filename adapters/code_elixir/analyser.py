@@ -13,7 +13,7 @@ from __future__ import annotations
 import re
 
 from adapters.code_static.common import (PW_EXPIRY, Collector, external_host, is_credential_name,
-                                         is_password_name, is_personal_name, is_stored_password_name,
+                                         is_password_name, is_personal_name, is_record_field, is_stored_password_name,
                                          is_user_object_name, literal_secret_kind, plausible_secret_value,
                                          secret_kind_for_name, session_cookie_name, words)
 from adapters.code_static.models import Models, arg as model_arg
@@ -1474,7 +1474,8 @@ class Analyser:
                         if not fname:
                             continue
                         loc = f"{ef.rel}:{L(f)}"
-                        if is_personal_name(fname, "user" if is_user else mod.name.split(".")[-1].lower()):
+                        if is_personal_name(fname, "user" if is_user else mod.name.split(".")[-1].lower()) or (
+                                is_user and is_record_field(fname)):
                             self.out.signal("personal_field", loc, model=True)
                         if PW_EXPIRY.search(fname) and re.search(r"expir|max_age|must|force|require", fname):
                             self.out.signal("pw_expiry", loc)

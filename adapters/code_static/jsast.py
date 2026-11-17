@@ -8,8 +8,8 @@ import tree_sitter as ts
 import tree_sitter_javascript as tsjs
 import tree_sitter_typescript as tsts
 
-from .common import (dedicated_hasher, length_bound, rejects_words, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
-                     is_personal_name, is_stored_password_name, is_user_object_name, literal_secret_kind,
+from .common import (dedicated_hasher, deletes_a_person, length_bound, rejects_words, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
+                     is_personal_name, is_record_field, is_stored_password_name, PERSONAL_TYPES, is_user_object_name, literal_secret_kind,
                      plausible_secret_value, secret_kind_for_name, words, PW_WORDS, TRACKER_HOSTS, USER_OBJECTS)
 from .files import SourceFile
 from .models import Models, arg as model_arg
@@ -855,6 +855,8 @@ class JSAnalyser:
                     "findByIdAndRemove", "delete"} and recv and any(w in USER_OBJECTS for p in recv[-2:] for w in words(p)) \
                 and "session" not in recv and self.request_reachable(jf, c, args):
             out.signal("user_delete", at)
+        elif deletes_a_person(last) and self.request_reachable(jf, c, args):
+            out.signal("user_delete", at)   # the repository's own helper: deleteUser(userId)
         rule = jf.rule(c, "erasure")
         if rule and self.request_reachable(jf, c, args):
             out.signal("user_delete", at)
@@ -874,7 +876,7 @@ class JSAnalyser:
         ctor = dotted(n.child_by_field_name("constructor"))
         args = kids(n.child_by_field_name("arguments"))
         if ctor and ctor[-1] == "Schema" and args:
-            self.personal_object(jf, args[0], out, model=True)
+            self.personal_object(jf, args[0], out, model=True, person=self.defines_person(n, ctor))
 
     # ------------------------------------------------------------ queries
     def classify(self, jf: JSFile, expr, at, depth=0):
@@ -1513,8 +1515,10 @@ class JSAnalyser:
         db_call = recv_name in {"create", "insert", "insertOne", "insertMany", "save", "update", "updateOne", "build", "upsert",
                                 "bulkCreate", "findOrCreate", "set", "findOneAndUpdate", "replaceOne"} or (recv_name[:1].isupper() and recv_name not in {"Error", "Promise", "Date"})
         user_holder = holder is not None and is_user_object_name(holder)
-        if recv_name in {"init", "define", "Schema"} or (db_call or user_holder) and any(is_personal_name(k) for k in obj_pairs(n)):
-            self.personal_object(jf, n, out, model=recv_name in {"init", "define", "Schema"})
+        if recv_name in {"init", "define", "Schema"}:
+            self.personal_object(jf, n, out, model=True, person=self.defines_person(call, fd))
+        elif recv_name == "object" or (db_call or user_holder) and any(is_personal_name(k) for k in obj_pairs(n)):
+            self.personal_object(jf, n, out)   # a record written, or a validation schema (zod, Joi, yup)
         if not (db_call or user_holder):
             return
         for key, v in obj_pairs(n).items():
@@ -1524,10 +1528,31 @@ class JSAnalyser:
                     continue
                 self.password_store(jf, v, out, "plaintext", False, jf.tainted(v, v))
 
-    def personal_object(self, jf: JSFile, n, out: Collector, model=False):
+    def personal_object(self, jf: JSFile, n, out: Collector, model=False, person=False):
+        """Fields that hold personal data: named so, typed or validated as an email, phone number or IP address
+        (`isEmail`, `z.string().email()`), or any field of a model of a person, whatever language it is named in."""
         for key, v in obj_pairs(n).items():
-            if key and is_personal_name(key):
+            text = T(v)
+            typed = set(re.findall(r"\w+", text)) & (PERSONAL_TYPES - {"email"}) or re.search(r"\.email\s*\(", text)
+            if key and (is_personal_name(key) or typed or person and is_record_field(key)):
                 out.signal("personal_field", jf.at(v), model=model)
+
+    @staticmethod
+    def defines_person(call, fd) -> bool:
+        """The model a schema call defines is a record about a person: `User.init({…})`, `define('User', {…})`,
+        `const UserSchema = new Schema({…})`, `model('User', new Schema({…}))`."""
+        names = [fd[-2]] if len(fd) >= 2 else []
+        args = kids(call.child_by_field_name("arguments"))
+        if args and str_value(args[0]):
+            names.append(str_value(args[0]))
+        up = call.parent
+        if up is not None and up.type == "variable_declarator":
+            names.append(T(up.child_by_field_name("name")))
+        elif up is not None and up.type == "arguments":
+            outer = kids(up)
+            if outer and str_value(outer[0]):
+                names.append(str_value(outer[0]))
+        return any(is_user_object_name(re.sub(r"(Schema|Model)$", "", x)) for x in names if x)
 
     # ------------------------------------------------------------ secrets
     def secrets(self, jf: JSFile, out: Collector):

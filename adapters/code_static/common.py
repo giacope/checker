@@ -15,7 +15,7 @@ def words(name: str) -> list[str]:
     """`clearTextPassword` / `CLEAR_TEXT_PASSWORD` / `clear-text.password` -> ['clear', 'text', 'password']."""
     name = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", name)
     name = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", name)
-    return [w for w in re.split(r"[^A-Za-z0-9]+", name.lower()) if w]
+    return [w for w in re.split(r"[\W_]+", name.lower()) if w]   # letters of any script: `生年月日`, `prénom` stay whole
 
 
 PW_WORDS = {"password", "passwd", "pwd", "pass", "passphrase", "pw", "passwort", "pword", "clearpassword"}
@@ -86,6 +86,27 @@ def is_personal_name(name: str, owner: str | None = None) -> bool:
     if ws and ws[-1] == "name" and owner is not None and any(w in USER_OBJECTS for w in words(owner)):
         return True
     return False
+
+
+def is_record_field(name: str) -> bool:
+    """A field of a stored record about a person that holds information about them, whatever language it is named in:
+    any information relating to an identifiable person is personal data. Keys and timestamps describe the record."""
+    ws = words(name)
+    return bool(ws) and ws[-1] not in {"id", "pk", "uuid", "at", "version"} and ws != ["type"]
+
+
+# Types and validators that say a value is an email address, phone number or IP address, whatever it is named.
+PERSONAL_TYPES = {"EmailField", "EmailStr", "EmailType", "Email", "NameEmail", "EmailValidator", "validate_email",
+                  "PhoneNumberField", "PhoneNumberType", "PhoneNumber", "GenericIPAddressField", "IPAddressField",
+                  "IPAddressType", "IPvAnyAddress", "isEmail", "isMobilePhone", "isIP", "email"}
+
+
+def deletes_a_person(name: str) -> bool:
+    """A function named for deleting a person's record: `deleteUser`, `delete_account`, `removeMemberById`, not one
+    that deletes something of theirs or their place in something (`deleteUserSession`, `deleteTeamUser`)."""
+    ws = words(name)
+    ws = ws[:ws.index("by")] if "by" in ws else ws
+    return len(ws) >= 2 and ws[0] in {"delete", "remove", "destroy", "erase", "purge"} and all(w in USER_OBJECTS for w in ws[1:])
 
 
 def is_user_object_name(name: str) -> bool:
