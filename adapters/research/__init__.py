@@ -29,7 +29,7 @@ from pathlib import Path
 
 import httpx
 
-from adapters.assess import CONTROL, Corpus, cited
+from adapters.assess import CONTROL, Corpus, cited, rank
 from adapters.regulation import CJK
 from adapters.code_llm import ReaderError, complete, parse_json, provider_from_env
 
@@ -74,7 +74,7 @@ class RegulationCorpus:
             self._blocks.append((head, c["text"], (head + "\n" + c["text"]).lower()))
 
     def search(self, terms: list[str], budget: int) -> list[tuple[str, str]]:
-        return _rank(self._blocks, terms, budget)
+        return rank(self._blocks, terms, budget)
 
     def everything(self) -> list[tuple[str, str]]:
         return [(h, t) for h, t, _ in self._blocks]
@@ -140,23 +140,6 @@ class Union:
     def excerpt(self, locator: str) -> str:
         p = self.split(locator)
         return self.parts[p[0]].excerpt(p[1]) if p else ""
-
-
-def _rank(blocks: list[tuple[str, str, str]], terms: list[str], budget: int) -> list[tuple[str, str]]:
-    """Blocks (header, text, lowercased both) holding the terms: more distinct terms first, then denser, then order."""
-    terms = list(dict.fromkeys(t.strip().lower() for t in terms if isinstance(t, str) and len(t.strip()) >= 2))
-    ranked = []
-    for i, (_, body, low) in enumerate(blocks):
-        counts = [low.count(t) for t in terms]
-        if any(counts):
-            ranked.append((-sum(1 for c in counts if c), -round(sum(counts) / (1 + len(body) / 1000), 6), i))
-    out, used = [], 0
-    for *_, i in sorted(ranked):
-        h, t, _ = blocks[i]
-        if used + len(h) + len(t) <= budget:
-            out.append((h, t))
-            used += len(h) + len(t)
-    return out
 
 
 def keywords(question: str) -> list[str]:

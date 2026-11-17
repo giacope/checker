@@ -75,6 +75,23 @@ class Corpus(Protocol):
         """Every excerpt of the corpus, each piece of text once, in the corpus's own order (for reading it all)."""
 
 
+def rank(blocks: list[tuple[str, str, str]], terms: list[str], budget: int) -> list[tuple[str, str]]:
+    """Blocks (header, text, lowercased both) holding the terms: more distinct terms first, then denser, then order."""
+    terms = list(dict.fromkeys(t.strip().lower() for t in terms if isinstance(t, str) and len(t.strip()) >= 2))
+    ranked = []
+    for i, (_, body, low) in enumerate(blocks):
+        counts = [low.count(t) for t in terms]
+        if any(counts):
+            ranked.append((-sum(1 for c in counts if c), -round(sum(counts) / (1 + len(body) / 1000), 6), i))
+    out, used = [], 0
+    for *_, i in sorted(ranked):
+        h, t, _ = blocks[i]
+        if used + len(h) + len(t) <= budget:
+            out.append((h, t))
+            used += len(h) + len(t)
+    return out
+
+
 # ---------------------------------------------------------------- code repositories
 
 SMALL_FILE = 6_000             # a smaller file is shown whole
