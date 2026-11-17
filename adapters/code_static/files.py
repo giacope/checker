@@ -35,6 +35,13 @@ SKIP_DIRS = {
     "static", "public", "assets", "wwwroot", "staticfiles", "i18n", "locales", "locale", "translations", "lang",
     "deps", "_build", "tmp", "log",  # Elixir dependencies and build output; Rails tmp/ and log/
 }
+# Skipped by convention (build output, assets, translations, scratch), but a project may keep its own code there: server
+# code found under them is counted (discover's `excluded`) so the report can say what was not analysed.
+CONVENTION_DIRS = {"dist", "build", "out", "target", "static", "public", "assets", "wwwroot", "staticfiles", "i18n", "locales",
+                   "locale", "translations", "lang", "tmp", "log", "_build", "solutions", "solution", "walkthrough",
+                   "walkthroughs", "tutorial", "tutorials"}
+SERVER_EXT = {".py", ".rb", ".rake", ".ex", ".exs"}   # never browser code, so never an asset under a skipped folder
+EXCLUDED_SCAN = 5_000                                 # directory entries looked at per skipped folder
 EXAMPLE_DIRS = {"example", "examples", "sample", "samples", "fixture", "fixtures", "demo-data", "mocks", "mock"}
 CODE_EXT = {".py": "py", ".js": "js", ".mjs": "js", ".cjs": "js", ".jsx": "js", ".ts": "ts", ".mts": "ts", ".cts": "ts", ".tsx": "tsx",
             ".rb": "rb", ".rake": "rb", ".ex": "ex", ".exs": "ex"}
@@ -91,14 +98,34 @@ def _skip_dir(path: Path, rel_parts: tuple[str, ...], name: str, scope: str = "s
     return False
 
 
-def discover(root: Path, scope: str = "static") -> list[SourceFile]:
+def _server_files(top: Path) -> int:
+    """Server-language files under a folder skipped by convention (looking at EXCLUDED_SCAN entries at most)."""
+    n = seen = 0
+    for dirpath, dirnames, filenames in os.walk(top, followlinks=False):
+        dirnames[:] = [d for d in dirnames if not d.startswith(".") and d.lower() not in SKIP_DIRS - CONVENTION_DIRS]
+        seen += len(dirnames) + len(filenames)
+        n += sum(1 for f in filenames if Path(f).suffix.lower() in SERVER_EXT and not TEST_FILE.search(f))
+        if seen > EXCLUDED_SCAN:
+            break
+    return n
+
+
+def discover(root: Path, scope: str = "static", excluded: dict[str, int] | None = None) -> list[SourceFile]:
+    """The files of `root` in `scope`. With `excluded`, a dict, it is filled with {folder: server-language files} for
+    folders skipped only by a naming convention (CONVENTION_DIRS) that hold Python, Ruby or Elixir code."""
     if scope not in SCOPES:
         raise ValueError(f"scope is one of {SCOPES}")
     out: list[SourceFile] = []
     for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
         rel_dir = Path(dirpath).relative_to(root)
         parts = rel_dir.parts
-        dirnames[:] = sorted(d for d in dirnames if not _skip_dir(Path(dirpath), parts, d, scope) and not os.path.islink(os.path.join(dirpath, d)))
+        keep = [d for d in dirnames if not _skip_dir(Path(dirpath), parts, d, scope) and not os.path.islink(os.path.join(dirpath, d))]
+        if excluded is not None:
+            for d in set(dirnames) - set(keep):
+                if d.lower() in CONVENTION_DIRS and not os.path.islink(os.path.join(dirpath, d)) \
+                        and not (Path(dirpath) / d / "pyvenv.cfg").exists() and (n := _server_files(Path(dirpath) / d)):
+                    excluded["/".join(parts + (d,))] = n
+        dirnames[:] = sorted(keep)
         support = scope == "all" and bool({x.lower() for x in parts} & SUPPORT_DIRS)
         for fn in sorted(filenames):
             p = Path(dirpath) / fn
@@ -142,7 +169,8 @@ def discover(root: Path, scope: str = "static") -> list[SourceFile]:
             stem = low if low.startswith(".env") else Path(low).stem
             name_rule = EXAMPLE_FILE if kind == "config" else EXAMPLE_CODE_FILE
             example = bool(set(lowparts) & EXAMPLE_DIRS) or bool(name_rule.search(stem)) or (TEST_FILE.search(fn) is not None)
-            client = kind not in {"rb", "ex"} and (bool(set(lowparts) & CLIENT_DIRS) or ext in {".tsx", ".jsx"})  # Ruby and Elixir run on the server
+            # only JavaScript and TypeScript run in a browser; a folder name (web/, ui/) does not make Python client code
+            client = kind in {"js", "ts", "tsx"} and (bool(set(lowparts) & CLIENT_DIRS) or ext in {".tsx", ".jsx"})
             if scope == "all" and (support or is_test or kind == "doc"):
                 example = False   # a test's fixtures are part of what it shows
             out.append(SourceFile(rel, p, kind, example, client, support=scope == "all" and (support or is_test or kind == "doc")))

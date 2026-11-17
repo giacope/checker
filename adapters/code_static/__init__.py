@@ -167,7 +167,8 @@ def analyse(repo: str | Path, describes: str | None = None, models: list[str | P
     """`models`: customer framework model files or directories (models.py), applied before the built-in ones."""
     root = Path(repo).resolve()
     fm = load_models(models)
-    files = discover(root)
+    excluded: dict[str, int] = {}
+    files = discover(root, excluded=excluded)
     out = Collector()
     py_files, js_files = [], []
     for f in files:
@@ -215,6 +216,8 @@ def analyse(repo: str | Path, describes: str | None = None, models: list[str | P
     source = {"id": SOURCE, "kind": "static_analysis", "describes": describes or root.name,
               "adapter": "adapters.code_static", "adapter_version": VERSION, "commit": git_commit(root),
               "files_analysed": len(files), "unparsed": sorted(py.unparsed)}
+    if excluded:
+        source["excluded_code"] = excluded   # {folder: Python, Ruby or Elixir files}, skipped by a naming convention
     if fm.sources:
         used = {}
         for m in out.via.values():

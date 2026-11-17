@@ -670,3 +670,23 @@ def test_a_byte_order_mark_changes_no_finding(tmp_path):
     plain, bom = analyse(tmp_path / "plain"), analyse(tmp_path / "bom")
     assert bom["sources"][0]["unparsed"] == []
     assert elements(bom, "PasswordStore") == elements(plain, "PasswordStore") == {"auth.py:3": {"algorithm": "md5", "salted": False}}
+
+
+@pytest.mark.parametrize("folder", ["web", "ui", "frontend", "client"])
+def test_python_in_a_folder_named_like_a_frontend_is_server_code(tmp_path, folder):
+    """Only JavaScript and TypeScript run in a browser: renaming app/ to web/ must not hide a Python app's code."""
+    (tmp_path / folder).mkdir()
+    (tmp_path / folder / "app.py").write_text(WEAK_PY)
+    assert elements(analyse(tmp_path), "PasswordStore") == {f"{folder}/app.py:3": {"algorithm": "md5", "salted": False}}
+
+
+def test_server_code_in_a_folder_skipped_by_convention_is_counted(tmp_path):
+    """A folder named like build output or translations is skipped; the Python in it is reported, not silently lost."""
+    for rel in ("lang/app.py", "lang/models.py", "public/js/site.js", "node_modules/x/setup.py"):
+        (tmp_path / rel).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / rel).write_text(WEAK_PY)
+    src = analyse(tmp_path)["sources"][0]
+    assert src["excluded_code"] == {"lang": 2}
+    from app.report import source_limits
+    assert any("2 Python, Ruby or Elixir files were not analysed" in n and "lang/ (2)" in n
+               for n in source_limits([{"sources": [src]}]))

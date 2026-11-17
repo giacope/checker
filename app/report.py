@@ -94,6 +94,12 @@ def _limits(src: dict) -> list[str]:
         out.append(f"{len(src['not_sent'])} requirements were never sent to the model: the run's budget ran out")
     if (src.get("second_look") or {}).get("skipped"):
         out.append(f"{src['second_look']['skipped']} requirements the model left open got no second look: the run's budget ran out")
+    if src.get("excluded_code"):
+        ex = src["excluded_code"]
+        names = ", ".join(f"{k}/ ({n})" for k, n in list(ex.items())[:5]) + (" …" if len(ex) > 5 else "")
+        out.append(f"{sum(ex.values())} Python, Ruby or Elixir files were not analysed because their folders are named like "
+                   f"build output, assets or translations: {names}. A requirement about code kept there can show as not "
+                   "applicable; move the code or check those folders by hand")
     if src.get("requirement_chars"):
         out.append(f"each requirement was shown at most {src['requirement_chars']:,} characters, best matches first, "
                    "so that every requirement fits the run's budget")
