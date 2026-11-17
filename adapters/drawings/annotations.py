@@ -239,10 +239,11 @@ LEN = (r"(?:\d+\s*'\s*-?\s*\d+(?:\.\d+)?(?:(?:\s+|\s*-\s*)\d+/\d+)?\s*\"?"
        r"|\d+(?:\.\d+)?(?:\s+\d+/\d+)?\s*(?:\"|IN\b\.?|INCH(?:ES)?\b)"
        r"|\d+/\d+\s*\""
        r"|\d+(?:\.\d+)?\s*(?:FT\b\.?|FEET\b)"
-       r"|(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:MM|CM|M)\b(?!\s*[2²]))")
+       r"|(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+|,\d{1,2}(?!\d))?\s*(?:MM|CM|M)\b(?!\s*[2²]))")
 BARE = r"(?:\d{1,3}(?:,\d{3})+|\d{3,5})(?![\d.,'\"])"
 AREA = r"(?:(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?\s*(?:SQ\.?\s*FT\.?|S\.?F\.?\b|SF\b|M2|M²|㎡))"
-LIMIT = re.compile(r"\b(?:MIN|MAX)(?:IMUM)?\b\.?|最小|最大|以上|以下", re.I)
+LIMIT = re.compile(r"\b(?:MIN|MAX)(?:IMUM)?\b\.?|\b(?:M[IÍ]N[IÍ]M[OAU]M?|M[AÁ]X[IÍ]M[OAU]M?|MINDESTENS|H[OÖ]CHSTENS)\b"
+                   r"|最小|最大|以上|以下", re.I)
 
 
 def _dec(x) -> str:
@@ -288,9 +289,9 @@ def length(text: str, bare: bool = False) -> tuple[str, str] | None:
         else:
             v, h = whole, Fraction(_half_digits(m[1]))
         return f"{_dec(v - h)} in", f"{_dec(v + h)} in"
-    m = re.fullmatch(r"(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?\s*(MM|CM|M)", s)
+    m = re.fullmatch(r"(\d{1,3}(?:,\d{3})+|\d+)(\.\d+|,\d{1,2})?\s*(MM|CM|M)", s)
     if m:
-        num = m[1].replace(",", "") + (m[2] or "")
+        num = m[1].replace(",", "") + (m[2] or "").replace(",", ".")
         v, h = Decimal(num), _half_digits(num)
         unit = m[3].lower()
         if unit == "cm":
@@ -523,21 +524,52 @@ def read_notes(r: Reading, ph: list[Line]) -> None:
 
 # --- stairs ------------------------------------------------------------------------------
 
+# Other drafting traditions' names for what the English and Japanese patterns below read (DIN 18065, NF P01-012,
+# CTE DB-SUA, UNI 10804, NEN 2580, NBR 9050), each written before its length: "STEIGUNG 17,5 cm", "GIRON: 280".
+# Accents are optional: OCR often drops them.
+TERMS = {
+    "stair": r"TREPPE|ESCALIER|ESCALERA|SCALA|TRAP|ESCADA",
+    "riser": r"STEIGUNG(?:SH[OÖ]HE)?|STUFENH[OÖ]HE|HAUTEUR\s+DE\s+(?:LA\s+)?MARCHE|CONTREMARCHE|CONTRAHUELLA|TABICA|ALZATA|OPTREDE|"
+             r"ESPELHO|ALTURA\s+DE(?:L|\s+LA)?\s+(?:PELDA[NÑ]O|ESCAL[OÓ]N|DEGRAU)",
+    "tread": r"AUFTRITT(?:SBREITE|STIEFE)?|GIRON|HUELLA|PEDATA|AANTREDE|PISADA",
+    "stair_width": r"(?:TREPPEN)?LAUFBREITE|TREPPENBREITE|(?:LARGEUR|EMMARCHEMENT)\s+D(?:E\s+L'|E\s+|U\s+|')?\s*(?:ESCALIER|VOL[EÉ]E)|"
+                   r"ANCHO\s+DE(?:L|\s+LA)?\s+(?:ESCALERA|TRAMO)|LARGHEZZA\s+(?:DELLA\s+)?(?:SCALA|RAMPA)|TRAPBREEDTE|"
+                   r"LARGURA\s+DA\s+ESCADA",
+    "handrail": r"HANDLAUF(?:H[OÖ]HE)?|(?:HAUTEUR\s+(?:DE\s+LA\s+)?)?MAIN\s+COURANTE|ALTURA\s+DE(?:L)?\s+(?:PASAMANOS|CORRIMANO)|"
+                r"ALTEZZA\s+(?:DEL\s+)?CORRIMANO|LEUNINGHOOGTE|ALTURA\s+DO\s+CORRIM[AÃ]O",
+    "headroom": r"DURCHGANGSH[OÖ]HE|[EÉ]CHAPP[EÉ]E|ALTURA\s+LIBRE(?:\s+DE\s+PASO)?|ALTEZZA\s+LIBERA|VRIJE\s+HOOGTE",
+    "corridor": r"FLURBREITE|GANGBREITE|LARGEUR\s+D[EU]\s+(?:COULOIR|D[EÉ]GAGEMENT)|ANCHO\s+DE(?:L)?\s+PASILLO|"
+                r"LARGHEZZA\s+(?:DEL\s+)?CORRIDOIO|GANGBREEDTE|LARGURA\s+D[OE]\s+CORREDOR",
+    "travel": r"RETTUNGSWEGL[AÄ]NGE|FLUCHTWEGL[AÄ]NGE|DISTANCE\s+D'[EÉ]VACUATION|LONGITUD\s+DE(?:L)?\s+RECORRIDO(?:\s+DE\s+EVACUACI[OÓ]N)?|"
+              r"LUNGHEZZA\s+(?:DEL\s+)?PERCORSO(?:\s+DI\s+ESODO)?|VLUCHTWEGLENGTE|DIST[AÂ]NCIA\s+(?:M[AÁ]XIMA\s+)?A\s+PERCORRER",
+    "occupants": r"PERSONENZAHL|PERSONENBELEGUNG|EFFECTIF|OCUPACI[OÓ]N|AFFOLLAMENTO|BEZETTING|LOTA[CÇ][AÃ]O",
+}
+
+
+def _term(kind: str, group: str, value: str) -> str:
+    """One more alternative for a pattern: the term, an optional colon or equals sign, and its value."""
+    return rf"|\b(?:{TERMS[kind]})\s*[:=]?\s*(?P<{group}>{value})"
+
+
 L_OR_BARE = rf"(?:{LEN}|{BARE})"
 RISERS = re.compile(rf"(?P<n>\d{{1,2}})\s*(?:EQ\.?|EQUAL)?\s*(?:RISERS?|R)\s*(?:@|AT)\s*(?P<len>{L_OR_BARE})", re.I)
 TREADS = re.compile(rf"(?P<n>\d{{1,2}})\s*(?:EQ\.?|EQUAL)?\s*(?:TREADS?|T)\s*(?:@|AT)\s*(?P<len>{L_OR_BARE})", re.I)
-RISER_HEIGHT = re.compile(rf"\bRISER\s+(?:HEIGHT|HT\.?)\s*[:=]?\s*(?P<len>{L_OR_BARE})|蹴上げ?\s*(?:寸法)?\s*[:=＝]?\s*(?P<jlen>{L_OR_BARE})", re.I)
-TREAD_DEPTH = re.compile(rf"\bTREAD\s+(?:DEPTH|WIDTH|RUN)\s*[:=]?\s*(?P<len>{L_OR_BARE})|踏面\s*(?:寸法)?\s*[:=＝]?\s*(?P<jlen>{L_OR_BARE})", re.I)
+RISER_HEIGHT = re.compile(rf"\bRISER\s+(?:HEIGHT|HT\.?)\s*[:=]?\s*(?P<len>{L_OR_BARE})|蹴上げ?\s*(?:寸法)?\s*[:=＝]?\s*(?P<jlen>{L_OR_BARE})"
+                          + _term("riser", "xlen", L_OR_BARE), re.I)
+TREAD_DEPTH = re.compile(rf"\bTREAD\s+(?:DEPTH|WIDTH|RUN)\s*[:=]?\s*(?P<len>{L_OR_BARE})|踏面\s*(?:寸法)?\s*[:=＝]?\s*(?P<jlen>{L_OR_BARE})"
+                         + _term("tread", "xlen", L_OR_BARE), re.I)
 STAIR_WIDTH = re.compile(rf"\b(?:STAIR|FLIGHT)\s+(?:CLEAR\s+)?WIDTH\s*[:=]?\s*(?P<len>{L_OR_BARE})|(?P<len2>{LEN})\s+(?:CLEAR\s+)?(?:STAIR|FLIGHT)\s+WIDTH\b"
-                         rf"|階段(?:有効)?幅(?:員)?\s*[:=＝]?\s*(?P<jlen>{L_OR_BARE})", re.I)
-HEADROOM = re.compile(rf"\bHEAD\s*ROOM\s*[:=]?\s*(?P<len>{LEN}|{BARE})|(?P<len2>{LEN}|{BARE})\s*(?:(?:MIN|MAX)(?:IMUM)?\.?\s+|CLEAR\s+|CLR\.?\s+)?HEAD\s*ROOM\b", re.I)
+                         rf"|階段(?:有効)?幅(?:員)?\s*[:=＝]?\s*(?P<jlen>{L_OR_BARE})" + _term("stair_width", "xlen", L_OR_BARE), re.I)
+HEADROOM = re.compile(rf"\bHEAD\s*ROOM\s*[:=]?\s*(?P<len>{LEN}|{BARE})|(?P<len2>{LEN}|{BARE})\s*(?:(?:MIN|MAX)(?:IMUM)?\.?\s+|CLEAR\s+|CLR\.?\s+)?HEAD\s*ROOM\b"
+                      + _term("headroom", "xlen", L_OR_BARE), re.I)
 HANDRAIL = re.compile(rf"\bHANDRAIL\s+(?:HEIGHT|HT\.?)\s*[:=]?\s*(?P<len>{L_OR_BARE})(?:\s*(?:-|TO)\s*(?P<hi>{L_OR_BARE}))?"
                       rf"|(?P<len2>{LEN})(?:\s*(?:-|TO)\s*(?P<hi2>{LEN}))?\s*(?:A\.?F\.?F\.?\s*|ABOVE\s+(?:STAIR\s+)?NOSINGS?\s*)?(?:TO\s+)?(?:TOP\s+OF\s+)?HANDRAIL\b"
                       rf"|\bHANDRAIL\s*(?:@|AT)\s*(?P<len3>{LEN})(?:\s*(?:-|TO)\s*(?P<hi3>{LEN}))?\s*(?:A\.?F\.?F|ABOVE)"
-                      rf"|手摺(?:り)?高さ?\s*[:=＝H]?\s*(?P<jlen>{L_OR_BARE})", re.I)
+                      rf"|手摺(?:り)?高さ?\s*[:=＝H]?\s*(?P<jlen>{L_OR_BARE})" + _term("handrail", "xlen", L_OR_BARE), re.I)
 STAIR_NAME = re.compile(r"\b(?P<ext>EXTERIOR\s+|EXT\.\s+)?STAIR(?:WAY)?\s*(?:NO\.?\s*|#\s*)(?P<n>[A-Z]?\d{1,2}[A-Z]?|[A-Z])\b"
                         r"|\b(?P<ext2>EXTERIOR\s+|EXT\.\s+)?STAIR(?:WAY)?\s+(?P<m>\d{1,2}|[A-Z])\b(?!\s*(?:DETAIL|SECTION|ELEVATION|-))"
-                        r"|(?P<j>(?:屋外)?階段(?:室)?\s*[A-ZＡ-Ｚ0-9０-９]{1,2})", re.I)
+                        r"|(?P<j>(?:屋外)?階段(?:室)?\s*[A-ZＡ-Ｚ0-9０-９]{1,2})"
+                        rf"|\b(?P<xw>{TERMS['stair']})\s*(?:NR\.?\s*|N[°ºO]\.?\s*|#\s*)?(?P<x>\d{{1,2}}|[A-Z])\b(?!\s*[-:/]\s*\d)", re.I)
 
 
 def _len_of(m: re.Match, *groups: str):
@@ -555,6 +587,8 @@ def _stairs(ls: list[Line]) -> list[tuple[str, bool, tuple[float, float], str]]:
                 continue
             if m["j"]:
                 name, ext = re.sub(r"\s+", "", m["j"]), "屋外" in m["j"]
+            elif m["xw"]:
+                name, ext = f"{m['xw'].upper()} {m['x'].upper()}", False
             else:
                 name = f"STAIR {'#' if '#' in m[0] else ''}{(m['n'] or m['m']).upper()}"
                 ext = bool(m["ext"] or m["ext2"])
@@ -607,19 +641,19 @@ def read_stairs(r: Reading, ls: list[Line]) -> None:
         for m in TREADS.finditer(t):
             emit(l, m, m.start(), m.end(), "len", "tread_depth", m[0], f"tread depth ({m['n']} treads)")
         for m in RISER_HEIGHT.finditer(t):
-            g, _ = _len_of(m, "len", "jlen")
+            g, _ = _len_of(m, "len", "jlen", "xlen")
             emit(l, m, m.start(), m.end(), g, "riser_height", m[0], "riser height")
         for m in TREAD_DEPTH.finditer(t):
-            g, _ = _len_of(m, "len", "jlen")
+            g, _ = _len_of(m, "len", "jlen", "xlen")
             emit(l, m, m.start(), m.end(), g, "tread_depth", m[0], "tread depth")
         for m in STAIR_WIDTH.finditer(t):
-            g, _ = _len_of(m, "len", "len2", "jlen")
+            g, _ = _len_of(m, "len", "len2", "jlen", "xlen")
             emit(l, m, m.start(), m.end(), g, "width", m[0], "flight width")
         for m in HEADROOM.finditer(t):
-            g, _ = _len_of(m, "len", "len2")
+            g, _ = _len_of(m, "len", "len2", "xlen")
             emit(l, m, m.start(), m.end(), g, "headroom", m[0], "headroom")
         for m in HANDRAIL.finditer(t):
-            g, _ = _len_of(m, "len", "len2", "len3", "jlen")
+            g, _ = _len_of(m, "len", "len2", "len3", "jlen", "xlen")
             emit(l, m, m.start(), m.end(), g, "handrail_height", m[0], "handrail height", hi_group={"len": "hi", "len2": "hi2", "len3": "hi3"}.get(g))
 
     # A sheet repeats a stair's riser note in plan and section; where OCR reads the count
@@ -660,12 +694,14 @@ def storey_of(title: str | None) -> str | None:
     return found.pop() if len(found) == 1 else None
 
 
-TRAVEL = re.compile(rf"\bTRAVEL\s+DIST(?:ANCE|\.)?\s*(?:=|:|IS)?\s*(?P<len>{LEN})|(?P<len2>{LEN})\s+TRAVEL\s+DIST(?:ANCE|\.)?\b|\bT\.\s?D\.\s*[:=]?\s*(?P<len3>{LEN})", re.I)
+TRAVEL = re.compile(rf"\bTRAVEL\s+DIST(?:ANCE|\.)?\s*(?:=|:|IS)?\s*(?P<len>{LEN})|(?P<len2>{LEN})\s+TRAVEL\s+DIST(?:ANCE|\.)?\b|\bT\.\s?D\.\s*[:=]?\s*(?P<len3>{LEN})"
+                    + _term("travel", "xlen", LEN), re.I)
 # a travel-distance arrow's label in both units, "137 FT./41.75 M"; when one half is unreadable
 # ("153 FT. / .65") the other is kept and the unreadable half skipped
 DUAL = re.compile(r"(?<![\d.])(?P<a>\d+(?:\.\d+)?\s*(?:FT\b\.?|'))\s*/\s*(?P<b>[\d.]+\s*(?:M\b\.?)?)"
                   r"|(?<![\d.])(?P<c>\d+(?:\.\d+)?\s*M\b\.?)\s*/\s*(?P<d>[\d.]+\s*(?:FT\b\.?|')?)", re.I)
-OCC_LOAD = re.compile(r"\bOCC(?:UPANT|\.)?\s*LOAD\s*(?:=|:|IS)?\s*(?P<n>\d{1,5})\b(?!\s*(?:SF|SQ|/))|定員\s*[:=＝]?\s*(?P<j>\d{1,5})\s*人?", re.I)
+OCC_LOAD = re.compile(r"\bOCC(?:UPANT|\.)?\s*LOAD\s*(?:=|:|IS)?\s*(?P<n>\d{1,5})\b(?!\s*(?:SF|SQ|/))|定員\s*[:=＝]?\s*(?P<j>\d{1,5})\s*人?"
+                      + _term("occupants", "x", r"\d{1,5}\b(?!\s*(?:M2|M²|/))"), re.I)
 EXITS = re.compile(r"\b(?:NUMBER\s+OF\s+EXITS|EXITS)\s+PROVIDED\s*[:=]?\s*(?P<n>\d{1,2})\b|\b(?P<m>\d{1,2})\s+EXITS\s+PROVIDED\b", re.I)
 
 
@@ -675,7 +711,7 @@ def read_life_safety(r: Reading, sheet: Sheet, ls: list[Line], ph: list[Line], t
     distances = []
     for l in ph:
         for m in TRAVEL.finditer(l.text):
-            g, txt = _len_of(m, "len", "len2", "len3")
+            g, txt = _len_of(m, "len", "len2", "len3", "xlen")
             distances.append((l, m.start(), m.end(), [m[g]], m[0], None))
     if legend is not None:
         legend_note = f'legend on the sheet: "{_q(legend.text)}"'
@@ -728,7 +764,7 @@ def read_life_safety(r: Reading, sheet: Sheet, ls: list[Line], ph: list[Line], t
             elif ok:
                 r.skip(at, m[0], "exits provided: the sheet title names no single storey to attach it to")
         for m in OCC_LOAD.finditer(l.text):
-            n = int(m["n"] or m["j"])
+            n = int(m["n"] or m["j"] or m["x"])
             at, ok = _confident(r, l, m.start(), m.end(), "occupant load")
             if not ok:
                 continue
@@ -842,14 +878,15 @@ def read_rooms(r: Reading, ls: list[Line], tags) -> None:
         r.add(e, "floor_area", _interval(iv, a.at(), a.text, "room area"))
 
 
-CORRIDOR = re.compile(rf"廊下(?:有効)?幅(?:員)?\s*[:=＝]?\s*(?P<len>{L_OR_BARE})|\bCORRIDOR\s+(?:CLEAR\s+)?WIDTH\s*[:=]?\s*(?P<len2>{LEN})", re.I)
+CORRIDOR = re.compile(rf"廊下(?:有効)?幅(?:員)?\s*[:=＝]?\s*(?P<len>{L_OR_BARE})|\bCORRIDOR\s+(?:CLEAR\s+)?WIDTH\s*[:=]?\s*(?P<len2>{LEN})"
+                      + _term("corridor", "xlen", L_OR_BARE), re.I)
 
 
 def read_corridors(r: Reading, sheet: Sheet, ls: list[Line]) -> None:
     storey = storey_of(sheet.title)
     for l in ls:
         for m in CORRIDOR.finditer(l.text):
-            g, txt = _len_of(m, "len", "len2")
+            g, txt = _len_of(m, "len", "len2", "xlen")
             if LIMIT.search(l.text[max(0, m.start() - 12):m.end() + 12]):
                 r.skip(l.at(m.start(), m.end()), m[0], "corridor width: stated limit (MIN/MAX), not a measurement")
                 continue

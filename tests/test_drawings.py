@@ -424,3 +424,19 @@ def test_a_page_whose_content_inflates_past_the_limit_is_skipped_before_pdfium_p
     assert doc["sheets"] == []
     assert unreadable(doc) == [("bomb.pdf: file not readable: ValueError: page 1's content streams decompress to more than "
                                 "1,000,000 bytes")]
+
+
+@pytest.mark.parametrize("rows, stair, facts", [
+    ([["TREPPE", "2"], ["STEIGUNG", "17,5", "cm"], ["AUFTRITT:", "28", "cm"], ["LAUFBREITE", "1,20", "m"]], "stair:TREPPE 2",
+     {"riser_height": ["174.5 mm", "175.5 mm"], "tread_depth": ["275 mm", "285 mm"], "width": ["1.195 m", "1.205 m"]}),
+    ([["ESCALIER", "A"], ["HAUTEUR", "DE", "MARCHE", "175"], ["GIRON", "=", "280", "mm"], ["ÉCHAPPÉE", "MINIMUM", "2000"]],
+     "stair:ESCALIER A", {"riser_height": ["174.5 mm", "175.5 mm"], "tread_depth": ["279.5 mm", "280.5 mm"]}),
+    ([["SCALA", "1:50"], ["ALZATA", "170"]], None, {}),   # an Italian scale is no stair: the riser has nothing to attach to
+    ([["STAIR", "1"], ["RISER", "HEIGHT", "1,200", "mm"]], "stair:STAIR 1", {"riser_height": ["1199.5 mm", "1200.5 mm"]}),
+])
+def test_stairs_are_read_in_other_drafting_traditions(rows, stair, facts):
+    sh = sheet("DETAIL")
+    r = A.read(sh, [t for i, ws in enumerate(rows) for t in line(sh, 100, 100 + 20 * i, *ws)])
+    got = {e["id"]: {k: [o["value"] for o in v] for k, v in e["facts"].items()} for e in r.elements.values()}
+    assert got == ({stair: facts} if stair else {})
+
