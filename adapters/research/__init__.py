@@ -29,7 +29,7 @@ from pathlib import Path
 
 import httpx
 
-from adapters.assess import CONTROL, Corpus, cited, rank
+from adapters.assess import CONTROL, Corpus, cited, rank, shown_in
 from adapters.regulation import CJK
 from adapters.code_llm import ReaderError, complete, parse_json, provider_from_env
 
@@ -67,11 +67,13 @@ class RegulationCorpus:
         self.revision = None
         self._clauses = {c["id"]: c for c in reg.get("clauses") or [] if c.get("text")}
         self._blocks = []
+        self._head: dict[str, str] = {}
         for c in self._clauses.values():
             pages = c.get("pages") or []
             where = f"{c.get('file') or ''} p{pages[0]}" + (f"-{pages[1]}" if len(pages) > 1 and pages[1] != pages[0] else "") if pages else c.get("file") or ""
             head = " · ".join(str(x) for x in (f"clause {c['id']}", c.get("ref"), c.get("title"), where) if x)
             self._blocks.append((head, c["text"], (head + "\n" + c["text"]).lower()))
+            self._head[c["id"]] = head
 
     def search(self, terms: list[str], budget: int) -> list[tuple[str, str]]:
         return rank(self._blocks, terms, budget)
@@ -86,6 +88,10 @@ class RegulationCorpus:
     def excerpt(self, locator: str) -> str:
         c = self.verify(locator)
         return self._clauses[c]["text"] if c else ""
+
+    def rendered(self, locator: str) -> list[tuple[str, str]]:
+        c = self.verify(locator)
+        return [(self._head[c], ln.rstrip()) for ln in self._clauses[c]["text"].split("\n")] if c else []
 
     def clause(self, locator: str) -> dict | None:
         c = self.verify(locator)
@@ -140,6 +146,10 @@ class Union:
     def excerpt(self, locator: str) -> str:
         p = self.split(locator)
         return self.parts[p[0]].excerpt(p[1]) if p else ""
+
+    def rendered(self, locator: str) -> list[tuple[str, str]]:
+        p = self.split(locator)
+        return [(f"[{p[0]}] {h}", ln) for h, ln in self.parts[p[0]].rendered(p[1])] if p else []
 
 
 def keywords(question: str) -> list[str]:
@@ -260,12 +270,13 @@ class _Model:
         return reply
 
 
-def _message(question: str, corpus_name: str, excerpts: list[tuple[str, str]], token: str, extra: str = "") -> tuple[str, str]:
+def _message(question: str, corpus_name: str, excerpts: list[tuple[str, str]], token: str, extra: str = "") -> tuple[str, set]:
+    """The user message, and what it shows (assess.shown_in)."""
     body = "\n\n".join(f"=== {CONTROL.sub(' ', h)}\n{t}" for h, t in excerpts)
     user = (f"BEGIN UNTRUSTED DATA {token}\nMaterial: {CONTROL.sub(' ', corpus_name)}\n\nQuestion: {CONTROL.sub(' ', question)[:2000]}\n\n"
             f"{'Excerpts' if excerpts else 'No excerpts matched the question.'}:\n{body}\nEND UNTRUSTED DATA {token}\n\n{extra}"
             "Reply with the JSON only.")
-    return user, body
+    return user, shown_in(excerpts)
 
 
 def _claims(raw, corpus: Corpus, shown: str, stats: dict, absence_note: str, limit: int) -> list[dict]:
@@ -448,8 +459,9 @@ def _deep(question, corpus, m: _Model, stats, budget, workers, progress) -> dict
     # reduce: findings with the text they cite, in stages while they do not fit one call
     items = findings
     for _ in range(4):
-        blocks = []
+        blocks, quotes = [], {}
         for i, f in enumerate(items, 1):
+            quotes[f"F{i}"] = {r for a in f["at"] for r in corpus.rendered(a)}   # what citing a finding's text shows
             quoted = "\n".join(f"--- {a}\n{corpus.excerpt(a)}" for a in f["at"])
             blocks.append((f"F{i}", f"{f['text']}" + (f" ({f.get('note')})" if f["basis"] == "absence" else "") + (f"\n{quoted}" if quoted else "")))
         batches = _calls(blocks, CALL_CHARS)
@@ -457,8 +469,8 @@ def _deep(question, corpus, m: _Model, stats, budget, workers, progress) -> dict
         def synth(part):
             token = secrets.token_hex(8)
             system = SYNTH.format(what=what, coverage=cov_note, token=token, notes=notes, max_locators=MAX_LOCATORS, max_claims=MAX_CLAIMS)
-            user, shown = _message(question, corpus.name, part, token)
-            return m.ask(system, user, token), shown
+            user, _ = _message(question, corpus.name, part, token)
+            return m.ask(system, user, token), set().union(*(quotes[h] for h, _ in part))
         progress(f"research: writing the answer from {len(items)} findings" + (f" in {len(batches)} parts" if len(batches) > 1 else ""))
         with cf.ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
             results = list(pool.map(synth, batches))

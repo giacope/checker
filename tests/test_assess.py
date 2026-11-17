@@ -8,7 +8,7 @@ import httpx
 import pytest
 
 import adapters.assess as assess_mod
-from adapters.assess import CodeCorpus, ReaderError, assess
+from adapters.assess import CodeCorpus, ReaderError, assess, cited, shown_in
 from normir import load
 from normir.evidence import load_evidence, run
 from normir.model import validate
@@ -37,6 +37,12 @@ def write(root, files):
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(text)
     return root
+
+
+@pytest.fixture(autouse=True)
+def searched(monkeypatch):
+    """These tests are about retrieval: read no corpus whole (test_a_small_artifact_is_read_whole turns it back on)."""
+    monkeypatch.setattr(assess_mod, "WHOLE_CHARS", 0)
 
 
 @pytest.fixture
@@ -365,3 +371,56 @@ def test_every_language_infrastructure_code_tests_and_docs_are_read(tmp_path, mo
     monkeypatch.setattr(assess_mod, "SUPPORT_SHARE", 0.0)
     c = CodeCorpus(tmp_path / "r", "r")
     assert "docs/SECURITY.md" not in [h for h, _ in c.search(["vulnerabilit"], 100_000)]
+
+
+def test_a_citation_counts_only_when_its_own_lines_were_shown(tmp_path):
+    """A cited line must have been sent in the excerpt that holds it, not merely appear somewhere in the prompt: the
+    same statement in a file that was not sent, a substring of a sent line, or text equal to a line-number margin."""
+    from adapters.assess.documents import DocumentCorpus
+    from adapters.regulation.documents import Document, Line
+    root = write(tmp_path / "repo", {"app/main.py": "from flask_wtf import CSRFProtect\ncsrf = CSRFProtect()\n# csrf.init_app(app)\n",
+                                     "lib/sec.py": "import os\n\ncsrf.init_app(app)\n"})
+    code = CodeCorpus(root, "shop")
+    found = code.search(["flask_wtf"], 10_000)
+    assert [h for h, _ in found] == ["app/main.py"]
+    rejected = {}
+    assert cited(code, ["lib/sec.py:3", "app/main.py:2"], shown_in(found), rejected) == ["app/main.py:2"]
+    assert rejected == {"cited text was not in the excerpts sent": 1}
+
+    doc = lambda file, rows: Document(file, "0" * 64, "md", None, [Line(i, None, t) for i, t in enumerate(rows, 1)])  # noqa: E731
+    body = [f"clause {i}" for i in range(1, 12)] + ["Status: Not approved", "Signed: yes by the supplier"]
+    docs = DocumentCorpus([doc("contract.md", body), doc("annex/contract.md", ["approved", "x", "12", "Not approved", "Signed: yes"])], "c")
+    found = docs.search(["supplier"], 10_000)
+    assert [h for h, _ in found] == ["contract.md#L1-L13"]
+    rejected = {}
+    got = cited(docs, ["annex/contract.md#L1", "annex/contract.md#L3", "annex/contract.md#L4", "annex/contract.md#L5",
+                       "contract.md#L12-L13"], shown_in(found), rejected)
+    assert got == ["contract.md#L12-L13"] and rejected == {"cited text was not in the excerpts sent": 4}
+
+
+def test_document_search_matches_the_text_not_margins_or_file_names():
+    from adapters.assess.documents import DocumentCorpus
+    from adapters.regulation.documents import Document, Line
+    rows = [f"clause {i}" for i in range(1, 12)] + ["The data controller keeps records for 30 days."]
+    docs = DocumentCorpus([Document("contract.md", "0" * 64, "md", None, [Line(i, None, t) for i, t in enumerate(rows, 1)])], "c")
+    assert docs.search(["contract"], 10_000) == [] and docs.search(["12"], 10_000) == []   # the file name; a margin
+    assert [h for h, _ in docs.search(["data_controller"], 10_000)] == ["contract.md#L1-L12"]   # an identifier as words
+
+
+def test_a_small_artifact_is_read_whole_so_search_terms_in_another_language_do_not_hide_it(tmp_path, monkeypatch):
+    """Search terms are fixed when a regulation is compiled; a German term finds nothing in an English contract. A
+    corpus that fits one requirement's share is shown whole, and absence over all of it counts."""
+    monkeypatch.setattr(assess_mod, "WHOLE_CHARS", assess_mod.REQUIREMENT_CHARS)
+    from adapters.assess.documents import DocumentCorpus
+    from adapters.regulation.documents import Document, Line
+    rows = ["The processor deletes all personal data at the end of the services.", "Signed by both parties."]
+    docs = DocumentCorpus([Document("dpa.md", "0" * 64, "md", None, [Line(i, None, t) for i, t in enumerate(rows, 1)])], "dpa")
+    reqs = [req("req_delete", "löschung", "auftragsverarbeiter"), req("req_audit", "überprüfungen")]
+    answers = {"req_delete": {"attr": "req_delete", "value": "met", "basis": "evidence", "at": ["dpa.md#L1"], "note": "deletes"},
+               "req_audit": {"attr": "req_audit", "value": "not_met", "basis": "absence", "note": "no audit right"}}
+    transport, sent = fake(answers)
+    doc = assess(reqs, docs, provider=PROVIDER, transport=transport, workers=1)
+    assert "The processor deletes all personal data" in sent[0][1]
+    assert doc["facts"]["req_delete"][0]["value"] == "met" and doc["facts"]["req_delete"][0]["at"] == "dpa.md#L1"
+    assert doc["facts"]["req_audit"] == [{"value": "not_met", "basis": "absence", "source": "llm:test-model",
+                                          "note": "read all 1 excerpts of the artifact: no audit right"}]

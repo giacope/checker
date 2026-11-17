@@ -19,6 +19,10 @@ MAX_SPAN = 30
 LOCATOR = re.compile(r"^(?P<file>.+?)(?:#L|:)(?P<a>\d{1,9})(?:-L?(?P<b>\d{1,9}))?$")
 
 
+def _row(ln) -> str:
+    return f"{ln.no:5}  {ln.text}".rstrip()
+
+
 class DocumentCorpus:
     prompt_notes = ("The artifact is a set of documents (for example a case file, a plan, a contract, or records). Each "
                     "excerpt is a window of one document, headed `file#L<first>-L<last>` with its pages; every line "
@@ -32,14 +36,17 @@ class DocumentCorpus:
         self.revision = None
         self._lines = {d.file: d.lines for d in docs}
         self._blocks = []
+        self._header: dict[tuple[str, int], str] = {}   # (file, line) -> the window that shows it
         for d in docs:
             for i in range(0, len(d.lines), WINDOW):
                 part = d.lines[i:i + WINDOW]
                 pages = sorted({ln.page for ln in part if ln.page is not None})
                 where = (f" p{pages[0]}" + (f"-{pages[-1]}" if pages[-1] != pages[0] else "")) if pages else ""
                 head = f"{d.file}#L{part[0].no}-L{part[-1].no}{where}"
-                body = "\n".join(f"{ln.no:5}  {ln.text}" for ln in part)
-                self._blocks.append((head, body, (head + "\n" + body).lower()))
+                body = "\n".join(_row(ln) for ln in part)
+                for ln in part:
+                    self._header[(d.file, ln.no)] = head
+                self._blocks.append((head, body, "\n".join(ln.text for ln in part).lower()))
 
     def search(self, terms: list[str], budget: int) -> list[tuple[str, str]]:
         return rank(self._blocks, terms, budget)
@@ -64,6 +71,10 @@ class DocumentCorpus:
     def excerpt(self, locator: str) -> str:
         s = self._span(locator)
         return "" if s is None else "\n".join(ln.text for ln in self._lines[s[0]][s[1] - 1:s[2]])
+
+    def rendered(self, locator: str) -> list[tuple[str, str]]:
+        s = self._span(locator)
+        return [] if s is None else [(self._header[(s[0], ln.no)], _row(ln)) for ln in self._lines[s[0]][s[1] - 1:s[2]]]
 
     def snippet(self, locator: str, context: int = 2) -> dict | None:
         """The cited lines with `context` lines around them, for a report: {file, line, end, pages, lines: [(no, text)]}."""

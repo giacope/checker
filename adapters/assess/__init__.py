@@ -46,6 +46,7 @@ VERSION = "0.2.0"
 MAX_PER_CALL = 8               # requirements per call
 CALL_CHARS = 100_000           # artifact text per call (about 25k tokens)
 REQUIREMENT_CHARS = 40_000     # artifact text retrieved per requirement
+WHOLE_CHARS = REQUIREMENT_CHARS   # an artifact this small is read whole for every requirement, not searched
 MAX_CHARS = 2_000_000          # artifact text per run
 CLAUSE_CHARS = 3_000           # of a requirement's clause text; a longer clause is cut with a marker the model sees
 FIRST_ROUND_SHARE = 0.9        # of MAX_CHARS for the first round; the rest is for second looks
@@ -71,16 +72,23 @@ class Corpus(Protocol):
     def excerpt(self, locator: str) -> str:
         """The text a locator cites (one line or a short span); "" for a locator that does not verify."""
 
+    def rendered(self, locator: str) -> list[tuple[str, str]]:
+        """(excerpt header, line as the excerpt shows it) for each line the locator names: the fixed excerpt that
+        holds it, so a citation counts only when that excerpt, with that line, was sent (cited())."""
+
     def everything(self) -> list[tuple[str, str]]:
         """Every excerpt of the corpus, each piece of text once, in the corpus's own order (for reading it all)."""
 
 
 def rank(blocks: list[tuple[str, str, str]], terms: list[str], budget: int) -> list[tuple[str, str]]:
-    """Blocks (header, text, lowercased both) holding the terms: more distinct terms first, then denser, then order."""
+    """Blocks (header, text, searchable text) holding the terms: more distinct terms first, then denser, then order.
+    The searchable text is what a match may come from, lowercased: the content, not line-number margins or a file
+    name repeated in every header. A term written as an identifier (`riser_height`) also matches as words."""
     terms = list(dict.fromkeys(t.strip().lower() for t in terms if isinstance(t, str) and len(t.strip()) >= 2))
+    variants = [{t, t.replace("_", " ")} for t in terms]
     ranked = []
     for i, (_, body, low) in enumerate(blocks):
-        counts = [low.count(t) for t in terms]
+        counts = [sum(low.count(v) for v in vs) for vs in variants]
         if any(counts):
             ranked.append((-sum(1 for c in counts if c), -round(sum(counts) / (1 + len(body) / 1000), 6), i))
     out, used = [], 0
@@ -226,6 +234,19 @@ class CodeCorpus:
         path, a, b = p
         return "\n".join(r.rstrip() for r in self._index()[path][1][a - 1:b])
 
+    def rendered(self, locator: str) -> list[tuple[str, str]]:
+        p = self._parse(locator)
+        if p is None:
+            return []
+        path, a, b = p
+        text, rows, _ = self._index()[path]
+        out = []
+        for i in range(a - 1, b):
+            k = i // WINDOW
+            header = path if len(text) < SMALL_FILE else f"{path}:{k * WINDOW + 1}-{min(len(rows), (k + 1) * WINDOW)}"
+            out.append((header, _numbered(text, range(i, i + 1))))
+        return out
+
 
 # ---------------------------------------------------------------- assessing
 
@@ -349,9 +370,19 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
     source = f"llm:{model}"
     started = time.time()
 
-    found = {a: corpus.search(r["search"], REQUIREMENT_CHARS) for a, r in reqs.items()}
-    # how many excerpts match in the whole corpus: "absent" is a finding only when all of them were shown
-    matching = {a: len(corpus.search(r["search"], ALL)) for a, r in reqs.items()}
+    whole = corpus.everything()
+    if sum(_size(h, t) for h, t in whole) <= WHOLE_CHARS:
+        # an artifact that fits one requirement's share is read whole: what the search terms (fixed when the
+        # regulation was compiled, perhaps in another language) would find is no longer the limit, and absence is
+        # established over all of it
+        found = {a: whole for a in reqs}
+        matching = {a: len(whole) for a in reqs}
+        for r in reqs.values():
+            r["whole"] = True
+    else:
+        found = {a: corpus.search(r["search"], REQUIREMENT_CHARS) for a, r in reqs.items()}
+        # how many excerpts match in the whole corpus: "absent" is a finding only when all of them were shown
+        matching = {a: len(corpus.search(r["search"], ALL)) for a, r in reqs.items()}
     not_sent, total = [], 0
 
     notes = getattr(corpus, "prompt_notes", "") or GENERIC_NOTES
@@ -388,7 +419,7 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
             if hit is not None and hit.is_file():
                 try:
                     cached.append(digest)
-                    return json.loads(hit.read_text())["answers"], body
+                    return json.loads(hit.read_text())["answers"], shown_in(excerpts)
                 except (OSError, ValueError, KeyError):
                     cached.pop()
             try:
@@ -404,7 +435,7 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
                 tmp = hit.with_suffix(f".{secrets.token_hex(4)}.tmp")
                 tmp.write_text(json.dumps({"answers": reply["answers"]}, ensure_ascii=False))
                 tmp.replace(hit)
-            return reply["answers"], body
+            return reply["answers"], shown_in(excerpts)
 
         def plan(attrs):
             out = []
@@ -525,7 +556,9 @@ def _settle(ans, members, seen, reqs, found, matching, corpus, shown, dropped, r
             unsettled[attr] = f"{note} (not every excerpt matching the search could be shown, so absence is not established)"[:400]
             return []
         terms = ", ".join(reqs[attr]["search"])
-        return [{"value": value, "basis": "absence", "note": f"searched {len(found[attr])} excerpts for terms {terms}: {note}"}]
+        where = (f"read all {len(found[attr])} excerpts of the artifact" if reqs[attr].get("whole") else
+                 f"searched {len(found[attr])} excerpts for terms {terms}")
+        return [{"value": value, "basis": "absence", "note": f"{where}: {note}"}]
     if basis != "evidence":
         count(dropped, "unknown basis")
         return []
@@ -536,9 +569,16 @@ def _settle(ans, members, seen, reqs, found, matching, corpus, shown, dropped, r
     return [{"value": value, "at": a, "basis": "evidence", "note": note} for a in ats[:MAX_LOCATORS]]
 
 
-def cited(corpus: Corpus, at, shown: str, rejected: dict[str, int]) -> list[str]:
-    """The locators in `at` that name text in the corpus which was among the text `shown` to the model, normalised
-    and deduplicated; every other one is counted in `rejected` by reason."""
+def shown_in(excerpts: list[tuple[str, str]]) -> set[tuple[str, str]]:
+    """What a call showed the model: (header, line) for every line of its excerpts."""
+    return {(h, ln.rstrip()) for h, t in excerpts for ln in t.split("\n")}
+
+
+def cited(corpus: Corpus, at, shown: set[tuple[str, str]], rejected: dict[str, int]) -> list[str]:
+    """The locators in `at` that name text in the corpus which was shown to the model (`shown`, from shown_in()): every
+    line of it, in the excerpt that holds it. Normalised and deduplicated; every other one is counted in `rejected`
+    by reason. Matching whole lines in their own excerpt, not text anywhere in the prompt, keeps a line that merely
+    repeats a shown one (the same statement in an unshown file, a line equal to a margin number) from passing."""
     ats = []
     for raw in (at if isinstance(at, list) else [at] if at else [])[:40]:
         loc = corpus.verify(str(raw))
@@ -547,7 +587,8 @@ def cited(corpus: Corpus, at, shown: str, rejected: dict[str, int]) -> list[str]
             continue
         lines = [ln.strip() for ln in corpus.excerpt(loc).split("\n") if ln.strip()]
         why = ("cited text is blank" if not lines else
-               "cited text was not in the excerpts sent" if not all(ln in shown for ln in lines) else None)
+               "cited text was not in the excerpts sent" if not all((h, ln.rstrip()) in shown for h, ln in corpus.rendered(loc))
+               else None)
         if why:
             rejected[why] = rejected.get(why, 0) + 1
         elif loc not in ats:

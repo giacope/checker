@@ -26,6 +26,8 @@ from normir.evidence import load_evidence
 
 from adapters.drawings.tokens import Sheet, locator, parse_locator
 
+from . import rank
+
 WINDOW = 50            # sheet lines per excerpt
 ELEMENT_BLOCK = 40     # element lines per excerpt
 GAP = 3.0              # a gap wider than this many letter heights is shown as " | " (a table's next column)
@@ -66,6 +68,7 @@ class BuildingCorpus:
         self._line: dict[str, str] = {}         # sheet-line locator -> its text
         self._cite: dict[str, str] = {}         # element or building-fact locator -> the line shown for it
         self._by_id: dict[str, str] = {}        # element id -> its locator
+        self._shown: dict[str, tuple[str, str]] = {}   # locator -> (excerpt header, the line as shown there)
         self._blocks: list[tuple[str, str, str]] = []   # (header, text, lowercased header and text)
         for meta, words in sheets:
             self._add_sheet(meta, words)
@@ -115,7 +118,10 @@ class BuildingCorpus:
             b = min(len(lines), a + WINDOW)
             header = f"{label} · lines {a + 1}-{b} of {len(lines)}"
             body = "\n".join(f"L{k + 1} {lines[k][1]}" for k in range(a, b))
-            self._blocks.append((header, body, (header + "\n" + body).lower()))
+            for k in range(a, b):
+                self._shown[lines[k][0]] = (header, f"L{k + 1} {lines[k][1]}".rstrip())
+            # searchable: the sheet's number and title and its words, not the line margins or the file name
+            self._blocks.append((header, body, (title + "\n" + "\n".join(lines[k][1] for k in range(a, b))).lower()))
 
     def _add_evidence(self, docs: list[dict]) -> None:
         if not docs:
@@ -135,11 +141,15 @@ class BuildingCorpus:
                 for a in ats:
                     self._cite.setdefault(a, line)
                 self._by_id.setdefault(e.id, primary)
-                rows.append(line)
+                rows.append((line, ats))
             for a in range(0, len(rows), ELEMENT_BLOCK):
                 b = min(len(rows), a + ELEMENT_BLOCK)
                 header = f"model elements: {typ} {a + 1}-{b} of {len(rows)}"
-                body = "\n".join(rows[a:b])
+                body = "\n".join(r for r, _ in rows[a:b])
+                for line, ats in rows[a:b]:
+                    for loc in ats:
+                        if self._cite.get(loc) == line:
+                            self._shown.setdefault(loc, (header, line.rstrip()))
                 self._blocks.append((header, body, (header + "\n" + body).lower()))
         rows = []
         for k, f in sorted(ev.facts.items()):
@@ -149,35 +159,20 @@ class BuildingCorpus:
             line = f"{at or '-'}  building {k.replace('_', ' ')}: {' / '.join(str(v) for v in f.values()[:4])}"[:MAX_LINE]
             if at:
                 self._cite.setdefault(at, line)
-            rows.append(line)
+            rows.append((line, at))
         if rows:
             header = "model: facts about the building as a whole"
-            body = "\n".join(rows)
+            body = "\n".join(r for r, _ in rows)
+            for line, at in rows:
+                if at and self._cite.get(at) == line:
+                    self._shown.setdefault(at, (header, line.rstrip()))
             self._blocks.append((header, body, (header + "\n" + body).lower()))
 
     # ---------------------------------------------------------------- Corpus
 
     def search(self, terms: list[str], budget: int) -> list[tuple[str, str]]:
-        """Excerpts holding the terms: more distinct terms first, then more hits per thousand characters, then the
-        order of the project (sheets as uploaded, then elements by type)."""
-        terms = list(dict.fromkeys(t.strip().lower().replace("_", " ") for t in terms if isinstance(t, str) and len(t.strip()) >= 2))
-        if not terms or budget <= 0:
-            return []
-        ranked = []
-        for i, (_, body, low) in enumerate(self._blocks):
-            counts = [low.count(t) for t in terms]
-            distinct = sum(1 for c in counts if c)
-            if distinct:
-                ranked.append((-distinct, -round(sum(counts) / (1 + len(body) / 1000), 6), i))
-        ranked.sort()
-        out, used = [], 0
-        for *_, i in ranked:
-            header, body, _ = self._blocks[i]
-            size = len(header) + len(body)
-            if used + size <= budget:
-                out.append((header, body))
-                used += size
-        return out
+        """Excerpts holding the terms (adapters.assess.rank); among equals, sheets as uploaded, then elements by type."""
+        return rank(self._blocks, terms, budget) if budget > 0 else []
 
     def everything(self) -> list[tuple[str, str]]:
         return [(h, t) for h, t, _ in self._blocks]
@@ -202,6 +197,10 @@ class BuildingCorpus:
         if loc is None:
             return ""
         return self._line.get(loc) or self._cite.get(loc, "")
+
+    def rendered(self, locator: str) -> list[tuple[str, str]]:
+        loc = self.verify(locator)
+        return [self._shown[loc]] if loc in self._shown else []
 
     def element(self, locator: str) -> str | None:
         """The line shown for an element or building-fact locator, for the report."""
