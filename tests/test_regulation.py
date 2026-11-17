@@ -741,3 +741,13 @@ def test_build_pack_rejects_a_computed_check_without_an_expression(tmp_path):
     chk = {"id": "k1-1", "clause": "c1", "summary": "x", "kind": "computed", "enabled": True, "why": "", "search": ["a"]}
     with pytest.raises(RegulationError, match="k1-1 is computed but has no valid 'require'"):
         build_pack({"id": "r1", "name": "x", "clauses": [clause(1, "x")], "checks": [chk]}, CODE, tmp_path)
+
+
+def test_a_check_without_search_terms_gets_the_same_content_words_wherever_it_is_derived():
+    """The compiler's fallback, an assessed check's requirement, and a check switched to assessed by the user."""
+    summary = "The operator must ensure that staff handling food are trained."
+    assert regulation.summary_terms(summary) == ["operator", "staff", "handling", "food", "trained"]
+    req = regulation.requirements({"id": "r1", "clauses": [], "checks": [
+        {"id": "k1-1", "clause": "c1", "kind": "assessed", "enabled": True, "summary": summary}]})
+    assert req[0]["search"] == regulation.summary_terms(summary)
+    assert regulation._search([], summary) == ["operator", "staff", "handling"]

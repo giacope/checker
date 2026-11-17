@@ -424,3 +424,13 @@ def test_a_small_artifact_is_read_whole_so_search_terms_in_another_language_do_n
     assert doc["facts"]["req_delete"][0]["value"] == "met" and doc["facts"]["req_delete"][0]["at"] == "dpa.md#L1"
     assert doc["facts"]["req_audit"] == [{"value": "not_met", "basis": "absence", "source": "llm:test-model",
                                           "note": "read all 1 excerpts of the artifact: no audit right"}]
+
+
+def test_ranking_discounts_words_every_excerpt_has_in_any_language():
+    """A question's filler words in German match every excerpt; the excerpt with the rare word is the answer."""
+    from adapters.assess import rank
+    texts = ["Die Daten werden verarbeitet.", "Wie die Kunden werden informiert.", "Die Daten werden nach 30 Tagen gelöscht.",
+             "Die Rechnung werden versandt.", "Die Daten werden gesichert."]
+    blocks = [(f"b{i}", t, t.lower()) for i, t in enumerate(texts)]
+    got = [h for h, _ in rank(blocks, ["wie", "lange", "werden", "die", "daten", "gelöscht"], 10_000)]
+    assert got[0] == "b2" and "b3" not in got   # b3 matches only words most excerpts have

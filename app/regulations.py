@@ -194,8 +194,8 @@ def update_checks(rid: str, changes: dict[str, dict]) -> dict:
                 if kind == "computed" and not k.get("require"):
                     continue
                 if kind == "assessed" and not k.get("search"):
-                    from adapters.regulation import words
-                    k["search"] = words(k["summary"])[:8]
+                    from adapters.regulation import summary_terms
+                    k["search"] = summary_terms(k["summary"])
                 if kind == "attested" and not k.get("question"):
                     k["question"] = f"Is this met: {k['summary'].rstrip('.')}?"
                 k["kind"] = kind

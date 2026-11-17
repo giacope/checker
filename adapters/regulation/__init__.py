@@ -78,7 +78,7 @@ def requirements(reg: dict) -> list[dict]:
         if k.get("enabled") and (k["kind"] == "assessed" or fallback):
             out.append({"attr": fact_attr(reg["id"], k["id"]), "summary": k["summary"],
                         "clause": clauses.get(k["clause"], {}).get("text", ""),   # adapters.assess cuts and says so
-                        "search": k.get("search") or words(k["summary"])[:8],
+                        "search": k.get("search") or summary_terms(k["summary"]),
                         **({"for_type": k["for"]["type"]} if fallback else {})})
     return out
 
@@ -422,12 +422,15 @@ def _search(raw: Any, summary: str) -> list[str]:
         if t and t.lower() not in {x.lower() for x in terms}:
             terms.append(t)
     if len(terms) < 3:  # fall back on the summary's content words, so an assessor always has something to look for
-        for w in words(summary):
-            if w.lower() not in STOP and w.lower() not in {x.lower() for x in terms}:
-                terms.append(w.lower())
-            if len(terms) >= 3:
-                break
+        have = {x.lower() for x in terms}
+        terms += [w for w in summary_terms(summary) if w not in have][:3 - len(terms)]
     return terms[:10]
+
+
+def summary_terms(summary: str, n: int = 8) -> list[str]:
+    """Search terms from a check's summary when it has none of its own: its content words, lowercased, without
+    the English function words in STOP (the assessor's ranking also discounts words common in any language)."""
+    return list(dict.fromkeys(w.lower() for w in words(summary) if w.lower() not in STOP))[:n]
 
 
 # ---- verification of computed checks

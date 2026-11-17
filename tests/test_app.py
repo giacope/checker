@@ -128,10 +128,10 @@ class RegulationError(Exception):
 def compiler(monkeypatch):
     """A stand-in for adapters.regulation: two requirements, one compiled to an assessed check and one attested,
     and a pack built by copying the GDPR pack so the scan has real rules to run under the regulation's name."""
-    from adapters.regulation import words
+    from adapters.regulation import summary_terms
     m = types.ModuleType("adapters.regulation")
     m.RegulationError = RegulationError
-    m.words = words
+    m.summary_terms = summary_terms
     m.read = lambda path, rel: types.SimpleNamespace(file=rel, sha256="0" * 64, kind="md", pages=1,
                                                      lines=Path(path).read_text().splitlines())
     m.clauses = lambda docs, progress=None, **kw: [

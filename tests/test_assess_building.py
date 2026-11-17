@@ -58,9 +58,9 @@ def test_search_ranking_is_deterministic_and_within_budget():
     found = c.search(["stair", "riser", "handrail"], 100_000)
     heads = [h for h, _ in found]
     # the stair element block matches two terms (its type and riser height), the plan and the schedule one each:
-    # between those the shorter excerpt, with more hits per character, comes first
-    assert heads == ["model elements: Stair 1-1 of 1", "sheet S2 · set/plan.dxf layout Model (CAD text) · lines 1-2 of 2",
-                     "sheet S1 · A5-1 DOOR SCHEDULE · set/A5-1.pdf p1 (OCR) · lines 1-4 of 4"]
+    # between those the rarer term weighs more (adapters.assess.rank)
+    assert heads == ["model elements: Stair 1-1 of 1", "sheet S1 · A5-1 DOOR SCHEDULE · set/A5-1.pdf p1 (OCR) · lines 1-4 of 4",
+                     "sheet S2 · set/plan.dxf layout Model (CAD text) · lines 1-2 of 2"]
     # equal on both: the project's order (sheets as uploaded, then elements)
     twins = BuildingCorpus("x", [], [({"file": f"{n}.pdf", "page": 1, "text": "layer"}, [("HANDRAIL", (0, 0, 50, 10))]) for n in "BA"])
     assert [h.split(" · ")[1] for h, _ in twins.search(["handrail"], 1000)] == ["B.pdf p1 (text layer)", "A.pdf p1 (text layer)"]
