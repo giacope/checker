@@ -702,3 +702,12 @@ def test_a_password_hasher_hashes_a_password_whatever_the_variable_is_called(tmp
     # a general digest is a password store only when the value is a password
     assert elements(repo(tmp_path / "g", {"app.py": f"import hashlib\ndef etag({name}):\n    return hashlib.md5({name}).hexdigest()\n"}),
                     "PasswordStore") == {}
+
+
+def test_a_password_length_bound_named_by_a_constant_is_read(tmp_path):
+    py = ("MIN_LENGTH = 8\ndef register(form):\n    password = form['password']\n"
+          "    if len(password) < MIN_LENGTH:\n        raise ValueError('too short')\n")
+    js = ("const MIN_LENGTH = 10;\napp.post('/register', (req, res) => {\n  const password = req.body.password;\n"
+          "  if (password.length < MIN_LENGTH) { return res.status(400).send('short'); }\n});\n")
+    doc = repo(tmp_path, {"app.py": py, "server.js": js})
+    assert fact(doc, "password_min_length") == [(10, "server.js:4"), (8, "app.py:4")]

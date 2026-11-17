@@ -1060,8 +1060,12 @@ class PyAnalyser:
         # length checks
         for a, b, o in ((left, right, op), (right, left, _flip(op))):
             if isinstance(a, ast.Call) and isinstance(a.func, ast.Name) and a.func.id == "len" and a.args and self.mentions_password(pf, a.args[0]) \
-                    and isinstance(b, ast.Constant) and isinstance(b.value, int) and o is not None:
-                self._length(pf, n, o, b.value, at, out, "server")
+                    and o is not None and not (isinstance(b, ast.Call) and isinstance(b.func, ast.Name) and b.func.id == "len"):
+                k = _int_value(pf, b)   # a literal, or a module-level constant (MIN_LENGTH = 8)
+                if k is not None:
+                    self._length(pf, n, o, k, at, out, "server")
+                else:   # a bound that can't be read is still a length rule
+                    out.signal("pw_validation", at, side="server")
         if isinstance(op, (ast.In, ast.NotIn)) and self.mentions_password(pf, left):
             if any(w in {"common", "blocklist", "blacklist", "banned", "weak", "pwned", "breached", "compromised", "denylist"}
                    for nm, _ in names_in(right) for w in words(nm)):
@@ -1295,3 +1299,15 @@ def _alg_risk(algs: list[str]) -> bool:
 
 def _flip(op):
     return {ast.Lt: ast.Gt(), ast.Gt: ast.Lt(), ast.LtE: ast.GtE(), ast.GtE: ast.LtE()}.get(type(op))
+
+
+def _int_value(pf: PyFile, node) -> int | None:
+    """An int literal, or a name the module assigns one int literal to at its top level."""
+    if isinstance(node, ast.Constant) and type(node.value) is int:
+        return node.value
+    if isinstance(node, ast.Name):
+        vals = [a.value.value for a in pf.tree.body if isinstance(a, (ast.Assign, ast.AnnAssign)) and a.value is not None
+                and any(isinstance(t, ast.Name) and t.id == node.id for t in (a.targets if isinstance(a, ast.Assign) else [a.target]))
+                and isinstance(a.value, ast.Constant) and type(a.value.value) is int]
+        return vals[0] if len(vals) == 1 else None
+    return None

@@ -1474,8 +1474,9 @@ class JSAnalyser:
                     out.element("Secret", at, kind="password", test_or_example=True if jf.sf.example else None)
         for a, b, o in ((left, right, op), (right, left, {"<": ">", ">": "<", "<=": ">=", ">=": "<="}.get(op))):
             if a is not None and b is not None and o and a.type == "member_expression" and dotted(a)[-1:] == ["length"] \
-                    and loose_password((dotted(a) or ["", ""])[-2] if len(dotted(a)) > 1 else "") and b.type == "number" and T(b).isdigit():
-                bound = length_bound(o, int(T(b)), _invalid_when(n))
+                    and loose_password((dotted(a) or ["", ""])[-2] if len(dotted(a)) > 1 else "") and b.type in ("number", "identifier"):
+                k = _int_value(jf, b)   # a literal, or a top-level constant (const MIN_LENGTH = 8)
+                bound = length_bound(o, k, _invalid_when(n)) if k is not None else None
                 if bound:
                     out.signal("pw_min" if bound[0] == "min" else "pw_max", at, bound[1], side=side)
                 out.signal("pw_validation", at, side=side)
@@ -1570,3 +1571,21 @@ class JSAnalyser:
                 kind = literal_secret_kind(T(n))
                 if kind:
                     out.element("Secret", jf.at(n), kind=kind, test_or_example=ex)
+
+
+def _int_value(jf: JSFile, node) -> int | None:
+    """A whole-number literal, or an identifier the file declares once at its top level as one."""
+    if node.type == "number":
+        return int(T(node)) if T(node).isdigit() else None
+    if node.type != "identifier":
+        return None
+    vals = []
+    for decl in jf.root.children:
+        decl = decl.child_by_field_name("declaration") or decl if decl.type == "export_statement" else decl
+        if decl is None or decl.type not in ("lexical_declaration", "variable_declaration"):
+            continue
+        for d in decl.children:
+            if d.type == "variable_declarator" and T(d.child_by_field_name("name") or d) == T(node):
+                v = d.child_by_field_name("value")
+                vals.append(int(T(v)) if v is not None and v.type == "number" and T(v).isdigit() else None)
+    return vals[0] if len(vals) == 1 else None
