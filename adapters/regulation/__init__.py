@@ -372,16 +372,31 @@ Reply with only JSON:
 {{"clauses": [{{"clause": "c1", "checks": [{{"summary": "...", "kind": "computed|assessed|attested", "why": "...", \
 "for": null, "applies": null, "require": null, "search": ["..."], "question": null}}]}}]}}"""
 
-CJK = re.compile(r"[\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff]{2,}|[\u30a0-\u30ff\u31f0-\u31ff]{2,}")   # Han, or katakana
+HAN = r"\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff"
+CJK = re.compile(rf"[{HAN}]{{2,}}|[\u30a0-\u30ff\u31f0-\u31ff]{{2,}}|[\uac00-\ud7af]{{2,}}")   # Han, katakana, or Hangul
+
+
+def cjk_terms(text: str) -> list[str]:
+    """Search terms from text in scripts whose words are not separated, or carry their particles attached: each run
+    of Han characters or Hangul as its overlapping two-character pieces (个人数据保存 -> 个人, 人数, 数据, 据保, 保存;
+    비밀번호는 -> 비밀, 밀번, 번호, 호는), the way search engines index these scripts, since matching is by substring and
+    no word list is needed. A piece that straddles two words is rare in the corpus and weighs little; katakana runs,
+    loanwords, are kept whole. Hiragana, mostly particles and endings, separates runs."""
+    out = []
+    for run in CJK.findall(re.sub(r"[\u3040-\u309f]", " ", str(text or ""))):
+        if re.match(r"[\u30a0-\u30ff\u31f0-\u31ff]", run) or len(run) == 2:
+            out.append(run)
+        else:
+            out += [run[i:i + 2] for i in range(len(run) - 1)]
+    return list(dict.fromkeys(out))
 
 
 def words(text: str, min_len: int = 4) -> list[str]:
-    """Content words in any script: runs of Han characters or katakana (scripts written without spaces; hiragana,
-    mostly particles and endings, separate them), and other words of min_len letters or more."""
+    """Content words in any script: pieces of Han, katakana and Hangul runs (cjk_terms), and other words of min_len
+    letters or more."""
     text = str(text or "")
-    out = CJK.findall(text)
     rest = re.sub(r"[\u3040-\u309f]", " ", CJK.sub(" ", text))
-    return out + re.findall(rf"[^\W\d_][\w-]{{{min_len - 1},}}", rest)
+    return cjk_terms(text) + re.findall(rf"[^\W\d_][\w-]{{{min_len - 1},}}", rest)
 
 
 STOP = set("a an and any are as at be by can for from has have in into is it its may must not of on or shall should "

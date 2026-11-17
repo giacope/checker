@@ -30,7 +30,7 @@ from pathlib import Path
 import httpx
 
 from adapters.assess import CONTROL, Corpus, cited, rank, shown_in
-from adapters.regulation import CJK
+from adapters.regulation import CJK, cjk_terms
 from adapters.code_llm import ReaderError, complete, parse_json, provider_from_env
 
 VERSION = "0.1.0"
@@ -157,7 +157,7 @@ def keywords(question: str) -> list[str]:
     a plural s."""
     q = str(question or "")
     out = [p.strip() for p in re.findall(r"[\"“'`「『](.{2,60}?)[\"”'`」』]", q)]
-    out += CJK.findall(q)   # Han and katakana runs: words in scripts written without spaces
+    out += cjk_terms(q)   # pieces of Han, katakana and Hangul runs: scripts whose words are not separated
     for w in re.findall(r"\w[\w.\-/:]*\w", re.sub(r"[\u3040-\u309f]", " ", CJK.sub(" ", q))):
         lw = w.lower()
         if lw in STOP or len(lw) < 3 and not lw.isdigit():

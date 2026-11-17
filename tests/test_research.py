@@ -198,5 +198,16 @@ def test_keywords():
     assert keywords("How are user passwords stored?") == ["user", "password", "stored"]
     assert keywords('Which policies mention "rate limit" or config.force_ssl?') == ["rate limit", "polic", "mention", "rate", "limit", "config.force_ssl"]
     # scripts written without spaces, and letters outside ASCII
-    assert keywords("避難階段の幅は何メートル以上必要ですか？") == ["避難階段", "メートル", "以上必要"]
+    assert keywords("避難階段の幅は何メートル以上必要ですか？") == ["避難", "難階", "階段", "メートル", "以上", "上必", "必要"]
     assert keywords("Wie breit müssen Rettungswege sein?") == ["wie", "breit", "müssen", "rettungswege", "sein"]
+
+
+@pytest.mark.parametrize("question, blocks, best", [
+    # Chinese is written without spaces: a question finds the line that answers it in other words around the same terms
+    ("个人数据保存多长时间？", [("a.md", "本公司重视用户隐私。我们提供多种服务。"), ("b.md", "账户关闭后，个人数据保存三十天，然后删除。")], "b.md"),
+    # Korean attaches particles: 비밀번호는 (the password, topic) matches 비밀번호를 (object)
+    ("비밀번호는 몇 자 이상이어야 합니까?", [("a.md", "회원 정보는 암호화하여 저장됩니다."), ("b.md", "비밀번호를 8자 이상으로 설정해야 한다.")], "b.md"),
+])
+def test_questions_in_scripts_without_word_breaks_find_the_answering_text(question, blocks, best):
+    from adapters.assess import rank
+    assert rank([(h, t, t.lower()) for h, t in blocks], keywords(question), 10_000)[0][0] == best
