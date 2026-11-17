@@ -254,3 +254,108 @@ def test_a_draft_schema_is_read_as_its_successor_and_a_model_without_storeys_say
     notes = doc["sources"][0]["notes"]
     assert notes[0] == "bridge.ifc: schema IFC4X2 is not supported; read as IFC4X3_ADD2, which superseded it"
     assert "no building storeys (it models IfcBridge)" in notes[1] and doc["elements"] == []
+
+
+# ----------------------------------------------------------------- malformed models: skipped with a reason, never raised
+
+def _one_room(unit: str = "mm") -> Model:
+    m = Model(unit)
+    ground = m.storey("Ground", 0.0)
+    m.storey("Upper", 3000.0 if unit == "mm" else 3.0)
+    m.space(ground, "101", "OFFICE", 0, 0, 5, 4, NetFloorArea=20.0)
+    m.door(ground, m.wall(ground), "D101", (5.0, 1.0, 0.2, 1.0), 915.0 if unit == "mm" else 0.915, 2100.0 if unit == "mm" else 2.1,
+           (0, 1, 0), (5.1, 1.0), IsExternal=True)
+    return m
+
+
+def _edited(m: Model, tmp_path, *subs, name="model.ifc"):
+    """The model written out with its STEP text edited (old, new) pairs: the malformed models ifcopenshell.api refuses to make."""
+    p = m.save(tmp_path, name)
+    text = p.read_text()
+    for old, new in subs:
+        assert old in text, old
+        text = text.replace(old, new, 1)
+    p.write_text(text)
+    return p
+
+
+def _skipped(doc) -> str:
+    return "\n".join(doc["sources"][0].get("skipped", []))
+
+
+def test_a_length_unit_that_is_missing_malformed_or_implausible_reads_no_lengths(tmp_path):
+    for label, subs in (("EXA", [(".MILLI.,.METRE.", ".EXA.,.METRE.")]),           # 1e18 m: no building is modelled in it
+                        ("no name", [(".MILLI.,.METRE.", ".MILLI.,$")]),            # an IfcSIUnit without its name
+                        ("dangling", [("LENGTHUNIT", "MASSUNIT")])):                # no length unit at all
+        m = _one_room()
+        doc = analyse(_edited(m, tmp_path, *subs, name=f"{label}.ifc"))
+        door = element(doc, "Door", "door:D101")
+        assert "leaf_width" not in door["facts"] and "height" not in door["facts"], label
+        assert "elevation" not in element(doc, "Storey", "storey:Upper")["facts"], label
+        assert "length unit not known" in _skipped(doc), label
+        assert doc["sources"][0]["length_unit"].endswith("(not known)"), label
+
+
+def test_a_placement_that_cannot_be_resolved_is_skipped_and_the_rest_is_read(tmp_path):
+    m = _one_room()
+    upper = next(s for s in m.f.by_type("IfcBuildingStorey") if s.Name == "Upper")
+    m.place(upper, z=3.0)
+    space, door = m.f.by_type("IfcSpace")[0], m.f.by_type("IfcDoor")[0]
+    sp, up, ax = space.ObjectPlacement, upper.ObjectPlacement, door.ObjectPlacement.RelativePlacement
+    p = m.save(tmp_path)
+    lines = {ln.split("=", 1)[0]: ln for ln in p.read_text().splitlines() if ln.startswith("#")}
+    text = p.read_text()
+    for old, new in ((lines[f"#{sp.id()}"], f"#{sp.id()}=IFCLOCALPLACEMENT(#{sp.id()},#{sp.RelativePlacement.id()});"),  # a cycle
+                     (lines[f"#{up.id()}"], f"#{up.id()}=IFCLOCALPLACEMENT($,$);"),                                    # no axes
+                     (lines[f"#{ax.id()}"], lines[f"#{ax.id()}"].replace(f"#{ax.RefDirection.id()})", f"#{m.project.id()})"))):
+        text = text.replace(old, new, 1)
+    p.write_text(text)
+
+    doc = analyse(p)
+    skipped = _skipped(doc)
+    assert f"placement #{sp.id()} cannot be read (placement cycle" in skipped
+    assert f"placement #{up.id()} cannot be read (RelativePlacement is missing" in skipped
+    assert "has an IfcProject where an IfcDirection belongs" in skipped
+    assert values(element(doc, "Storey", "storey:Upper"), "elevation") == ["3 m"]   # its Elevation attribute
+    assert values(element(doc, "Door", "door:D101"), "leaf_width") == ["915 mm"]
+    assert values(element(doc, "Space", "space:101"), "floor_area") == ["20 m2"]
+
+
+def test_text_where_a_length_belongs_is_skipped(tmp_path):
+    m = _one_room()
+    doc = analyse(_edited(m, tmp_path, ("2100.,915.,", "'2100','915',")))
+    door = element(doc, "Door", "door:D101")
+    assert "leaf_width" not in door["facts"] and "height" not in door["facts"]
+    assert "OverallWidth: '915' is not a number: not read" in _skipped(doc)
+
+
+def test_negative_and_implausible_sizes_are_skipped_with_their_reason(tmp_path):
+    m = _one_room()
+    doc = analyse(_edited(m, tmp_path, ("2100.,915.,", "2100000000.,-915.,"), ("$,20.,$", "$,-20.,$")))
+    door = element(doc, "Door", "door:D101")
+    assert not {"leaf_width", "clear_width", "height"} & set(door["facts"])
+    space = element(doc, "Space", "space:101")
+    assert values(space, "floor_area") == ["20 m2"]   # the negative quantity skipped: the geometry's plan area is read
+    assert "geometry" in space["facts"]["floor_area"][0]["at"]
+    skipped = _skipped(doc)
+    assert "leaf_width -915 mm" in skipped and "outside the plausible range of Door.leaf_width (0 m to 100 m)" in skipped
+    assert "height 2100000000 mm" in skipped and "Space.floor_area -20 m2" in skipped
+
+
+def test_a_relationship_relating_an_entity_of_the_wrong_type_is_skipped(tmp_path):
+    """IfcRelAggregates relating an IfcProductDefinitionShape: ifcopenshell.geom's iterator crashes the process on it."""
+    import subprocess
+    import sys
+
+    m = _one_room()
+    rel = next(r for r in m.f.by_type("IfcRelAggregates") if r.RelatingObject == m.site)
+    shape = m.f.by_type("IfcSpace")[0].Representation
+    p = _edited(m, tmp_path, (f"#{rel.id()}=IFCRELAGGREGATES('{rel.GlobalId}',$,$,$,#{m.site.id()},",
+                              f"#{rel.id()}=IFCRELAGGREGATES('{rel.GlobalId}',$,$,$,#{shape.id()},"))
+    code = ("import sys, json; from adapters.ifc import analyse; d = analyse(sys.argv[1]); "
+            "print(json.dumps(d['sources'][0].get('skipped', []))); print(sum(1 for e in d['elements'] if 'floor_area' in e['facts']))")
+    r = subprocess.run([sys.executable, "-c", code, str(p)], capture_output=True, text=True, timeout=120)
+    assert r.returncode == 0, r.stderr[-2000:]
+    out = r.stdout.splitlines()
+    assert f"IfcRelAggregates #{rel.id()} has IfcProductDefinitionShape #{shape.id()} as RelatingObject" in out[0]
+    assert int(out[1]) >= 1   # the space is still read
