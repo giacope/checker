@@ -9,6 +9,7 @@ import json
 import re
 import time
 import types
+import warnings
 import zipfile
 
 import pytest
@@ -140,6 +141,132 @@ def test_zip_upload_is_unpacked_safely(client, tmp_path):
     got = sorted(str(p.relative_to(files_dir)) for p in files_dir.rglob("*") if p.is_file())
     assert got == ["set/escape.pdf", "set/set/A-101.pdf"]  # the ../ entry lands inside, the rest are dropped
     assert not (tmp_path / "escape.pdf").exists()
+
+
+def zipped(*members, compression=zipfile.ZIP_DEFLATED) -> bytes:
+    """A zip of (name, data) members, written as given (duplicate names included)."""
+    buf = io.BytesIO()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")   # zipfile warns of a duplicate name, and writes it
+        with zipfile.ZipFile(buf, "w", compression) as z:
+            for name, data in members:
+                z.writestr(name, data)
+    return buf.getvalue()
+
+
+def patched(data: bytes, member: bytes, **fields) -> bytes:
+    """The zip with fields of `member` overwritten in its local and central headers: flag (OR-ed in), method,
+    crc, or name (replaced by bytes of the same length)."""
+    data = bytearray(data)
+    for sig, at in ((b"PK\x03\x04", {"flag": 6, "method": 8, "crc": 14, "name": 30}),
+                    (b"PK\x01\x02", {"flag": 8, "method": 10, "crc": 16, "name": 46})):
+        i = 0
+        while (i := data.find(sig, i)) >= 0:
+            if data[i + at["name"]:i + at["name"] + len(member)] == member:
+                if "flag" in fields:
+                    data[i + at["flag"]] |= fields["flag"]
+                if "method" in fields:
+                    data[i + at["method"]:i + at["method"] + 2] = fields["method"].to_bytes(2, "little")
+                if "crc" in fields:
+                    data[i + at["crc"]:i + at["crc"] + 4] = fields["crc"].to_bytes(4, "little")
+                if "name" in fields:
+                    data[i + at["name"]:i + at["name"] + len(member)] = fields["name"]
+            i += 4
+    return bytes(data)
+
+
+def unpacked(files_dir) -> dict:
+    return {str(p.relative_to(files_dir)): p.read_bytes() for p in sorted(files_dir.rglob("*")) if p.is_file()}
+
+
+def test_a_zip_or_member_that_cannot_be_read_is_a_note_and_the_rest_is_unpacked(tmp_path):
+    files_dir = tmp_path / "files"
+    files_dir.mkdir()
+    good = ("ok.pdf", b"%PDF ok")
+    (files_dir / "name.zip").write_bytes(patched(zipped(("\u00e9.pdf", b"%PDF")), "\u00e9.pdf".encode(), name=b"\x9d\x9d"))
+    (files_dir / "locked.zip").write_bytes(patched(zipped(good, ("e.pdf", b"%PDF e")), b"e.pdf", flag=1))
+    (files_dir / "method.zip").write_bytes(patched(zipped(good, ("m.pdf", b"%PDF m")), b"m.pdf", method=99))
+    deflated = zipped(good, ("c.pdf", b"%PDF " + bytes(range(256)) * 40))
+    at = deflated.index(b"c.pdf") + len(b"c.pdf")
+    (files_dir / "deflate.zip").write_bytes(deflated[:at + 20] + bytes(b ^ 0x55 for b in deflated[at + 20:at + 120]) + deflated[at + 120:])
+    (files_dir / "x.zip").mkdir()   # a folder whose name ends .zip
+    (files_dir / "x.zip" / "A-101.pdf").write_bytes(b"%PDF x")
+    notes = buildings.expand_zips(files_dir)
+    assert unpacked(files_dir) == {"locked/ok.pdf": b"%PDF ok", "method/ok.pdf": b"%PDF ok", "deflate/ok.pdf": b"%PDF ok",
+                                   "x.zip/A-101.pdf": b"%PDF x"}
+    text = " ".join(notes)
+    assert "name.zip is not a readable zip file" in text
+    assert "e.pdf (encrypted)" in text and "m.pdf (NotImplementedError" in text and "c.pdf (zlib.error" in text
+
+    only = tmp_path / "only"   # all an upload had: the error says why, through process()
+    only.mkdir()
+    (only / "set.zip").write_bytes(patched(zipped(("e.pdf", b"%PDF e")), b"e.pdf", flag=1))
+    with pytest.raises(buildings.ProjectError, match=r"No IFC model.*e\.pdf \(encrypted\)"):
+        PROCESS(only, "x")
+
+
+def test_unpacked_bytes_are_counted_as_written_across_the_upload(tmp_path, monkeypatch):
+    monkeypatch.setattr(buildings, "ZIP_RATIO_FLOOR", 1_000_000, raising=False)
+    bomb = tmp_path / "bomb"
+    bomb.mkdir()
+    (bomb / "set.zip").write_bytes(zipped(("A-101.pdf", b"\0" * 5_000_000)))   # 5 MB from a 5 kB zip
+    with pytest.raises(buildings.ProjectError, match="more than 100 times its size"):
+        buildings.expand_zips(bomb)
+    assert not any(p.is_file() for p in bomb.rglob("*"))
+
+    monkeypatch.setattr(buildings, "MAX_UNZIPPED", 1_000_000)
+    two = tmp_path / "two"   # each under the limit, together over it
+    two.mkdir()
+    for n in "ab":
+        (two / f"{n}.zip").write_bytes(zipped((f"{n}.pdf", bytes(range(256)) * 2400), compression=zipfile.ZIP_STORED))
+    with pytest.raises(buildings.ProjectError, match="too large to unpack"):
+        buildings.expand_zips(two)
+
+
+def test_a_zip_is_recognised_whatever_the_case_of_its_extension(tmp_path):
+    files_dir = tmp_path / "files"
+    files_dir.mkdir()
+    (files_dir / "DRAWINGS.ZIP").write_bytes(zipped(("A-101.pdf", b"%PDF")))
+    assert buildings.expand_zips(files_dir) == []
+    assert unpacked(files_dir) == {"DRAWINGS/A-101.pdf": b"%PDF"}
+
+
+def test_unpacked_files_never_overwrite_each_other_or_an_upload(tmp_path):
+    files_dir = tmp_path / "files"
+    files_dir.mkdir()
+    long = "a" * 300 + ".pdf"
+    members = [("A-101.pdf", b"1"), ("A-101.pdf", b"2"), ("A?102.pdf", b"3"), ("A*102.pdf", b"4"), ("a.pdf", b"5"),
+               ("a.pdf/b.pdf", b"6"), (long, b"7")]
+    (files_dir / "set.zip").write_bytes(zipped(*members))
+    (files_dir / "plan.pdf").write_bytes(b"uploaded")
+    (files_dir / "plan.pdf.zip").write_bytes(zipped(("p1.pdf", b"8")))
+    notes = buildings.expand_zips(files_dir)
+    got = unpacked(files_dir)
+    assert sorted(got.values()) == [b"1", b"2", b"3", b"4", b"5", b"6", b"7", b"8", b"uploaded"]
+    assert got["plan.pdf"] == b"uploaded" and got["plan.pdf (2)/p1.pdf"] == b"8"
+    assert all(len(part.encode()) <= 255 for name in got for part in name.split("/"))
+    assert "plan.pdf.zip was unpacked into plan.pdf (2)/" in " ".join(notes)
+    assert "set.zip: 3 file(s) have the same name as another" in " ".join(notes)
+
+
+def test_a_nested_zip_is_named_in_a_note(tmp_path):
+    files_dir = tmp_path / "files"
+    files_dir.mkdir()
+    (files_dir / "set.zip").write_bytes(zipped(("arch.zip", zipped(("A-101.pdf", b"%PDF"))), ("S-101.pdf", b"%PDF s")))
+    notes = buildings.expand_zips(files_dir)
+    assert unpacked(files_dir) == {"set/S-101.pdf": b"%PDF s"}
+    assert any("nested zip" in n and "arch.zip" in n for n in notes)
+
+
+def test_a_member_with_a_bad_checksum_is_removed_and_the_others_kept(tmp_path):
+    files_dir = tmp_path / "files"
+    files_dir.mkdir()
+    z = zipped(("a.pdf", b"%PDF a"), ("b.pdf", b"%PDF b" * 1000), ("c.pdf", b"%PDF c"), compression=zipfile.ZIP_STORED)
+    (files_dir / "set.zip").write_bytes(patched(z, b"b.pdf", crc=0x12345678))
+    notes = buildings.expand_zips(files_dir)
+    assert unpacked(files_dir) == {"set/a.pdf": b"%PDF a", "set/c.pdf": b"%PDF c"}   # no part of b.pdf
+    assert notes == [("set.zip: 1 file(s) could not be unpacked and were skipped: b.pdf (BadZipFile: Bad CRC-32 for file 'b.pdf'). "
+                      "The other 2 were unpacked into set/.")]
 
 
 def test_upload_rejects_other_formats_and_crop_stays_in_project(client):

@@ -15,11 +15,15 @@ from __future__ import annotations
 
 import hashlib
 import importlib
+import lzma
 import re
 import shutil
 import stat
+import struct
+import tempfile
 import time
 import zipfile
+import zlib
 from collections import Counter
 from pathlib import Path
 from urllib.parse import quote
@@ -45,8 +49,16 @@ CODES = {
 
 DRAWING_EXT = {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff"}
 ACCEPTED = DRAWING_EXT | {".ifc", ".dxf", ".zip"}
-MAX_UNZIPPED = 2_000_000_000
-MAX_ZIP_ENTRIES = 5000
+# what the zips of one upload may unpack to, counted as it is written (a zip's declared sizes may lie)
+MAX_UNZIPPED = 2_000_000_000   # bytes
+MAX_ZIP_ENTRIES = 5000         # files
+MAX_ZIP_RATIO = 100            # bytes written per byte of the zip, once a zip has written ZIP_RATIO_FLOOR (a ratio bomb)
+ZIP_RATIO_FLOOR = 100_000_000
+MAX_NAME_BYTES = 255           # one path component, as file systems allow
+MAX_PATH_BYTES = 1024          # a whole relative path
+# what reading a damaged, encrypted or unsupported zip or member raises
+ZIP_ERRORS = (zipfile.BadZipFile, zipfile.LargeZipFile, RuntimeError, NotImplementedError, EOFError, OSError,
+              ValueError, struct.error, zlib.error, lzma.LZMAError)   # ValueError: also a member name that is not UTF-8
 
 TYPE_LABEL = {"Stair": "stair", "Door": "door", "Space": "space", "Storey": "storey", "Corridor": "corridor", "Ramp": "ramp",
               "Exit": "exit", "EscapeRoute": "escape route", "Room": "room", "Floor": "floor", "Route": "accessible route",
@@ -59,42 +71,155 @@ class ProjectError(Exception):
 
 # ---------------------------------------------------------------- files
 
+def _fit(name: str, tail: str = "") -> str:
+    """name + tail, inserted before the extension, cut to MAX_NAME_BYTES."""
+    stem, ext = (name[:-len(Path(name).suffix)], Path(name).suffix) if 0 < len(Path(name).suffix) <= 16 else (name, "")
+    room = MAX_NAME_BYTES - len((tail + ext).encode())
+    return stem.encode()[:room].decode(errors="ignore").rstrip(" .") + tail + ext
+
+
 def safe_name(name: str) -> str:
-    """A file name from an upload, reduced to a safe relative path (no directories above, no odd characters)."""
+    """A file name from an upload, reduced to a safe relative path (no directories above, no odd characters, no
+    component over MAX_NAME_BYTES)."""
     parts = [re.sub(r"[^\w.\- ()&#+,]", "_", p).strip(" .") for p in Path(name.replace("\\", "/")).parts if p not in ("", ".", "..", "/")]
-    parts = [p for p in parts if p]
-    if not parts:
-        raise ProjectError(f"Unusable file name: {name!r}")
+    parts = [_fit(p) for p in parts if p]
+    if not parts or len("/".join(parts).encode()) > MAX_PATH_BYTES:
+        raise ProjectError(f"Unusable file name: {name[:200]!r}")
     return "/".join(parts)
 
 
+def is_zip(path: Path) -> bool:
+    return path.suffix.lower() == ".zip"
+
+
+def _numbered(name: str, n: int, is_dir: bool) -> str:
+    """The n-th name for something whose name is taken: 'A-101 (2).pdf', or 'set (2)' for a folder."""
+    return _fit(name + f" ({n})") if is_dir else _fit(name, f" ({n})")
+
+
+def _free(rel: str, files: set[str], dirs: set[str]) -> str:
+    """rel, with components renamed where an earlier member took that path for a file (or, for the file itself,
+    for a folder); records the result in files and dirs."""
+    parts = rel.split("/")
+    for k, name in enumerate(parts):
+        last = k == len(parts) - 1
+        at, n = "/".join(parts[:k + 1]), 1
+        while at in files or (last and at in dirs):
+            n += 1
+            parts[k] = _numbered(name, n, not last)
+            at = "/".join(parts[:k + 1])
+        if not last:
+            dirs.add(at)
+    files.add(at)
+    return at
+
+
+def _why(e: BaseException) -> str:
+    name = type(e).__name__
+    return f"{type(e).__module__ + '.' if name == 'error' else ''}{name}: {str(e)[:160]}"   # zlib.error, not "error"
+
+
+def _listed(items: list[str], most: int = 10) -> str:
+    return ", ".join(items[:most]) + (f" and {len(items) - most} more" if len(items) > most else "")
+
+
 def expand_zips(files_dir: Path) -> list[str]:
-    """Unpack every .zip in place (drawing sets usually arrive zipped). Refuses path traversal, links and zip bombs."""
-    notes = []
-    for z in sorted(files_dir.rglob("*.zip")):
+    """Unpack every uploaded .zip (drawing sets usually arrive zipped) into a folder named after it, or that name
+    numbered when it is taken. Refuses path traversal, links and zip bombs: the files and bytes the upload's zips
+    unpack are counted as they are written, against MAX_ZIP_ENTRIES, MAX_UNZIPPED and MAX_ZIP_RATIO, and over them
+    the upload is refused (ProjectError). Each zip is unpacked into a staging folder and moved into place, so a zip
+    that cannot be opened leaves nothing behind. Returns notes for the user: a zip that cannot be read, members that
+    cannot be (encrypted, an unsupported compression, damaged data, an unusable name) or that are zips themselves
+    (not unpacked), and members unpacked under a new name because another took theirs."""
+    notes: list[str] = []
+    budget = {"bytes": MAX_UNZIPPED, "entries": MAX_ZIP_ENTRIES}
+    for z in sorted(p for p in files_dir.rglob("*") if is_zip(p) and p.is_file() and not p.is_symlink()):
         try:
-            with zipfile.ZipFile(z) as zf:
-                infos = [i for i in zf.infolist() if not i.is_dir()]
-                if len(infos) > MAX_ZIP_ENTRIES or sum(i.file_size for i in infos) > MAX_UNZIPPED:
-                    raise ProjectError(f"{z.name} is too large to unpack ({len(infos)} files).")
-                dest = z.with_suffix("")
-                for i in infos:
-                    if stat.S_ISLNK(i.external_attr >> 16):
-                        continue
-                    rel = safe_name(i.filename)
-                    if Path(rel).suffix.lower() not in ACCEPTED - {".zip"} or "__MACOSX" in rel:
-                        continue
-                    out = (dest / rel).resolve()
-                    if files_dir.resolve() not in out.parents:
-                        continue
-                    out.parent.mkdir(parents=True, exist_ok=True)
-                    with zf.open(i) as src, open(out, "wb") as dst:
-                        shutil.copyfileobj(src, dst, 1 << 20)
-            z.unlink()
-        except zipfile.BadZipFile:
-            notes.append(f"{z.name} is not a readable zip file; skipped.")
+            notes += _unpack(z, files_dir, budget)
+        finally:
             z.unlink()
     return notes
+
+
+def _unpack(z: Path, files_dir: Path, budget: dict) -> list[str]:
+    zname = str(z.relative_to(files_dir))
+    try:
+        zf = zipfile.ZipFile(z)
+    except ZIP_ERRORS as e:
+        return [f"{zname} is not a readable zip file ({_why(e)}); skipped."]
+    stage = Path(tempfile.mkdtemp(prefix=".unzip-", dir=files_dir))
+    try:
+        with zf:
+            infos = [i for i in zf.infolist() if not i.is_dir()]
+            budget["entries"] -= len(infos)
+            if budget["entries"] < 0 or sum(i.file_size for i in infos) > budget["bytes"]:
+                raise ProjectError(f"{zname} is too large to unpack ({len(infos)} files).")
+            limit = min(budget["bytes"], max(ZIP_RATIO_FLOOR, MAX_ZIP_RATIO * z.stat().st_size))
+            written, kept = 0, 0
+            files: set[str] = set()
+            dirs: set[str] = set()
+            skipped, renamed, nested = [], [], []
+            for i in infos:
+                if stat.S_ISLNK(i.external_attr >> 16):
+                    continue
+                try:
+                    rel = safe_name(i.filename)
+                except ProjectError:
+                    skipped.append(f"{i.filename[:200]!r} (unusable name)")
+                    continue
+                if "__MACOSX" in rel:
+                    continue
+                if is_zip(Path(rel)):
+                    nested.append(rel)
+                    continue
+                if Path(rel).suffix.lower() not in ACCEPTED:
+                    continue
+                if i.flag_bits & 0x1:
+                    skipped.append(f"{rel} (encrypted)")
+                    continue
+                out_rel = _free(rel, files, dirs)
+                out = stage / out_rel
+                try:
+                    out.parent.mkdir(parents=True, exist_ok=True)
+                    with zf.open(i) as src, open(out, "wb") as dst:
+                        while chunk := src.read(1 << 20):
+                            written += len(chunk)
+                            if written > limit:
+                                raise ProjectError(f"{zname} is too large to unpack: the zips of one upload may unpack to "
+                                                   f"{MAX_UNZIPPED // 1_000_000} MB." if limit == budget["bytes"] else
+                                                   f"{zname} unpacks to more than {MAX_ZIP_RATIO} times its size, as a zip "
+                                                   "bomb does; it was not unpacked.")
+                            dst.write(chunk)
+                except ZIP_ERRORS as e:
+                    out.unlink(missing_ok=True)
+                    skipped.append(f"{rel} ({_why(e)})")
+                    continue
+                kept += 1
+                if out_rel != rel:
+                    renamed.append(f"{i.filename[:200]} -> {out_rel}")
+        budget["bytes"] -= written
+        dest, n = z.with_suffix(""), 1
+        while dest.exists() or dest.is_symlink():
+            n += 1
+            dest = z.parent / _numbered(z.stem, n, True)
+        into = str(dest.relative_to(files_dir))
+        notes = []
+        if kept:
+            stage.rename(dest)
+            if n > 1:
+                notes.append(f"{zname} was unpacked into {into}/, as {z.with_suffix('').name} is taken.")
+        if skipped:
+            notes.append(f"{zname}: {len(skipped)} file(s) could not be unpacked and were skipped: {_listed(skipped)}. "
+                         + (f"The other {kept} were unpacked into {into}/." if kept else "No other file in it was unpacked."))
+        if nested:
+            notes.append(f"{zname}: nested zip file(s) inside it were not unpacked: {_listed(nested)}. "
+                         "Unzip them and upload their contents.")
+        if renamed:
+            notes.append(f"{zname}: {len(renamed)} file(s) have the same name as another file in it once unpacked, "
+                         f"and were unpacked under a new name: {_listed(renamed)}.")
+        return notes
+    finally:
+        shutil.rmtree(stage, ignore_errors=True)
 
 
 def inventory(files_dir: Path) -> dict[str, list[Path]]:
@@ -126,7 +251,7 @@ def process(files_dir: Path, name: str, progress=lambda m: None, requirements: l
     rel = lambda p: str(p.relative_to(files_dir))  # noqa: E731
     files = [{"file": rel(p), "kind": k, "bytes": p.stat().st_size} for k, ps in kinds.items() for p in ps]
     if not any(kinds[k] for k in ("ifc", "dxf", "drawings")):
-        raise ProjectError("No IFC model, DXF drawing, PDF or image sheet was found in the upload.")
+        raise ProjectError(" ".join(["No IFC model, DXF drawing, PDF or image sheet was found in the upload.", *notes]))
     for p in kinds["other"]:
         notes.append(f"{rel(p)}: not a format this checker reads (IFC, DXF, PDF, PNG, JPEG, TIFF); skipped.")
     docs, sheets = [], []
