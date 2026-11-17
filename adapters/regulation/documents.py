@@ -10,15 +10,21 @@ from __future__ import annotations
 
 import hashlib
 import html as html_mod
+import lzma
 import re
 import unicodedata
 import zipfile
+import zlib
 from dataclasses import dataclass
 from html.parser import HTMLParser
+from operator import itemgetter
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
 MAX_BYTES = 50_000_000
+MAX_XML_BYTES = 100_000_000       # one XML part of a .docx, inflated
+MAX_PDF_INFLATED = 200_000_000    # a PDF's compressed streams other than images, inflated (pdfminer holds them in memory)
+MAX_LIST_LABEL = 64               # characters of one list number written in letters or roman numerals
 KINDS = {".pdf": "pdf", ".docx": "docx", ".html": "html", ".htm": "html", ".xhtml": "html",
          ".md": "md", ".markdown": "md", ".txt": "txt", ".text": "txt", ".rst": "txt"}
 LEGACY = {".doc": "save it as .docx", ".rtf": "save it as .docx or PDF", ".odt": "save it as .docx or PDF",
@@ -28,6 +34,18 @@ OLE_MAGIC = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"   # an encrypted .docx is an OLE
 
 class RegulationError(RuntimeError):
     """A problem with the customer's document or the compilation, with a message meant for the user."""
+
+
+INTEGER = re.compile(r"[-+]?[0-9]{1,10}")   # ASCII digits: str.isdigit() and int() also take '²' and other scripts' digits
+
+
+def _integer(text: str | None) -> int | None:
+    """`text` as a 32-bit whole number (the range of the HTML and Word numbering attributes read here), or None when
+    it is not one."""
+    if text is None or not INTEGER.fullmatch(text.strip()):
+        return None
+    n = int(text)
+    return n if -2**31 <= n < 2**31 else None
 
 
 @dataclass
@@ -55,7 +73,8 @@ def _clean(text: str) -> str:
     text = unicodedata.normalize("NFKC", text).translate(_INVISIBLE)
     # Symbol-font bullets (Wingdings, Symbol) come out as private-use code points.
     text = "".join("•" if unicodedata.category(c) == "Co" else " " if unicodedata.category(c) == "Cc" else c for c in text)
-    text = re.sub(r"(?:\. ?){5,}|…{2,}", " … ", text)   # table-of-contents leader dots
+    # table-of-contents leader dots; possessive, as a backtracking repeat keeps state for every dot (GBs for a long run)
+    text = re.sub(r"(?:\. ?){5,}+|…{2,}", " … ", text)
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -68,6 +87,23 @@ def _number(rows: list[tuple[int | None, str]]) -> list[Line]:
     return out
 
 
+ASCII = bytes(range(0x20, 0x7F)) + b"\t\n\r"
+
+
+def _declared(data: bytes) -> str | None:
+    """The charset an HTML <meta> declares, if it can be the file's: the declaration was found as ASCII bytes, so a
+    charset that does not read ASCII as itself (UTF-16, UTF-32, EBCDIC, punycode) cannot be, nor can one Python has no
+    text codec for or cannot decode with replacement (rot13, idna)."""
+    m = re.search(rb"""<meta[^>]+charset=["']?([\w-]+)""", data[:4096], re.I)
+    if not m:
+        return None
+    enc = m.group(1).decode("ascii")
+    try:
+        return enc if ASCII.decode(enc, errors="replace") == ASCII.decode("ascii") else None
+    except (LookupError, UnicodeError):
+        return None
+
+
 def _decode(data: bytes, rel: str, html: bool = False) -> str:
     for bom, enc in ((b"\xef\xbb\xbf", "utf-8-sig"), (b"\xff\xfe", "utf-16"), (b"\xfe\xff", "utf-16")):
         if data.startswith(bom):
@@ -75,8 +111,7 @@ def _decode(data: bytes, rel: str, html: bool = False) -> str:
     try:
         text = data.decode("utf-8")
     except UnicodeDecodeError:
-        m = re.search(rb"""<meta[^>]+charset=["']?([\w-]+)""", data[:4096], re.I) if html else None
-        enc = m.group(1).decode("ascii", "replace") if m else None
+        enc = _declared(data) if html else None
         if enc is None:   # undeclared: detect it (Shift_JIS, GB18030, cp1252...) rather than assume Western European
             from charset_normalizer import from_bytes
             best = from_bytes(data).best()
@@ -109,6 +144,8 @@ def _pdf(path: Path, rel: str) -> tuple[list[tuple[int | None, str]], int]:
         with pdf:
             for page in pdf.pages:
                 pages.append(_page_text(page))
+                page.close()                  # pdfplumber keeps every page's objects otherwise,
+                page.flush_cache(["_layout"])  # and close() leaves pdfminer's layout tree
     except Exception as e:
         name = type(e).__name__
         if "Password" in name or "Encrypt" in name:
@@ -116,9 +153,43 @@ def _pdf(path: Path, rel: str) -> tuple[list[tuple[int | None, str]], int]:
         raise RegulationError(f"{rel} could not be read as a PDF ({name}); the file may be damaged") from e
     if not any(_clean(t) for p in pages for t in p):
         raise RegulationError(f"{rel} has no text layer; scanned PDFs are not supported yet")
+    for i, p in enumerate(pages):
+        text = " ".join(p)
+        glyphs = len(CID.findall(text))
+        if glyphs and glyphs >= len(re.sub(r"\s", "", CID.sub("", text))):
+            raise RegulationError(f"{rel}: page {i + 1} has no text layer that can be read (its font does not say which "
+                                  "characters its glyphs are); upload a PDF exported with its text, or a Word or HTML copy")
     repeated = _running_heads(pages)
     rows = [(i + 1, t) for i, p in enumerate(pages) for t in p if _shape(t) not in repeated]
     return rows, len(pages)
+
+
+CID = re.compile(r"\(cid:\d+\)")   # pdfminer's text for a glyph its font maps to no character
+STREAM = re.compile(rb"(?<!end)stream(?:\r\n|\n|\r)")
+IMAGE = re.compile(rb"/Subtype\s*/Image(?![A-Za-z])")
+
+
+def _inflated(data: bytes) -> int:
+    """How many bytes the PDF's Flate streams expand to, counted in chunks and stopping past MAX_PDF_INFLATED: pdfminer
+    inflates a stream whole and keeps it. Images are left out, as text extraction never decodes them; a stream that is
+    not Flate data fails at its first bytes and counts nothing."""
+    total, view = 0, memoryview(data)
+    for m in STREAM.finditer(data):
+        head = data[max(0, m.start() - 4096):m.start()]
+        if IMAGE.search(head[max(0, head.rfind(b"obj")):]):   # the stream's own dictionary, after the previous endobj
+            continue
+        d, pos = zlib.decompressobj(), m.end()
+        try:
+            while not d.eof and pos < len(data):
+                buf, pos = view[pos:pos + 65536], pos + 65536
+                while buf and not d.eof:
+                    total += len(d.decompress(buf, 1 << 20))
+                    buf = d.unconsumed_tail
+                    if total > MAX_PDF_INFLATED:
+                        return total
+        except zlib.error:
+            pass
+    return total
 
 
 RUN = re.compile(r"[A-Za-z,.;:()'’-]{22,}")
@@ -137,19 +208,42 @@ def _page_text(page) -> list[str]:
     malformed tokens, readings with glyphs drawn twice in one place (fake bold) counted once, and with gaps judged
     against 15% of the font size (PDFs that set spaces as narrow gaps), are tried too, and the one with the fewest
     malformed tokens is kept."""
-    chars = page.chars
-    if chars and sum(1 for c in chars if c.get("upright", True)) >= 0.5 * len(chars):
-        page = page.filter(lambda o: o.get("object_type") != "char" or o.get("upright", True))
-    best = (page.extract_text() or "").split("\n")
-    bad = _malformed(best)
-    if bad:
-        once = page.dedupe_chars()
-        for kw_page, kw in ((once, {}), (once, {"x_tolerance_ratio": 0.15})):
-            lines = (kw_page.extract_text(**kw) or "").split("\n")
-            n = _malformed(lines)
-            if n < bad:
-                best, bad = lines, n
-    return best
+    derived = []   # filtered views of the page, closed when done: each caches its own objects and text maps
+    try:
+        chars = page.chars
+        if chars and sum(1 for c in chars if c.get("upright", True)) >= 0.5 * len(chars):
+            page = page.filter(lambda o: o.get("object_type") != "char" or o.get("upright", True))
+            derived.append(page)
+        best = (page.extract_text() or "").split("\n")
+        bad = _malformed(best)
+        if bad:
+            once = _deduped(page)
+            derived.append(once)
+            for kw in ({}, {"x_tolerance_ratio": 0.15}):
+                lines = (once.extract_text(**kw) or "").split("\n")
+                n = _malformed(lines)
+                if n < bad:
+                    best, bad = lines, n
+        return best
+    finally:
+        for p in derived:
+            p.close()
+
+
+def _deduped(page):
+    """The page with each glyph drawn twice in one place counted once, as pdfplumber's dedupe_chars does it (same
+    text, upright, font and size, within 1 pt), in linear time: dedupe_chars restores the order with list.index."""
+    from pdfplumber.utils import cluster_objects
+
+    groups: dict[tuple, list[dict]] = {}
+    for c in page.chars:
+        groups.setdefault((c.get("upright"), c.get("text"), c.get("fontname"), c.get("size")), []).append(c)
+    keep = set()
+    for chars in groups.values():
+        for row in cluster_objects(chars, itemgetter("doctop"), 1):
+            for same in cluster_objects(row, itemgetter("x0"), 1):
+                keep.add(id(min(same, key=itemgetter("doctop", "x0"))))
+    return page.filter(lambda o: o.get("object_type") != "char" or id(o) in keep)
 
 
 def _shape(text: str) -> str:
@@ -168,7 +262,8 @@ def _running_heads(pages: list[list[str]]) -> set[str]:
     for i, p in enumerate(pages):
         kept = [t for t in p if _clean(t)]
         for t in {t: None for t in kept[:2] + kept[-2:]}:
-            seen.setdefault(_shape(t), []).append((i, [int(n) for n in re.findall(r"\d+", _clean(t))]))
+            # 18 digits at a time: int() refuses more than 4300, and page numbers are short
+            seen.setdefault(_shape(t), []).append((i, [int(n) for n in re.findall(r"\d{1,18}", _clean(t))]))
     out = set()
     for s, occ in seen.items():
         if not s or len({i for i, _ in occ}) < max(3, 0.6 * len(pages)):
@@ -193,24 +288,51 @@ def _paged(a: tuple[int, list[int]], b: tuple[int, list[int]]) -> bool:
 # ---------------------------------------------------------------- DOCX
 
 W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+DOCX_PARTS = ("word/document.xml", "word/numbering.xml", "word/styles.xml")
+# what reading a damaged zip member can raise: bad headers or offsets, corrupt deflate/bzip2/lzma data, truncation, an
+# unknown compression method, an encrypted member (RuntimeError), a member name that is not valid UTF-8 (ValueError)
+ZIP_ERRORS = (zipfile.BadZipFile, zlib.error, lzma.LZMAError, EOFError, OSError, NotImplementedError, RuntimeError,
+              ValueError)
+
+
+class _Damaged(Exception):
+    """A Word numbering value that no valid document has; the message says which."""
 
 
 def _roman(n: int) -> str:
+    if n // 1000 > MAX_LIST_LABEL:
+        raise _Damaged(f"list item number {n} is too large to write in roman numerals")
     out = ""
+    if n <= 0:
+        return out
     for v, s in ((1000, "m"), (900, "cm"), (500, "d"), (400, "cd"), (100, "c"), (90, "xc"), (50, "l"), (40, "xl"),
                  (10, "x"), (9, "ix"), (5, "v"), (4, "iv"), (1, "i")):
-        while n >= v:
-            out, n = out + s, n - v
+        out, n = out + s * (n // v), n % v
     return out
 
 
 def _letter(n: int) -> str:
+    if (n - 1) // 26 >= MAX_LIST_LABEL:
+        raise _Damaged(f"list item number {n} is too large to write in letters")
     return chr(ord("a") + (n - 1) % 26) * ((n - 1) // 26 + 1) if n > 0 else ""
 
 
 def _fmt(fmt: str, n: int) -> str:
-    return {"lowerLetter": _letter(n), "upperLetter": _letter(n).upper(), "lowerRoman": _roman(n),
-            "upperRoman": _roman(n).upper(), "decimalZero": f"{n:02d}", "bullet": "•", "none": ""}.get(fmt, str(n))
+    if fmt in ("lowerLetter", "upperLetter"):
+        return _letter(n).upper() if fmt == "upperLetter" else _letter(n)
+    if fmt in ("lowerRoman", "upperRoman"):
+        return _roman(n).upper() if fmt == "upperRoman" else _roman(n)
+    return {"decimalZero": f"{n:02d}", "bullet": "•", "none": ""}.get(fmt, str(n))
+
+
+def _whole(value: str | None, what: str, default: int) -> int:
+    """A Word decimal-number attribute (a list level, a list's start), `default` when absent."""
+    if value is None:
+        return default
+    n = _integer(value)
+    if n is None:
+        raise _Damaged(f"{what} {value[:20]!r} is not a whole number")
+    return n
 
 
 class _Numbering:
@@ -227,9 +349,10 @@ class _Numbering:
                 lv = {}
                 for lvl in a.iter(W + "lvl"):
                     fmt, text, start = lvl.find(W + "numFmt"), lvl.find(W + "lvlText"), lvl.find(W + "start")
-                    lv[int(lvl.get(W + "ilvl", "0"))] = (fmt.get(W + "val", "decimal") if fmt is not None else "decimal",
-                                                       text.get(W + "val", "") if text is not None else "",
-                                                       int(start.get(W + "val", "1")) if start is not None else 1)
+                    lv[_whole(lvl.get(W + "ilvl"), "list level", 0)] = (
+                        fmt.get(W + "val", "decimal") if fmt is not None else "decimal",
+                        text.get(W + "val", "") if text is not None else "",
+                        _whole(start.get(W + "val"), "list start", 1) if start is not None else 1)
                 self.levels[a.get(W + "abstractNumId")] = lv
             for n in numbering.iter(W + "num"):
                 a = n.find(W + "abstractNumId")
@@ -257,7 +380,7 @@ class _Numbering:
     def _numpr(np: ET.Element, default: tuple) -> tuple:
         nid, ilvl = np.find(W + "numId"), np.find(W + "ilvl")
         return (nid.get(W + "val") if nid is not None else default[0],
-                int(ilvl.get(W + "val", "0")) if ilvl is not None else default[1])
+                _whole(ilvl.get(W + "val"), "list level", 0) if ilvl is not None else default[1])
 
     def label(self, p: ET.Element) -> str:
         ppr = p.find(W + "pPr")
@@ -304,9 +427,16 @@ def _paragraph(p: ET.Element, numbering: _Numbering) -> list[str]:
     return rows
 
 
-def _docx_blocks(parent: ET.Element, numbering: _Numbering, out: list[str]) -> None:
-    for el in parent:
-        if el.tag == W + "p":
+def _docx_blocks(body: ET.Element, numbering: _Numbering) -> list[str]:
+    """Paragraphs and table rows in reading order, looking inside content controls, custom XML and tracked insertions
+    however deeply they nest: the walk keeps its own stack, as recursion would end at Python's limit."""
+    out: list[str] = []
+    stack = [iter(body)]
+    while stack:
+        el = next(stack[-1], None)
+        if el is None:
+            stack.pop()
+        elif el.tag == W + "p":
             out.extend(_paragraph(el, numbering))
         elif el.tag == W + "tbl":
             for tr in el.iter(W + "tr"):   # a row is one line, its cells joined by " | ", as in HTML
@@ -318,7 +448,8 @@ def _docx_blocks(parent: ET.Element, numbering: _Numbering, out: list[str]) -> N
                     cells.append(" ".join(c.strip() for c in cell if c.strip()))
                 out.append(" | ".join(cells))
         elif el.tag in (W + "sdt", W + "sdtContent", W + "customXml", W + "ins"):
-            _docx_blocks(el, numbering, out)
+            stack.append(iter(el))
+    return out
 
 
 def _docx(path: Path, rel: str) -> list[tuple[int | None, str]]:
@@ -326,22 +457,32 @@ def _docx(path: Path, rel: str) -> list[tuple[int | None, str]]:
         if f.read(8) == OLE_MAGIC:
             raise RegulationError(f"{rel} is encrypted (password-protected) or a legacy Word file; "
                                   "upload an unprotected .docx or a PDF")
+    parts: dict[str, bytes] = {}
     try:
         with zipfile.ZipFile(path) as z:
             names = set(z.namelist())
             if "word/document.xml" not in names:
                 raise RegulationError(f"{rel} is not a Word document (no word/document.xml)")
-            doc = ET.fromstring(z.read("word/document.xml"))
-            numbering = ET.fromstring(z.read("word/numbering.xml")) if "word/numbering.xml" in names else None
-            styles = ET.fromstring(z.read("word/styles.xml")) if "word/styles.xml" in names else None
-    except zipfile.BadZipFile as e:
+            for name in DOCX_PARTS:
+                if name in names:
+                    with z.open(name) as f:
+                        parts[name] = f.read(MAX_XML_BYTES + 1)   # inflated a chunk at a time, so a bomb stops here
+                    if len(parts[name]) > MAX_XML_BYTES:
+                        raise RegulationError(f"{rel} is too large: its {name} expands to more than "
+                                              f"{MAX_XML_BYTES // 1_000_000} MB")
+    except RegulationError:
+        raise
+    except ZIP_ERRORS as e:
         raise RegulationError(f"{rel} could not be read as a .docx file (not a valid zip archive)") from e
-    except ET.ParseError as e:
+    try:   # an unknown or multi-byte encoding declared: LookupError, ValueError (UnicodeError for idna)
+        doc, numbering, styles = (ET.fromstring(parts[n]) if n in parts else None for n in DOCX_PARTS)
+    except (ET.ParseError, LookupError, ValueError) as e:
         raise RegulationError(f"{rel} could not be read: its document XML is damaged ({e})") from e
     body = doc.find(W + "body")
-    out: list[str] = []
-    if body is not None:
-        _docx_blocks(body, _Numbering(numbering, styles), out)
+    try:
+        out = _docx_blocks(body, _Numbering(numbering, styles)) if body is not None else []
+    except _Damaged as e:
+        raise RegulationError(f"{rel} could not be read: its list numbering is damaged ({e})") from e
     return [(None, t) for t in out]
 
 
@@ -353,6 +494,7 @@ BLOCK = {"address", "article", "aside", "blockquote", "caption", "dd", "details"
          "body", "html", "br", "legend", "option"}
 SKIP = {"script", "style", "noscript", "template", "svg", "head", "nav", "iframe", "object", "canvas", "math",
         "button", "select"}
+HEAD = {"base", "basefont", "bgsound", "link", "meta", "noframes", "noscript", "script", "style", "template", "title"}
 VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
 
 
@@ -377,14 +519,28 @@ class _Html(HTMLParser):
         self.furniture = 0
         self.cells: list[int] = []           # per open table row: cells started so far
         self.incell = 0
+        self.head = False                    # in <head>, whose end tag may be left out
 
     def flush(self) -> None:
         text = "".join(self.buf)
         self.buf = []
         self.rows.extend(text.split("\n") if self.pre else [text])
 
+    def end_head(self) -> None:
+        """Leave <head>: at </head>, or where the HTML parsing rules imply it, at the first element or text that
+        cannot be in it (<body>, <p>...), when it is not inside another skipped element."""
+        self.head = False
+        self.skip -= 1
+
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
+        if tag == "head":
+            if not self.head:
+                self.head = True
+                self.skip += 1
+            return
+        if self.head and tag not in HEAD and self.skip == 1:
+            self.end_head()
         if tag in SKIP:
             self.skip += tag not in VOID
             return
@@ -415,8 +571,8 @@ class _Html(HTMLParser):
         if tag == "pre":
             self.pre += 1
         if tag in ("ol", "ul"):
-            start = a.get("start")
-            self.lists.append((int(start) if start and start.isdigit() else 1) if tag == "ol" else None)
+            start = _integer(a.get("start"))   # as browsers read it: an integer, else 1
+            self.lists.append((1 if start is None else start) if tag == "ol" else None)
         if tag == "li":
             if self.lists and self.lists[-1] is not None:
                 self.label = f"{self.lists[-1]}. "
@@ -425,6 +581,10 @@ class _Html(HTMLParser):
                 self.label = "• "
 
     def handle_endtag(self, tag):
+        if tag == "head":
+            if self.head:
+                self.end_head()
+            return
         if tag in SKIP:
             self.skip = max(0, self.skip - 1)
             return
@@ -459,6 +619,8 @@ class _Html(HTMLParser):
             self.cells, self.incell = [], 0
 
     def handle_data(self, data):
+        if self.head and self.skip == 1 and data.strip() and not (self.open and self.open[-1][0] == "title"):
+            self.end_head()
         if self.skip or self.furniture:
             return
         if self.label and data.strip():
@@ -469,7 +631,7 @@ class _Html(HTMLParser):
 
 def _html(text: str) -> list[tuple[int | None, str]]:
     p = _Html()
-    p.feed(text)
+    p.feed(text.replace("\r\n", "\n").replace("\r", "\n"))   # line ends normalised, as an HTML parser does first
     p.close()
     p.flush()
     return [(None, t) for t in p.rows]
@@ -528,6 +690,9 @@ def read(path: Path, rel: str) -> Document:
     if kind == "pdf":
         if not data.lstrip()[:5] == b"%PDF-":
             raise RegulationError(f"{rel} is not a PDF file")
+        if _inflated(data) > MAX_PDF_INFLATED:
+            raise RegulationError(f"{rel} is too large: its compressed content expands to more than "
+                                  f"{MAX_PDF_INFLATED // 1_000_000} MB")
         rows, pages = _pdf(path, rel)
     elif kind == "docx":
         rows = _docx(path, rel)

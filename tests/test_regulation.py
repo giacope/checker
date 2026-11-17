@@ -3,7 +3,11 @@ pack the engine evaluates."""
 
 import json
 import re
+import struct
+import time
+import tracemalloc
 import zipfile
+import zlib
 from pathlib import Path
 
 import httpx
@@ -11,6 +15,7 @@ import pytest
 import yaml
 
 import adapters.regulation as regulation
+from adapters.regulation import documents
 from adapters.regulation import (Document, Line, RegulationError, build_pack, clauses, compile_checks, fact_attr, uncovered, upgrade,
                                  read)
 from normir.evidence import load_evidence, run
@@ -41,13 +46,15 @@ def transport(answer):
 
 # ---------------------------------------------------------------- fixtures
 
-def make_pdf(pages: list[list[str] | bytes]) -> bytes:
-    """A minimal PDF with one Helvetica text line per string, written by hand (no PDF writer is installed). A page
-    given as bytes is its content stream as it is."""
+HELVETICA = b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"
+
+
+def make_pdf(pages: list[list[str] | bytes], font: bytes = HELVETICA, flate: bool = False) -> bytes:
+    """A minimal PDF with one text line per string in `font` (Helvetica), written by hand (no PDF writer is installed).
+    A page given as bytes is its content stream as it is; `flate` compresses the content streams."""
     n = len(pages)
     objs = [b"<< /Type /Catalog /Pages 2 0 R >>",
-            f"<< /Type /Pages /Kids [{' '.join(f'{4 + 2 * i} 0 R' for i in range(n))}] /Count {n} >>".encode(),
-            b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"]
+            f"<< /Type /Pages /Kids [{' '.join(f'{4 + 2 * i} 0 R' for i in range(n))}] /Count {n} >>".encode(), font]
     for i, lines in enumerate(pages):
         ops = []
         for j, t in enumerate(lines if isinstance(lines, list) else []):
@@ -56,7 +63,8 @@ def make_pdf(pages: list[list[str] | bytes]) -> bytes:
         stream = lines if isinstance(lines, bytes) else ("BT /F1 12 Tf 72 720 Td " + " ".join(ops) + " ET").encode() if lines else b""
         objs.append(f"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> "
                     f"/Contents {5 + 2 * i} 0 R >>".encode())
-        objs.append(b"<< /Length %d >>\nstream\n" % len(stream) + stream + b"\nendstream")
+        stream, filt = (zlib.compress(stream), b" /Filter /FlateDecode") if flate else (stream, b"")
+        objs.append(b"<< /Length %d%s >>\nstream\n" % (len(stream), filt) + stream + b"\nendstream")
     out, offsets = b"%PDF-1.4\n", []
     for k, o in enumerate(objs, 1):
         offsets.append(len(out))
@@ -109,6 +117,14 @@ def make_docx(path: Path) -> Path:
         z.writestr("word/document.xml", f"<w:document {W}><w:body>{body}</w:body></w:document>")
         z.writestr("word/numbering.xml", numbering)
         z.writestr("word/styles.xml", styles)
+    return path
+
+
+def write_docx(path: Path, body: str, numbering: str = "") -> Path:
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("word/document.xml", f"<w:document {W}><w:body>{body}</w:body></w:document>")
+        if numbering:
+            z.writestr("word/numbering.xml", f"<w:numbering {W}>{numbering}</w:numbering>")
     return path
 
 
@@ -228,6 +244,156 @@ def test_unreadable_files_are_user_facing_errors(tmp_path, name, data, message):
     p.write_bytes(data)
     with pytest.raises(RegulationError, match=re.escape(message)):
         read(p, name)
+
+
+NUMBERED = '<w:p><w:pPr><w:numPr><w:ilvl w:val="{ilvl}"/><w:numId w:val="1"/></w:numPr></w:pPr><w:r><w:t>Stairs are 1 m wide.</w:t></w:r></w:p>'
+
+
+@pytest.mark.parametrize("ilvl, lvl, start, fmt, message", [
+    ("0", "x", "1", "decimal", "list level 'x' is not a whole number"),
+    ("0", "0", "1.5", "decimal", "list start '1.5' is not a whole number"),
+    ("one", "0", "1", "decimal", "list level 'one' is not a whole number"),
+    ("0", "0", "9" * 12, "decimal", "list start '999999999999' is not a whole number"),
+    ("0", "0", "10000000", "upperRoman", "list item number 10000000 is too large to write in roman numerals"),
+    ("0", "0", "100000000", "lowerLetter", "list item number 100000000 is too large to write in letters"),
+])
+def test_word_list_numbering_that_no_valid_document_has_is_an_error(tmp_path, ilvl, lvl, start, fmt, message):
+    numbering = (f'<w:abstractNum w:abstractNumId="7"><w:lvl w:ilvl="{lvl}"><w:start w:val="{start}"/><w:numFmt w:val="{fmt}"/>'
+                 '<w:lvlText w:val="%1."/></w:lvl></w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="7"/></w:num>')
+    p = write_docx(tmp_path / "std.docx", NUMBERED.format(ilvl=ilvl), numbering)
+    with pytest.raises(RegulationError, match=re.escape(f"its list numbering is damaged ({message})")):
+        read(p, "std.docx")
+
+
+def test_word_content_nested_thousands_deep_is_read(tmp_path):
+    body = "<w:sdt><w:sdtContent><w:ins>" * 3000 + wp("Stairs are 1 m wide.") + "</w:ins></w:sdtContent></w:sdt>" * 3000
+    assert texts(read(write_docx(tmp_path / "std.docx", body + wp("Ramps are 1:12.")), "std.docx")) == [
+        "Stairs are 1 m wide.", "Ramps are 1:12."]
+
+
+def _deflate_broken(z: bytearray) -> None:      # the first member's data starts with a reserved block type
+    name_len, extra_len = struct.unpack_from("<HH", z, 26)
+    z[30 + name_len + extra_len] = 0xFF
+
+
+def _directory_misplaced(z: bytearray) -> None:  # the end record puts the central directory after where it is
+    struct.pack_into("<I", z, len(z) - 6, struct.unpack_from("<I", z, len(z) - 6)[0] + 1000)
+
+
+@pytest.mark.parametrize("damage, xml_decl, message", [
+    (_deflate_broken, "", "not a valid zip archive"),
+    (_directory_misplaced, "", "not a valid zip archive"),
+    (None, '<?xml version="1.0" encoding="UTF-1"?>', "its document XML is damaged (unknown encoding: UTF-1)"),
+    (None, '<?xml version="1.0" encoding="shift_jis"?>', "its document XML is damaged"),
+])
+def test_damaged_word_archives_and_xml_are_user_facing_errors(tmp_path, damage, xml_decl, message):
+    p = tmp_path / "std.docx"
+    with zipfile.ZipFile(p, "w", zipfile.ZIP_DEFLATED) as z:
+        z.writestr("word/document.xml", f"{xml_decl}<w:document {W}><w:body>{wp('Stairs are 1 m wide.')}</w:body></w:document>")
+    if damage:
+        data = bytearray(p.read_bytes())
+        damage(data)
+        p.write_bytes(data)
+    with pytest.raises(RegulationError, match=re.escape(message)):
+        read(p, "std.docx")
+
+
+def test_compressed_parts_that_expand_past_the_limit_are_refused_unread(tmp_path, monkeypatch):
+    monkeypatch.setattr(documents, "MAX_XML_BYTES", 50_000)
+    monkeypatch.setattr(documents, "MAX_PDF_INFLATED", 50_000)
+    docx = write_docx(tmp_path / "std.docx", wp("Stairs are 1 m wide." + " " * 60_000))
+    with pytest.raises(RegulationError, match=re.escape("std.docx is too large: its word/document.xml expands to more than")):
+        read(docx, "std.docx")
+    pdf = tmp_path / "std.pdf"
+    pdf.write_bytes(make_pdf([b"BT /F1 12 Tf 72 700 Td (Stairs are 1 m wide.) Tj ET" + b" " * 60_000], flate=True))
+    with pytest.raises(RegulationError, match=re.escape("std.pdf is too large: its compressed content expands to more than")):
+        read(pdf, "std.pdf")
+    pdf.write_bytes(make_pdf([b"BT /F1 12 Tf 72 700 Td (Stairs are 1 m wide.) Tj ET" + b" " * 40_000], flate=True))
+    assert texts(read(pdf, "std.pdf")) == ["Stairs are 1 m wide."]
+
+
+def test_numbers_of_any_length_in_lists_and_page_furniture_are_read(tmp_path):
+    p = tmp_path / "std.html"
+    for start in ("²", "9" * 5000, "-x"):   # not integers browsers read: the list counts from 1
+        p.write_text(f'<ol start="{start}"><li>Stairs</li><li>Ramps</li></ol>')
+        assert texts(read(p, "std.html")) == ["1. Stairs", "2. Ramps"]
+    p.write_text('<ol start=" -2"><li>Stairs</li></ol>')
+    assert texts(read(p, "std.html")) == ["-2. Stairs"]
+    p = tmp_path / "std.pdf"   # int() refuses a number of over 4300 digits, as in this header line of every page
+    p.write_bytes(make_pdf([["7" * 5000, f"Article {7 * i} fire doors"] for i in range(1, 4)]))
+    assert texts(read(p, "std.pdf")) == ["Article 7 fire doors", "Article 14 fire doors", "Article 21 fire doors"]
+
+
+@pytest.mark.parametrize("charset", ["idna", "utf-16"])
+def test_an_html_charset_the_bytes_cannot_be_in_is_not_trusted(tmp_path, charset):
+    p = tmp_path / "std.html"
+    p.write_bytes(f'<meta charset="{charset}">'.encode() + b"<p>Caf\xe9 stairs are at least 1200 mm wide.</p>" * 20)
+    assert set(texts(read(p, "std.html"))) == {"Café stairs are at least 1200 mm wide."}
+
+
+def test_html_whose_head_end_tag_is_left_out_keeps_its_body(tmp_path):
+    p = tmp_path / "std.html"
+    for doc in ("<html><head><title>T</title><style>p {}</style><body><p>Stairs</p></body></html>",
+                "<head><meta charset=utf-8><title>T</title><h1>Stairs</h1>",
+                "<head><title>T</title>Stairs"):
+        p.write_text(doc)
+        assert texts(read(p, "std.html")) == ["Stairs"]
+    p.write_text("<head><noscript><p>Enable scripts</p></noscript><title>T</title></head><p>Stairs</p></head><p>Ramps</p>")
+    assert texts(read(p, "std.html")) == ["Stairs", "Ramps"]
+
+
+def test_html_with_carriage_return_line_ends_reads_as_with_newlines(tmp_path):
+    p = tmp_path / "std.html"
+    html = "<p>Stairs</p>\n<pre>Table 1\n  width  1200 mm\n</pre>\n<p>Ramps</p>\n"
+    for ending in ("\n", "\r\n", "\r"):
+        p.write_bytes(html.replace("\n", ending).encode())
+        assert texts(read(p, "std.html")) == ["Stairs", "Table 1", "width 1200 mm", "Ramps"]
+
+
+def test_a_long_run_of_leader_dots_takes_memory_in_proportion(tmp_path):
+    p = tmp_path / "toc.txt"
+    p.write_bytes(b"Contents " + b". " * 500_000 + b" 7")
+    tracemalloc.start()
+    try:
+        assert texts(read(p, "toc.txt")) == ["Contents … 7"]
+        peak = tracemalloc.get_traced_memory()[1]
+    finally:
+        tracemalloc.stop()
+    assert peak < 25 * p.stat().st_size   # a backtracking repeat kept about 60 bytes per dot
+
+
+def test_pdf_pages_are_released_once_read(tmp_path):
+    def peak(n):
+        p = tmp_path / f"{n}.pdf"
+        p.write_bytes(make_pdf([[f"{i}.{j} Stairs serving an exit are at least 1100 mm wide" for j in range(40)] for i in range(n)]))
+        tracemalloc.start()
+        try:
+            assert len(read(p, p.name).lines) == 40 * n
+            return tracemalloc.get_traced_memory()[1]
+        finally:
+            tracemalloc.stop()
+    assert peak(12) < 2 * peak(3)   # every page's objects were kept: four times the pages, four times the memory
+
+
+def test_a_pdf_page_with_many_glyphs_is_read_in_linear_time(tmp_path):
+    # run-together words are malformed, so the reading with glyphs drawn twice counted once is tried as well;
+    # pdfplumber's dedupe_chars restores the order with list.index, which took ~15 s on this page
+    page = b"BT /F1 4 Tf 5 TL 10 780 Td " + b" ".join(b"(%d Stairwaysservinganexitareatleastwide) ' " % j for j in range(600)) + b" ET"
+    p = tmp_path / "std.pdf"
+    p.write_bytes(make_pdf([page]))
+    t0 = time.monotonic()
+    assert len(read(p, "std.pdf").lines) == 600
+    assert time.monotonic() - t0 < 5
+
+
+def test_pdf_glyph_codes_without_characters_are_an_error_not_text(tmp_path):
+    identity = (b"<< /Type /Font /Subtype /Type0 /BaseFont /Foo /Encoding /Identity-H /DescendantFonts [<< /Type /Font "
+                b"/Subtype /CIDFontType2 /BaseFont /Foo /CIDSystemInfo << /Registry (Adobe) /Ordering (Identity) /Supplement 0 >> "
+                b"/DW 1000 >>] >>")
+    p = tmp_path / "std.pdf"
+    p.write_bytes(make_pdf([b"BT /F1 12 Tf 72 700 Td <0041004200430044> Tj ET"], font=identity))
+    with pytest.raises(RegulationError, match=re.escape("std.pdf: page 1 has no text layer that can be read")):
+        read(p, "std.pdf")
 
 
 # ---------------------------------------------------------------- clauses
