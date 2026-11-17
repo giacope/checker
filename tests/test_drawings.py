@@ -440,3 +440,16 @@ def test_stairs_are_read_in_other_drafting_traditions(rows, stair, facts):
     got = {e["id"]: {k: [o["value"] for o in v] for k, v in e["facts"].items()} for e in r.elements.values()}
     assert got == ({stair: facts} if stair else {})
 
+
+@pytest.mark.parametrize("words, missed", [
+    (["SCHODY", "1", "WYSOKOŚĆ", "STOPNIA", "17,5", "cm"], ["Stair", "Door", "Space", "Corridor", "Storey"]),
+    (["TREPPE", "1", "STEIGUNG", "17,5", "cm"], None),
+])
+def test_a_set_whose_text_no_reader_recognises_says_it_may_have_missed_elements(tmp_path, monkeypatch, words, missed):
+    import adapters.drawings as D
+
+    monkeypatch.setattr(D, "tokens_of", lambda path, sh, digest, stats: [
+        t for i in range(4) for t in line(sh, 100, 100 + 20 * i, *words)])
+    (tmp_path / "set.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)]))
+    doc = D.analyse([tmp_path / "set.pdf"], tmp_path)
+    assert doc["sources"][0].get("may_miss") == missed

@@ -296,3 +296,28 @@ def test_reconciling_thousands_of_elements_is_near_linear():
     ev = load_evidence(d("static", 0), d("llm:m", 1))
     assert time.perf_counter() - t < 3
     assert len(ev.elements) == 8000 and all(e.sources == {"static", "llm:m"} for e in ev.elements)
+
+
+
+def test_a_type_a_source_may_have_missed_is_open_not_absent(tmp_path):
+    (tmp_path / "pack").mkdir()
+    _pack(tmp_path / "pack")
+    (tmp_path / "pack" / "predicates.yaml").write_text((tmp_path / "pack" / "predicates.yaml").read_text()
+                                                       + "  - name: Log.secret\n    label: logs a secret\n    type: bool\n")
+    (tmp_path / "pack" / "norms.yaml").write_text("""norms:
+  - name: no_secrets
+    title: no_secrets
+    modality: obligation
+    cite: {section: "L1", url: "https://example.org/l1"}
+    for: {l: Log}
+    require: {not: {fact: l.secret}}
+""")
+    rs = load(tmp_path / "pack")
+    def verdict(may_miss=None, elements=()):
+        src = {"id": "drawings", **({"may_miss": may_miss} if may_miss else {})}
+        rows = run(rs, load_evidence({"sources": [src], "facts": {}, "elements": list(elements)}))
+        return summarize(rows).get("no_secrets", {"verdict": "not_applicable"})["verdict"]
+    assert verdict() == "not_applicable"
+    assert verdict(["Log"]) == "unknown"             # none found by a source that may have missed them: open
+    assert verdict(["Stair"]) == "not_applicable"    # it may only have missed other types
+    assert verdict(["Log"], [{"type": "Log", "id": "x.rb:3", "facts": {"secret": True}}]) == "fail"   # one found: checked

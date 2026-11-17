@@ -100,6 +100,10 @@ def _limits(src: dict) -> list[str]:
         out.append(f"{sum(ex.values())} Python, Ruby or Elixir files were not analysed because their folders are named like "
                    f"build output, assets or translations: {names}. A requirement about code kept there can show as not "
                    "applicable; move the code or check those folders by hand")
+    if src.get("may_miss"):
+        out.append(f"the drawings' text was read, but no reader recognised its drafting conventions (language or notation), "
+                   f"so requirements about {', '.join(t.lower() + 's' for t in src['may_miss'])} stay open instead of not "
+                   "applying: check them on the drawings by hand, or upload an IFC model")
     if src.get("requirement_chars"):
         out.append(f"each requirement was shown at most {src['requirement_chars']:,} characters, best matches first, "
                    "so that every requirement fits the run's budget")
@@ -173,7 +177,10 @@ def sections(evaluation: dict, locate, coverage=lambda sid, names: None, by_type
                      "deciding": r.get("deciding") or {}, "open": r.get("open") or [],
                      "open_labels": [_predicate(rs, o).get("label") or o for o in r.get("open") or []],
                      # a system-level verdict: the reasons the sources gave for the facts it reads (a model's judgement)
-                     "notes": [] if r.get("type") else _notes(ev, el.get("require"))}
+                     "notes": [] if r.get("type") else [{"note": f"No {r['none_found']} was found, but {' and '.join(r['missed_by'])} "
+                                                                  "may not have recognised them: open rather than not applicable",
+                                                          "source": r["missed_by"][0], "value": None, "missed": True}]
+                     if r.get("missed_by") else _notes(ev, el.get("require"))}
                 findings.append(f)
                 for fact in f["open"] + list(f["deciding"]):
                     root, _, attr = fact.rpartition(".") if "." in fact else ("system", "", fact)

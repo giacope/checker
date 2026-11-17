@@ -96,7 +96,7 @@ def reasons(chk: Check, results: dict) -> Counter:
                     chk.fail(f"system {v} without a citation", where)
             if v == "uncertain" and not r.get("deciding") and not r.get("error"):
                 chk.fail("uncertain without deciding facts", where)
-            if v == "unknown" and not r.get("open") and not r.get("error"):
+            if v == "unknown" and not r.get("open") and not r.get("error") and not r.get("missed_by"):   # what settles it
                 chk.fail("unknown without open facts", where)
     return verdicts
 

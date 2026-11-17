@@ -14,6 +14,9 @@ source (an IFC model, a drawing set, a static analysis, a model reading the code
       - {type: Stair, id: "3NhaIUfh12PAdrGa$S3z3M", at: "ifc:3NhaIUfh12PAdrGa$S3z3M",
          facts: {width: [{value: 1000 mm, source: ifc, at: "PSet_Revit_Dimensions.Width"}]}}
 
+A source may list element types it may have failed to find (`may_miss: [Stair, Door]`): a norm about a type
+no source has an element of is then unknown, not not applicable.
+
 Each fact is a list of observations. Several documents are *reconciled* into one:
 observations of the same fact are pooled, so a fact holds every value some source
 supports. A fact no source mentions is open. Elements from different sources are the
@@ -160,6 +163,9 @@ def _check_document(d: Any, name: str) -> None:
         if "id" not in s:
             bad(f"sources[{i}]", "id missing")
         text(s["id"], f"sources[{i}].id", empty=False)
+        if s.get("may_miss") is not None:   # element types this source may have failed to find
+            for j, t in enumerate(items(s["may_miss"], f"sources[{i}].may_miss")):
+                text(t, f"sources[{i}].may_miss[{j}]", "an element type", empty=False)
     facts(d.get("facts"), "facts")
     for i, e in enumerate(items(d.get("elements"), "elements")):
         p = f"elements[{i}]"
@@ -514,6 +520,13 @@ def run(rs: Ruleset, ev: Evidence, profile: dict | None = None) -> list[dict]:
             rows.append({**base, "element": ev.subject.get("id", "subject"), "at": at, **check(rs, name, subject)})
             continue
         vmap = _vocab_map(rs, types[0])
+        missed_by = [s["id"] for s in ev.sources if types[0] in (s.get("may_miss") or [])]
+        if missed_by and not any(e.type == types[0] for e in ev.elements):
+            # None found, but a source says it may not have found them (drawings in conventions it cannot read):
+            # neither "does not apply" nor what when_none requires of a subject that has none.
+            rows.append({**base, "element": ev.subject.get("id", "subject"), "at": [], "none_found": types[0],
+                         "verdict": "unknown", "outcomes": {"unknown": 1}, "deciding": {}, "open": [], "missed_by": missed_by})
+            continue
         if "when_none" in el.data and not any(e.type == types[0] for e in ev.elements):
             # No element of the type was found: the norm's when_none says what that requires of the subject
             # (a project with no stairs passes a stair rule; a codebase with no log statements must still show

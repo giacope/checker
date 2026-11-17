@@ -18,6 +18,8 @@ from .tokens import Sheet, Token, locator, parse_locator
 
 VERSION = "0.1.0"
 SKIPPED_LISTED = 200  # skipped readings listed one by one in the source entry; the rest are counted
+ELEMENT_TYPES = ("Stair", "Door", "Space", "Corridor", "Storey")   # what the readers can find
+MIN_TEXT_TOKENS = 20  # a set with less text (a bare logo or sheet number) says too little to have missed anything
 
 __all__ = ["VERSION", "analyse", "render", "sheets_of", "tokens_of", "Sheet", "Token", "locator", "parse_locator"]
 
@@ -71,6 +73,12 @@ def analyse(files: list[Path], root: Path, describes: str | None = None, progres
     }
     if len(reading.skipped) > SKIPPED_LISTED:
         source["skipped_more"] = len(reading.skipped) - SKIPPED_LISTED
+    if sum(s["tokens"] for s in sheets) >= MIN_TEXT_TOKENS and not reading.facts and not any(e["facts"] for e in reading.elements.values()):
+        # Text, but no reader recognised a convention in it (another language or notation): finding no stair
+        # here does not mean the building has none, so requirements about these types stay open.
+        source["may_miss"] = list(ELEMENT_TYPES)
+        source["skipped"].append({"at": ", ".join(source["files"][:3]), "text": "",
+                                  "reason": "text read, but no drafting convention the readers know was recognised in it"})
     elements = []
     for e in reading.elements.values():
         if e["facts"]:
