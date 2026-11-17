@@ -1,9 +1,12 @@
 """The shared evidence layer: reconciliation, value-set checks, and profiles."""
 
+import time
 from pathlib import Path
 
+import pytest
+
 from normir import load, validate
-from normir.evidence import conflicts, load_evidence, prefer_sources, run, summarize
+from normir.evidence import EvidenceError, conflicts, load_evidence, prefer_sources, run, summarize
 from normir.quantity import Quantity, mul
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -239,3 +242,57 @@ def test_when_none_says_what_a_norm_requires_when_no_element_was_found(tmp_path)
     assert verdict({"b0": True, "b1": False}, [{"type": "Log", "id": "x.rb:3", "facts": {"secret": False}}]) == [("pass", None)]
     rs.elements[("norm", "no_secrets")].data["when_none"] = {"applies": {"fact": "l.secret"}, "require": True}
     assert any("unknown variable 'l'" in e for e in validate(rs)[0])
+
+
+# ---------------------------------------------------------------- documents of the wrong shape
+
+def _secret(i, **extra):
+    return {"type": "Secret", "id": f"s{i}", "at": f"a{i}.py:1", "facts": {"kind": [{"value": "api_key"}]}, **extra}
+
+
+@pytest.mark.parametrize("d, where", [
+    ([], "evidence document 1: is a list, not an evidence document"),
+    (None, "evidence document 1: is empty"),
+    ({"subject": "repo"}, "subject: must be a mapping"),
+    ({"sources": "static"}, "sources: must be a list"),
+    ({"sources": [{}]}, r"sources\[0\]: id missing"),
+    ({"sources": [{"id": ["a"]}]}, r"sources\[0\].id: must be text"),
+    ({"facts": ["a"]}, "facts: must map fact names"),
+    ({"facts": {"password_auth": ["yes"]}}, r"facts.password_auth\[0\]: an observation is a mapping"),
+    ({"facts": {"password_auth": [{"source": "s"}]}}, r"facts.password_auth\[0\]: value missing"),
+    ({"facts": {"password_auth": [{"value": True, "at": ["a.py:1"]}]}}, r"facts.password_auth\[0\].at: must be text"),
+    ({"elements": {"a": 1}}, "elements: must be a list"),
+    ({"elements": [_secret(0), {"type": "Secret"}]}, r"elements\[1\]: id missing"),
+    ({"elements": [{"id": "x"}]}, r"elements\[0\]: type missing"),
+    ({"elements": [_secret(0), _secret(1, at=5)]}, r"elements\[1\].at: must be a locator"),
+    ({"elements": [_secret(0, facts={"width": [{"value": [8, 12]}]})]}, r"elements\[0\].facts.width\[0\].value: a value is text"),
+    ({"elements": [_secret(0, facts={"width": [{}]})]}, r"elements\[0\].facts.width\[0\]: value missing"),
+])
+def test_a_document_of_the_wrong_shape_is_refused_naming_the_place(d, where):
+    with pytest.raises(EvidenceError, match=where):
+        load_evidence(d)
+
+
+@pytest.mark.parametrize("text, why", [
+    (b"facts: {a: [{value: caf\xe9}]}\n", "not UTF-8 text: byte 0xe9 at line 1"),
+    (b"facts: {a: [{value: " + b"[" * 50_000 + b"]" * 50_000 + b"}]}\n", "nested deeper than 100 levels"),
+    (b"sources: [{id: s}]\nfacts:\n  a: &a [{value: 1}, {value: 2}, {value: 3}, {value: 4}, {value: 5}, {value: 6}, {value: 7}, {value: 8}, {value: 9}]\n"
+     + b"".join(f"  {chr(98 + i)}: &{chr(98 + i)} [{','.join(['*' + chr(97 + i)] * 9)}]\n".encode() for i in range(8)), "aliases repeat"),
+    (b"!!python/object/apply:os.system ['echo pwned']\n", "not valid YAML"),
+    (b"facts: {a: [{value: \x07}]}\n", "not valid YAML: unacceptable character"),
+])
+def test_an_evidence_file_that_is_not_bounded_yaml_is_refused(tmp_path, text, why):
+    (tmp_path / "doc.yaml").write_bytes(text)
+    with pytest.raises(EvidenceError, match=f"doc.yaml: {why}"):
+        load_evidence(tmp_path / "doc.yaml")
+
+
+def test_reconciling_thousands_of_elements_is_near_linear():
+    # every file holds 16 elements 20 lines apart; a second document's elements lie a line away from the first's
+    def d(src, shift):
+        return {"sources": [{"id": src}], "elements": [{"type": "Secret", "id": f"{src}-{i}", "at": f"f{i % 500}.py:{(i // 500) * 20 + 1 + shift}",
+                                                         "facts": {"kind": [{"value": "api_key"}]}} for i in range(8000)]}
+    t = time.perf_counter()
+    ev = load_evidence(d("static", 0), d("llm:m", 1))
+    assert time.perf_counter() - t < 3
+    assert len(ev.elements) == 8000 and all(e.sources == {"static", "llm:m"} for e in ev.elements)

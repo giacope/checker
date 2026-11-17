@@ -35,16 +35,14 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
-import yaml
-
 from .evaluate import NOT_APPLICABLE, Evaluator, Residual, facts_in, met_if_applicable
-from .model import Ruleset, walk
+from .model import Ruleset, YAMLInputError, _what, read_yaml, walk
 from .quantity import Quantity
 
 LINE_TOLERANCE = 5
 MAX_COMBINATIONS = 4096  # enumerated in full below this; split fact by fact above it
 MAX_EVALUATIONS = 200_000
-CODE_LOCATOR = re.compile(r"^(?P<path>[^:]+):(?P<line>\d+)$")
+CODE_LOCATOR = re.compile(r"^(?P<path>[^:]+):(?P<line>\d{1,18})$")  # a longer number is no line
 
 
 def _key(v: Any) -> Any:
@@ -100,6 +98,101 @@ class Evidence:
     sources: list[dict]
 
 
+class EvidenceError(ValueError):
+    """An evidence document that cannot be read or does not have the shape above. The message names the document
+    and the place in it: `deps.yaml: elements[3].facts.width[0]: value missing`."""
+
+
+def _check_document(d: Any, name: str) -> None:
+    """Raise EvidenceError for the first place `d` departs from the evidence document shape (module docstring):
+    everything load_evidence, run and conflicts read. Other keys (`sheets`, `note`, `model`, ...) are free."""
+    def bad(path: str, msg: str):
+        raise EvidenceError(f"{name}: {path}: {msg}" if path else f"{name}: {msg}")
+
+    def text(v: Any, path: str, what: str = "text", empty: bool = True) -> None:
+        if not isinstance(v, str) or (not v and not empty):
+            bad(path, f"must be {what}, got {'empty text' if v == '' else _what(v)}")
+
+    def value(v: Any, path: str) -> None:
+        if not isinstance(v, (str, int, float, bool)):
+            bad(path, f"a value is text, a number or true/false, got {_what(v)}")
+
+    def facts(raw: Any, path: str) -> None:
+        if raw is None:
+            return
+        if not isinstance(raw, dict):
+            bad(path, f"must map fact names to lists of observations, got {_what(raw)}")
+        for k, obs in raw.items():
+            if not isinstance(k, str):
+                bad(path, f"fact name {k!r} is not text")
+            if not isinstance(obs, list):
+                value(obs, f"{path}.{k}")  # a bare value: one observation
+                continue
+            for j, o in enumerate(obs):
+                p = f"{path}.{k}[{j}]"
+                if not isinstance(o, dict):
+                    bad(p, f"an observation is a mapping with a value, got {_what(o)}")
+                if "value" not in o:
+                    bad(p, "value missing")
+                value(o["value"], f"{p}.value")
+                for f in ("source", "at", "basis"):
+                    if f in o:
+                        text(o[f], f"{p}.{f}")
+
+    def items(v: Any, path: str) -> list:
+        if v is None:
+            return []
+        if not isinstance(v, list):
+            bad(path, f"must be a list, got {_what(v)}")
+        return v
+
+    if not isinstance(d, dict):
+        bad("", f"is {'empty' if d is None else _what(d)}, not an evidence document (a mapping with subject, sources, facts and elements)")
+    if d.get("subject") is not None:
+        if not isinstance(d["subject"], dict):
+            bad("subject", f"must be a mapping (kind, id), got {_what(d['subject'])}")
+        for k in ("kind", "id"):
+            if k in d["subject"]:
+                text(d["subject"][k], f"subject.{k}")
+    for i, s in enumerate(items(d.get("sources"), "sources")):
+        if not isinstance(s, dict):
+            bad(f"sources[{i}]", f"a source is a mapping with an id, got {_what(s)}")
+        if "id" not in s:
+            bad(f"sources[{i}]", "id missing")
+        text(s["id"], f"sources[{i}].id", empty=False)
+    facts(d.get("facts"), "facts")
+    for i, e in enumerate(items(d.get("elements"), "elements")):
+        p = f"elements[{i}]"
+        if not isinstance(e, dict):
+            bad(p, f"an element is a mapping with type and id, got {_what(e)}")
+        for k in ("type", "id"):
+            if e.get(k) is None:
+                bad(p, f"{k} missing")
+        text(e["type"], f"{p}.type", "a type name", empty=False)
+        if isinstance(e["id"], bool) or not isinstance(e["id"], (str, int)):
+            bad(f"{p}.id", f"must be text, got {_what(e['id'])}")
+        if "at" in e:
+            for j, a in enumerate(e["at"] if isinstance(e["at"], list) else [e["at"]]):
+                text(a, f"{p}.at" + (f"[{j}]" if isinstance(e["at"], list) else ""), "a locator (text)")
+        facts(e.get("facts"), f"{p}.facts")
+
+
+def _read_document(doc: str | Path | dict, n: int) -> tuple[dict, str]:
+    """The n-th argument of load_evidence as a checked document, and the name its errors use."""
+    if not isinstance(doc, (str, Path)):  # a document already in memory
+        d, name = doc, f"evidence document {n + 1}"
+    else:
+        name = str(doc)
+        try:
+            d = read_yaml(Path(doc).read_bytes())
+        except OSError as e:
+            raise EvidenceError(f"{name}: cannot be read ({e.strerror or e})") from None
+        except YAMLInputError as e:
+            raise EvidenceError(f"{name}: {e}") from None
+    _check_document(d, name)
+    return d, name
+
+
 def _facts(raw: dict | None, default_source: str) -> dict[str, Fact]:
     out = {}
     for name, obs in (raw or {}).items():
@@ -109,56 +202,69 @@ def _facts(raw: dict | None, default_source: str) -> dict[str, Fact]:
     return out
 
 
-def _distance(a: Element, b: Element) -> int | None:
-    """How far apart two elements of one type are: 0 for the same id, else the fewest lines between two of their
-    code locators in one file, when that is within LINE_TOLERANCE; None when they are not the same element."""
-    if a.type != b.type:
-        return None
-    if a.id == b.id:
-        return 0
-    # Only locators an adapter wrote: an element without `at` takes its id as locator, and ids such as
-    # "door:101" and "door:102" are not code locations a line apart.
-    best = None
-    for x in a.at if a.at != [a.id] else []:
-        mx = CODE_LOCATOR.match(x)
-        for y in b.at if b.at != [b.id] else []:
-            my = CODE_LOCATOR.match(y)
-            if mx and my and mx["path"] == my["path"]:
-                d = abs(int(mx["line"]) - int(my["line"]))
-                if d <= LINE_TOLERANCE and (best is None or d < best):
-                    best = d
-    return best
+def _code_lines(at: list[str]) -> list[tuple[str, int]]:
+    return [(m["path"], int(m["line"])) for a in at if (m := CODE_LOCATOR.match(a))]
 
 
 def load_evidence(*docs: str | Path | dict) -> Evidence:
-    """Read evidence documents and reconcile them into one."""
+    """Read evidence documents and reconcile them into one. A document that cannot be read or does not have the
+    shape above raises EvidenceError.
+
+    Two elements of one type are the same element when their ids match, or when two of their code locators are in
+    one file within LINE_TOLERANCE lines; a new element joins the nearest (the first of equals). Candidates come
+    from an index by type and id and by type, file and line, so reconciling is linear in the elements."""
     subject: dict = {}
     facts: dict[str, Fact] = {}
     elements: list[Element] = []
     sources: list[dict] = []
-    origin: dict[int, set[int]] = {}   # id(element) -> the documents it came from
+    origin: list[set[int]] = []     # per element: the documents it came from
+    has_at: list[set[str]] = []     # per element: its locators
+    by_id: dict[tuple[str, str], int] = {}
+    by_line: dict[tuple[str, str, int], list[int]] = {}  # (type, file, line) -> elements with that code locator
+
+    def add_locators(i: int, at: list[str]) -> None:
+        has_at[i].update(at)
+        for path, line in _code_lines(at):
+            by_line.setdefault((elements[i].type, path, line), []).append(i)
+
     for n, doc in enumerate(docs):
-        d = doc if isinstance(doc, dict) else yaml.safe_load(Path(doc).read_text())
-        src = [s["id"] for s in d.get("sources", [])] or ["unnamed"]
-        sources += d.get("sources", [])
-        subject = subject or d.get("subject", {})
+        d, _ = _read_document(doc, n)
+        src = [s["id"] for s in d.get("sources") or []] or ["unnamed"]
+        sources += d.get("sources") or []
+        subject = subject or d.get("subject") or {}
         for name, f in _facts(d.get("facts"), src[0]).items():
             facts.setdefault(name, Fact()).observations += f.observations
-        for e in d.get("elements", []):
-            at = e.get("at", [e["id"]])
-            new = Element(e["type"], str(e["id"]), at if isinstance(at, list) else [at], _facts(e.get("facts"), src[0]), set(src))
+        for e in d.get("elements") or []:
+            at = e.get("at", [str(e["id"])])
+            new = Element(e["type"], str(e["id"]), list(at) if isinstance(at, list) else [at], _facts(e.get("facts"), src[0]), set(src))
             # The same id is the same element. Nearby lines are only how two documents describe one element (a
             # reader's query at line 9, the static analyser's at line 8); within one document two elements are two,
             # however close, and an element joins the nearest match.
-            near = [(dist, i) for i, x in enumerate(elements)
-                    if (dist := _distance(x, new)) is not None and (dist == 0 or n not in origin[id(x)])]
-            if not near:
+            near: dict[int, int] = {}  # element -> fewest lines between one of its code locators and one of new's
+            if (new.type, new.id) in by_id:
+                near[by_id[(new.type, new.id)]] = 0
+            # Only locators an adapter wrote: an element without `at` takes its id as locator, and ids such as
+            # "door:101" and "door:102" are not code locations a line apart.
+            if new.at != [new.id]:
+                for path, line in _code_lines(new.at):
+                    for off in range(-LINE_TOLERANCE, LINE_TOLERANCE + 1):
+                        for i in by_line.get((new.type, path, line + off), ()):
+                            if elements[i].at != [elements[i].id] and abs(off) < near.get(i, LINE_TOLERANCE + 1):
+                                near[i] = abs(off)
+            fits = [(dist, i) for i, dist in near.items() if dist == 0 or n not in origin[i]]
+            if not fits:
                 elements.append(new)
-                origin[id(new)] = {n}
+                origin.append({n})
+                has_at.append(set())
+                by_id[(new.type, new.id)] = len(elements) - 1
+                add_locators(len(elements) - 1, new.at)
                 continue
-            match = elements[min(near)[1]]
-            origin[id(match)].add(n)
-            match.at += [a for a in new.at if a not in match.at]
+            i = min(fits)[1]
+            match = elements[i]
+            origin[i].add(n)
+            added = [a for a in new.at if a not in has_at[i]]
+            match.at += added
+            add_locators(i, added)
             match.sources |= new.sources
             for name, f in new.facts.items():
                 match.facts.setdefault(name, Fact()).observations += f.observations
