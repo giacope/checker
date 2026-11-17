@@ -30,6 +30,8 @@ HISTORY_TURNS = 6           # earlier turns a follow-up carries
 CODE_WINDOW = 400           # lines of a long file shown on each side of a citation
 MAX_FILE_BYTES = 2_000_000  # a larger source file is shown around the citation only
 MESH_SECONDS = 180
+MESH_FORMAT = 2                 # of what app.model_mesh writes; names the kept file and the browser-cached URL, so a
+                                # changed format is neither reused from disk nor from a browser cache
 
 
 class ChatError(ValueError):
@@ -277,7 +279,7 @@ def _building(d: Path, pid: str, at: str) -> dict:
         el = next((e for doc in data.get("docs") or [] for e in doc.get("elements") or []
                    if at in (e["at"] if isinstance(e.get("at"), list) else [e.get("at")]) or e.get("id") == gid), None)
         facts = {k: sorted({str(o.get("value")) for o in v})[:4] for k, v in (el or {}).get("facts", {}).items()}
-        return {"type": "model", "label": where["label"], "gid": gid, "model": f"/api/projects/{pid}/model.json",
+        return {"type": "model", "label": where["label"], "gid": gid, "model": f"/api/projects/{pid}/model.json?v={MESH_FORMAT}",
                 "element": {"type": el.get("type"), "id": el.get("id"), "facts": facts} if el else None, "href": f"/projects/{pid}"}
     return {"type": "text", "label": where["label"], "href": f"/projects/{pid}"}
 
@@ -285,7 +287,7 @@ def _building(d: Path, pid: str, at: str) -> dict:
 def model_mesh(pid: str) -> Path:
     """The project's IFC models as one mesh file (app.model_mesh), built once in a child process and kept."""
     d = _artifact("project", pid)
-    out = d / "mesh.json"
+    out = d / f"mesh-{MESH_FORMAT}.json"
     if out.is_file():
         return out
     ifcs = sorted(p for p in (d / "files").rglob("*") if p.suffix.lower() == ".ifc" and p.is_file())

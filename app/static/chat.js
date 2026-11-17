@@ -298,24 +298,26 @@ async function model(el, p) {
   const ghost = new THREE.MeshLambertMaterial({color: 0xb8c0cc, transparent: true, opacity: 0.22, depthWrite: false});
   const solid = new THREE.MeshLambertMaterial({color: 0xd4d9e1});
   const hit = new THREE.MeshLambertMaterial({color: 0xe5484d, emissive: 0x5a0d10});
-  let target = null;
-  const meshes = [];
+  // the cited element, or the parts of a cited aggregate such as a stair's flights and railings
+  const hits = [], meshes = [];
   for (const e of data.elements) {
-    if (e.t === "IfcSpace" && e.g !== p.gid) continue;
+    const cited = e.g === p.gid || (e.a || []).includes(p.gid);
+    if (e.t === "IfcSpace" && !cited) continue;
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.BufferAttribute(e.v, 3));
     g.setIndex(new THREE.BufferAttribute(e.i, 1));
     g.computeVertexNormals();
-    const m = new THREE.Mesh(g, e.g === p.gid ? hit : ghost);
-    if (e.g === p.gid) { target = m; m.renderOrder = 2; }
+    const m = new THREE.Mesh(g, cited ? hit : ghost);
+    if (cited) { hits.push(m); m.renderOrder = 2; }
     meshes.push(m); scene.add(m);
   }
+  const target = hits.length ? hits : null;
   if (!target) meshes.forEach(m => m.material = solid);
   const controls = new OrbitControls(cam, renderer.domElement);
   const draw = () => renderer.render(scene, cam);
   controls.addEventListener("change", draw);
   const fit = obj => {
-    const box = obj ? new THREE.Box3().setFromObject(obj) : new THREE.Box3(new THREE.Vector3(...data.bbox[0]), new THREE.Vector3(...data.bbox[1]));
+    const box = obj ? obj.reduce((b, m) => b.expandByObject(m), new THREE.Box3()) : new THREE.Box3(new THREE.Vector3(...data.bbox[0]), new THREE.Vector3(...data.bbox[1]));
     const c = box.getCenter(new THREE.Vector3()), r = Math.max(box.getSize(new THREE.Vector3()).length() / 2, 1);
     // an element is framed with its surroundings, so the reader sees where in the building it is
     cam.position.copy(c).add(new THREE.Vector3(1, -1.3, 0.9).normalize().multiplyScalar(obj ? Math.max(r * 4, 18) : r * 2.6));

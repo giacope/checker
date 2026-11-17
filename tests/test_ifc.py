@@ -359,3 +359,21 @@ def test_a_relationship_relating_an_entity_of_the_wrong_type_is_skipped(tmp_path
     out = r.stdout.splitlines()
     assert f"IfcRelAggregates #{rel.id()} has IfcProductDefinitionShape #{shape.id()} as RelatingObject" in out[0]
     assert int(out[1]) >= 1   # the space is still read
+
+
+def test_the_chat_mesh_shows_a_cited_aggregate_by_its_parts(tmp_path):
+    from app.model_mesh import mesh
+    m = Model()
+    st = m.storey("Ground", 0.0)
+    stair = m.make("IfcStair", "Stair 1")             # an aggregate: no geometry of its own
+    api.run("spatial.assign_container", m.f, relating_structure=st, products=[stair])
+    flight = m.make("IfcStairFlight", "Flight 1")
+    api.run("aggregate.assign_object", m.f, relating_object=stair, products=[flight])
+    m.box(flight, 0, 0, 0, 3.0, 1.2, 0.2)
+    wall = m.make("IfcWall", "Wall")
+    api.run("spatial.assign_container", m.f, relating_structure=st, products=[wall])
+    m.box(wall, 0, 2, 0, 3.0, 0.2, 2.5)
+    m.f.write(str(tmp_path / "m.ifc"))
+    els = {e["n"]: e for e in mesh(tmp_path / "m.ifc")["elements"]}
+    assert stair.GlobalId not in {e["g"] for e in els.values()}
+    assert stair.GlobalId in els["Flight 1"]["a"] and stair.GlobalId not in els["Wall"]["a"]

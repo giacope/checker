@@ -3,9 +3,10 @@
     python -m app.model_mesh <model.ifc> <out.json>
 
 Run in its own process (app.chats.model_mesh) because a geometry kernel can crash on a damaged model. Writes
-{elements: [{g: GlobalId, t: IFC type, n: name, v: base64 float32 xyz, i: base64 uint32 triangle indices}], bbox,
+{elements: [{g: GlobalId, t: IFC type, n: name, a: GlobalIds of the elements it is part of, v: base64 float32 xyz,
+i: base64 uint32 triangle indices}], bbox,
 triangles, skipped}: world coordinates in metres, z up. Openings are left out; spaces are kept so a cited room can be
-shown. Past MAX_TRIANGLES the rest of the elements are counted in `skipped`.
+shown. `a` lets a cited aggregate with no geometry of its own (a stair, a roof) be shown by its parts. Past MAX_TRIANGLES the rest of the elements are counted in `skipped`.
 """
 
 from __future__ import annotations
@@ -25,6 +26,7 @@ def mesh(ifc_path: Path) -> dict:
 
     import ifcopenshell
     import ifcopenshell.geom
+    import ifcopenshell.util.element
 
     model = ifcopenshell.open(str(ifc_path))
     settings = ifcopenshell.geom.settings()
@@ -32,6 +34,13 @@ def mesh(ifc_path: Path) -> dict:
     it = ifcopenshell.geom.iterator(settings, model, max(1, min(4, multiprocessing.cpu_count())))
     out, tris, skipped = [], 0, 0
     lo, hi = [float("inf")] * 3, [float("-inf")] * 3
+
+    def wholes(el) -> list[str]:
+        out, seen = [], set()
+        while (el := ifcopenshell.util.element.get_aggregate(el)) is not None and el.id() not in seen:
+            seen.add(el.id())
+            out.append(el.GlobalId)
+        return out
     if it.initialize():
         while True:
             shape = it.get()
@@ -45,7 +54,7 @@ def mesh(ifc_path: Path) -> dict:
                         for a in range(3):
                             lo[a], hi[a] = min(lo[a], verts[k + a]), max(hi[a], verts[k + a])
                     tris += len(faces) // 3
-                    out.append({"g": el.GlobalId, "t": el.is_a(), "n": getattr(el, "Name", None) or "",
+                    out.append({"g": el.GlobalId, "t": el.is_a(), "n": getattr(el, "Name", None) or "", "a": wholes(el),
                                 "v": base64.b64encode(array("f", verts).tobytes()).decode(),
                                 "i": base64.b64encode(array("I", faces).tobytes()).decode()})
             if not it.next():
