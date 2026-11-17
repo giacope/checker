@@ -482,3 +482,119 @@ def test_an_unreadable_drawing_is_in_the_projects_notes(tmp_path, no_annotations
     (files / "broken.dxf").write_bytes(b"AutoCAD Binary DXF\r\n\x1a\x00" + bytes(range(256)) * 4)
     notes = process(files, "p")["notes"]
     assert [n for n in notes if n.startswith("broken.dxf: not readable as DXF")], notes
+
+
+# ---------------------------------------------------------------- malformed drawings: skipped with a reason, never raised
+
+def _room(msp, x=0, y=0, w=5000, h=4000, layer="A-AREA"):
+    msp.add_lwpolyline([(x, y), (x + w, y), (x + w, y + h), (x, y + h)], close=True, dxfattribs={"layer": layer})
+
+
+def _skips(ev) -> str:
+    return "\n".join(ev["sources"][0].get("skipped", []))
+
+
+def test_coordinates_that_are_not_finite_or_far_out_are_not_read(tmp_path):
+    import json
+
+    doc = _doc()
+    msp = doc.modelspace()
+    _room(msp)
+    nan, inf = float("nan"), float("inf")
+    msp.add_lwpolyline([(6000, 0), (nan, 0), (9000, 4000), (6000, 4000)], close=True, dxfattribs={"layer": "A-AREA"})
+    for a, b in (((0, 0), (5000, 0)), ((5000, 0), (1e308, 4000)), ((0, 4000), (-1e308, nan))):
+        msp.add_line(a, b, dxfattribs={"layer": "A-WALL"})
+    # a room schedule's header, one word of it at infinity
+    msp.add_text("ROOM NO.", dxfattribs={"height": 200}).set_placement((20000, 9000))
+    msp.add_text("ROOM NAME", dxfattribs={"height": 200}).set_placement((inf, 9000))
+    msp.add_text("101", dxfattribs={"height": 200}).set_placement((20000, 8600))
+    ev = _run(_save(doc, tmp_path), tmp_path)
+    json.dumps({k: ev[k] for k in ("facts", "elements", "sheets")}, allow_nan=False)   # no NaN or inf anywhere
+    assert [_vals(s, "floor_area") for s in _els(ev, "Space")] == [["20 m2"]]
+    for what in ("2 entities LINE", "1 entity LWPOLYLINE", "1 entity TEXT"):
+        assert f"{what} with coordinates that are not finite numbers within the drawing's range: not read" in _skips(ev)
+
+
+def test_a_drawing_unit_buildings_are_not_drawn_in_reads_no_lengths(tmp_path, no_annotations):
+    doc = _doc(insunits=7)   # kilometres: a 5 x 4 km "room", 20 km2
+    _room(doc.modelspace())
+    _door_block(doc, "DOOR-SGL", 0.0009)
+    doc.modelspace().add_blockref("DOOR-SGL", (1, 0))
+    ev = _run(_save(doc, tmp_path), tmp_path)
+    assert not any("floor_area" in s["facts"] for s in _els(ev, "Space")) and not _els(ev, "Door")
+    assert "$INSUNITS=7 (km) is not a unit buildings are drawn in (1 to 1000 mm): no lengths or areas read" in _skips(ev)
+
+
+def test_an_implausible_size_is_skipped_with_its_reason(tmp_path, no_annotations):
+    doc = _doc(insunits=6)   # metres, drawn as if millimetres: a 5 x 4 km room
+    _room(doc.modelspace())
+    _room(doc.modelspace(), 6000, 0, 5, 4)   # and a 5 x 4 m one
+    ev = _run(_save(doc, tmp_path), tmp_path)
+    assert sorted(_vals(s, "floor_area") for s in _els(ev, "Space")) == [[], ["20 m2"]]
+    assert "floor_area 20000000 m2 (plan.dxf#layout=Model&bbox=0,0,5000,4000): outside the plausible range of Space.floor_area " \
+           "(0 m2 to 2 km2): not read" in _skips(ev)
+
+
+def test_entities_without_the_attributes_their_type_needs_are_skipped(tmp_path, no_annotations):
+    doc = _doc()
+    msp = doc.modelspace()
+    _room(msp)
+    _door_block(doc, "DOOR-SGL", 900)
+    msp.add_blockref("DOOR-SGL", (1000, 0), dxfattribs={"layer": "NONAME"})
+    msp.add_line((0, 0), (1, 1), dxfattribs={"layer": "ISBLOCK"})
+    p = _save(doc, tmp_path)
+    text = p.read_text()
+    i = text.index("\n  8\nNONAME\n")
+    j = text.index("\n  2\nDOOR-SGL\n", i)
+    text = text[:j] + text[j + len("\n  2\nDOOR-SGL"):]            # an INSERT with no block name
+    k = text.rindex("\n  0\nLINE\n", 0, text.index("\n  8\nISBLOCK\n"))
+    text = text[:k] + "\n  0\nBLOCK\n" + text[k + len("\n  0\nLINE\n"):]   # a BLOCK among the entities
+    p.write_text(text)
+    ev = _run(p, tmp_path)
+    assert "not readable" not in _skips(ev)
+    assert [_vals(s, "floor_area") for s in _els(ev, "Space")] == [["20 m2"]]
+    assert "1 entity INSERT with no block name: not read" in _skips(ev)
+
+
+def test_a_file_the_plain_reader_rejects_goes_to_the_recover_reader(tmp_path, no_annotations):
+    doc = _doc()
+    _room(doc.modelspace())
+    p = _save(doc, tmp_path)
+    p.write_text(p.read_text().replace("TABLE\n  2\nAPPID\n", "TABLE\n  2\nROOM\n", 1))   # ezdxf.readfile: KeyError 'ROOM'
+    with pytest.raises(KeyError):
+        ezdxf.readfile(p)
+    ev = _run(p, tmp_path)
+    assert "not readable" not in _skips(ev)
+    assert [_vals(s, "floor_area") for s in _els(ev, "Space")] == [["20 m2"]]
+
+
+def test_geometry_beyond_the_vertex_budget_is_not_read(tmp_path, no_annotations, monkeypatch):
+    monkeypatch.setattr(dxf, "MAX_PATH_VERTICES", 2000, raising=False)   # 50 000 by default: a smaller drawing tests the same
+    doc = _doc()
+    msp = doc.modelspace()
+    _room(msp)
+    n = dxf.MAX_PATH_VERTICES + 1000   # a self-intersecting zigzag "room"
+    msp.add_lwpolyline([(10000 + i, (i * 7919) % 10000) for i in range(n)], close=True, dxfattribs={"layer": "A-AREA"})
+    msp.add_lwpolyline([(0, 6000, 0, 0, 1e10), (5000, 6000, 0, 0, 1e10), (5000, 11000), (0, 11000)], format="xyseb", close=True,
+                       dxfattribs={"layer": "A-AREA"})   # bulges of 1e10: arcs of radius 1e13 mm, flattened at 2 mm
+    ev = _run(_save(doc, tmp_path), tmp_path)
+    assert [_vals(s, "floor_area") for s in _els(ev, "Space")] == [["20 m2"]]
+    assert f"1 entity LWPOLYLINE with more than {dxf.MAX_PATH_VERTICES} vertices when flattened: not read" in _skips(ev)
+    assert "1 entity LWPOLYLINE with coordinates that are not finite numbers within the drawing's range: not read" in _skips(ev)
+
+
+def test_many_texts_are_read_in_time(tmp_path):
+    """Lines of text are joined into phrases by looking only at the lines just below each. Comparing every line with every
+    line of its row and the next rows, each comparison recomputing their boxes, took 16 s for 9000 words in rows of 300,
+    40 s in rows of 900, and 1 min 50 s for the fuzzer's 60 000 words; it now takes 2 s, most of it ezdxf's."""
+    import time
+
+    doc = _doc()
+    msp = doc.modelspace()
+    for i in range(9000):
+        msp.add_text(f"NOTE {i}", dxfattribs={"height": 100}).set_placement((i % 900 * 400, i // 900 * 400))
+    p = _save(doc, tmp_path)
+    t = time.time()
+    ev = _run(p, tmp_path)
+    assert ev["sources"][0]["files"][0]["counts"]["tokens"] == 9000
+    assert time.time() - t < 15

@@ -27,18 +27,28 @@ SUBCLASS = {"LWPOLYLINE": "AcDbPolyline"}
 COMMON_CODES = {6, 8, 48, 60, 62, 67, 92, 160, 284, 310, 347, 370, 390, 410, 420, 430, 440}
 
 
+# Raised as they are: the file is missing or not a DXF file (ezdxf's own OSError), or memory ran out.
+PASS = (OSError, MemoryError)
+
+
 def read(path: Path):
     """The ezdxf document. A damaged file goes to ezdxf's recover reader; a file neither reads (binary DXF, or
-    entities written without their subclass markers) is re-read tag by tag, with the missing markers added."""
-    try:
-        return ezdxf.readfile(str(path))
-    except ezdxf.DXFStructureError:
-        from ezdxf import recover
+    entities written without their subclass markers) is re-read tag by tag, with the missing markers added. ezdxf's
+    readers raise ValueError, KeyError, OverflowError and more on damaged files besides DXFStructureError: each is a
+    reason to try the next reader, and a file none of them reads raises one DXFStructureError saying why."""
+    from ezdxf import recover
+
+    errors = []
+    for how, attempt in (("ezdxf", lambda: ezdxf.readfile(str(path))), ("recover", lambda: recover.readfile(str(path))[0]),
+                         ("tag by tag", lambda: _repaired(Path(path).read_bytes()))):
         try:
-            doc, _ = recover.readfile(str(path))
-            return doc
-        except ezdxf.DXFStructureError:
-            return _repaired(Path(path).read_bytes())
+            return attempt()
+        except PASS:
+            raise
+        except Exception as e:  # noqa: BLE001 - see above
+            errors.append(f"{how}: {type(e).__name__}: {str(e)[:200]}")
+            last = e
+    raise ezdxf.DXFStructureError("not readable as DXF (" + "; ".join(errors) + ")") from last
 
 
 def _repaired(data: bytes):

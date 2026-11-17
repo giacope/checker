@@ -37,9 +37,11 @@ import dataclasses
 import math
 import re
 import time
+from bisect import bisect_left, bisect_right
 from collections import Counter
 from pathlib import Path
 
+import shapely
 import yaml
 from ezdxf import bbox as ebbox
 from ezdxf import path as epath
@@ -51,7 +53,7 @@ from shapely.ops import unary_union
 from . import ifc_egress as G
 from .drawings.tokens import BBox, Sheet, Token, locator, parse_locator
 from .dxf_render import read, render  # noqa: F401  (render is part of this adapter's interface)
-from .ifc import CLEAR_WIDTH_DEDUCTION_MM
+from .ifc import CLEAR_WIDTH_DEDUCTION_MM, UNIT_M, drop_implausible
 
 VERSION = "0.1.0"
 MAX_DEPTH = 8
@@ -86,6 +88,15 @@ MIN_ROOM_M2 = 0.5
 SWING_TOL = 0.02               # relative: hinge on the arc centre, leaf length equal to the radius
 STAIR_MIN_TREADS = 4
 
+# Budgets: what a building drawing needs, with room to spare. Beyond them a file is malformed or not a plan; what exceeds
+# them is not read and is listed in `skipped`, so that reading stays bounded in time and memory.
+MAX_COORD = 1e10            # drawing units: a coordinate farther from the origin (or NaN, inf) is not read
+MAX_PATH_VERTICES = 50_000  # a polyline, hatch boundary or curve that flattens to more vertices is not read
+MAX_ROOM_VERTICES = 10_000  # a room boundary with more vertices (after repair) is not read as a room
+MAX_ENTITIES = 250_000      # entities read per layout, block contents included
+POINT_ATTRS = ("start", "end", "center", "insert", "defpoint", "defpoint2", "defpoint3", "defpoint4", "text_midpoint",
+               "align_point", "radius", "start_angle", "end_angle", "rotation", "xscale", "yscale")
+
 
 # ---------------------------------------------------------------- units
 
@@ -115,17 +126,93 @@ def _num(x: float, places: int) -> str:
     return s.rstrip("0").rstrip(".") if "." in s else s
 
 
-def units_of(doc) -> Units | None:
+def units_of(doc) -> tuple[Units | None, str | None]:
+    """(units, None), or (None, why): not set, or a unit buildings are not drawn in (adapters.ifc UNIT_M: a plan in
+    kilometres or microinches is a plan in another unit with the wrong header)."""
     code = doc.header.get("$INSUNITS", 0)
-    if code in INSUNITS:
+    if isinstance(code, int) and code in INSUNITS:
         name, mm = INSUNITS[code]
-        return Units(name, mm, f"$INSUNITS={code} ({name})")
+        if not UNIT_M[0] * 1000 <= mm <= UNIT_M[1] * 1000:
+            return None, (f"$INSUNITS={code} ({name}) is not a unit buildings are drawn in ({UNIT_M[0] * 1000:g} to "
+                          f"{UNIT_M[1] * 1000:g} mm): no lengths or areas read")
+        return Units(name, mm, f"$INSUNITS={code} ({name})"), None
     meas = doc.header.get("$MEASUREMENT")
     if meas == 0:
-        return Units("in", 25.4, "$INSUNITS unset; $MEASUREMENT=0 (imperial): read as inches")
+        return Units("in", 25.4, "$INSUNITS unset; $MEASUREMENT=0 (imperial): read as inches"), None
     if meas == 1:
-        return Units("mm", 1.0, "$INSUNITS unset; $MEASUREMENT=1 (metric): read as millimetres")
+        return Units("mm", 1.0, "$INSUNITS unset; $MEASUREMENT=1 (metric): read as millimetres"), None
+    return None, "drawing units are not set ($INSUNITS and $MEASUREMENT missing): no lengths or areas read"
+
+
+# ---------------------------------------------------------------- coordinates
+
+def _finite(*vals) -> bool:
+    """Every value a finite number within MAX_COORD: the test DXF coordinates pass before they become geometry."""
+    try:
+        return all(math.isfinite(v) and abs(v) <= MAX_COORD for v in vals)
+    except TypeError:
+        return False
+
+
+def _path_problem(path, flat: float) -> str | None:
+    """Why a path is not flattened, or None: a coordinate _finite() rejects, or more vertices than MAX_PATH_VERTICES
+    (estimated before flattening from the length of each curve's control polygon, an upper bound in practice)."""
+    n, prev = 1.0, path.start
+    if not _finite(prev.x, prev.y, prev.z):
+        return "coordinates that are not finite numbers within the drawing's range"
+    for c in path.commands():
+        pts = [getattr(c, a) for a in ("ctrl", "ctrl1", "ctrl2") if hasattr(c, a)] + [c.end]
+        if not all(_finite(p.x, p.y, p.z) for p in pts):
+            return "coordinates that are not finite numbers within the drawing's range"
+        n += math.sqrt(sum((b - a).magnitude for a, b in zip([prev, *pts[:-1]], pts)) / flat) + 4 if len(pts) > 1 else 1
+        prev = c.end
+        if n > MAX_PATH_VERTICES:
+            return f"more than {MAX_PATH_VERTICES} vertices when flattened"
     return None
+
+
+def _flatten(path, flat: float) -> list[Vec2] | None:
+    """The path's vertices, `flat` apart at most from its curves; None where _path_problem() rejects it."""
+    if _path_problem(path, flat):
+        return None
+    return [Vec2(v) for v in path.flattening(flat)]
+
+
+def _bad_geometry(e, flat: float) -> str | None:
+    """Why an entity is not read, or None: a point, size or angle that is not a finite number within MAX_COORD, or a
+    boundary _path_problem() rejects. Checked once per entity, where the drawing is read."""
+    t = e.dxftype()
+    try:
+        if t in ("LWPOLYLINE", "HATCH", "MPOLYGON") or t == "POLYLINE" and e.is_2d_polyline:
+            for p in (epath.from_hatch(e) if t in ("HATCH", "MPOLYGON") else [epath.make_path(e)]):
+                why = _path_problem(p, flat)
+                if why:
+                    return why
+        vals = []
+        for a in POINT_ATTRS:
+            if e.dxf.is_supported(a) and e.dxf.hasattr(a):
+                v = e.dxf.get(a)
+                vals += list(v) if hasattr(v, "__iter__") else [v]
+    except Exception:  # noqa: BLE001 - what ezdxf cannot convert, the readers below skip
+        return None
+    return None if _finite(*vals) else "coordinates that are not finite numbers within the drawing's range"
+
+
+def _extents(entities) -> BBox | None:
+    """The extents of the entities, leaving out any whose own extents _finite() rejects (one NaN or far point would
+    make the frame of the whole layout useless)."""
+    try:
+        b = ebbox.extents(entities, fast=True)
+        if not b.has_data:
+            return None
+        box = (b.extmin.x, b.extmin.y, b.extmax.x, b.extmax.y)
+        if _finite(*box):
+            return box
+        boxes = [(x.extmin.x, x.extmin.y, x.extmax.x, x.extmax.y) for x in ebbox.multi_flat(entities, fast=True) if x.has_data]
+    except Exception:  # noqa: BLE001 - no frame: the tokens' own extents are used
+        return None
+    boxes = [x for x in boxes if _finite(*x)]
+    return _union_box(boxes) if boxes else None
 
 
 # ---------------------------------------------------------------- walking
@@ -140,6 +227,8 @@ def _hidden_layers(doc) -> set[str]:
 
 def _expand(insert):
     try:
+        if insert.mcount > MAX_ENTITIES:   # a MINSERT array of more copies than a layout may hold
+            return
         for ins in (insert.multi_insert() if insert.mcount > 1 else [insert]):
             yield from ins.virtual_entities()
     except Exception:  # noqa: BLE001 - a block ezdxf cannot transform is skipped and counted by the caller
@@ -150,7 +239,8 @@ def _walk(entities, hidden: set[str], key: str = "", depth: int = 0, chain: tupl
     """Every visible entity with a stable key (top-level handle, then index paths) and its enclosing INSERTs."""
     for i, e in enumerate(entities):
         layer = e.dxf.get("layer", "0")
-        if e.dxf.get("invisible", 0) or layer.lower() in hidden:
+        # `invisible` is not an attribute of every entity type (a BLOCK written among the entities has none)
+        if (e.dxf.is_supported("invisible") and e.dxf.get("invisible", 0)) or not isinstance(layer, str) or layer.lower() in hidden:
             continue
         k = e.dxf.handle if depth == 0 and e.dxf.handle else f"{key}/{i}"
         yield e, k, chain
@@ -163,7 +253,7 @@ def _ext(e) -> BBox | None:
         b = ebbox.extents([e], fast=True)
     except Exception:  # noqa: BLE001
         return None
-    if not b.has_data:
+    if not b.has_data or not _finite(b.extmin.x, b.extmin.y, b.extmax.x, b.extmax.y):
         return None
     return (b.extmin.x, b.extmin.y, b.extmax.x, b.extmax.y)
 
@@ -188,13 +278,19 @@ def _text_tokens(e, sheet: Sheet, chain: tuple, units: Units | None) -> list[Tok
         extra = {"layer": e.dxf.layer}
         if t == "ATTRIB":
             extra |= {"tag": e.dxf.tag, "block": chain[-1].dxf.name if chain else None}
-        return [Token(s, box, sheet, angle=round(e.dxf.get("rotation", 0.0), 1), source="dxf", extra=extra)]
+        rot = e.dxf.get("rotation", 0.0)
+        if not _finite(rot):
+            return []
+        return [Token(s, box, sheet, angle=round(rot, 1), source="dxf", extra=extra)]
     if t == "MTEXT":
         lines = [ln.strip() for ln in e.plain_text(split=True)]
         box = _ext(e)
         if not box or not any(lines):
             return []
-        rot = round(e.get_rotation(), 1)
+        rot = e.get_rotation()
+        if not _finite(rot):
+            return []
+        rot = round(rot, 1)
         out = []
         n = len(lines)
         for i, ln in enumerate(lines):
@@ -236,7 +332,7 @@ def _dimension(e, units: Units | None, paper: bool = False) -> dict | None:
         meas = abs(m) * lfac  # the value the dimension states: the measured length times DIMLFAC
     pts = [e.dxf.get(a) for a in ("defpoint", "defpoint2", "defpoint3", "text_midpoint")]
     pts = [(p.x, p.y) for p in pts if p is not None]
-    if not pts:
+    if not pts or not _finite(*(c for p in pts for c in p)):
         return None
     x0, y0, x1, y1 = _bbox_of(pts)
     # the displayed text, as the drawing shows it
@@ -264,17 +360,26 @@ def _prims(entities, flat: float, depth: int = 0) -> list[tuple]:
     for e in entities:
         t = e.dxftype()
         if t == "LINE":
-            out.append(("line", Vec2(e.dxf.start), Vec2(e.dxf.end)))
+            a, b = Vec2(e.dxf.start), Vec2(e.dxf.end)
+            if _finite(a.x, a.y, b.x, b.y):
+                out.append(("line", a, b))
         elif t == "ARC":
-            c = Vec2(e.ocs().to_wcs(e.dxf.center))
-            sweep = (e.dxf.end_angle - e.dxf.start_angle) % 360 or 360
-            out.append(("arc", c, e.dxf.radius, Vec2(e.start_point), Vec2(e.end_point), sweep))
+            try:
+                c = Vec2(e.ocs().to_wcs(e.dxf.center))
+                sweep = (e.dxf.end_angle - e.dxf.start_angle) % 360 or 360
+                a, b = Vec2(e.start_point), Vec2(e.end_point)
+            except Exception:  # noqa: BLE001 - an arc ezdxf cannot place
+                continue
+            if _finite(c.x, c.y, e.dxf.radius, a.x, a.y, b.x, b.y, sweep):
+                out.append(("arc", c, e.dxf.radius, a, b, sweep))
         elif t in ("LWPOLYLINE", "POLYLINE"):
             if t == "POLYLINE" and not e.is_2d_polyline:
                 continue
             try:
-                pts = [Vec2(v) for v in epath.make_path(e).flattening(flat)]
+                pts = _flatten(epath.make_path(e), flat)
             except Exception:  # noqa: BLE001
+                continue
+            if pts is None:
                 continue
             closed = e.closed if t == "LWPOLYLINE" else e.is_closed
             if len(pts) >= 2:
@@ -353,20 +458,24 @@ def _polygons(e, flat: float) -> list[Polygon]:
     t = e.dxftype()
     try:
         if t == "LWPOLYLINE" and e.closed or t == "POLYLINE" and e.is_2d_polyline and e.is_closed:
-            rings = [[(v.x, v.y) for v in epath.make_path(e).flattening(flat)]]
+            paths = [epath.make_path(e)]
         elif t == "HATCH" or t == "MPOLYGON":
-            rings = [[(v.x, v.y) for v in p.flattening(flat)] for p in epath.from_hatch(e)]
+            paths = list(epath.from_hatch(e))
         else:
             return []
+        rings = [_flatten(p, flat) for p in paths]
     except Exception:  # noqa: BLE001
+        return []
+    if any(r is None for r in rings):
         return []
     polys = []
     for r in rings:
         if len(r) >= 3:
-            p = Polygon(r)
+            p = Polygon([(v.x, v.y) for v in r])
             if not p.is_valid:
                 p = p.buffer(0)
-            if not p.is_empty and p.area > 0:
+            # the room's geometry stays bounded: a boundary that repairs into more vertices is not a room's
+            if not p.is_empty and p.area > 0 and shapely.get_num_coordinates(p) <= MAX_ROOM_VERTICES:
                 polys.append(p)
     if t in ("HATCH", "MPOLYGON") and len(polys) > 1:  # outer boundary less the islands inside it
         polys.sort(key=lambda p: -p.area)
@@ -448,7 +557,7 @@ def _viewports(doc) -> dict[str, list[tuple[BBox, float]]]:
                 continue
             c, h = v.dxf.view_center_point, v.dxf.view_height
             w = h * v.dxf.width / v.dxf.height if v.dxf.height else 0
-            if w <= 0:
+            if not _finite(c.x, c.y, h, w, v.dxf.height) or w <= 0:
                 continue
             out.setdefault(lay.name, []).append(((c.x - w / 2, c.y - h / 2, c.x + w / 2, c.y + h / 2), v.dxf.height / h))
     return out
@@ -457,13 +566,14 @@ def _viewports(doc) -> dict[str, list[tuple[BBox, float]]]:
 def analyse_file(path: Path, rel: str, progress=lambda m: None) -> dict:
     t0 = time.time()
     doc = read(path)
-    units = units_of(doc)
+    units, units_problem = units_of(doc)
     hidden = _hidden_layers(doc)
     skipped: list[str] = []
     state: dict = {}
     count = Counter()
+    bad: Counter = Counter()   # reason -> entities not read for it
     if units is None:
-        skipped.append(f"{rel}: drawing units are not set ($INSUNITS and $MEASUREMENT missing): no lengths or areas read")
+        skipped.append(f"{rel}: {units_problem}")
     upm = units.per_metre if units else None
     flat = units.from_mm(2) if units else 1.0  # curves flattened to 2 mm
     msp = doc.modelspace()
@@ -474,16 +584,16 @@ def analyse_file(path: Path, rel: str, progress=lambda m: None) -> dict:
     paper_tokens: dict[str, list[Token]] = {}
     frames: dict[str, BBox] = {}  # layout -> extents, the frame annotations reads it in
     for lay in layouts:
-        try:
-            ext = ebbox.extents(lay, fast=True)
-            if ext.has_data:
-                frames[lay.name] = (ext.extmin.x, ext.extmin.y, ext.extmax.x, ext.extmax.y)
-        except Exception:  # noqa: BLE001 - no frame: the tokens' own extents are used
-            pass
+        box = _extents(lay)
+        if box:
+            frames[lay.name] = box
     for lay in layouts[1:]:
         sh = Sheet(rel, layout=lay.name, text="dxf")
         toks = []
-        for e, _k, chain in _walk(lay, hidden):
+        for n, (e, _k, chain) in enumerate(_walk(lay, hidden)):
+            if n >= MAX_ENTITIES:
+                bad[f"beyond the first {MAX_ENTITIES} entities of layout {lay.name!r}"] += 1
+                break
             if e.dxftype() in ("TEXT", "MTEXT", "ATTRIB", "DIMENSION"):
                 toks += _text_tokens(e, sh, chain, None)
             if e.dxftype() == "INSERT":
@@ -494,7 +604,7 @@ def analyse_file(path: Path, rel: str, progress=lambda m: None) -> dict:
         # the sheet size from the layout's plot settings (always in mm in DXF), in drawing units
         pl = lay.dxf_layout.dxf
         pw, ph = pl.get("paper_width", 0) or 0, pl.get("paper_height", 0) or 0
-        if units and pw > 0 and ph > 0:
+        if units and _finite(pw, ph) and pw > 0 and ph > 0:
             if pl.get("plot_rotation", 0) in (1, 3):
                 pw, ph = ph, pw
             sh.width, sh.height = units.from_mm(pw), units.from_mm(ph)
@@ -519,9 +629,18 @@ def analyse_file(path: Path, rel: str, progress=lambda m: None) -> dict:
     stair_lines: dict[str, list] = {}
     dims: list[dict] = []
     attr_tags: list[dict] = []
-    for e, k, chain in _walk(msp, hidden):
+    for n, (e, k, chain) in enumerate(_walk(msp, hidden)):
+        if n >= MAX_ENTITIES:
+            bad[f"beyond the first {MAX_ENTITIES} entities of model space"] += 1
+            break
         t = e.dxftype()
         layer = e.dxf.get("layer", "0")
+        why = _bad_geometry(e, flat)
+        if why is None and t == "INSERT" and not (isinstance(e.dxf.get("name"), str) and e.dxf.get("name")):
+            why = "no block name"
+        if why:
+            bad[f"{t} with {why}"] += 1
+            continue
         if t in ("TEXT", "MTEXT", "DIMENSION"):
             model_tokens += _text_tokens(e, model_sheet, chain, units)
         if t == "DIMENSION" and units:
@@ -571,6 +690,8 @@ def analyse_file(path: Path, rel: str, progress=lambda m: None) -> dict:
             group = f"block {in_stair.dxf.name} {k.rsplit('/', 1)[0]}" if in_stair is not None else f"layer {layer}"
             stair_lines.setdefault(group, []).append((Vec2(e.dxf.start), Vec2(e.dxf.end), k))
     count["tokens"] = len(model_tokens)
+    for why, n in sorted(bad.items()):
+        skipped.append(f"{rel}: {n} entit{'y' if n == 1 else 'ies'} {why}: not read")
     if count["dimlfac"]:
         skipped.append(f"{rel}: {count['dimlfac']} linear dimension(s) with DIMLFAC other than 1 (scaled details): not used for widths or tread depths")
 
@@ -666,6 +787,7 @@ def analyse_file(path: Path, rel: str, progress=lambda m: None) -> dict:
 
     if state.get("annotations"):
         skipped.append(f"{rel}: {state['annotations']}")
+    drop_implausible(facts, elements, skipped)
     counts = Counter(e["type"] for e in elements)
     f = frames.get(msp.name)
     model_ext = (f[2] - f[0], f[3] - f[1]) if f else None
@@ -697,10 +819,10 @@ def _segments(e, flat: float):
     if t == "LINE":
         return [(Vec2(e.dxf.start), Vec2(e.dxf.end))]
     try:
-        pts = [Vec2(v) for v in epath.make_path(e).flattening(flat)]
+        pts = _flatten(epath.make_path(e), flat)
     except Exception:  # noqa: BLE001
         return []
-    return list(zip(pts, pts[1:]))
+    return list(zip(pts, pts[1:])) if pts else []
 
 
 # ---------------------------------------------------------------- doors
@@ -812,6 +934,8 @@ def _room_tag(e, per_attrib: list) -> dict | None:
     generic = not any(re.match(r"(?i)^(room|rm|space)|室", a.dxf.tag) for a in e.attribs)
     if not (name or number) or (generic and not ROOM_TAG_BLOCK.search(e.dxf.name)):
         return None
+    if not _finite(e.dxf.insert.x, e.dxf.insert.y):
+        return None
     vis = [t for t in toks if t.text] or None
     b = _union_box(t.bbox for t in vis) if vis else (e.dxf.insert.x, e.dxf.insert.y, e.dxf.insert.x, e.dxf.insert.y)
     return {"point": (e.dxf.insert.x, e.dxf.insert.y), "bbox": b, "name": name, "number": number, "element": None, "at": None}
@@ -842,11 +966,16 @@ def _name_tags(tokens: list[Token], taken: list[BBox], rel: str, sheet: Sheet, s
         parts = re.split(r"\s+[xX×]\s+", norm(txt))
         return len(parts) == 2 and all(length(p) for p in parts)
 
+    # upright tokens by the top of their box, so that under() looks only at the band just below a text
+    ups = sorted((u for u in tokens if upright(u)), key=lambda u: u.bbox[3])
+    tops = [u.bbox[3] for u in ups]
+
     def under(t, pick):
         """The text directly under t, centred on it, that `pick` accepts."""
         h = t.bbox[3] - t.bbox[1]
         cx = (t.bbox[0] + t.bbox[2]) / 2
-        below = [u for u in tokens if u is not t and upright(u) and -0.3 * h <= t.bbox[1] - u.bbox[3] <= 1.2 * h
+        band = ups[bisect_left(tops, t.bbox[1] - 1.2 * h):bisect_right(tops, t.bbox[1] + 0.3 * h)]
+        below = [u for u in band if u is not t and -0.3 * h <= t.bbox[1] - u.bbox[3] <= 1.2 * h
                  and abs((u.bbox[0] + u.bbox[2]) / 2 - cx) <= 0.6 * max(u.bbox[2] - u.bbox[0], t.bbox[2] - t.bbox[0])
                  and 0.5 < (u.bbox[3] - u.bbox[1]) / max(h, 1e-9) < 2.0]
         below = [u for u in below if pick(u.text)]
