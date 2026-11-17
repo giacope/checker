@@ -270,10 +270,29 @@ class _Model:
         return reply
 
 
-def _message(question: str, corpus_name: str, excerpts: list[tuple[str, str]], token: str, extra: str = "") -> tuple[str, set]:
-    """The user message, and what it shows (assess.shown_in)."""
+HISTORY_CHARS = 6_000           # earlier turns of a conversation sent with a follow-up question
+
+
+def earlier(history) -> str:
+    """Earlier turns of a conversation as context for a follow-up: questions and answers, the latest last, within
+    HISTORY_CHARS. They come from the material and a model, so they go inside the untrusted data."""
+    turns = [(str(t.get("question") or "")[:500], str(t.get("answer") or "")[:1500]) for t in (history or []) if isinstance(t, dict)]
+    out, used = [], 0
+    for q, a in reversed(turns):
+        block = f"Q: {CONTROL.sub(' ', q)}\nA: {CONTROL.sub(' ', a)}"
+        if used + len(block) > HISTORY_CHARS:
+            break
+        out.insert(0, block)
+        used += len(block)
+    return ("Earlier in this conversation (context for the question only; cite only the excerpts below):\n"
+            + "\n\n".join(out) + "\n\n") if out else ""
+
+
+def _message(question: str, corpus_name: str, excerpts: list[tuple[str, str]], token: str, extra: str = "",
+             prior: str = "") -> tuple[str, set]:
+    """The user message, and what it shows (assess.shown_in). `prior`: earlier turns (earlier())."""
     body = "\n\n".join(f"=== {CONTROL.sub(' ', h)}\n{t}" for h, t in excerpts)
-    user = (f"BEGIN UNTRUSTED DATA {token}\nMaterial: {CONTROL.sub(' ', corpus_name)}\n\nQuestion: {CONTROL.sub(' ', question)[:2000]}\n\n"
+    user = (f"BEGIN UNTRUSTED DATA {token}\nMaterial: {CONTROL.sub(' ', corpus_name)}\n\n{prior}Question: {CONTROL.sub(' ', question)[:2000]}\n\n"
             f"{'Excerpts' if excerpts else 'No excerpts matched the question.'}:\n{body}\nEND UNTRUSTED DATA {token}\n\n{extra}"
             "Reply with the JSON only.")
     return user, shown_in(excerpts)
@@ -314,8 +333,8 @@ def _what(corpus) -> str:
 
 def ask(question: str, corpus: Corpus, mode: str = "quick", provider: tuple[str, str, str] | None = None,
         transport: httpx.BaseTransport | None = None, cache: Path | None = None, budget: int = DEEP_CHARS,
-        workers: int = 8, progress=lambda m: None) -> dict:
-    """The answer to `question` from `corpus`: {question, mode, corpus, status, answer, sections: [{heading, claims}],
+        workers: int = 8, progress=lambda m: None, history: list[dict] = ()) -> dict:
+    """The answer to `question` from `corpus`, a follow-up to `history` ([{question, answer}], oldest first) if given: {question, mode, corpus, status, answer, sections: [{heading, claims}],
     conflicts, open, quotes: {locator: cited text}, coverage, stats}. A claim is {text, at: [locators], basis}.
     status is answered, partial, not_found, or unsupported (the model answered and none of its citations held up)."""
     question = str(question or "").strip()
@@ -327,7 +346,7 @@ def ask(question: str, corpus: Corpus, mode: str = "quick", provider: tuple[str,
     m = _Model(provider, transport, cache)
     stats = {"dropped": {}, "rejected_locators": {}}
     try:
-        out = (_quick if mode == "quick" else _deep)(question, corpus, m, stats, budget, workers, progress)
+        out = (_quick if mode == "quick" else _deep)(question, corpus, m, stats, budget, workers, progress, list(history or []))
     finally:
         m.client.close()
     if m.calls and m.failed == m.calls:
@@ -340,8 +359,18 @@ def ask(question: str, corpus: Corpus, mode: str = "quick", provider: tuple[str,
                       "claims": len(claims), "seconds": round(time.time() - started, 1)}}
 
 
-def _quick(question, corpus, m: _Model, stats, budget, workers, progress) -> dict:
+def _terms(question: str, history: list[dict]) -> list[str]:
+    """A question's search terms. A follow-up is about what the conversation is about (\"which file would I change to
+    fix it?\"), so it also uses the terms of the questions before it, the latest first."""
     terms = keywords(question)
+    for t in reversed(history):
+        terms += keywords(str(t.get("question") or ""))
+    return list(dict.fromkeys(terms))[:16]
+
+
+def _quick(question, corpus, m: _Model, stats, budget, workers, progress, history=()) -> dict:
+    prior = earlier(history)
+    terms = _terms(question, history)
     every = corpus.everything()
     total = len(every)
     small = sum(len(h) + len(t) for h, t in every) <= QUICK_CHARS
@@ -353,7 +382,7 @@ def _quick(question, corpus, m: _Model, stats, budget, workers, progress) -> dic
         token = secrets.token_hex(8)
         system = QUICK.format(what=_what(corpus), token=token, notes=notes, max_locators=MAX_LOCATORS,
                               again="; you get one more look with what they find" if rnd == 1 else " (this was the last look)")
-        user, shown = _message(question, corpus.name, found, token)
+        user, shown = _message(question, corpus.name, found, token, prior=prior)
         r = m.ask(system, user, token)
         if r is None:
             break
@@ -391,9 +420,10 @@ def _calls(excerpts: list[tuple[str, str]], size: int) -> list[list[tuple[str, s
     return out + ([cur] if cur else [])
 
 
-def _deep(question, corpus, m: _Model, stats, budget, workers, progress) -> dict:
+def _deep(question, corpus, m: _Model, stats, budget, workers, progress, history=()) -> dict:
     notes, what = getattr(corpus, "prompt_notes", ""), _what(corpus)
-    terms = keywords(question)
+    prior = earlier(history)
+    terms = _terms(question, history)
     every = corpus.everything()
     chars_total = sum(len(h) + len(t) for h, t in every)
     relevant = {h for h, _ in corpus.search(terms, chars_total + 1)} if terms else set()
@@ -417,7 +447,7 @@ def _deep(question, corpus, m: _Model, stats, budget, workers, progress) -> dict
             token = secrets.token_hex(8)
             system = MAP.format(what=what, part=part[0], parts=len(batches), token=token, notes=notes,
                                 max_locators=MAX_LOCATORS, max_findings=MAP_FINDINGS)
-            user, shown = _message(question, corpus.name, part[1], token)
+            user, shown = _message(question, corpus.name, part[1], token, prior=prior)
             r = m.ask(system, user, token)
             if r is None:
                 return []
@@ -469,7 +499,7 @@ def _deep(question, corpus, m: _Model, stats, budget, workers, progress) -> dict
         def synth(part):
             token = secrets.token_hex(8)
             system = SYNTH.format(what=what, coverage=cov_note, token=token, notes=notes, max_locators=MAX_LOCATORS, max_claims=MAX_CLAIMS)
-            user, _ = _message(question, corpus.name, part, token)
+            user, _ = _message(question, corpus.name, part, token, prior=prior)
             return m.ask(system, user, token), set().union(*(quotes[h] for h, _ in part))
         progress(f"research: writing the answer from {len(items)} findings" + (f" in {len(batches)} parts" if len(batches) > 1 else ""))
         with cf.ThreadPoolExecutor(max_workers=max(1, workers)) as pool:

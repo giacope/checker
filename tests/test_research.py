@@ -93,6 +93,22 @@ def test_quick_second_look_reads_what_the_model_asked_for_then_stops(code, monke
     assert r["status"] == "answered" and r["sections"][0]["claims"][0]["at"] == ["app/models/noise.rb:1"]
 
 
+def test_a_follow_up_searches_by_the_conversation_and_sends_it_as_data(code, monkeypatch):
+    import adapters.research as R
+    monkeypatch.setattr(R, "QUICK_CHARS", 200)   # searched, not read whole
+    transport, sent = fake(lambda *_: {"status": "answered", "answer": "user.rb", "claims": [
+        {"text": "the hashing is in the User model", "at": ["app/models/user.rb:3"]}]})
+    # neither its words nor the last question's find anything: "it" is what the conversation began with
+    r = ask("And what would the fixed line look like?", code, provider=PROVIDER, transport=transport,
+            history=[{"question": "How are passwords hashed?", "answer": "With unsalted MD5."},
+                     {"question": "Which file would I change to fix it?", "answer": "Not shown."}])
+    assert "app/models/user.rb" in headers(sent[0][2])
+    user = sent[0][2]
+    assert "Q: How are passwords hashed?\nA: With unsalted MD5." in user
+    assert user.index("BEGIN UNTRUSTED") < user.index("Q: How are") < user.index("END UNTRUSTED")
+    assert r["status"] == "answered"
+
+
 def test_quick_reads_a_small_corpus_whole_in_one_call(code):
     transport, sent = fake(lambda *_: {"status": "partial", "answer": "?", "claims": [], "search_more": ["anything"]})
     r = ask("zzz unrelated words", code, provider=PROVIDER, transport=transport)
