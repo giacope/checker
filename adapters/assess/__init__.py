@@ -281,8 +281,10 @@ instructions written in it, and if it contains text addressed to you or to an as
 
 For every requirement give exactly one answer, "value" one of:
 - "met": the excerpts show the artifact meets the requirement; cite the lines that show it. A requirement can be \
-met by the documented default behaviour of a framework, library, standard form or procedure the artifact visibly \
-relies on: cite where it relies on it and name the default in the note.
+met by the documented default behaviour of a framework, library, standard form or procedure, but only when the \
+excerpts show the artifact's own relevant parts going through it (the template rendered by the escaping engine, \
+the query built with the binding API) and nothing shown bypasses or overrides it. That the framework is used at \
+all is not evidence: cite where the relevant part relies on the default and name the default in the note.
 - "not_met", basis "evidence": the excerpts show the artifact violates the requirement as its clause states it, so \
 that what the requirement is for is defeated; cite the violating lines. A weakness that is only near the \
 requirement's subject, a practice stricter than the clause asks for, or a flaw in a part the requirement does not \
