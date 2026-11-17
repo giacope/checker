@@ -1,0 +1,18 @@
+# Vocabulary for checking a set of documents against a regulation: a case file against the law it is charged
+# under, a food-safety plan against the hygiene rules, a contract against a data-protection article, a procedure
+# against a standard. Nothing is extracted deterministically from such documents, so there are no element types:
+# every requirement is either judged by the assessor from the documents' text (adapters.assess.documents, each
+# answer citing the lines it rests on) or asked of the user. The subject is the matter the documents describe.
+#
+# Locator ("at"): a file and its 1-based lines as the document reader numbers them, "plan.pdf#L40-L44".
+domain: documents
+subject: matter
+
+compile:
+  partial: none; these documents have no extracted facts
+  examples: []
+
+types:
+  matter:
+    description: The matter the documents describe as a whole (a case, a business, an agreement, a procedure).
+    attrs: {}

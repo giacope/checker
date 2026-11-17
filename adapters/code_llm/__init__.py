@@ -196,7 +196,7 @@ def vocab_text(vocab: dict) -> str:
     out = []
     for t, spec in vocab["types"].items():
         attrs = "; ".join(f"{a} ({'/'.join(map(str, d['values'])) if 'values' in d else d['type']}): {d.get('label', '')}"
-                          for a, d in spec["attrs"].items())
+                          for a, d in spec["attrs"].items()) or "none (no fact is extracted: no check can be computed)"
         out.append(f"- {t}: {spec['description']}\n  Attributes: {attrs}")
     return "\n".join(out)
 

@@ -29,6 +29,7 @@ from fastapi.templating import Jinja2Templates
 from adapters.regulation import ANSWER_LABELS
 
 from . import buildings
+from . import documents as documents_mod
 from . import questions as qs
 from . import regulations as regs
 from . import report as report_mod
@@ -40,6 +41,8 @@ SCANS = DATA / "scans"
 SCANS.mkdir(parents=True, exist_ok=True)
 PROJECTS = DATA / "projects"
 PROJECTS.mkdir(parents=True, exist_ok=True)
+DOCSETS = DATA / "documents"
+DOCSETS.mkdir(parents=True, exist_ok=True)
 MAX_UPLOAD = int(os.environ.get("NORMIR_MAX_UPLOAD_MB", "1024")) * 1_000_000
 POOL = ThreadPoolExecutor(max_workers=int(os.environ.get("NORMIR_WORKERS", "2")))
 LOCK = threading.Lock()
@@ -534,6 +537,144 @@ def project_json(pid: str):
     if _read(d, "status.json", {}).get("state") != "done":
         raise HTTPException(409, "The project has not finished processing")
     return JSONResponse(json.loads(json.dumps(_project_report(pid, d), default=str)))
+
+
+# ---------------------------------------------------------------- document sets
+
+def _ddir(did: str) -> Path:
+    if not SCAN_ID.match(did):
+        raise HTTPException(404)
+    d = DOCSETS / did
+    if not d.is_dir():
+        raise HTTPException(404, "No such document set")
+    return d
+
+
+def run_documents(did: str) -> None:
+    """Read the uploaded documents and assess the regulations' requirements from them. Runs in the pool."""
+    d = DOCSETS / did
+    req = _read(d, "request.json")
+    log = []
+
+    def progress(msg: str) -> None:
+        log.append(msg)
+        _status(d, state="running", step=msg, log=log[-40:])
+    try:
+        progress("Queued")
+        data = documents_mod.process(d / "files", req["name"], progress=progress,
+                                     requirements=regs.assessed([c[4:] for c in req["codes"]]))
+        _write(d, "data.json", data)
+        _status(d, state="done", step="Done", seconds=data["seconds"])
+    except documents_mod.DocumentsError as e:
+        _status(d, state="error", error=str(e))
+    except Exception as e:  # noqa: BLE001 - shown to the user, with the trace kept on disk
+        (d / "error.txt").write_text(traceback.format_exc())
+        _status(d, state="error", error=f"{type(e).__name__}: {e}")
+
+
+def _documents_report(d: Path) -> dict:
+    req, data = _read(d, "request.json"), _read(d, "data.json")
+    answers = _read(d, "answers.json", {}) or {}
+    ev = documents_mod.evaluate(data["docs"], req["codes"], answers)
+    return documents_mod.build({"id": d.name, **req}, data, ev, answers)
+
+
+@app.get("/documents", response_class=HTMLResponse)
+def documents_index(request: Request):
+    recent = []
+    for d in sorted(DOCSETS.iterdir(), key=lambda p: p.stat().st_mtime, reverse=True)[:30]:
+        req, st = _read(d, "request.json"), _read(d, "status.json", {})
+        if req:
+            recent.append({"id": d.name, **req, "state": st.get("state", "queued"), "step": st.get("step")})
+    return templates.TemplateResponse(request, "documents_index.html", {
+        "regulations": [r for r in regs.regulations("documents") if r["state"] == "done" and regs.ready(r["id"], "documents")],
+        "recent": recent, "suffixes": sorted(regs.SUFFIXES), "max_mb": MAX_UPLOAD // 1_000_000})
+
+
+@app.post("/documents")
+async def create_documents(name: str = Form(""), codes: list[str] = Form([]), files: list[UploadFile] = File(...)):
+    _check_choices(codes, {}, "documents")
+    if not codes:
+        raise HTTPException(400, "Choose at least one regulation to check the documents against.")
+    did = secrets.token_hex(6)
+    d = DOCSETS / did
+    (d / "files").mkdir(parents=True)
+    names, total = [], 0
+    try:
+        for f in files:
+            if not f.filename:
+                continue
+            base = n = regs.safe_name(f.filename)
+            if Path(n).suffix.lower() not in regs.SUFFIXES:
+                raise HTTPException(400, f"{f.filename}: upload PDF, Word (.docx), HTML, Markdown or text files.")
+            k = 0
+            while n in names:
+                k += 1
+                n = f"{Path(base).stem}-{k}{Path(base).suffix}"
+            names.append(n)
+            with open(d / "files" / n, "wb") as out:
+                while chunk := await f.read(1 << 20):
+                    total += len(chunk)
+                    if total > MAX_UPLOAD:
+                        raise HTTPException(413, f"The upload is larger than {MAX_UPLOAD // 1_000_000} MB.")
+                    out.write(chunk)
+    except HTTPException:
+        shutil.rmtree(d, ignore_errors=True)
+        raise
+    if total == 0:
+        shutil.rmtree(d, ignore_errors=True)
+        raise HTTPException(400, "No files were uploaded.")
+    _write(d, "request.json", {"name": name.strip()[:120] or Path(names[0]).stem, "codes": list(dict.fromkeys(codes)),
+                               "files": names, "created": time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())})
+    _status(d, state="queued", step="Queued")
+    POOL.submit(isolated, run_documents, d, did)
+    return RedirectResponse(f"/documents/{did}", status_code=303)
+
+
+@app.get("/documents/{did}", response_class=HTMLResponse)
+def show_documents(request: Request, did: str):
+    d = _ddir(did)
+    st, req = _read(d, "status.json", {}), _read(d, "request.json")
+    names = {c: (regs.ready(c[4:], "documents") or {}).get("name", c) for c in req["codes"]}
+    if st.get("state") != "done":
+        return templates.TemplateResponse(request, "documents_report.html", {"did": did, "req": req, "st": st, "names": names, "r": None})
+    ask = _ask({"kind": "documents", "id": did}, "documents", [c[4:] for c in req["codes"]],
+               hint="e.g. Who are the parties and what did each agree to? or: List every deadline the documents set")
+    return templates.TemplateResponse(request, "documents_report.html", {
+        "did": did, "req": req, "st": st, "names": names, "r": _documents_report(d), "VERDICT": report_mod.VERDICT_LABEL, "ask": ask})
+
+
+@app.get("/documents/{did}/status")
+def documents_status(did: str):
+    return _read(_ddir(did), "status.json", {})
+
+
+@app.post("/documents/{did}/answers")
+async def documents_answer(request: Request, did: str):
+    d = _ddir(did)
+    form = await request.form()
+    known = {q["key"]: q for q in _documents_report(d)["questions"]}
+    answers = _read(d, "answers.json", {}) or {}
+    subject = answers.setdefault("subject", {})
+    for key, raw in form.items():
+        if key.startswith("clear::"):
+            subject.pop(key[7:].partition("::")[2], None)
+            continue
+        q = known.get(key)
+        if q is not None and q["element"] == "_subject":
+            v = _coerce(str(raw).strip(), q["value_type"], q["values"])
+            if v is not None:
+                subject[q["attr"]] = v
+    _write(d, "answers.json", answers)
+    return RedirectResponse(f"/documents/{did}#questions", status_code=303)
+
+
+@app.get("/documents/{did}/report.json")
+def documents_json(did: str):
+    d = _ddir(did)
+    if _read(d, "status.json", {}).get("state") != "done":
+        raise HTTPException(409, "The documents have not finished processing")
+    return JSONResponse(json.loads(json.dumps(_documents_report(d), default=str)))
 
 
 # ---------------------------------------------------------------- questions

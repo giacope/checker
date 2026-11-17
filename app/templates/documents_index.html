@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Documents — compliance check{% endblock %}
+{% block sub %}Case files, plans, contracts and records — verdicts citing the lines they rest on{% endblock %}
+{% block body %}
+<div class="card">
+  <h1>Check documents</h1>
+  <p class="muted">Upload the documents under review: a case file, a food-safety plan, a contract, a policy, minutes or records. Each file is read as numbered lines, a model judges every requirement of the regulations you pick from what the documents say, and each verdict quotes the lines it rests on. Requirements the documents can't show become questions for you.</p>
+  {% if regulations %}
+  <form method="post" action="/documents" enctype="multipart/form-data">
+    <label for="name">Name <span class="muted small">(optional; the first file's name if empty)</span></label>
+    <input id="name" name="name" type="text" placeholder="Harbour Café HACCP plan 2026">
+    <label for="files">Documents <span class="muted small">(PDF, Word .docx, HTML, Markdown or text; up to {{ max_mb }} MB in all)</span></label>
+    <input id="files" name="files" type="file" multiple required accept="{{ suffixes | join(',') }}">
+    <label>Regulations</label>
+    <div class="checks">
+      {% for r in regulations %}
+      <label><input type="checkbox" name="codes" value="reg:{{ r.id }}" {% if loop.first %}checked{% endif %}> {{ r.name }} <span class="muted small">{{ r.checks }} checks ({{ r.kinds.assessed }} assessed · {{ r.kinds.attested }} attested)</span></label>
+      {% endfor %}
+    </div>
+    <p class="small muted"><a href="/regulations">Add a regulation</a> with “Checked against: documents” to check against another law, code or standard.</p>
+    <button type="submit">Check documents</button>
+  </form>
+  {% else %}
+  <div class="note"><b>No regulation for documents yet.</b> <a href="/regulations">Add one</a> — a law, a hygiene regulation, a code of practice — and choose <i>Checked against: documents</i>. Once it has compiled, it appears here.</div>
+  {% endif %}
+</div>
+
+{% if recent %}
+<div class="card">
+  <h2>Recent document sets</h2>
+  <table><tr><th>Documents</th><th>Started</th><th>State</th></tr>
+  {% for p in recent %}<tr><td><a href="/documents/{{ p.id }}">{{ p.name }}</a><div class="small muted">{{ p.files | join(", ") }}</div></td><td class="muted small">{{ p.created }}</td>
+    <td class="small">{% if p.state == "error" %}<span class="pill v-fail">failed</span>{% elif p.state == "done" %}<span class="pill v-pass">done</span>{% else %}<span class="pill v-unknown">{{ p.step or p.state }}</span>{% endif %}</td></tr>{% endfor %}
+  </table>
+</div>
+{% endif %}
+{% endblock %}

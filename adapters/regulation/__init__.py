@@ -50,7 +50,9 @@ KINDS = ("computed", "assessed", "attested")
 VAR = re.compile(r"^[a-z][a-z0-9_]{0,19}$")
 ARTIFACT = {"code": ("the software system's source code and configuration", "code, configuration files, or dependency manifests"),
             "bim": ("the building's drawings and model (plans, sections, schedules, sheet notes, IFC properties)",
-                    "drawing notes, schedules, sheet titles, or model property names")}
+                    "drawing notes, schedules, sheet titles, or model property names"),
+            "documents": ("the documents under review (a case file, a plan, a contract, a policy, records), read as text",
+                          "the documents' own wording: defined terms, headings, names of parties, procedures or records")}
 
 
 # The answer to an assessed or attested check, and to a computed per-element check when no element was found.

@@ -3,7 +3,7 @@
 {% block body %}
 <div class="card">
   <h1>Add a regulation</h1>
-  <p class="muted">Upload the regulation, policy or standard your work must meet. A model splits it into clauses and turns each requirement into a check: <b>computed</b> from the facts the readers extract, <b>assessed</b> by the model from the code or drawings with the lines it read, or <b>attested</b> as a question for you. You can review and change every check before you scan.</p>
+  <p class="muted">Upload the regulation, policy or standard your work must meet. A model splits it into clauses and turns each requirement into a check: <b>computed</b> from the facts the readers extract, <b>assessed</b> by the model from the code, drawings or documents with the lines it read, or <b>attested</b> as a question for you. You can review and change every check before you scan.</p>
   <form method="post" action="/regulations" enctype="multipart/form-data">
     <label for="name">Name <span class="muted small">(optional; the first file's name if empty)</span></label>
     <input id="name" name="name" type="text" placeholder="Acme secure coding standard v3">
@@ -11,6 +11,7 @@
     <div class="checks">
       <label><input type="radio" name="domain" value="code" checked> Code repositories</label>
       <label><input type="radio" name="domain" value="building"> Building drawings and models</label>
+      <label><input type="radio" name="domain" value="documents"> Documents <span class="muted small">— case files, plans, contracts, records</span></label>
     </div>
     <label for="files">Documents</label>
     <input id="files" name="files" type="file" multiple required accept="{{ suffixes | join(',') }}">
@@ -24,7 +25,7 @@
   <table><tr><th>Regulation</th><th>For</th><th>Clauses</th><th>Checks</th><th>State</th></tr>
   {% for r in regs %}<tr>
     <td><a href="/regulations/{{ r.id }}">{{ r.name }}</a><div class="muted small">{{ r.files | join(", ") }} · {{ r.created }}</div></td>
-    <td>{{ "Code" if r.domain == "code" else "Buildings" }}</td>
+    <td>{{ {"code": "Code", "building": "Buildings", "documents": "Documents"}.get(r.domain, r.domain) }}</td>
     <td>{{ r.clauses or "" }}</td>
     <td>{% if r.state == "done" %}{{ r.checks }} <span class="muted small">({{ r.kinds.computed }} computed · {{ r.kinds.assessed }} assessed · {{ r.kinds.attested }} attested)</span>{% endif %}</td>
     <td>{% if r.state == "error" %}<span class="pill v-fail">failed</span>{% elif r.state == "done" %}<span class="pill v-pass">ready</span>{% else %}<span class="pill v-unknown">{{ r.state or "queued" }}</span>{% endif %}</td>

@@ -32,7 +32,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = Path(os.environ.get("NORMIR_DATA", ROOT / ".data")).resolve()
 REGS = DATA / "regulations"
 REGS.mkdir(parents=True, exist_ok=True)
-VOCABS = {"code": ROOT / "vocab" / "code.yaml", "building": ROOT / "vocab" / "bim.yaml"}
+VOCABS = {"code": ROOT / "vocab" / "code.yaml", "building": ROOT / "vocab" / "bim.yaml",
+          "documents": ROOT / "vocab" / "documents.yaml"}
 SUFFIXES = {".pdf", ".docx", ".html", ".htm", ".md", ".markdown", ".txt"}
 MAX_FILE = int(os.environ.get("NORMIR_MAX_REGULATION_MB", "40")) * 1_000_000
 REG_ID = re.compile(r"^r[a-z0-9]{10}$")

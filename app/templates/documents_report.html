@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}{{ req.name }} — documents report{% endblock %}
+{% block sub %}Documents — verdicts citing the lines they rest on{% endblock %}
+{% block head %}{% if not r and st.state != "error" %}<meta http-equiv="refresh" content="3">{% endif %}{% endblock %}
+{% macro pill(v) %}<span class="pill v-{{ v }}">{{ VERDICT[v] }}</span>{% endmacro %}
+{% macro code(s) %}{% if s %}<pre class="code">{% for n, t in s.lines %}<span class="row{% if s.line <= n <= s.end %} hl{% endif %}"><span class="ln">{{ n }}</span>{{ t }}</span>{% endfor %}</pre>{% endif %}{% endmacro %}
+{% block body %}
+{% if not r %}
+<div class="card">
+  <h1>{{ req.name }}</h1>
+  <p class="muted">{{ req.files | join(", ") }} · checked against {% for c in req.codes %}{{ names[c] }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+  {% if st.state == "error" %}
+    <div class="note"><b>The documents could not be processed.</b> {{ st.error }}</div>
+    <p><a class="btn secondary" href="/documents">Back</a></p>
+  {% else %}
+    <p><b>{{ st.step or "Queued" }}</b>…</p>
+    <ul class="small muted">{% for m in (st.log or [])[:-1] %}<li>{{ m }}</li>{% endfor %}</ul>
+    <p class="small muted">This page refreshes itself. A model reads the documents for each requirement; a long set takes a few minutes.</p>
+  {% endif %}
+</div>
+{% else %}
+<div class="card">
+  <div style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap">
+    <div>
+      <h1>{{ req.name }}</h1>
+      <div class="muted small">{% for f in r.files %}{{ f.file }} <span class="muted">({{ f.lines }} lines{% if f.pages %}, {{ f.pages }} pages{% endif %})</span>{% if not loop.last %} · {% endif %}{% endfor %}</div>
+      <div class="muted small">Processed in {{ r.seconds }} s · {{ req.created }}</div>
+    </div>
+    <div><a class="btn secondary" href="/documents/{{ did }}/report.json">JSON</a></div>
+  </div>
+  <div class="grid g4" style="margin-top:16px">
+    <div class="stat"><div class="n" style="color:var(--fail)">{{ r.totals.fail or 0 }}</div><div class="small muted">requirements fail</div></div>
+    <div class="stat"><div class="n" style="color:var(--unc)">{{ (r.totals.uncertain or 0) + (r.totals.unknown or 0) }}</div><div class="small muted">need your answer</div></div>
+    <div class="stat"><div class="n" style="color:var(--pass)">{{ r.totals.pass or 0 }}</div><div class="small muted">pass</div></div>
+    <div class="stat"><div class="n">{{ r.totals.not_applicable or 0 }}</div><div class="small muted">don't apply</div></div>
+  </div>
+  <table style="margin-top:14px"><tr><th>Regulation</th><th>Fails</th><th>Uncertain</th><th>Needs input</th><th>Passes</th><th>N/A</th></tr>
+  {% for s in r.standards %}<tr><td><a href="#{{ s.id }}">{{ s.label }}</a></td><td>{{ s.summary.fail or 0 }}</td><td>{{ s.summary.uncertain or 0 }}</td><td>{{ s.summary.unknown or 0 }}</td><td>{{ s.summary.pass or 0 }}</td><td>{{ s.summary.not_applicable or 0 }}</td></tr>{% endfor %}
+  </table>
+  {% if r.notes %}<div class="note" style="margin-top:14px"><b>Limits of this check</b><ul style="margin:6px 0 0">{% for n in r.notes %}<li>{{ n }}</li>{% endfor %}</ul></div>{% endif %}
+  {% if r.questions %}<p style="margin-bottom:0"><a href="#questions"><b>{{ r.questions | length }} question{{ "s" if r.questions | length != 1 }}</b></a> the documents don't settle — answer them to update the report.</p>{% endif %}
+  <nav class="toc small" style="margin-top:10px">{% for s in r.standards %}<a href="#{{ s.id }}">{{ s.label }}</a>{% endfor %}{% if ask %}<a href="#ask">Ask</a>{% endif %}<a href="#questions">Questions</a><a href="#method">Method</a></nav>
+</div>
+
+{% if ask %}{% include "_ask.html" %}{% endif %}
+
+{% for s in r.standards %}
+<div class="card" id="{{ s.id }}">
+  <h2>{{ s.label }}</h2>
+  <p class="small muted">Your regulation, compiled from {{ s.title }}: <a href="/regulations/{{ s.id[4:] }}">review its checks</a>.</p>
+  {% for e in s.entries if e.verdict != "not_applicable" %}
+  <details class="req" {% if e.verdict in ("fail", "uncertain", "unknown") %}open{% endif %}>
+    <summary>{{ pill(e.verdict) }}{% if e.rests_on == "absence" and e.verdict == "fail" %} <span class="pill v-unknown" title="The model found nothing in the documents it searched that meets this; no line shows the failure.">nothing found</span>{% endif %} <span class="sec">{{ e.section }}</span> <span>{{ e.title }}</span></summary>
+    <div class="body">
+      <div class="small">Requirement: {% if e.url %}<a href="{{ e.url }}">{{ e.section }}</a>{% else %}{{ e.section }}{% endif %}</div>
+      {% if e.quote %}<blockquote class="small">{{ e.quote }}</blockquote>{% endif %}
+      {% if e.assessment %}{% set m = e.assessment %}
+      <div class="finding {{ {'met': 'pass', 'not_met': 'fail'}.get(m.value, 'not_applicable') }}">
+        <div class="small"><b>Model assessment:</b> {{ ANSWER.get(m.value, m.value) }}{% if m.basis == "absence" %} (not found in the documents searched){% endif %} <span class="muted">({{ m.source }})</span> — {{ m.note }}</div>
+        {% for a in m.at %}<div class="small" style="margin-top:6px"><span class="kv">{{ a.label }}</span>{{ code(a.snippet) }}</div>{% endfor %}
+      </div>
+      {% endif %}
+      {% for f in e.findings if not e.assessment %}
+      <div class="finding {{ f.verdict }}">
+        {% for n in f.notes %}<div class="small"><span class="muted">{{ n.source or "reader" }}:</span> {{ n.note }}</div>{% endfor %}
+        {% if f.open %}<div class="small">Not settled by the documents: {% for o in f.open_labels %}<span class="kv">{{ o }}</span> {% endfor %}— see <a href="#questions">questions</a>.</div>{% endif %}
+      </div>
+      {% endfor %}
+      {% if e.guidance and e.verdict != "pass" %}<p class="small"><b>What to do:</b> {{ e.guidance }}</p>{% endif %}
+      {% if e.interpretation %}<details class="small"><summary class="muted">How this is checked</summary><p>{{ e.interpretation }}</p></details>{% endif %}
+    </div>
+  </details>
+  {% endfor %}
+  {% set na = s.entries | selectattr("verdict", "equalto", "not_applicable") | list %}
+  {% if na %}<p class="small"><b>Judged not to apply</b>:</p><ul class="small">{% for e in na %}<li><span class="sec">{{ e.section }}</span> {{ e.title }}{% for w in e.na_reason[:1] %} — {{ w.note }} <span class="muted">({{ w.source }}{% if e.rests_on == "absence" %}, nothing found in the documents searched{% endif %}{% for a in w.at %}; {{ a.label }}{% endfor %})</span>{% endfor %}</li>{% endfor %}</ul>{% endif %}
+</div>
+{% endfor %}
+
+<div class="card" id="questions">
+  <h2>Questions</h2>
+  {% if r.questions %}
+  <p class="small muted">What the documents don't settle. Answers are stored with this document set, shown as given by you, and the regulations are evaluated again.</p>
+  <form method="post" action="/documents/{{ did }}/answers">
+    {% for q in r.questions[:80] %}
+    <div class="q">
+      <div><b>{{ q.label }}</b><div class="small muted">Decides {{ q.decides | join(", ") }}</div></div>
+      <div>{% if q.value_type == "bool" %}
+          <select name="{{ q.key }}"><option value="">—</option><option value="true">Yes</option><option value="false">No</option></select>
+        {% elif q.value_type == "enum" %}
+          <select name="{{ q.key }}"><option value="">—</option>{% for v in q["values"] %}<option value="{{ v }}">{{ (q.value_labels or {}).get(v, v) }}</option>{% endfor %}</select>
+        {% else %}<input type="text" name="{{ q.key }}" placeholder="{{ q.value_type }}">{% endif %}</div>
+    </div>
+    {% endfor %}
+    <p><button type="submit">Update report</button></p>
+  </form>
+  {% else %}<p class="small">None: every verdict above is decided by the documents and your answers.</p>{% endif %}
+  {% if r.answered %}
+  <h3 style="margin-top:12px">Your answers</h3>
+  <form method="post" action="/documents/{{ did }}/answers"><table>
+    {% for a in r.answered %}<tr><td class="small">{{ a.label }}</td><td>{{ ANSWER.get(a.value, a.value) }}</td><td><button class="btn secondary" name="clear::_subject::{{ a.attr }}" value="1">Remove</button></td></tr>{% endfor %}
+  </table></form>
+  {% endif %}
+</div>
+
+<div class="card" id="method">
+  <h2>Method</h2>
+  <p class="small muted">Each document is read as numbered lines (PDF text layers, Word, HTML, Markdown, text). For each requirement a model is shown the parts of the documents its search terms find, and answers met, not met, doesn't apply, or open; an answer is kept only when the lines it cites exist and were among those it was shown, and “not met because nothing was found” only when every matching part was shown. Requirements about facts the documents can't show are asked of you. A statement in a document is evidence of what it records, not that it happened. This is an automated assessment, not legal advice.</p>
+</div>
+{% endif %}
+{% endblock %}

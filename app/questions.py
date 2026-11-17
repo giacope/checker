@@ -19,7 +19,8 @@ from . import regulations as regs
 from .regulations import _read, _write, status
 
 QID = re.compile(r"^[a-z0-9]{12}$")
-KINDS = ("scan", "project")
+FOLDERS = {"scan": "scans", "project": "projects", "documents": "documents"}   # artifact kind -> its folder under DATA
+KINDS = tuple(FOLDERS)
 
 
 class QuestionError(ValueError):
@@ -33,7 +34,7 @@ def qdir(qid: str) -> Path:
 
 
 def _artifact_dir(kind: str, aid: str) -> Path:
-    d = regs.DATA / ("scans" if kind == "scan" else "projects") / aid
+    d = regs.DATA / FOLDERS.get(kind, "") / aid
     if not QID.match(aid or "") or not d.is_dir():
         raise QuestionError(f"No such {kind}")
     if (_read(d, "status.json", {}) or {}).get("state") != "done":
@@ -51,7 +52,7 @@ def create(question: str, mode: str, artifact: dict | None, regulations: list[st
         raise QuestionError(f"Mode is one of {', '.join(MODES)}.")
     if artifact:
         if artifact.get("kind") not in KINDS:
-            raise QuestionError("Ask about a scan or a project.")
+            raise QuestionError("Ask about a scan, a building project or a document set.")
         d = _artifact_dir(artifact["kind"], artifact.get("id"))
         if artifact["kind"] == "scan" and not (d / "source").is_dir():
             raise QuestionError("This scan kept no copy of the code. Scan the repository again to ask questions about it.")
@@ -86,6 +87,9 @@ def corpus_of(req: dict):
             from adapters.assess import CodeCorpus
             data = _read(d, "scan.json")
             parts["A"] = CodeCorpus(d / "source", f"{data['repo']['owner']}/{data['repo']['name']}")
+        elif art["kind"] == "documents":
+            from .documents import corpus
+            parts["A"] = corpus(_read(d, "data.json"), _read(d, "request.json")["name"])
         else:
             from adapters.assess.building import BuildingCorpus
             data, preq = _read(d, "data.json"), _read(d, "request.json")
@@ -143,12 +147,15 @@ def parts_of(req: dict) -> dict[str, dict]:
     rids = req.get("regulations") or []
     single = (1 if art else 0) + len(rids) == 1
     if art:
-        d = regs.DATA / ("scans" if art["kind"] == "scan" else "projects") / art["id"]
+        d = regs.DATA / FOLDERS[art["kind"]] / art["id"]
         if art["kind"] == "scan":
             data = _read(d, "scan.json") or {}
             repo = data.get("repo") or {}
             out["" if single else "A"] = {"kind": "scan", "id": art["id"], "name": f"{repo.get('owner')}/{repo.get('name')}",
                                          "href": f"/scans/{art['id']}", "repo": repo}
+        elif art["kind"] == "documents":
+            out["" if single else "A"] = {"kind": "documents", "id": art["id"], "name": (_read(d, "request.json") or {}).get("name"),
+                                         "href": f"/documents/{art['id']}"}
         else:
             preq = _read(d, "request.json") or {}
             data = _read(d, "data.json") or {}
@@ -176,6 +183,10 @@ def citation(loc: str, quoted: str, parts: dict[str, dict]) -> dict:
     elif p.get("kind") == "regulation":
         c = p["clauses"].get(own) or {}
         out.update(label=" ".join(x for x in (c.get("ref"), c.get("title")) if x) or own, href=f"{p['href']}#{own}", text=quoted)
+    elif p.get("kind") == "documents":
+        m = re.match(r"^(.+)#L(\d+)(?:-L(\d+))?$", own)
+        a = int(m[2]) if m else 1
+        out.update(label=own, href=p["href"], lines=[[a + i, t[:240]] for i, t in enumerate(quoted.split("\n"))])
     elif p.get("kind") == "project":
         from .buildings import locate
         where = locate(p["id"], p["sheets"], own)
