@@ -345,6 +345,21 @@ def test_a_damaged_sheet_is_read_by_ocr_and_does_not_lose_the_others(tmp_path, o
     assert unreadable(doc) == []
 
 
+def test_a_sheet_whose_text_cannot_be_read_is_a_note_and_the_set_is_kept(tmp_path, ocr_stub, monkeypatch):
+    import adapters.drawings as D
+
+    real = D.tokens_of
+    def flaky(path, sheet, digest, stats):
+        if sheet.page == 2:
+            raise RuntimeError("OCR engine failed")
+        return real(path, sheet, digest, stats)
+    monkeypatch.setattr(D, "tokens_of", flaky)
+    (tmp_path / "set.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)] * 3))
+    doc = D.analyse([tmp_path / "set.pdf"], tmp_path)
+    assert [s["page"] for s in doc["sheets"]] == [1, 3]
+    assert [r.split(": ", 1)[1] for r in unreadable(doc)] == ["sheet not readable: RuntimeError: OCR engine failed"]
+
+
 def test_an_image_stating_an_absurd_resolution_is_read_as_stating_none(tmp_path, ocr_stub):
     from PIL import Image
 

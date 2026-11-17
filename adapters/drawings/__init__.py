@@ -39,7 +39,12 @@ def analyse(files: list[Path], root: Path, describes: str | None = None, progres
         for sheet in sheets_here:
             stats: dict = {}
             progress(f"reading {sheet.file} p{sheet.page}")
-            tokens = tokens_of(path, sheet, digest, stats)
+            try:
+                tokens = tokens_of(path, sheet, digest, stats)
+            except Exception as e:  # noqa: BLE001 - one sheet that cannot be read must not lose the set
+                reading.skipped.append({"at": locator(sheet, (0, 0, sheet.width, sheet.height)), "text": "",
+                                        "reason": f"sheet not readable: {type(e).__name__}: {str(e)[:200]}"})
+                continue
             t0 = time.perf_counter()
             r = annotations.read(sheet, tokens)
             reading.merge(r)
