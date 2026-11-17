@@ -287,3 +287,125 @@ def test_clinic_life_safety_sheet():
     assert values(obs)[:2] == ["136.5 ft", "137.5 ft"]
     png = render(f, 1, parse_locator(obs[0]["at"])["bbox"])
     assert png[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+# --- what a sheet may cost to read -------------------------------------------------------
+
+def pdf_bytes(pages, root_gen=0, startxref_off=0, end_stream=True) -> bytes:
+    """A PDF of (content bytes, mediabox) pages in Helvetica; a content of type bytes is deflated if it is long.
+    root_gen, startxref_off and end_stream=False damage it the way pdfminer cannot read and pdfium can."""
+    import zlib
+
+    objs = {1: b"<< /Type /Catalog /Pages 2 0 R >>", 3: b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>"}
+    kids = []
+    for n, (content, box) in enumerate(pages):
+        k = 4 + 2 * n
+        flate = len(content) > 100_000
+        data = zlib.compress(content) if flate else content
+        objs[k] = (f"<< /Type /Page /Parent 2 0 R /MediaBox [{box}] /Resources << /Font << /F1 3 0 R >> >> "
+                   f"/Contents {k + 1} 0 R >>").encode()
+        objs[k + 1] = (f"<< /Length {len(data)}{' /Filter /FlateDecode' if flate else ''} >>\nstream\n".encode() + data
+                       + (b"\nendstream" if end_stream else b"\nstream"))
+        kids.append(f"{k} 0 R")
+    objs[2] = f"<< /Type /Pages /Kids [{' '.join(kids)}] /Count {len(kids)} >>".encode()
+    out, offs = bytearray(b"%PDF-1.4\n"), {}
+    for k in sorted(objs):
+        offs[k] = len(out)
+        out += f"{k} 0 obj\n".encode() + objs[k] + b"\nendobj\n"
+    xref = len(out)
+    out += f"xref\n0 {max(objs) + 1}\n0000000000 65535 f \n".encode() + b"".join(f"{offs[k]:010d} 00000 n \n".encode() for k in sorted(objs))
+    out += f"trailer\n<< /Size {max(objs) + 1} /Root 1 {root_gen} R >>\nstartxref\n{xref + startxref_off}\n%%EOF\n".encode()
+    return bytes(out)
+
+
+TEXT = b"BT /F1 12 Tf 72 700 Td (DOOR 101 3'-0\" x 7'-0\"  STAIR 1  OFFICE 101  CORRIDOR 102  EXIT  FIRST FLOOR PLAN) Tj ET"
+LETTER = "0 0 612 792"
+
+
+@pytest.fixture
+def ocr_stub(tmp_path, monkeypatch):
+    """OCR that reads one word on any page, cached under tmp_path: the reader's paths, not the OCR models."""
+    from adapters.drawings import ocr
+
+    monkeypatch.setattr(ocr, "CACHE_DIR", tmp_path / "ocr-cache")
+    monkeypatch.setattr(ocr, "read_image", lambda img: [{"text": "EXIT", "bbox": [10, 10, 60, 30], "score": 0.99, "angle": 0}])
+
+
+def unreadable(doc) -> list[str]:
+    return [f"{s['at']}: {s['reason']}" for s in doc["sources"][0]["skipped"] if "not readable" in s["reason"]]
+
+
+def test_a_damaged_sheet_is_read_by_ocr_and_does_not_lose_the_others(tmp_path, ocr_stub):
+    from adapters.drawings import analyse
+
+    (tmp_path / "damaged.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)], root_gen=2147483648, startxref_off=9, end_stream=False))
+    (tmp_path / "good.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)]))
+    doc = analyse(sorted(tmp_path.glob("*.pdf")), tmp_path)
+    assert [(s["file"], s["text"]) for s in doc["sheets"]] == [("damaged.pdf", "ocr"), ("good.pdf", "layer")]
+    assert unreadable(doc) == []
+
+
+def test_an_image_stating_an_absurd_resolution_is_read_as_stating_none(tmp_path, ocr_stub):
+    from PIL import Image
+
+    from adapters.drawings import analyse
+
+    Image.new("RGB", (300, 200), "white").save(tmp_path / "s.png", dpi=(100_000_000, 100_000_000))
+    doc = analyse([tmp_path / "s.png"], tmp_path)
+    assert [(s["width"], s["height"], s["text"]) for s in doc["sheets"]] == [(300.0, 200.0, "ocr")]
+
+
+def png_header(w: int, h: int) -> bytes:
+    """A grey PNG that states w x h pixels, with almost none of its data (decoding it would take w * h bytes)."""
+    import struct
+    import zlib
+
+    chunk = lambda kind, data: struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data))  # noqa: E731
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 0, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(b"\0" * 1000)) + chunk(b"IEND", b""))
+
+
+def test_a_sheet_too_large_to_render_is_skipped_with_a_note_naming_it(tmp_path, ocr_stub):
+    from adapters.drawings import analyse
+
+    (tmp_path / "huge.pdf").write_bytes(pdf_bytes([(b"0 0 m 10 10 l S", "0 0 200000 200000")]))   # no text: OCR
+    (tmp_path / "huge.png").write_bytes(png_header(30000, 30000))
+    (tmp_path / "plan.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)]))
+    doc = analyse(sorted(tmp_path.glob("*.p*")), tmp_path)
+    assert [s["file"] for s in doc["sheets"]] == ["plan.pdf"]
+    notes = unreadable(doc)
+    assert len(notes) == 2 and notes[0].startswith("huge.pdf: ") and notes[1].startswith("huge.png: ")
+    assert all("over the 100,000,000 this reader decodes or renders" in n for n in notes)
+
+
+def test_a_sheet_set_is_opened_once_not_once_a_page(tmp_path, monkeypatch, ocr_stub):
+    import pdfplumber
+    import pypdfium2
+
+    from adapters.drawings import analyse
+
+    opened = {"plumber": 0, "pdfium": 0}
+
+    def counted(key, fn):
+        def f(*a, **k):
+            opened[key] += 1
+            return fn(*a, **k)
+        return f
+    monkeypatch.setattr(pdfplumber, "open", counted("plumber", pdfplumber.open))
+    monkeypatch.setattr(pypdfium2, "PdfDocument", counted("pdfium", pypdfium2.PdfDocument))
+    (tmp_path / "set.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)] * 40))
+    doc = analyse([tmp_path / "set.pdf"], tmp_path)
+    assert len(doc["sheets"]) == 40 and {s["text"] for s in doc["sheets"]} == {"layer"}
+    assert opened == {"plumber": 1, "pdfium": 1}
+
+
+def test_a_page_whose_content_inflates_past_the_limit_is_skipped_before_pdfium_parses_it(tmp_path, monkeypatch, ocr_stub):
+    import adapters.drawings.reader as reader
+    from adapters.drawings import analyse
+
+    monkeypatch.setattr(reader, "MAX_CONTENT_BYTES", 1_000_000, raising=False)
+    (tmp_path / "bomb.pdf").write_bytes(pdf_bytes([(b"0 0 m 10 10 l S\n" * 100_000, LETTER)]))   # 1.6 MB, deflated
+    doc = analyse([tmp_path / "bomb.pdf"], tmp_path)
+    assert doc["sheets"] == []
+    assert unreadable(doc) == [("bomb.pdf: file not readable: ValueError: page 1's content streams decompress to more than "
+                                "1,000,000 bytes")]

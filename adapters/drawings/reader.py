@@ -13,6 +13,7 @@ from __future__ import annotations
 import math
 import re
 import time
+import zlib
 from pathlib import Path
 
 import numpy as np
@@ -23,6 +24,10 @@ from .tokens import Sheet, Token
 PDF = {".pdf"}
 IMAGES = {".png", ".jpg", ".jpeg", ".tif", ".tiff"}
 MIN_LAYER_CHARS = 50   # fewer text-layer characters than this: the drawing's text is outlines or raster
+# Limits on what one sheet may cost to read; a sheet over them makes its file "not readable", with the reason.
+MAX_RENDER_PIXELS = 100_000_000   # pixels an image is decoded to or a page rendered to (~300 MB as RGB)
+MAX_CONTENT_BYTES = 256_000_000   # a page's content streams, decompressed: pdfium aborts the process on gigabytes
+MAX_STATED_DPI = 10_000           # an image stating a higher resolution states none (300 px "at 1e8 dpi" is not 0.002 pt)
 CJK = re.compile(r"[\u3000-\u30ff\u3400-\u9fff\uf900-\ufaff\uff00-\uffef]")
 
 
@@ -41,29 +46,170 @@ def _image_dpi(img) -> float:
         d = float(dpi[0]) if dpi else 0.0
     except (TypeError, ValueError, IndexError):
         d = 0.0
-    return d if d >= 10 else 72.0
+    return d if 10 <= d <= MAX_STATED_DPI else 72.0
+
+
+def _check_pixels(pixels: float, what: str) -> None:
+    if pixels > MAX_RENDER_PIXELS:
+        raise ValueError(f"{what}: reading it takes {pixels:,.0f} pixels, over the {MAX_RENDER_PIXELS:,} this reader "
+                         "decodes or renders for one sheet")
+
+
+def _decompress_corrupted(data: bytes) -> bytes:
+    """pdfminer.pdftypes.decompress_corrupted, the same bytes in linear time: pdfminer's own joins its output
+    one input byte at a time, which takes half a minute for a damaged 1 MB font stream."""
+    d = zlib.decompressobj()
+    out, i = [], 0
+    try:
+        for i in range(len(data)):
+            out.append(d.decompress(data[i:i + 1]))
+    except zlib.error:
+        if i < len(data) - 3:   # as pdfminer: only a damaged checksum at the very end is forgiven
+            raise
+    return b"".join(out)
+
+
+class _Pdf:
+    """A PDF opened once for all of its pages (reopened for each page, a sheet set takes time quadratic in its
+    pages): pdfium for page sizes, text counts and rendering, pdfplumber for the text layer."""
+
+    def __init__(self, path: Path, key: tuple):
+        import pypdfium2 as pdfium
+
+        self.path, self.key = path, key
+        self.doc = pdfium.PdfDocument(str(path))
+        self._plumber = None
+        self._chars: dict[int, int] = {}
+
+    def plumber_page(self, page: int):
+        """The pdfplumber page, or None where pdfminer cannot read the file or does not list the page: its text layer,
+        if any, is then read by OCR, as pdfium renders it."""
+        if self._plumber is None:
+            import pdfminer.pdftypes
+            import pdfplumber
+
+            pdfminer.pdftypes.decompress_corrupted = _decompress_corrupted
+
+            try:
+                self._plumber = pdfplumber.open(str(self.path))
+                self._plumber.pages   # noqa: B018 - parses the page tree, which may be what is damaged
+            except Exception:  # noqa: BLE001 - what a damaged file raises in pdfminer is not one type
+                self._plumber = False
+        pages = self._plumber.pages if self._plumber else []
+        return pages[page - 1] if page <= len(pages) else None
+
+    def layer_chars(self, page: int) -> int:
+        """Printable characters in the page's text layer. pdfium counts them in milliseconds;
+        pdfplumber would parse every vector path of an outlined sheet first (~10 s for a plan)."""
+        if page not in self._chars:
+            pg = self.doc[page - 1]
+            try:
+                tp = pg.get_textpage()
+                self._chars[page] = len("".join(tp.get_text_range().split()))
+                tp.close()
+            finally:
+                pg.close()
+        return self._chars[page]
+
+    def close(self) -> None:
+        if self._plumber:
+            self._plumber.close()
+        self.doc.close()
+
+
+_open_pdf: _Pdf | None = None
+
+
+def _pdf(path: Path) -> _Pdf:
+    """The open PDF at path; the one open before it, if another, is closed."""
+    global _open_pdf
+    st = path.stat()
+    key = (str(path.resolve()), st.st_mtime_ns, st.st_size)
+    if _open_pdf is None or _open_pdf.key != key:
+        _close_pdf()
+        _open_pdf = _Pdf(path, key)
+    return _open_pdf
+
+
+def _close_pdf() -> None:
+    global _open_pdf
+    if _open_pdf is not None:
+        pdf, _open_pdf = _open_pdf, None
+        pdf.close()
+
+
+def _inflate(chunks, step: int = 1 << 20):
+    """Flate-decoded pieces of a stream given in pieces, at most `step` bytes each; ends at damaged data."""
+    d = zlib.decompressobj()
+    try:
+        for c in chunks:
+            while c and not d.eof:
+                yield d.decompress(c, step)
+                c = d.unconsumed_tail
+    except zlib.error:
+        return
+
+
+def _content_bytes(pdf: _Pdf, page: int) -> int:
+    """Bytes of the page's content streams once decompressed (Flate, the filter a stream inflates through a
+    thousandfold), counted in pieces and only up to MAX_CONTENT_BYTES: what pdfium would hold to parse the page.
+    What pdfminer cannot read is not counted."""
+    from pdfminer.pdftypes import LITERALS_FLATE_DECODE, PDFStream, resolve1
+
+    pp = pdf.plumber_page(page)
+    total = 0
+    try:
+        for ref in pp.page_obj.contents if pp else []:
+            s = resolve1(ref)
+            if not isinstance(s, PDFStream) or s.rawdata is None:
+                continue
+            raw = s.decipher(s.objid, s.genno, s.rawdata, s.attrs) if s.decipher else s.rawdata
+            chunks = (raw[i:i + (1 << 16)] for i in range(0, len(raw), 1 << 16))
+            for f, _ in s.get_filters():
+                if f not in LITERALS_FLATE_DECODE:
+                    break
+                chunks = _inflate(chunks)
+            for c in chunks:
+                total += len(c)
+                if total > MAX_CONTENT_BYTES:
+                    return total
+    except Exception:  # noqa: BLE001 - as above; what was counted stands
+        return total
+    return total
 
 
 def sheets_of(path: Path, root: Path | None = None) -> list[Sheet]:
-    """One Sheet per PDF page or image frame, sized in points as displayed."""
+    """One Sheet per PDF page or image frame, sized in points as displayed. Raises ValueError for a sheet over
+    this reader's limits (MAX_CONTENT_BYTES, MAX_RENDER_PIXELS), before any library is given it to parse."""
     path = Path(path)
     name = _rel(path, root)
     ext = path.suffix.lower()
     if ext in PDF:
-        import pypdfium2 as pdfium
-
-        pdf = pdfium.PdfDocument(str(path))
+        pdf = _pdf(path)
         try:
-            return [Sheet(file=name, page=i + 1, width=round(pdf[i].get_width(), 2), height=round(pdf[i].get_height(), 2)) for i in range(len(pdf))]
-        finally:
-            pdf.close()
+            for i in range(len(pdf.doc)):   # pdfium parses a page's content as it loads the page: check its size first
+                if _content_bytes(pdf, i + 1) > MAX_CONTENT_BYTES:
+                    raise ValueError(f"page {i + 1}'s content streams decompress to more than {MAX_CONTENT_BYTES:,} bytes")
+            out = []
+            for i in range(len(pdf.doc)):
+                pg = pdf.doc[i]
+                w, h = pg.get_width(), pg.get_height()
+                pg.close()
+                if pdf.layer_chars(i + 1) < MIN_LAYER_CHARS or pdf.plumber_page(i + 1) is None:   # read by OCR
+                    _check_pixels((w * ocr.OCR_DPI / 72.0) * (h * ocr.OCR_DPI / 72.0),
+                                  f"page {i + 1} is {w:,.0f} x {h:,.0f} pt with no text layer, read by OCR at {ocr.OCR_DPI} dpi")
+                out.append(Sheet(file=name, page=i + 1, width=round(w, 2), height=round(h, 2)))
+            return out
+        except Exception:
+            _close_pdf()
+            raise
     if ext in IMAGES:
-        from PIL import Image
-
         out = []
-        with Image.open(path) as img:
+        with _open_image(path, 1) as img:
             for i in range(getattr(img, "n_frames", 1)):
                 img.seek(i)
+                _check_pixels(img.width * img.height, f"page {i + 1} is {img.width:,} x {img.height:,} px")
+                img.load()   # a frame that cannot be decoded (truncated, damaged) makes the file unreadable here, not later
                 k = 72.0 / _image_dpi(img)
                 out.append(Sheet(file=name, page=i + 1, width=round(img.width * k, 2), height=round(img.height * k, 2)))
         return out
@@ -131,19 +277,6 @@ def layer_words(page) -> list[dict]:
 
 # --- tokens --------------------------------------------------------------------------
 
-def _layer_chars(path: Path, page: int) -> int:
-    """Printable characters in the page's text layer. pdfium counts them in milliseconds;
-    pdfplumber would parse every vector path of an outlined sheet first (~10 s for a plan)."""
-    import pypdfium2 as pdfium
-
-    pdf = pdfium.PdfDocument(str(path))
-    try:
-        tp = pdf[page - 1].get_textpage()
-        return len("".join(tp.get_text_range().split()))
-    finally:
-        pdf.close()
-
-
 RENDER_TILE = 768  # px
 
 
@@ -155,6 +288,7 @@ def _render_region(pg, scale: float, region=None, grayscale: bool = False) -> np
     W, H = pg.get_width(), pg.get_height()
     x0, y0, x1, y1 = region or (0.0, 0.0, W, H)
     pw, ph = max(1, round((x1 - x0) * scale)), max(1, round((y1 - y0) * scale))
+    _check_pixels(pw * ph, f"the region is {x1 - x0:,.0f} x {y1 - y0:,.0f} pt, rendered at {scale * 72:g} dpi")
     out = np.full((ph, pw, 3), 255, np.uint8)
     for ty in range(0, ph, RENDER_TILE):
         for tx in range(0, pw, RENDER_TILE):
@@ -169,22 +303,39 @@ def _render_region(pg, scale: float, region=None, grayscale: bool = False) -> np
 
 
 def _render_pdf(path: Path, page: int, dpi: float) -> np.ndarray:
-    import pypdfium2 as pdfium
-
-    pdf = pdfium.PdfDocument(str(path))
+    pg = _pdf(path).doc[page - 1]
     try:
-        return _render_region(pdf[page - 1], dpi / 72.0, grayscale=True)
+        return _render_region(pg, dpi / 72.0, grayscale=True)
     finally:
-        pdf.close()
+        pg.close()
 
 
 def _open_image(path: Path, page: int):
+    """The image's frame `page`, not yet decoded; ValueError if it is over MAX_RENDER_PIXELS."""
     from PIL import Image
 
-    Image.MAX_IMAGE_PIXELS = None
+    Image.MAX_IMAGE_PIXELS = None   # PIL's own limit warns from 89 MP; this reader's is MAX_RENDER_PIXELS
     img = Image.open(path)
-    img.seek(page - 1)
+    try:
+        img.seek(page - 1)
+        _check_pixels(img.width * img.height, f"page {page} is {img.width:,} x {img.height:,} px")
+    except Exception:
+        img.close()
+        raise
     return img
+
+
+def _layer_words_of(pdf: _Pdf, page: int) -> list[dict] | None:
+    """The page's text-layer words, or None where pdfminer cannot read the file or the page."""
+    pp = pdf.plumber_page(page)
+    if pp is None:
+        return None
+    try:
+        return layer_words(pp)
+    except Exception:  # noqa: BLE001 - what a damaged page raises in pdfminer is not one type
+        return None
+    finally:
+        pp.close()
 
 
 def tokens_of(path: Path, sheet: Sheet, digest: str | None = None, stats: dict | None = None) -> list[Token]:
@@ -195,20 +346,23 @@ def tokens_of(path: Path, sheet: Sheet, digest: str | None = None, stats: dict |
     stats = stats if stats is not None else {}
     tokens: list[Token] = []
     if path.suffix.lower() in PDF:
-        if _layer_chars(path, sheet.page) >= MIN_LAYER_CHARS:
-            import pdfplumber
-
-            with pdfplumber.open(str(path)) as pdf:
-                page = pdf.pages[sheet.page - 1]
-                sheet.text = "layer"
-                for w in layer_words(page):
-                    tokens.append(Token(w["text"], (w["x0"], w["top"], w["x1"], w["bottom"]), sheet, 1.0, float(w["angle"]), "layer",
-                                        {"vertical_cjk": True} if w.get("vertical_cjk") else {}))
-        if sheet.text != "layer":
-            data = ocr.cached(path, sheet.page, ocr.OCR_DPI, lambda: _render_pdf(path, sheet.page, ocr.OCR_DPI), digest)
-            scale = 72.0 / ocr.OCR_DPI
-            tokens = _ocr_tokens(data, sheet, scale)
-            stats.update(ocr_seconds=data["seconds"], cached=data.get("cached", False), timing=data.get("timing"))
+        pdf = _pdf(path)
+        try:
+            if pdf.layer_chars(sheet.page) >= MIN_LAYER_CHARS:
+                words = _layer_words_of(pdf, sheet.page)
+                if words:   # none, where pdfium counts text: pdfminer cannot read this page, OCR can
+                    sheet.text = "layer"
+                    for w in words:
+                        tokens.append(Token(w["text"], (w["x0"], w["top"], w["x1"], w["bottom"]), sheet, 1.0, float(w["angle"]), "layer",
+                                            {"vertical_cjk": True} if w.get("vertical_cjk") else {}))
+            if sheet.text != "layer":
+                data = ocr.cached(path, sheet.page, ocr.OCR_DPI, lambda: _render_pdf(path, sheet.page, ocr.OCR_DPI), digest)
+                scale = 72.0 / ocr.OCR_DPI
+                tokens = _ocr_tokens(data, sheet, scale)
+                stats.update(ocr_seconds=data["seconds"], cached=data.get("cached", False), timing=data.get("timing"))
+        finally:
+            if sheet.page >= len(pdf.doc):   # the last page: no reason to keep the file open
+                _close_pdf()
     else:
         with _open_image(path, sheet.page) as img:
             src_dpi = _image_dpi(img)
@@ -218,7 +372,7 @@ def tokens_of(path: Path, sheet: Sheet, digest: str | None = None, stats: dict |
             with _open_image(path, sheet.page) as im:
                 im = im.convert("RGB")
                 if dpi < src_dpi:
-                    im = im.resize((round(im.width * dpi / src_dpi), round(im.height * dpi / src_dpi)))
+                    im = im.resize((max(1, round(im.width * dpi / src_dpi)), max(1, round(im.height * dpi / src_dpi))))
                 return np.asarray(im)
 
         data = ocr.cached(path, sheet.page, int(round(dpi)), image, digest)
