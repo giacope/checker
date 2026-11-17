@@ -24,10 +24,12 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from bisect import bisect_left
 from collections import Counter
 from dataclasses import dataclass, field
 from decimal import Decimal
 from fractions import Fraction
+from functools import cached_property
 
 from .tokens import BBox, Sheet, Token, locator
 
@@ -107,11 +109,13 @@ class Line:
     def angle(self) -> int:
         return _snap(self.tokens[0].angle)
 
-    @property
+    # A line's tokens do not change once it is made: its box and height are computed once (phrases and the
+    # schedule readers ask for them in loops over every line).
+    @cached_property
     def bbox(self) -> BBox:
         return union(t.bbox for t in self.tokens)
 
-    @property
+    @cached_property
     def height(self) -> float:
         f = [_frame(t) for t in self.tokens]
         return max(x[3] - x[2] for x in f)
@@ -193,6 +197,7 @@ def phrases(ls: list[Line]) -> list[Line]:
     the next line starts under some word of the line above, close below it, at a similar
     size, and does not start a new numbered note."""
     up = sorted((l for l in ls if l.angle == 0), key=lambda l: (l.bbox[1], l.bbox[0]))
+    tops = [l.bbox[1] for l in up]
     out, taken = [], set()
     for i, l in enumerate(up):
         if i in taken:
@@ -200,23 +205,26 @@ def phrases(ls: list[Line]) -> list[Line]:
         group = [l]
         taken.add(i)
         cur = l
-        for j in range(i + 1, len(up)):
+        # Only a line whose top lies between 0.3 heights above and 0.9 below the current line's bottom can continue
+        # it; `up` is sorted by top, so the search starts at the first such line and ends past the last.
+        h, starts = cur.height, None
+        j = max(i + 1, bisect_left(tops, cur.bbox[3] - 0.3 * h))
+        while j < len(up):
             n = up[j]
-            if j in taken:
-                continue
-            h = cur.height
+            j += 1
             if n.bbox[1] - cur.bbox[3] > 0.9 * h:
-                if n.bbox[1] > cur.bbox[3] + 3 * h:
-                    break
+                break
+            if j - 1 in taken or not (0.7 < n.height / max(h, 0.1) < 1.4):
                 continue
-            if n.bbox[1] < cur.bbox[3] - 0.3 * h or not (0.7 < n.height / max(h, 0.1) < 1.4):
-                continue
-            starts = [t.bbox[0] for t in cur.tokens] + [cur.part(m.start())[0][0] for m in re.finditer(r"(?<=\s)\S", cur.text)]
+            if starts is None:
+                starts = [t.bbox[0] for t in cur.tokens] + [cur.part(m.start())[0][0] for m in re.finditer(r"(?<=\s)\S", cur.text)]
             if not any(abs(n.bbox[0] - s) <= 1.0 * h for s in starts) or NOTE_START.match(n.text):
                 continue
             group.append(n)
-            taken.add(j)
+            taken.add(j - 1)
             cur = n
+            h, starts = cur.height, None
+            j = max(j, bisect_left(tops, cur.bbox[3] - 0.3 * h))
         if len(group) == 1:
             out.append(l)
         else:
@@ -922,8 +930,8 @@ MARK_TITLES = ("DOOR#", "DOORNO.", "DOORNO", "DOORNUMBER", "DOORMARK", "MARK", "
 
 
 def _door_rows(r: Reading, ls: list[Line], head: Token, cols) -> None:
-    mark_col = next(c for c in cols if any(t is head for t in c[3]))
-    if mark_col[0].replace(" ", "") not in MARK_TITLES:  # e.g. the NO. under JAMB in the same header row
+    mark_col = next((c for c in cols if any(t is head for t in c[3])), None)
+    if mark_col is None or mark_col[0].replace(" ", "") not in MARK_TITLES:  # e.g. the NO. under JAMB in the same header row
         return
     h = head.bbox[3] - head.bbox[1]
 
@@ -1047,8 +1055,9 @@ def read_room_schedule(r: Reading, ls: list[Line]) -> list[tuple]:
             head = hl.part(m.start(), m.end())[2]
             tok = head[0]
             cols = _columns(head, ls)
-            num_c = next(c for c in cols if any(t is tok for t in c[3]))
-            if not num_c[0].replace(" ", "").startswith(("ROOM", "RM")):
+            # the header word may fall outside the row's cells (a token of another height on its line): not a schedule
+            num_c = next((c for c in cols if any(t is tok for t in c[3])), None)
+            if num_c is None or not num_c[0].replace(" ", "").startswith(("ROOM", "RM")):
                 continue
             name_c = next((c for c in cols if c[0].replace(" ", "").endswith("ROOMNAME") or c[0] == "NAME"), None)
             area_c = next((c for c in cols if c[0].replace(" ", "") in ("AREA", "AREA(SF)", "AREA(M2)", "AREASF", "FLOORAREA")), None)
