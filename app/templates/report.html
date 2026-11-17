@@ -28,8 +28,9 @@
 </div>
 
 {% if ask %}{% include "_ask.html" %}{% endif %}
+{% include "_filter.html" %}
 {% for s in r.standards %}
-<div class="card" id="{{ s.id }}">
+<div class="card" id="{{ s.id }}" data-standard>
   <h2>{{ s.label }}</h2>
   <p class="small muted">{% if s.id.startswith("reg:") %}Your regulation, compiled from {{ s.title }}: <a href="/regulations/{{ s.id[4:] }}">review its checks</a>{% else %}{{ s.title }}. Pack <span class="kv">{{ s.pack }} {{ s.version }}</span>{% endif %}{% if s.text_policy == "link-only" %} · requirement text is linked, not reproduced (licence){% endif %}.{% if s.attribution %} {{ s.attribution }}{% endif %}</p>
   {% if s.coverage %}
@@ -40,7 +41,7 @@
       <table>{% for ch in c.chapters %}<tr><td>{{ ch.chapter }} {{ ch.title }}</td><td>{{ ch.checked | length }} / {{ ch.requirements }}</td><td class="muted">{{ ch.checked | join(", ") }}</td></tr>{% endfor %}</table></details>
   {% endif %}
   {% for e in s.entries if e.verdict != "not_applicable" %}
-  <details class="req" {% if e.verdict in ("fail", "uncertain", "unknown") %}open{% endif %}>
+  <details class="req" data-verdict="{{ e.verdict }}" {% if e.verdict in ("fail", "uncertain") %}open{% endif %}>
     <summary>{{ pill(e.verdict) }}{% if e.rests_on == "absence" and e.verdict == "fail" %} <span class="pill v-unknown" title="The model found nothing in the code it searched that meets this; no line shows the failure.">nothing found</span>{% endif %} <span class="sec">{{ e.section }}</span>{% if e.level %}<span class="muted small">L{{ e.level }}</span>{% endif %} <span>{{ e.title }}</span>
       <span class="muted small" style="margin-left:auto; white-space:nowrap">{% if e.checked %}{{ e.counts.fail or 0 }} of {{ e.checked }} fail{% endif %}</span></summary>
     <div class="body">

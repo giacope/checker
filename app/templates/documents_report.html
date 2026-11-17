@@ -44,12 +44,13 @@
 
 {% if ask %}{% include "_ask.html" %}{% endif %}
 
+{% include "_filter.html" %}
 {% for s in r.standards %}
-<div class="card" id="{{ s.id }}">
+<div class="card" id="{{ s.id }}" data-standard>
   <h2>{{ s.label }}</h2>
   <p class="small muted">Your regulation, compiled from {{ s.title }}: <a href="/regulations/{{ s.id[4:] }}">review its checks</a>.</p>
   {% for e in s.entries if e.verdict != "not_applicable" %}
-  <details class="req" {% if e.verdict in ("fail", "uncertain", "unknown") %}open{% endif %}>
+  <details class="req" data-verdict="{{ e.verdict }}" {% if e.verdict in ("fail", "uncertain") %}open{% endif %}>
     <summary>{{ pill(e.verdict) }}{% if e.rests_on == "absence" and e.verdict == "fail" %} <span class="pill v-unknown" title="The model found nothing in the documents it searched that meets this; no line shows the failure.">nothing found</span>{% endif %} <span class="sec">{{ e.section }}</span> <span>{{ e.title }}</span></summary>
     <div class="body">
       <div class="small">Requirement: {% if e.url %}<a href="{{ e.url }}">{{ e.section }}</a>{% else %}{{ e.section }}{% endif %}</div>

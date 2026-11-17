@@ -1,0 +1,42 @@
+{# Filter bar for a report's requirements: every details.req[data-verdict] on the page. Pure client side. #}
+<div class="filter" id="filter">
+  <div class="chips" role="group" aria-label="Show requirements">
+    <button type="button" class="chip on" data-show="all">All <b></b></button>
+    <button type="button" class="chip v-fail" data-show="fail">Fails <b></b></button>
+    <button type="button" class="chip v-unknown" data-show="open">Open <b></b></button>
+    <button type="button" class="chip v-pass" data-show="pass">Passes <b></b></button>
+  </div>
+  <input type="search" placeholder="Filter by section, title or text…" aria-label="Filter requirements">
+  <span class="links small"><a href="#" data-all="1">Expand all</a> · <a href="#" data-all="0">Collapse all</a></span>
+  <span class="count small muted" aria-live="polite"></span>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {   // the requirements come after the bar
+  const bar = document.getElementById('filter');
+  const reqs = [...document.querySelectorAll('details.req[data-verdict]')];
+  const group = v => v === 'unknown' || v === 'uncertain' ? 'open' : v;
+  const n = k => reqs.filter(d => k === 'all' || group(d.dataset.verdict) === k).length;
+  bar.querySelectorAll('.chip').forEach(c => c.querySelector('b').textContent = n(c.dataset.show));
+  let show = 'all', q = '';
+  const apply = () => {
+    let shown = 0;
+    reqs.forEach(d => {
+      const ok = (show === 'all' || group(d.dataset.verdict) === show) && (!q || d.textContent.toLowerCase().includes(q));
+      d.hidden = !ok; shown += ok;
+    });
+    document.querySelectorAll('.card[data-standard]').forEach(c => c.hidden = !c.querySelector('details.req:not([hidden])') && (show !== 'all' || q));
+    bar.querySelector('.count').textContent = shown === reqs.length ? `${reqs.length} requirements` : `${shown} of ${reqs.length} shown`;
+  };
+  bar.querySelectorAll('.chip').forEach(c => c.onclick = () => {
+    show = c.dataset.show;
+    bar.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === c));
+    apply();
+  });
+  bar.querySelector('input').oninput = e => { q = e.target.value.trim().toLowerCase(); apply(); };
+  bar.querySelectorAll('[data-all]').forEach(a => a.onclick = e => {
+    e.preventDefault();
+    reqs.forEach(d => { if (!d.hidden) d.open = a.dataset.all === '1'; });
+  });
+  apply();
+});
+</script>
