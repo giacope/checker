@@ -41,7 +41,7 @@ import httpx
 from adapters.code_llm import ALWAYS, ReaderError, _numbered, complete, parse_json, provider_from_env
 from adapters.code_static import git_commit
 from adapters.code_static.files import discover, read_text
-from adapters.regulation import ANSWERS, answer
+from adapters.regulation import ANSWERS, answer, summary_terms
 
 VERSION = "0.2.0"
 MAX_PER_CALL = 8               # requirements per call
@@ -404,6 +404,11 @@ def assess(requirements: list[dict], corpus: Corpus, provider: tuple[str, str, s
         for r in reqs.values():
             r["whole"] = True
     else:
+        for r in reqs.values():
+            if not corpus.search(r["search"], ALL):
+                # the compiled terms find nothing (written for another kind of artifact, or in another language):
+                # look for the requirement's own words as well before concluding nothing bears on it
+                r["search"] = list(dict.fromkeys(r["search"] + summary_terms(r["summary"])))
         found = {a: corpus.search(r["search"], REQUIREMENT_CHARS) for a, r in reqs.items()}
         # how many excerpts match in the whole corpus: "absent" is a finding only when all of them were shown
         matching = {a: len(corpus.search(r["search"], ALL)) for a, r in reqs.items()}

@@ -434,3 +434,10 @@ def test_ranking_discounts_words_every_excerpt_has_in_any_language():
     blocks = [(f"b{i}", t, t.lower()) for i, t in enumerate(texts)]
     got = [h for h, _ in rank(blocks, ["wie", "lange", "werden", "die", "daten", "gelöscht"], 10_000)]
     assert got[0] == "b2" and "b3" not in got   # b3 matches only words most excerpts have
+
+
+def test_a_requirement_whose_terms_find_nothing_is_searched_by_its_own_words(corpus):
+    reqs = [{"attr": "req_x", "summary": "Orders are updated only by authenticated users.", "clause": "c", "search": ["zzz-none"]}]
+    transport, sent = fake({"req_x": {"attr": "req_x", "value": None, "note": "x"}})
+    assess(reqs, corpus, provider=PROVIDER, transport=transport, workers=1)
+    assert "orders_controller.rb" in sent[0][1] and '"zzz-none",' in sent[0][1]   # both term sets are searched
