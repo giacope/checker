@@ -30,6 +30,11 @@ domain: bim
 subject: building
 # For the regulation compiler's prompt, written by hand for this vocabulary (see vocab/code.yaml).
 compile:
+  artifact: the building's drawings and model (plans, sections, schedules, sheet notes, IFC properties)
+  search_space: drawing notes, schedules, sheet titles, or model property names
+  outside: >-
+    an organisational or process requirement (training, reviews, approvals, policies and procedures, retention
+    schedules, contracts, physical security, operations)
   partial: a door's clear width, a stair's riser height, a storey's travel distance
   examples:
     - clause: External doors give a clear opening of at least 800 mm.

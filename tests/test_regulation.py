@@ -24,6 +24,7 @@ from normir.model import load, validate
 ROOT = Path(__file__).resolve().parents[1]
 CODE = yaml.safe_load((ROOT / "vocab" / "code.yaml").read_text())
 BIM = yaml.safe_load((ROOT / "vocab" / "bim.yaml").read_text())
+DOCS = yaml.safe_load((ROOT / "vocab" / "documents.yaml").read_text())
 PROVIDER = ("anthropic", "test-model", "k")
 
 
@@ -571,6 +572,17 @@ def test_each_vocabulary_brings_worked_examples_that_compile(vocab):
     compile_checks([clause(1, "A requirement.")], vocab, provider=PROVIDER, transport=t)
     assert all(json.dumps(e["check"], ensure_ascii=False) in sent[0][0] for e in examples)
     assert vocab["compile"]["partial"] in sent[0][0]
+
+
+@pytest.mark.parametrize("vocab", [CODE, BIM, DOCS], ids=["code", "bim", "documents"])
+def test_the_compiler_describes_the_artifact_in_the_vocabularys_own_words(vocab):
+    """What the artifact is and what it cannot show come from the vocabulary: documents hold the policies, procedures
+    and records that code cannot show, so the compiler must not be told those are always asked of the user."""
+    t, sent = transport(lambda s, u: reply({"clauses": []}))
+    compile_checks([clause(1, "A requirement.")], vocab, provider=PROVIDER, transport=t)
+    c = vocab["compile"]
+    assert all(" ".join(c[k].split()) in " ".join(sent[0][0].split()) for k in ("artifact", "search_space", "outside"))
+    assert ("policies and procedures" in sent[0][0]) == (vocab is not DOCS)
 
 
 def test_fallback_search_terms_come_from_a_summary_in_any_script():

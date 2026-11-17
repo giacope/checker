@@ -9,6 +9,14 @@ domain: documents
 subject: matter
 
 compile:
+  artifact: the documents under review (a case file, a plan, a contract, a policy, records), read as text
+  search_space: "the documents' own wording: defined terms, headings, names of parties, procedures or records"
+  # Documents are where policies, procedures, plans and records live, so a duty to have, keep, write down or plan
+  # something is judged from them; only what no document in the set could show is asked of the user.
+  outside: >-
+    whether something the documents describe actually happened or is true in the world, the physical state of
+    premises, equipment or goods, or anything no document of this kind would record. A duty to have, keep, record,
+    document, plan or define something is not attested but assessed: the documents show whether it is there
   partial: none; these documents have no extracted facts
   examples: []
 

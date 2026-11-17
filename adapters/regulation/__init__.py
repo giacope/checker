@@ -48,11 +48,6 @@ MAX_CLAUSE_CHARS = 6_000     # a longer clause is cut in the compile prompt (not
 QUOTE_CHARS = 1_500
 KINDS = ("computed", "assessed", "attested")
 VAR = re.compile(r"^[a-z][a-z0-9_]{0,19}$")
-ARTIFACT = {"code": ("the software system's source code and configuration", "code, configuration files, or dependency manifests"),
-            "bim": ("the building's drawings and model (plans, sections, schedules, sheet notes, IFC properties)",
-                    "drawing notes, schedules, sheet titles, or model property names"),
-            "documents": ("the documents under review (a case file, a plan, a contract, a policy, records), read as text",
-                          "the documents' own wording: defined terms, headings, names of parties, procedures or records")}
 
 
 # The answer to an assessed or attested check, and to a computed per-element check when no element was found.
@@ -346,9 +341,8 @@ the requirement: whenever the expression is false, the requirement is not met. U
 requirement's, never a loosely related fact. When facts capture a necessary part of a broader requirement \
 ({partial}), give a computed check for that part and an assessed check for the rest.
   - "assessed": a property of {artifact} the facts below do not capture, but a reviewer reading it could judge.
-  - "attested": an organisational or process requirement {artifact} cannot show (training, reviews, approvals, \
-policies and procedures, retention schedules, contracts, physical security, operations). Give "question": a yes/no \
-question for the customer, phrased so that "yes" means the requirement is met.
+  - "attested": a requirement {artifact} cannot show: {outside}. Give "question": a yes/no question for the \
+customer, phrased so that "yes" means the requirement is met.
 - "why": a short reason for the kind.
 - "search": for every computed and assessed check, 3 to 10 literal strings likely to appear in {search_space} that \
 bear on the check (function, class, setting, header, or library names; lower case unless case matters).
@@ -663,11 +657,12 @@ def compile_checks(clauses: list[dict], vocab: dict, provider=None, transport=No
              "failures": [], "seconds": 0.0}
     if not reqs:
         return [], stats
-    domain = vocab.get("domain")
-    artifact, space = ARTIFACT.get(domain, ("the artifact under review", "the artifact's text"))
-    system = COMPILE.format(artifact=artifact, search_space=space, subject=vocab["subject"], vocab=vocab_text(vocab),
-                            examples=_examples(vocab),
-                            partial=(vocab.get("compile") or {}).get("partial") or "one attribute the facts record")
+    c = vocab.get("compile") or {}   # how the vocabulary's domain describes itself to the compiler
+    system = COMPILE.format(artifact=c.get("artifact") or "the artifact under review",
+                            search_space=c.get("search_space") or "the artifact's text",
+                            outside=c.get("outside") or "an organisational or process requirement, such as training or reviews",
+                            subject=vocab["subject"], vocab=vocab_text(vocab), examples=_examples(vocab),
+                            partial=c.get("partial") or "one attribute the facts record")
     groups = _batches(reqs)
     model = _Model(provider, transport)
     by_clause: dict[str, list[dict]] = {}

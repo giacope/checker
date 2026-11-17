@@ -13,6 +13,11 @@ subject: system
 # For the regulation compiler's prompt, written by hand for this vocabulary: what a fact can capture of a broader
 # requirement, and worked examples (each must compile without demotion; tests/test_regulation.py checks).
 compile:
+  artifact: the software system's source code and configuration
+  search_space: code, configuration files, or dependency manifests
+  outside: >-
+    an organisational or process requirement (training, reviews, approvals, policies and procedures, retention
+    schedules, contracts, physical security, operations)
   partial: a cookie attribute, a query's construction, a production setting
   examples:
     - clause: Session cookies are only sent over TLS and are not readable by scripts.
