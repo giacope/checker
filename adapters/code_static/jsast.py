@@ -8,7 +8,7 @@ import tree_sitter as ts
 import tree_sitter_javascript as tsjs
 import tree_sitter_typescript as tsts
 
-from .common import (length_bound, rejects_words, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
+from .common import (dedicated_hasher, length_bound, rejects_words, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
                      is_personal_name, is_stored_password_name, is_user_object_name, literal_secret_kind,
                      plausible_secret_value, secret_kind_for_name, words, PW_WORDS, TRACKER_HOSTS, USER_OBJECTS)
 from .files import SourceFile
@@ -800,7 +800,8 @@ class JSAnalyser:
             return
         # ---- PasswordStore
         prim = self.primitive(jf, c)
-        if prim and self.mentions_password(prim[2]):
+        # a password-hashing API hashes a password whatever the variable is called (`secret`, `motDePasse`)
+        if prim and (self.mentions_password(prim[2]) or (prim[2] and dedicated_hasher(prim[0], jf.rule(c, "password_hash") is not None))):
             self.password_store(jf, c, out, prim[0], prim[1], any(jf.tainted(i, c) for i in prim[2]))
             out.mark(at, jf.rule(c, "password_hash"))
         elif not prim:

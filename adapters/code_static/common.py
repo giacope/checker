@@ -27,6 +27,15 @@ PW_EXCLUDE = {"hash", "hashed", "digest", "salt", "reset", "forgot", "policy", "
               "enc", "encrypted", "md5", "sha1", "sha256", "bcrypt", "stored", "db", "old", "previous"}
 
 
+PASSWORD_KDFS = {"bcrypt", "argon2", "scrypt", "pbkdf2"}   # algorithms made for passwords
+
+
+def dedicated_hasher(algorithm: str | None, by_rule: bool) -> bool:
+    """Whether a hashing call is a password hasher whatever its argument is named: a known API (a model rule) for an
+    algorithm made for passwords. A general digest (md5, sha256) hashes passwords only when the value is one."""
+    return by_rule and algorithm in PASSWORD_KDFS
+
+
 def is_password_name(name: str) -> bool:
     """A variable or property that holds a cleartext password."""
     ws = words(name)

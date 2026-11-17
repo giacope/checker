@@ -690,3 +690,15 @@ def test_server_code_in_a_folder_skipped_by_convention_is_counted(tmp_path):
     from app.report import source_limits
     assert any("2 Python, Ruby or Elixir files were not analysed" in n and "lang/ (2)" in n
                for n in source_limits([{"sources": [src]}]))
+
+
+@pytest.mark.parametrize("name", ["secret_phrase", "credential", "mot_de_passe", "senha"])
+def test_a_password_hasher_hashes_a_password_whatever_the_variable_is_called(tmp_path, name):
+    py = (f"from werkzeug.security import generate_password_hash\n"
+          f"def register(user, {name}):\n    user.pw_hash = generate_password_hash({name})\n")
+    js = f"const bcrypt = require('bcrypt');\nasync function register(user, {name}) {{\n  user.hash = await bcrypt.hash({name}, 10);\n}}\n"
+    doc = repo(tmp_path, {"app.py": py, "server.js": js})
+    assert set(elements(doc, "PasswordStore")) == {"app.py:3", "server.js:3"}
+    # a general digest is a password store only when the value is a password
+    assert elements(repo(tmp_path / "g", {"app.py": f"import hashlib\ndef etag({name}):\n    return hashlib.md5({name}).hexdigest()\n"}),
+                    "PasswordStore") == {}

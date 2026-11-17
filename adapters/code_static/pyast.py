@@ -5,7 +5,7 @@ from __future__ import annotations
 import ast
 import re
 
-from .common import (Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
+from .common import (dedicated_hasher, Collector, model_policy, session_cookie_name, PW_EXPIRY, LOCKOUT, ERASURE_REQUEST, analyse_password_regex, external_host, is_credential_name, is_password_name,
                      is_personal_name, is_stored_password_name, is_user_object_name, literal_secret_kind,
                      plausible_secret_value, secret_kind_for_name, words, length_bound, rejects_words)
 from .files import SourceFile
@@ -17,6 +17,8 @@ SOURCE_ATTRS = {"GET", "POST", "body", "data", "args", "form", "values", "json",
 REQUEST_NAMES = {"request", "req"}
 ROUTE_DECORATORS = {"route", "get", "post", "put", "patch", "delete", "api_route", "websocket", "api_view", "head", "options"}
 SQL_WORDS = re.compile(r"\b(select|insert|update|delete|create|drop|alter|pragma|replace|with)\b", re.I)
+PASSWORD_APIS = ("werkzeug.security.generate_password_hash", "werkzeug.security.check_password_hash", "passlib.hash.",
+                 "django.contrib.auth.hashers.")   # functions that only ever hash passwords
 HASHLIB = {"md5": "md5", "sha1": "sha1", "sha224": "sha256", "sha256": "sha256", "sha384": "sha512", "sha512": "sha512",
            "sha3_256": "sha256", "sha3_512": "sha512", "blake2b": "other", "blake2s": "other"}
 PASSLIB_SCHEMES = {"bcrypt": ("bcrypt", True), "bcrypt_sha256": ("bcrypt", True), "argon2": ("argon2", True),
@@ -621,7 +623,11 @@ class PyAnalyser:
         # ---- PasswordStore
         prim = self.primitive(pf, c)
         helper = None if prim else self.helper_of(pf, c)
-        if prim and self.mentions_password(pf, prim[2]):
+        # a password-hashing API hashes a password whatever the variable is called (`secret_phrase`, `mot_de_passe`)
+        dedicated = prim is not None and prim[2] is not None and (
+            dedicated_hasher(prim[0], pf.rule(c, "password_hash") is not None) or q.startswith(PASSWORD_APIS)
+            or (self.django_project and last in {"set_password", "check_password", "create_user", "create_superuser"}))
+        if prim and (dedicated or self.mentions_password(pf, prim[2])):
             out.element("PasswordStore", at, algorithm=prim[0], salted=prim[1])
             out.mark(at, pf.rule(c, "password_hash"))
             if last in {"create_user", "create_superuser", "set_password", "make_password", "generate_password_hash", "hash", "hashpw"} and pf.tainted(prim[2], c):
