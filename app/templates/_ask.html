@@ -1,7 +1,7 @@
 {# Ask form. Context: ask = {artifact: {kind, id} | None, regs: [{id, name, checked}], recent: [...], title, hint} #}
 <div class="card ask" id="ask">
   <h2>{{ ask.title or "Ask a question" }}</h2>
-  <form method="post" action="/ask">
+  <form method="post" action="/chats">
     {% if ask.artifact %}<input type="hidden" name="artifact_kind" value="{{ ask.artifact.kind }}"><input type="hidden" name="artifact_id" value="{{ ask.artifact.id }}">{% endif %}
     <textarea name="question" rows="2" required minlength="3" maxlength="2000" placeholder="{{ ask.hint or 'Ask anything about it' }}"></textarea>
     <div class="ask-row">
@@ -9,7 +9,7 @@
         <label><input type="radio" name="mode" value="quick" checked> <b>Quick answer</b> <span class="muted small">reads what the question's words find · seconds</span></label>
         <label><input type="radio" name="mode" value="deep"> <b>Deep research</b> <span class="muted small">reads all of it, follows references · minutes</span></label>
       </div>
-      <button type="submit">Ask</button>
+      <button type="submit">Ask in chat</button>
     </div>
     {% if ask.regs %}<div class="checks small" style="margin-top:6px"><span class="muted">Read with:</span>
       {% for g in ask.regs %}<label style="display:inline-flex; margin-right:14px"><input type="checkbox" name="regulations" value="{{ g.id }}" {% if g.checked %}checked{% endif %}{% if g.fixed %} checked disabled{% endif %}> {{ g.name }}</label>{% if g.fixed %}<input type="hidden" name="regulations" value="{{ g.id }}">{% endif %}{% endfor %}</div>{% endif %}

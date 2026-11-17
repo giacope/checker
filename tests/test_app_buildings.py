@@ -354,7 +354,7 @@ def test_building_regulation_is_assessed_against_the_drawings_and_model(client, 
     assert wait_reg(client, rid)["state"] == "done"
     page = client.get("/buildings").text
     assert f'value="reg:{rid}"' in page and "ADK stairs" in page
-    assert f'value="reg:{rid}"' not in client.get("/").text            # a building regulation is not offered for code
+    assert f'value="reg:{rid}"' not in client.get("/code").text            # a building regulation is not offered for code
 
     pid = upload(client, [("plans/A11-1.pdf", b"%PDF-1.4 test", "application/pdf")], codes=(f"reg:{rid}",))
     assert wait(client, pid)["state"] == "done"

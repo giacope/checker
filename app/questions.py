@@ -42,8 +42,10 @@ def _artifact_dir(kind: str, aid: str) -> Path:
     return d
 
 
-def create(question: str, mode: str, artifact: dict | None, regulations: list[str]) -> str:
-    """Validate and store a question; returns its id. Raises QuestionError for bad input."""
+def create(question: str, mode: str, artifact: dict | None, regulations: list[str], history: list[dict] = (),
+           chat: str | None = None) -> str:
+    """Validate and store a question; returns its id. Raises QuestionError for bad input. `history`: the earlier turns
+    of the chat it continues ([{question, answer}])."""
     from adapters.research import MODES
     question = " ".join(str(question or "").split())[:2000]
     if len(question) < 3:
@@ -70,6 +72,7 @@ def create(question: str, mode: str, artifact: dict | None, regulations: list[st
     d = regs.DATA / "questions" / qid
     d.mkdir(parents=True)
     _write(d, "request.json", {"id": qid, "question": question, "mode": mode, "artifact": artifact or None, "regulations": rids,
+                               "history": list(history or []), "chat": chat,
                                "created": time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())})
     status(d, state="queued", step="Queued", log=["Queued"])
     return qid
@@ -111,7 +114,8 @@ def run(qid: str) -> None:
         status(d, state="running", step=msg, log=log[-40:])
     try:
         progress("Reading the material")
-        res = ask(req["question"], corpus_of(req), req["mode"], cache=regs.DATA / "research-cache", progress=progress)
+        res = ask(req["question"], corpus_of(req), req["mode"], cache=regs.DATA / "research-cache", progress=progress,
+                  history=req.get("history") or [])
         _write(d, "answer.json", res)
         status(d, state="done", step="Done", seconds=res["stats"]["seconds"])
     except Exception as e:  # noqa: BLE001 - shown to the user; the trace is kept on disk
@@ -173,7 +177,8 @@ def citation(loc: str, quoted: str, parts: dict[str, dict]) -> dict:
     from .scan import mask
     tag, _, own = loc.partition("|") if "|" in loc and loc.split("|", 1)[0] in parts else ("", "", loc)
     p = parts.get(tag) or {}
-    out = {"at": loc, "part": p.get("name") if tag else None, "kind": p.get("kind")}
+    out = {"at": loc, "part": p.get("name") if tag else None, "kind": p.get("kind"),
+           "ref": {"kind": p.get("kind"), "id": p.get("id"), "at": own}}   # what the chat's preview opens
     if p.get("kind") == "scan":
         m = re.match(r"^(.+):(\d+)(?:-(\d+))?$", own)
         path, a, b = (m[1], int(m[2]), int(m[3] or m[2])) if m else (own, 1, 1)

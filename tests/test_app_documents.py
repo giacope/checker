@@ -90,7 +90,7 @@ def upload(client, rid, files):
 def test_documents_are_assessed_with_cited_lines_and_attested_checks_are_asked(client, monkeypatch):
     rid = compile_hygiene(client, monkeypatch)
     assert f'value="reg:{rid}"' in client.get("/documents").text
-    assert f'value="reg:{rid}"' not in client.get("/buildings").text and f'value="reg:{rid}"' not in client.get("/").text
+    assert f'value="reg:{rid}"' not in client.get("/buildings").text and f'value="reg:{rid}"' not in client.get("/code").text
     # line 6 of the plan is the core temperature; L99 does not exist and other.md is not a file of the set
     calls = model(monkeypatch, ["plan.md#L6", "plan.md#L99", "other.md#L1"])
     did, st = upload(client, rid, [("plan.md", PLAN.encode(), "text/markdown"), ("empty.txt", b"\n", "text/plain")])

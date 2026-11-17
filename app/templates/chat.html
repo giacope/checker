@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Compliance chat</title>
+<link rel="stylesheet" href="/static/chat.css">
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="app" class="app">
+  <aside id="side" class="side" aria-label="Chats"></aside>
+  <div class="scrim" data-act="close-side"></div>
+  <main class="main">
+    <header id="bar" class="bar"></header>
+    <div id="scroll" class="scroll"><div id="thread" class="thread"></div></div>
+    <form id="composer" class="composer" autocomplete="off"></form>
+  </main>
+  <section id="pane" class="pane" hidden aria-label="Preview"></section>
+</div>
+<div id="card" class="hovercard" hidden></div>
+<div id="toast" class="toast" hidden></div>
+<script id="boot" type="application/json">{{ boot | safe }}</script>
+<script type="module" src="/static/chat.js"></script>
+</body>
+</html>

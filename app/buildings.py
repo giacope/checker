@@ -636,17 +636,17 @@ def crop(files_dir: Path, cache: Path, at: str) -> bytes:
     return png
 
 
-def thumbnail(files_dir: Path, cache: Path, file: str, page: int | None, layout: str | None) -> bytes:
+def thumbnail(files_dir: Path, cache: Path, file: str, page: int | None, layout: str | None, dpi: int = 36) -> bytes:
     path = (files_dir / file).resolve()
     if files_dir.resolve() not in path.parents or not path.is_file():
         raise ProjectError("No such file in this project")
     cache.mkdir(parents=True, exist_ok=True)
-    out = cache / (hashlib.sha1(f"{file}|{page}|{layout}".encode()).hexdigest() + ".png")
+    out = cache / (hashlib.sha1(f"{file}|{page}|{layout}|{dpi}".encode()).hexdigest() + ".png")
     if out.is_file():
         return out.read_bytes()
     if layout:
         png = importlib.import_module("adapters.dxf").render(path, layout, bbox=None)
     else:
-        png = importlib.import_module("adapters.drawings").render(path, page or 1, bbox=None, dpi=36)
+        png = importlib.import_module("adapters.drawings").render(path, page or 1, bbox=None, dpi=dpi)
     out.write_bytes(png)
     return png

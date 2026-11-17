@@ -23,12 +23,15 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
+from fastapi.middleware.gzip import GZipMiddleware
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from adapters.regulation import ANSWER_LABELS
 
 from . import buildings
+from . import chats
 from . import documents as documents_mod
 from . import questions as qs
 from . import regulations as regs
@@ -62,6 +65,8 @@ async def lifespan(_app):
 
 
 app = FastAPI(title="Compliance check", lifespan=lifespan)
+app.add_middleware(GZipMiddleware, minimum_size=20_000)   # model meshes and long reports
+app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 templates = Jinja2Templates(directory=HERE / "templates")
 templates.env.globals["ANSWER"] = ANSWER_LABELS
 templates.env.filters["short"] = lambda s, n=12: (s or "")[:n]
@@ -160,7 +165,7 @@ def _report(d: Path) -> dict:
 
 # ---------------------------------------------------------------- pages
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/code", response_class=HTMLResponse)
 def index(request: Request):
     recent = []
     for d in sorted(SCANS.iterdir(), key=lambda p: p.stat().st_mtime, reverse=True)[:12]:
@@ -714,6 +719,123 @@ def question_json(qid: str):
     except qs.QuestionError as e:
         raise HTTPException(404, str(e)) from e
     return {"request": _read(d, "request.json"), "status": _read(d, "status.json", {}), "answer": _read(d, "answer.json")}
+
+
+# ---------------------------------------------------------------- chat
+
+def _artifact_report(kind: str, aid: str) -> dict | None:
+    """The finished report of a chat's artifact, for the checks it shows."""
+    d = {"scan": SCANS, "project": PROJECTS, "documents": DOCSETS}[kind] / aid
+    if not SCAN_ID.match(aid) or (_read(d, "status.json", {}) or {}).get("state") != "done":
+        return None
+    return _report(d) if kind == "scan" else _project_report(aid, d) if kind == "project" else _documents_report(d)
+
+
+def _chat_page(request: Request, cid: str | None):
+    boot = {"chat": chats.view(cid) if cid else None, "chats": chats.chats(), "contexts": chats.contexts(),
+            "artifact": request.query_params.get("artifact") or "", "regulations": request.query_params.getlist("reg")}
+    return templates.TemplateResponse(request, "chat.html", {"boot": json.dumps(boot, default=str).replace("</", "<\\/")})
+
+
+@app.get("/", response_class=HTMLResponse)
+def chat_home(request: Request):
+    return _chat_page(request, None)
+
+
+@app.get("/chat/{cid}", response_class=HTMLResponse)
+def chat_page(request: Request, cid: str):
+    try:
+        return _chat_page(request, cid)
+    except chats.ChatError as e:
+        raise HTTPException(404, str(e)) from e
+
+
+def _start_chat(question: str, mode: str, artifact: str, regulations: list[str]) -> tuple[str, str]:
+    kind, _, aid = (artifact or "").partition(":")
+    try:
+        cid, qid = chats.create(question, mode, {"kind": kind, "id": aid} if kind else None, regulations)
+    except qs.QuestionError as e:
+        raise HTTPException(400, str(e)) from e
+    POOL.submit(isolated, qs.run, regs.DATA / "questions" / qid, qid)
+    return cid, qid
+
+
+@app.post("/chats")
+def chat_form(question: str = Form(...), mode: str = Form("quick"), artifact_kind: str = Form(""), artifact_id: str = Form(""),
+              regulations: list[str] = Form([])):
+    """The ask form on a report page: starts a chat about it."""
+    cid, _ = _start_chat(question, mode, f"{artifact_kind}:{artifact_id}" if artifact_kind else "", regulations)
+    return RedirectResponse(f"/chat/{cid}", status_code=303)
+
+
+@app.post("/api/chats")
+async def chat_new(request: Request):
+    body = await request.json()
+    cid, qid = _start_chat(str(body.get("question") or ""), str(body.get("mode") or "quick"), str(body.get("artifact") or ""),
+                           [str(r) for r in body.get("regulations") or []][:12])
+    return {"id": cid, "qid": qid}
+
+
+@app.post("/api/chats/{cid}/turns")
+async def chat_turn(request: Request, cid: str):
+    body = await request.json()
+    try:
+        qid = chats.add_turn(cid, str(body.get("question") or ""), str(body.get("mode") or "quick"))
+    except chats.ChatError as e:
+        raise HTTPException(404, str(e)) from e
+    except qs.QuestionError as e:
+        raise HTTPException(400, str(e)) from e
+    POOL.submit(isolated, qs.run, regs.DATA / "questions" / qid, qid)
+    return {"qid": qid}
+
+
+@app.get("/api/chats")
+def chat_list():
+    return chats.chats()
+
+
+@app.get("/api/chats/{cid}")
+def chat_json(cid: str):
+    try:
+        return JSONResponse(json.loads(json.dumps(chats.view(cid), default=str)))
+    except chats.ChatError as e:
+        raise HTTPException(404, str(e)) from e
+
+
+@app.get("/api/checks")
+def chat_checks(kind: str, id: str):
+    if kind not in ("scan", "project", "documents"):
+        raise HTTPException(404)
+    rep = _artifact_report(kind, id)
+    if rep is None:
+        raise HTTPException(404, "No finished report")
+    return JSONResponse(json.loads(json.dumps(chats.checks(rep), default=str)))
+
+
+@app.get("/api/preview")
+def chat_preview(kind: str, id: str, at: str):
+    try:
+        return JSONResponse(json.loads(json.dumps(chats.preview(kind, id, at), default=str)))
+    except chats.ChatError as e:
+        raise HTTPException(404, str(e)) from e
+
+
+@app.get("/api/projects/{pid}/model.json")
+def project_model(pid: str):
+    try:
+        return FileResponse(chats.model_mesh(pid), media_type="application/json", headers={"cache-control": "private, max-age=86400"})
+    except chats.ChatError as e:
+        raise HTTPException(404, str(e)) from e
+
+
+@app.get("/api/documents/{did}/page")
+def document_page(did: str, file: str, page: int):
+    d = _ddir(did)
+    try:
+        png = buildings.thumbnail(d / "files", d / "pages", file, max(1, page), None, dpi=110)
+    except buildings.ProjectError as e:
+        raise HTTPException(404, str(e)) from e
+    return Response(png, media_type="image/png", headers={"cache-control": "private, max-age=86400"})
 
 
 @app.get("/healthz")

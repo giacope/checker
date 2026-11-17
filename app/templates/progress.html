@@ -6,7 +6,7 @@
   <p class="muted">{{ req.standards | join(", ") }} · ASVS L{{ req.asvs_level }}{% if req.branch %} · branch {{ req.branch }}{% endif %}</p>
   {% if st.state == "error" %}
     <div class="note"><b>The scan failed.</b> {{ st.error }}</div>
-    <p><a class="btn secondary" href="/">Back</a></p>
+    <p><a class="btn secondary" href="/code">Back</a></p>
   {% else %}
     <p><b>{{ st.step or "Queued" }}</b>…</p>
     <ul class="small muted">{% for m in (st.log or [])[:-1] %}<li>{{ m }}</li>{% endfor %}</ul>

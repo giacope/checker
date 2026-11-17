@@ -180,7 +180,7 @@ def test_customer_regulation_upload_review_and_scan(client, compiler):
     r = client.post("/scans", data={"url": "https://github.com/acme/shop", "standards": ["reg:r000000nope"]}, follow_redirects=False)
     assert r.status_code == 400 and "reg:r000000nope" in r.text
     # the index offers it for scans; scanning with it hands the assessed check to the model assessor
-    assert f'value="reg:{rid}"' in client.get("/").text
+    assert f'value="reg:{rid}"' in client.get("/code").text
     r = client.post("/scans", data={"url": "https://github.com/acme/shop", "standards": [f"reg:{rid}"]}, follow_redirects=False)
     sid = r.headers["location"].rsplit("/", 1)[1]
     assert wait(client, sid)["state"] == "done"
@@ -295,7 +295,7 @@ def test_questions_about_a_scan_with_its_regulation(client, compiler, monkeypatc
                       follow_redirects=False).headers["location"].rsplit("/", 1)[1]
     assert wait(client, sid)["state"] == "done"
     page = client.get(f"/scans/{sid}").text
-    assert 'action="/ask"' in page and f'name="regulations" value="{rid}" checked' in page
+    assert 'action="/chats"' in page and f'name="regulations" value="{rid}" checked' in page
 
     seen = []
 
@@ -372,3 +372,46 @@ def test_regulation_uploads_keep_their_folders_and_a_folder_never_shadows_a_file
     files = json.loads((tmp_path / rid / "request.json").read_text())["files"]
     assert files == ["part-1/rules.md", "part-2/rules.md", "a.md", "a.md-1/b.md"]
     assert [(tmp_path / rid / "files" / f).read_bytes() for f in files] == [b"one", b"two", b"three", b"four"]
+
+
+def test_a_chat_carries_its_turns_into_follow_ups_and_its_citations_open_previews(client, compiler, monkeypatch):
+    research = adapters.research
+    r = client.post("/regulations", data={"name": "Acme standard", "domain": "code"},
+                    files=[("files", ("acme.md", b"2.1 Passwords must be hashed.\n", "text/markdown"))], follow_redirects=False)
+    rid = r.headers["location"].rsplit("/", 1)[1]
+    assert wait_reg(client, rid)["state"] == "done"
+    sid = client.post("/scans", data={"url": "https://github.com/acme/shop", "standards": [f"reg:{rid}"]},
+                      follow_redirects=False).headers["location"].rsplit("/", 1)[1]
+    assert wait(client, sid)["state"] == "done"
+    assert f'"kind": "scan", "id": "{sid}"' in client.get("/").text        # offered as something to chat about
+    seen = []
+
+    def complete(pname, model, key, system, user, client_):
+        seen.append(user)
+        return json.dumps({"status": "answered", "answer": f"Answer {len(seen)}: MD5.", "claims": [
+            {"text": "Passwords are hashed with MD5.", "at": ["A|server/routes.js:6"]}]})
+    monkeypatch.setattr(research, "complete", complete)
+    monkeypatch.setattr(research, "provider_from_env", lambda: ("anthropic", "test-model", "k"))
+
+    def finished(cid):
+        for _ in range(100):
+            c = client.get(f"/api/chats/{cid}").json()
+            if all(t["state"] in ("done", "error") for t in c["turns"]):
+                return c
+            time.sleep(0.05)
+        raise AssertionError("the chat did not finish")
+    cid = client.post("/api/chats", json={"question": "How are passwords stored?", "artifact": f"scan:{sid}", "regulations": [rid]}).json()["id"]
+    finished(cid)
+    assert "Earlier in this conversation" not in seen[0]
+    assert client.post(f"/api/chats/{cid}/turns", json={"question": "And is that allowed?", "mode": "quick"}).status_code == 200
+    c = finished(cid)
+    assert [t["question"] for t in c["turns"]] == ["How are passwords stored?", "And is that allowed?"]
+    # the follow-up is sent with the first turn, inside the untrusted data, and searched by its words too
+    assert "Q: How are passwords stored?\nA: Answer 1: MD5." in seen[1] and seen[1].index("Q: How") < seen[1].index("END UNTRUSTED")
+    ref = c["turns"][1]["cites"]["A|server/routes.js:6"]["ref"]
+    assert ref == {"kind": "scan", "id": sid, "at": "server/routes.js:6"}
+    p = client.get("/api/preview", params=ref).json()
+    assert p["type"] == "code" and p["focus"] == [6, 6] and "md5" in p["lines"][5 - (p["start"] - 1)]
+    assert client.get("/api/preview", params={**ref, "at": "../../../etc/passwd:1"}).status_code == 404
+    assert client.get("/api/preview", params={"kind": "regulation", "id": rid, "at": "c2"}).json()["type"] == "clause"
+    assert client.get(f"/chat/{cid}").status_code == 200 and client.get("/chat/zzzzzzzzzzzz").status_code == 404
