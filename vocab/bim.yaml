@@ -89,6 +89,10 @@ types:
       handrail_height: {type: length, kind: measured, range: [0 m, 10 m]}
       occupant_load:  {type: number, kind: measured, label: people the stair serves (derived from the areas it serves and a jurisdiction's occupant factors)}
       is_external:    {type: bool, kind: measured}
+      tapered_going_min:  {type: length, kind: measured, label: least going of the stair's tapered treads (winders), each measured between the midpoints of its two tread lines, range: [0 m, 10 m]}
+      tapered_going_max:  {type: length, kind: measured, label: greatest going of the stair's tapered treads (winders), measured the same way, range: [0 m, 10 m]}
+      tapered_going_difference: {type: length, kind: measured, label: largest difference in going between consecutive tapered treads, range: [0 m, 10 m]}
+      tapered_narrow_end: {type: length, kind: measured, label: least depth of a tapered tread at its narrow end, range: [0 m, 10 m]}
 
   Door:
     description: A door (IfcDoor), one per opening.
@@ -101,6 +105,7 @@ types:
       storey:      {type: text, kind: measured}
       fire_rating: {type: text, kind: measured, label: fire-resistance rating as scheduled}
       is_external: {type: bool, kind: measured}
+      stair_clearance: {type: length, kind: measured, label: least distance from the door's leaf swung 90° from closed to the nearest tread line of a stair beside it (0 where it crosses one), range: [0 m, 10 m]}
 
   Corridor:
     description: A corridor, with its narrowest clear width.

@@ -349,10 +349,10 @@ def test_a_sheet_whose_text_cannot_be_read_is_a_note_and_the_set_is_kept(tmp_pat
     import adapters.drawings as D
 
     real = D.tokens_of
-    def flaky(path, sheet, digest, stats):
+    def flaky(path, sheet, digest, stats, **kw):
         if sheet.page == 2:
             raise RuntimeError("OCR engine failed")
-        return real(path, sheet, digest, stats)
+        return real(path, sheet, digest, stats, **kw)
     monkeypatch.setattr(D, "tokens_of", flaky)
     (tmp_path / "set.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)] * 3))
     doc = D.analyse([tmp_path / "set.pdf"], tmp_path)
@@ -448,7 +448,7 @@ def test_stairs_are_read_in_other_drafting_traditions(rows, stair, facts):
 def test_a_set_whose_text_no_reader_recognises_says_it_may_have_missed_elements(tmp_path, monkeypatch, words, missed):
     import adapters.drawings as D
 
-    monkeypatch.setattr(D, "tokens_of", lambda path, sh, digest, stats: [
+    monkeypatch.setattr(D, "tokens_of", lambda path, sh, digest, stats, **kw: [
         t for i in range(4) for t in line(sh, 100, 100 + 20 * i, *words)])
     (tmp_path / "set.pdf").write_bytes(pdf_bytes([(TEXT, LETTER)]))
     doc = D.analyse([tmp_path / "set.pdf"], tmp_path)

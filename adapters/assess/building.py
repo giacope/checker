@@ -108,7 +108,7 @@ class BuildingCorpus:
                     words = tokens_of(path, sh, digest)
                     if path.suffix.lower() in PDF:   # a number on a drawn dimension line says so, and what it spans
                         try:
-                            measured = geometry.measure(path, words, sh.page, digest)
+                            measured = [(m["text"], m["bbox"]) for m in geometry.measure(path, words, sh.page, digest)]
                         except Exception as e:  # noqa: BLE001 - paths that can't be read lose the measurements, not the words
                             progress(f"assess: {s['file']} p{sh.page} stairs and doors not measured ({type(e).__name__})")
                         try:

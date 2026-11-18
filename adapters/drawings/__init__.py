@@ -12,8 +12,8 @@ import time
 from collections import Counter
 from pathlib import Path
 
-from . import annotations, ocr
-from .reader import IMAGES, PDF, render, sheets_of, tokens_of
+from . import annotations, geometry, ocr
+from .reader import IMAGES, PDF, _close_pdf, render, sheets_of, tokens_of
 from .tokens import Sheet, Token, locator, parse_locator
 
 VERSION = "0.1.0"
@@ -42,13 +42,19 @@ def analyse(files: list[Path], root: Path, describes: str | None = None, progres
             stats: dict = {}
             progress(f"reading {sheet.file} p{sheet.page}")
             try:
-                tokens = tokens_of(path, sheet, digest, stats)
+                tokens = tokens_of(path, sheet, digest, stats, keep_open=True)   # geometry reads its lines next
             except Exception as e:  # noqa: BLE001 - one sheet that cannot be read must not lose the set
                 reading.skipped.append({"at": locator(sheet, (0, 0, sheet.width, sheet.height)), "text": "",
                                         "reason": f"sheet not readable: {type(e).__name__}: {str(e)[:200]}"})
                 continue
             t0 = time.perf_counter()
             r = annotations.read(sheet, tokens)
+            if Path(path).suffix.lower() in PDF:   # stairs and doors the sheet draws but does not dimension
+                try:
+                    geometry.add_facts(r, sheet, geometry.measure(path, tokens, sheet.page, digest))
+                except Exception as e:  # noqa: BLE001 - paths that can't be read lose the measurements, not the sheet
+                    r.skip(locator(sheet, (0, 0, sheet.width, sheet.height)), "",
+                           f"stairs and doors not measured from the drawing's lines: {type(e).__name__}")
             reading.merge(r)
             if sheet.text == "none":
                 no_text.append(sheet)
@@ -58,6 +64,7 @@ def analyse(files: list[Path], root: Path, describes: str | None = None, progres
                            "seconds": stats.get("seconds"), "ocr_seconds": stats.get("ocr_seconds"),
                            "ocr_cached": stats.get("cached"), "read_seconds": round(time.perf_counter() - t0, 2)})
             progress(f"{sheet.label()}: {len(tokens)} tokens ({sheet.text}), {len(r.elements)} elements")
+        _close_pdf()
     reading.check_tags_against_schedules()
     for s in no_text:
         reading.skipped.append({"at": locator(s, (0, 0, s.width, s.height)), "text": "", "reason": "page has no text layer and OCR found no text"})

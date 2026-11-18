@@ -13,7 +13,11 @@ stair's, so a schedule's ruled rows or a wall's hatching are not taken for tread
     door swing      an arc with a straight leaf from its centre to one of its ends; its leaf swung to 90 degrees
                     from the closed position (the arc's other end), or as far as the arc is drawn if that is further
 
-Each measurement is one line of text with the region it covers; adapters.assess.building adds them to the sheet.
+Each measurement is one line of text with the region it covers, which adapters.assess.building adds to the sheet,
+and facts in vocab/bim.yaml terms, which add_facts gives the drawings' evidence: a flight's going (Stair.tread_depth),
+its tapered treads' least and greatest going, narrow end and the difference between consecutive goings (Stair
+tapered_*), and a door's clearance to the stair beside it (Door.stair_clearance). A scaled length is an interval:
+half a point of the drawing at its scale, and 1% for the scale itself, either way.
 """
 
 from __future__ import annotations
@@ -27,7 +31,7 @@ from pathlib import Path
 
 from . import dimensions, ocr
 from .annotations import TERMS
-from .tokens import Token
+from .tokens import Sheet, Token, locator, parse_locator
 
 CACHE_VERSION = 1
 CACHE_DIR = ocr.CACHE_DIR.parent / "geom"
@@ -405,9 +409,11 @@ def _mm(v) -> str:
     return f"{v:.0f}"
 
 
-def measure(path: Path, tokens: list[Token], page: int, digest: str | None = None) -> list[tuple[str, tuple]]:
-    """[(text, bbox)]: one line for each stair's tapered treads or straight flight and each door swing near a stair
-    measured on the page, in the page's coordinates. Empty for a scan or a sheet without dimensions."""
+def measure(path: Path, tokens: list[Token], page: int, digest: str | None = None) -> list[dict]:
+    """One record for each stair's tapered treads or straight flight and each door swing near a stair measured on
+    the page: {kind ("tapered", "flight" or "door"), text (the measurement in words), bbox (in the page's
+    coordinates), scale, and its lengths in mm: narrow, centre, wide per tapered tread; goings and length of a
+    flight; leaf, clearance and the stair's bbox for a door}. Empty for a scan or a sheet without dimensions."""
     segs = dimensions.segments(path, page, digest)
     if not segs:
         return []
@@ -441,13 +447,15 @@ def measure(path: Path, tokens: list[Token], page: int, digest: str | None = Non
             turn = sum(_step(a, b) for a, b in pairwise(lines))
             lens = [math.dist(s[:2], s[2:]) * mm for s in lines]
             names = _labels(_box(lines), tokens, 2000 / mm)
-            out.append(((f"[measured from the drawing's lines at 1:{k}, the scale of the dimensions nearby: "
+            out.append({"kind": "tapered", "scale": k, "bbox": _box(lines), "narrow": [n * mm for n, _, _ in treads],
+                        "centre": [c_ * mm for _, _, c_ in treads], "wide": [w * mm for _, w, _ in treads], "text": (
+                        f"[measured from the drawing's lines at 1:{k}, the scale of the dimensions nearby: "
                          f"{len(treads)} tapered stair treads (winders) between {len(lines)} tread lines turning "
                         f"{abs(turn):.0f}° in all, listed in order around the turn; tread depth at the narrow end "
                         f"{' / '.join(_mm(n * mm) for n, _, _ in treads)} mm, at the centre of the tread's width "
                         f"(straight between the midpoints of its two tread lines) {' / '.join(_mm(c_ * mm) for _, _, c_ in treads)} mm, "
                         f"at the wide end (straight between the outer ends) {' / '.join(_mm(w * mm) for _, w, _ in treads)} mm; "
-                        f"tread lines {_mm(min(lens))}-{_mm(max(lens))} mm long{names}]"), _box(lines)))
+                        f"tread lines {_mm(min(lens))}-{_mm(max(lens))} mm long{names}]")})
             stairs.append((lines, "tapered treads" + names, k))
         taken = {x for lines, _, _ in stairs for x in lines}
         for lines, gaps in _flights([s for s in near if s not in taken], mm):
@@ -465,9 +473,10 @@ def measure(path: Path, tokens: list[Token], page: int, digest: str | None = Non
             gm = sorted(x * mm for x in gaps)
             L = sum(math.dist(s[:2], s[2:]) for s in lines) / len(lines) * mm
             names = _labels(box, tokens, 2000 / mm)
-            out.append(((f"[measured from the drawing's lines at 1:{k}, the scale of the dimensions nearby: straight "
+            out.append({"kind": "flight", "scale": k, "bbox": box, "goings": gm, "length": L, "text": (
+                        f"[measured from the drawing's lines at 1:{k}, the scale of the dimensions nearby: straight "
                         f"stair flight drawn as {len(lines)} parallel tread lines {_mm(gm[len(gm) // 2])} mm apart "
-                        f"({_mm(gm[0])}-{_mm(gm[-1])}), each {_mm(L)} mm long{names}]"), box))
+                        f"({_mm(gm[0])}-{_mm(gm[-1])}), each {_mm(L)} mm long{names}]")})
             stairs.append((lines, "straight flight" + names, k))
     nearest = {}     # door hinge -> (clearance in mm, door, stair lines, what, scale): its nearest stair
     for lines, what, k in stairs:
@@ -484,7 +493,56 @@ def measure(path: Path, tokens: list[Token], page: int, digest: str | None = Non
         mm = PT_MM * k
         box = _union((hinge[0] - r, hinge[1] - r, hinge[0] + r, hinge[1] + r), _box(lines))   # the door and its stair
         reach = "crosses one of its tread lines" if d_mm < 1 else f"comes within {_mm(d_mm)} mm of its nearest tread line"
-        out.append(((f"[measured from the drawing's lines at 1:{k}, the scale of the dimensions nearby: door swing, "
+        out.append({"kind": "door", "scale": k, "bbox": box, "stair": _box(lines), "leaf": r * mm, "clearance": d_mm, "text": (
+                    f"[measured from the drawing's lines at 1:{k}, the scale of the dimensions nearby: door swing, "
                     f"leaf {_mm(r * mm)} mm, drawn open {drawn:.0f}°; swung through {abs(swing):.0f}° from closed, the "
-                    f"leaf's path {reach} of the stair ({what}) measured beside it]"), box))
+                    f"leaf's path {reach} of the stair ({what}) measured beside it]")})
     return out
+
+
+# ------------------------------------------------------------------- facts
+
+def _scaled(v: float, k: int, what: str, at: str, spread: float = 0.0) -> list[dict]:
+    """The observations of a length scaled off the drawing: v (mm) give or take what scaling can be out by, plus
+    `spread` where the value already combines several readings that may each be out that much."""
+    tol = 0.5 * PT_MM * k + 0.01 * v + spread
+    note = f"{what}, scaled from the drawing's lines at 1:{k}: {v:.0f} mm, give or take {tol:.0f} mm"
+    return [{"value": f"{max(v - tol, 0.0):.0f} mm", "at": at, "note": note}, {"value": f"{v + tol:.0f} mm", "at": at, "note": note}]
+
+
+def add_facts(r, sheet: Sheet, records: list[dict]) -> None:
+    """Give the Reading `r` of `sheet` what measure() found on it: each flight's or run of tapered treads' facts to the
+    stair the sheet names (a Stair element r already has from the sheet's text: the only one, as on an enlarged stair
+    plan, or else the nearest within REACH), or else to a stair of its own named by its region; each door's clearance to a Door of its own (plans tag doors by type as often as
+    by number, so its mark is not read)."""
+    named = [(e, b["bbox"]) for e in r.elements.values() if e["type"] == "Stair"
+             for b in map(parse_locator, e["at"]) if b and b["page"] == sheet.page]
+    for m in records:
+        at, k = locator(sheet, m["bbox"]), m["scale"]
+        if m["kind"] == "door":
+            e = r.element("Door", at, at)
+            r.add(e, "stair_clearance", _scaled(m["clearance"], k, "least distance from the leaf, swung 90° from closed, "
+                                                "to the stair's nearest tread line", at))
+            continue
+        c = _mid(m["bbox"])
+        near = [(math.dist(c, _mid(b)), e) for e, b in named
+                if len({id(x) for x, _ in named}) == 1 or math.dist(c, _mid(b)) * PT_MM * k <= REACH]
+        e = min(near, key=lambda x: x[0])[1] if near else r.element("Stair", at, at)
+        if at not in e["at"]:
+            e["at"].append(at)
+        if m["kind"] == "flight":
+            g = m["goings"]
+            mid = (g[0] + g[-1]) / 2
+            r.add(e, "tread_depth", _scaled(mid, k, f"going of a straight flight, {len(g) + 1} tread lines apart",
+                                            at, spread=(g[-1] - g[0]) / 2))
+        else:
+            cs = m["centre"]
+            diff = max(abs(a - b) for a, b in pairwise(cs))
+            r.add(e, "tapered_going_min", _scaled(min(cs), k, "least going of the tapered treads", at))
+            r.add(e, "tapered_going_max", _scaled(max(cs), k, "greatest going of the tapered treads", at))
+            r.add(e, "tapered_narrow_end", _scaled(min(m["narrow"]), k, "narrowest tapered tread at its narrow end", at))
+            tol = 2 * (0.5 * PT_MM * k + 0.01 * max(cs))   # each of the two goings may be out by that much
+            note = (f"largest difference between consecutive tapered treads' goings ({' / '.join(_mm(x) for x in cs)} mm), "
+                    f"scaled at 1:{k}: {diff:.0f} mm, give or take {tol:.0f} mm")
+            r.add(e, "tapered_going_difference", [{"value": f"{max(diff - tol, 0.0):.0f} mm", "at": at, "note": note},
+                                                  {"value": f"{diff + tol:.0f} mm", "at": at, "note": note}])

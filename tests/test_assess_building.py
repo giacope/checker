@@ -189,3 +189,29 @@ def test_winders_and_a_door_swing_beside_a_stair_are_measured_off_the_drawing(tm
     assert winders[0].endswith("; nearest stair labels: UP]")   # which stair it is
     doors = [t for t in lines if "door swing" in t]
     assert len(doors) == 1 and "leaf 914 mm, drawn open 30°" in doors[0] and "comes within 80 mm" in doors[0], doors
+
+    # The same measurements are Stair and Door facts in the drawings' evidence, which computed checks read. A
+    # scaled length is an interval, so a limit within scaling's reach of it (80 mm) is uncertain, not met.
+    from pathlib import Path
+
+    import yaml
+    from normir.evidence import load_evidence, run
+    from normir.model import load
+
+    from adapters import drawings
+    from adapters.regulation import build_pack
+
+    bim = yaml.safe_load((Path(__file__).parents[1] / "vocab" / "bim.yaml").read_text())
+    ev = load_evidence(drawings.analyse([tmp_path / "w.pdf"], tmp_path))
+
+    def check(n, typ, require):
+        v = typ[0].lower()
+        return {"id": f"k{n}-1", "clause": f"c{n}", "summary": "s", "kind": "computed", "enabled": True,
+                "for": {"var": v, "type": typ}, "require": {k: [{"fact": f"{v}.{a}"}, x] for k, (a, x) in require.items()},
+                "search": ["stair", "door", "winder"]}
+    checks = [check(1, "Stair", {"le": ("tapered_going_max", "300 mm")}), check(2, "Stair", {"ge": ("tapered_narrow_end", "50 mm")}),
+              check(3, "Door", {"ge": ("stair_clearance", "400 mm")}), check(4, "Door", {"ge": ("stair_clearance", "80 mm")})]
+    clauses = [{"id": f"c{n}", "file": "k.md", "text": "t", "requirement": True, "at": f"k.md#L{n}-L{n}"} for n in range(1, 5)]
+    rs = load(build_pack({"id": "rg", "name": "Geometry", "clauses": clauses, "checks": checks}, bim, tmp_path / "pack"))
+    verdicts = {r["norm"]: r["verdict"] for r in run(rs, ev)}
+    assert verdicts == {"k1-1": "fail", "k2-1": "pass", "k3-1": "fail", "k4-1": "uncertain"}, verdicts

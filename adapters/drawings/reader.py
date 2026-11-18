@@ -338,9 +338,10 @@ def _layer_words_of(pdf: _Pdf, page: int) -> list[dict] | None:
         pp.close()
 
 
-def tokens_of(path: Path, sheet: Sheet, digest: str | None = None, stats: dict | None = None) -> list[Token]:
+def tokens_of(path: Path, sheet: Sheet, digest: str | None = None, stats: dict | None = None, keep_open: bool = False) -> list[Token]:
     """The sheet's text as Tokens; sets sheet.text to "layer", "ocr" or "none".
-    `stats` receives {seconds, ocr_seconds, cached, low_confidence}."""
+    `stats` receives {seconds, ocr_seconds, cached, low_confidence}. A PDF is closed after its last page is read,
+    unless `keep_open`: then whoever reads more of the page closes it (_close_pdf)."""
     path = Path(path)
     t0 = time.perf_counter()
     stats = stats if stats is not None else {}
@@ -361,7 +362,7 @@ def tokens_of(path: Path, sheet: Sheet, digest: str | None = None, stats: dict |
                 tokens = _ocr_tokens(data, sheet, scale)
                 stats.update(ocr_seconds=data["seconds"], cached=data.get("cached", False), timing=data.get("timing"))
         finally:
-            if sheet.page >= len(pdf.doc):   # the last page: no reason to keep the file open
+            if sheet.page >= len(pdf.doc) and not keep_open:   # the last page: no reason to keep the file open
                 _close_pdf()
     else:
         with _open_image(path, sheet.page) as img:
