@@ -138,3 +138,54 @@ def test_a_number_on_a_dimension_line_says_so_and_what_it_spans(tmp_path, monkey
     assert any(t.startswith("3000 [vertical dimension line at 1:40") for t in lines)
     assert any(t.startswith("36\" [horizontal dimension line at 1:40") for t in lines)
     assert "450" in lines   # a lone fit at a scale no other number shares is not taken for a dimension
+
+
+def test_winders_and_a_door_swing_beside_a_stair_are_measured_off_the_drawing(tmp_path, monkeypatch):
+    import math
+
+    from adapters.drawings import dimensions, geometry
+    from tests.test_drawings import pdf_bytes
+
+    monkeypatch.setattr(dimensions, "CACHE_DIR", tmp_path / "dims")
+    monkeypatch.setattr(geometry, "CACHE_DIR", tmp_path / "geom")
+    H = 792
+
+    def line(ax, ay, bx, by):   # in points from the top left, as pdfplumber reads them
+        return f"0.6 w {ax} {H - ay} m {bx} {H - by} l S\n"
+
+    def text(x, y, s):
+        return f"BT /F1 9 Tf 1 0 0 1 {x} {H - y} Tm ({s}) Tj ET\n"
+
+    # The winders of a plan detail at 1:24 (1 pt = 8.467 mm): four tread lines turning 90° at 30° steps whose
+    # narrow ends stand 18 pt (152 mm) apart round the newel. Between the midpoints of consecutive lines lie
+    # 48.75, 49.8 and 48.8 pt: 413, 422 and 413 mm.
+    fan = [(949.04, 262.96, 842.48, 262.96), (949.04, 280.96, 842.48, 342.52),
+           (961.76, 293.68, 900.2, 400.24), (979.76, 293.68, 979.76, 399.52)]
+    content = "".join(line(*s) for s in fan) + text(900, 250, "UP")
+    content += "".join(line(*(v - 760 if i % 2 == 0 else v for i, v in enumerate(s))) for s in fan)   # no stair word
+    for x in (850, 90):         # each copy's dimensions: 1000 mm is 118.1 pt at 1:24
+        for y in (450, 470, 490):
+            content += line(x, y, x + 118.1, y) + text(x + 45, y - 2, "1000")
+    # A 914 mm door (108 pt) hinged its leaf plus 9.5 pt (80 mm) beyond the first riser, closed along the wall
+    # (upwards) and drawn open 30° towards the stair: drawn, it stays 63.5 pt away; swung on to 90° from closed
+    # its leaf passes 80 mm from that riser.
+    hx, hy, r = 979.76 + 108 + 9.5, 330.0, 108.0
+    a0, a1 = math.radians(-90), math.radians(-120)
+    k = 4 / 3 * math.tan((a1 - a0) / 4) * r
+    p0 = (hx + r * math.cos(a0), hy + r * math.sin(a0))
+    p3 = (hx + r * math.cos(a1), hy + r * math.sin(a1))
+    p1 = (p0[0] - k * math.sin(a0), p0[1] + k * math.cos(a0))
+    p2 = (p3[0] + k * math.sin(a1), p3[1] - k * math.cos(a1))
+    content += f"0.2 w {p0[0]} {H - p0[1]} m {p1[0]} {H - p1[1]} {p2[0]} {H - p2[1]} {p3[0]} {H - p3[1]} c S\n"
+    content += line(hx, hy, *p3)
+    (tmp_path / "w.pdf").write_bytes(pdf_bytes([(content.encode(), f"0 0 1224 {H}")]))
+    c = BuildingCorpus.from_project(tmp_path, [], [{"file": "w.pdf", "page": 1, "width": 1224, "height": H, "text": "layer"}], "w")
+    lines = [t for _, t in c._sheets[0]["lines"]]
+    winders = [t for t in lines if "tapered stair treads" in t]
+    assert len(winders) == 1, lines   # the copy with no stair word near it is not taken for a stair
+    assert "3 tapered stair treads (winders) between 4 tread lines turning 90°" in winders[0]
+    assert "at the narrow end 152 / 152 / 152 mm" in winders[0]
+    assert "(straight between the midpoints of its two tread lines) 413 / 422 / 413 mm" in winders[0]
+    assert winders[0].endswith("; nearest stair labels: UP]")   # which stair it is
+    doors = [t for t in lines if "door swing" in t]
+    assert len(doors) == 1 and "leaf 914 mm, drawn open 30°" in doors[0] and "comes within 80 mm" in doors[0], doors

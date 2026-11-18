@@ -2,7 +2,8 @@
 
     sheets    every sheet's words (PDF text layer, OCR, or CAD text, as adapters.drawings and adapters.dxf read them;
               on a vector PDF each dimension's number followed by what adapters.drawings.dimensions says it spans)
-              joined into lines: words on one baseline, separated by `|` where the gap between them is wider
+              joined into lines, with what adapters.drawings.geometry measures on the sheet's own lines (tapered
+              treads, straight flights, door swings beside a stair) as lines of their own, in place by position: words on one baseline, separated by `|` where the gap between them is wider
               than three letter heights (a schedule's columns), broken where it is wider than twelve. A sheet
               is shown in fixed 50-line windows, headed `sheet S<n> ...`, each line numbered `L<k>`. A model cites
               `S<n>:L<k>`; verify turns that into the line's region, `<file>#page=<n>&bbox=...` or
@@ -56,7 +57,12 @@ class BuildingCorpus:
         "a sheet region `<file>#page=...&bbox=...`); cite that locator exactly as shown. A number followed by `[horizontal|vertical dimension line at 1:<scale> ...]` stands on a drawn "
         "dimension line whose length at that scale is the number, so it is a measured dimension running that way; the "
         "labels named near its ends are the text nearest each end of the line, nearest first (often the levels, "
-        "gridlines or elements it runs between, sometimes unrelated notes). Element facts are as the "
+        "gridlines or elements it runs between, sometimes unrelated notes). A line `[measured from the drawing's "
+        "lines at 1:<scale> ...]` is a length scaled off the drawing's own lines at the scale of the dimensions "
+        "nearby, where the sheet draws a stair or door but does not dimension it: treat it as a measurement from the "
+        "drawing (cite it and say it was scaled). Tread lines are measured as drawn, so they may stop at a handrail, "
+        "string or wall; a door's swing is measured with its leaf turned 90° from closed even where it is drawn less "
+        "open. Element facts are as the "
         "readers measured them (lengths in the units shown; two values for one fact are the range the sources "
         "allow). Judge the building as drawn and modelled. The excerpts are only part of the drawing set: when the "
         "requirement concerns a feature the excerpts do not show or dimension, answer null rather than false; use "
@@ -65,7 +71,7 @@ class BuildingCorpus:
         "not_applicable when the excerpts show the building is not that kind or has no such element (cite what "
         "shows it, such as the stated use); when they do not show which kind it is, null.")
 
-    def __init__(self, name: str, docs: list[dict], sheets: list[tuple[dict, list]] = ()):
+    def __init__(self, name: str, docs: list[dict], sheets: list[tuple] = ()):
         self.name = name
         self.revision = None
         self._sheets: list[dict] = []           # {meta, label, lines: [(locator, text)]}
@@ -74,8 +80,8 @@ class BuildingCorpus:
         self._by_id: dict[str, str] = {}        # element id -> its locator
         self._shown: dict[str, tuple[str, str]] = {}   # locator -> (excerpt header, the line as shown there)
         self._blocks: list[tuple[str, str, str]] = []   # (header, text, lowercased header and text)
-        for meta, words in sheets:
-            self._add_sheet(meta, words)
+        for meta, words, *measured in sheets:   # (sheet, words[, [(text, bbox)] measured on its lines])
+            self._add_sheet(meta, words, measured[0] if measured else ())
         self._add_evidence(docs)
 
     # ---------------------------------------------------------------- reading
@@ -88,18 +94,23 @@ class BuildingCorpus:
         out = []
         for s in sheets:
             path = files_dir / s["file"]
+            measured = []
             try:
                 if files_dir.resolve() not in path.resolve().parents:
                     raise ValueError("outside the project")
                 if s.get("layout"):
                     words = _dxf_words(path, s["file"], s["layout"], dxf_docs)
                 else:
-                    from adapters.drawings import dimensions, ocr
+                    from adapters.drawings import dimensions, geometry, ocr
                     from adapters.drawings.reader import PDF, tokens_of
                     sh = Sheet(s["file"], page=s.get("page") or 1, width=s.get("width") or 0.0, height=s.get("height") or 0.0)
                     digest = ocr.file_hash(path)
                     words = tokens_of(path, sh, digest)
                     if path.suffix.lower() in PDF:   # a number on a drawn dimension line says so, and what it spans
+                        try:
+                            measured = geometry.measure(path, words, sh.page, digest)
+                        except Exception as e:  # noqa: BLE001 - paths that can't be read lose the measurements, not the words
+                            progress(f"assess: {s['file']} p{sh.page} stairs and doors not measured ({type(e).__name__})")
                         try:
                             words = dimensions.annotate(path, words, sh.page, digest)
                         except Exception as e:  # noqa: BLE001 - paths that can't be read lose the annotations, not the words
@@ -107,14 +118,17 @@ class BuildingCorpus:
             except Exception as e:  # noqa: BLE001 - a sheet that can't be read again is left out of the corpus
                 progress(f"assess: {s['file']} not read for assessment ({type(e).__name__})")
                 words = []
-            out.append((s, words))
+            out.append((s, words, measured))
         return cls(name, docs, out)
 
-    def _add_sheet(self, meta: dict, words: list) -> None:
+    def _add_sheet(self, meta: dict, words: list, measured=()) -> None:
         n = len(self._sheets) + 1
         sheet = Sheet(meta["file"], page=None if meta.get("layout") else (meta.get("page") or 1), layout=meta.get("layout"))
         lines = []
-        for text, bbox in _lines(words, y_up=bool(meta.get("layout"))):
+        rows = _lines(words, y_up=bool(meta.get("layout")))
+        if measured:   # among the sheet's words by position (PDF pages only: y grows downwards)
+            rows = sorted(rows + list(measured), key=lambda t: (round(t[1][1], 1), t[1][0], t[0]))
+        for text, bbox in rows:
             loc = locator(sheet, bbox)
             if loc in self._line:     # two lines with one region (rounding): keep the first
                 continue
