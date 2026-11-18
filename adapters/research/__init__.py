@@ -186,8 +186,16 @@ CLAIM = """Each claim is one fact, in your own words, with "at": up to {max_loca
 that show it, only lines shown in the excerpts. A claim that something is absent from the excerpts ("no rate limit is \
 configured") has "basis": "absence" and no locators; every other claim has "basis": "evidence"."""
 
+VERDICTS = """When the question asks whether something meets a requirement and the answer turns on what the \
+material leaves open (which category or case applies, what a dimension spans, which element a value or note belongs \
+to), do not stop at "cannot be settled": state the verdict under each reading the material allows, as "fails if \
+...; meets if ...", with the numbers that decide it, and say which reading the material makes likelier and why. Work \
+out what a limit implies for the values shown (differences between levels, sums, ratios, interpolating a table or \
+diagram) rather than leaving the arithmetic open. Leave a verdict open only when no reading of the material \
+decides it either way, and then say what would."""
+
 QUICK = """You answer a question about {what} from excerpts of it, as a careful expert would, for a person who will \
-check every citation. Answer only from the excerpts, never from what you know of similar material.
+check every citation. Answer only from the excerpts, never from what you know of similar material. """ + VERDICTS + """
 
 """ + PREAMBLE + """
 
@@ -204,7 +212,8 @@ clauses, tables, notes) whose occurrences would settle what is open{again}."""
 MAP = """You are reading part {part} of {parts} of {what}, all of it, to research a question for a person who will \
 check every citation. A synthesis sees only your findings, not this text, so be exhaustive within this part: report \
 every finding that bears on the question (facts that answer it, conditions, exceptions, definitions, numbers, \
-evidence for and against), and nothing that does not. Use only these excerpts, never what you know of similar material.
+evidence for and against), and nothing that does not. Use only these excerpts, never what you know of similar material. \
+""" + VERDICTS + """ Such a verdict is a finding, citing the lines whose numbers decide it.
 
 """ + PREAMBLE + """
 
@@ -216,7 +225,8 @@ Reply with only JSON:
 
 SYNTH = """You write the answer to a research question about {what} from verified findings, for a person who will \
 check every citation. Each finding is headed `=== F<n>` and quotes the text it cites under `--- <locator>`; {coverage} \
-Use only the findings. Combine findings that say the same thing; keep findings that disagree and name the conflict.
+Use only the findings. Combine findings that say the same thing; keep findings that disagree and name the conflict. \
+""" + VERDICTS + """ Keep the conditional verdicts the findings give; do not reduce "fails if ..." to open.
 
 """ + PREAMBLE + """
 
