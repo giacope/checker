@@ -112,3 +112,29 @@ def test_assess_keeps_only_citations_the_project_has():
     assert [o["at"] for o in ev["facts"]["req_handrails"]] == [f"{PLAN}#page=1&bbox=900,300,1100,312", "ifc:2abc$_X"]
     assert ev["sources"][0]["rejected_locators"] == {"locator does not exist": 3}
     assert "S<n>:L<k>" in sent[0] and ev["subject"] == {"kind": "building", "id": "Clinic"}
+
+
+def test_a_number_on_a_dimension_line_says_so_and_what_it_spans(tmp_path, monkeypatch):
+    from adapters.drawings import dimensions
+    from tests.test_drawings import pdf_bytes
+
+    monkeypatch.setattr(dimensions, "CACHE_DIR", tmp_path / "dims")
+    def text(x, y, s, turned=False):
+        return f"BT /F1 12 Tf {'0 1 -1 0' if turned else '1 0 0 1'} {x} {y} Tm ({s}) Tj ET\n"
+    content = (
+        "0.3 w 100 500 m 701.2 500 l S\n" + text(380, 503, "8480")    # 601.2 pt at 1:40 is 8483 mm
+        + text(95, 525, "29.80") + text(690, 525, "30.50")            # the levels at its two ends
+        + "800 500 m 826 500 l S\n858 500 m 886.5 500 l S\n"        # broken for its text, as US drafting draws it:
+        + text(830, 497, "4'-0\"")                                     # 86.5 pt is 1220.6 mm, 4'-0" is 1219.2
+        + "0.3 w 100 400 m 164.8 400 l S\n" + text(120, 403, "36\"")  # inches alone: 64.8 pt is 914.4 mm
+        + "302 250 m 302 462.6 l S\n" + text(300, 300, "3000", True)  # read bottom to top: a height
+        + "100 200 m 355.1 200 l S\n" + text(200, 203, "450")         # fits only 1:5, which no other number has
+        + text(100, 100, "RAMP ELEVATION SCALE 1:40 CONCRETE RAMP WITH STEEL PIPE HANDRAILS BOTH SIDES"))
+    (tmp_path / "r.pdf").write_bytes(pdf_bytes([(content.encode(), "0 0 1224 792")]))
+    c = BuildingCorpus.from_project(tmp_path, [], [{"file": "r.pdf", "page": 1, "width": 1224, "height": 792, "text": "layer"}], "r")
+    lines = [t for _, t in c._sheets[0]["lines"]]
+    assert "8480 [horizontal dimension line at 1:40; near its left end: 29.80; near its right end: 30.50]" in lines
+    assert any(t.startswith("4’-0\" [horizontal dimension line at 1:40") for t in lines)   # Helvetica's ' is ’
+    assert any(t.startswith("3000 [vertical dimension line at 1:40") for t in lines)
+    assert any(t.startswith("36\" [horizontal dimension line at 1:40") for t in lines)
+    assert "450" in lines   # a lone fit at a scale no other number shares is not taken for a dimension

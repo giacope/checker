@@ -1,6 +1,7 @@
 """A building project as an adapters.assess Corpus: the text of its drawing sheets and the elements its readers built.
 
-    sheets    every sheet's words (PDF text layer, OCR, or CAD text, as adapters.drawings and adapters.dxf read them)
+    sheets    every sheet's words (PDF text layer, OCR, or CAD text, as adapters.drawings and adapters.dxf read them;
+              on a vector PDF each dimension's number followed by what adapters.drawings.dimensions says it spans)
               joined into lines: words on one baseline, separated by `|` where the gap between them is wider
               than three letter heights (a schedule's columns), broken where it is wider than twelve. A sheet
               is shown in fixed 50-line windows, headed `sheet S<n> ...`, each line numbered `L<k>`. A model cites
@@ -52,7 +53,10 @@ class BuildingCorpus:
         "or note may be split across lines, words may come from different drawings on the sheet, and OCR may misread "
         "characters: read numbers with care and say so in the note when a reading is doubtful. Cite a sheet line as "
         "`S<n>:L<k>`, with the numbers as shown. Model element lines start with their locator (`ifc:<GlobalId>`, or "
-        "a sheet region `<file>#page=...&bbox=...`); cite that locator exactly as shown. Element facts are as the "
+        "a sheet region `<file>#page=...&bbox=...`); cite that locator exactly as shown. A number followed by `[horizontal|vertical dimension line at 1:<scale> ...]` stands on a drawn "
+        "dimension line whose length at that scale is the number, so it is a measured dimension running that way; the "
+        "labels named near its ends are the text nearest each end of the line, nearest first (often the levels, "
+        "gridlines or elements it runs between, sometimes unrelated notes). Element facts are as the "
         "readers measured them (lengths in the units shown; two values for one fact are the range the sources "
         "allow). Judge the building as drawn and modelled. The excerpts are only part of the drawing set: when the "
         "requirement concerns a feature the excerpts do not show or dimension, answer null rather than false; use "
@@ -90,10 +94,16 @@ class BuildingCorpus:
                 if s.get("layout"):
                     words = _dxf_words(path, s["file"], s["layout"], dxf_docs)
                 else:
-                    from adapters.drawings import ocr
-                    from adapters.drawings.reader import tokens_of
+                    from adapters.drawings import dimensions, ocr
+                    from adapters.drawings.reader import PDF, tokens_of
                     sh = Sheet(s["file"], page=s.get("page") or 1, width=s.get("width") or 0.0, height=s.get("height") or 0.0)
-                    words = tokens_of(path, sh, ocr.file_hash(path))
+                    digest = ocr.file_hash(path)
+                    words = tokens_of(path, sh, digest)
+                    if path.suffix.lower() in PDF:   # a number on a drawn dimension line says so, and what it spans
+                        try:
+                            words = dimensions.annotate(path, words, sh.page, digest)
+                        except Exception as e:  # noqa: BLE001 - paths that can't be read lose the annotations, not the words
+                            progress(f"assess: {s['file']} p{sh.page} dimensions not read ({type(e).__name__})")
             except Exception as e:  # noqa: BLE001 - a sheet that can't be read again is left out of the corpus
                 progress(f"assess: {s['file']} not read for assessment ({type(e).__name__})")
                 words = []
